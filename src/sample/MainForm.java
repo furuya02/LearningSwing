@@ -11,9 +11,9 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public final class App {
+public final class MainForm {
 
-	private JFrame frame;
+	private JFrame mainForm;
 	private AppMenu appMenu;
 	private AppFunc appFunc;
 	/**
@@ -23,8 +23,8 @@ public final class App {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					App window = new App();
-					window.frame.setVisible(true);
+					MainForm window = new MainForm();
+					window.mainForm.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -35,10 +35,10 @@ public final class App {
 	/**
 	 * Create the application.
 	 */
-	private App() {
+	private MainForm() {
 		initialize();
 		
-		appMenu = new AppMenu(frame);
+		appMenu = new AppMenu(mainForm);
 		
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -46,8 +46,8 @@ public final class App {
 				
 			}
 		});
-		frame.getContentPane().add(btnNewButton, BorderLayout.NORTH);
-		appFunc = new AppFunc(appMenu,frame);
+		mainForm.getContentPane().add(btnNewButton, BorderLayout.NORTH);
+		appFunc = new AppFunc(appMenu,mainForm);
 
 		//appFunc.dispose();
 		//appMeu.dispase();
@@ -57,10 +57,10 @@ public final class App {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("\u30BF\u30A4\u30C8\u30EB");
-		frame.setFont(new Font("メイリオ", Font.PLAIN, 12));
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainForm = new JFrame();
+		mainForm.setTitle("\u30BF\u30A4\u30C8\u30EB");
+		mainForm.setFont(new Font("メイリオ", Font.PLAIN, 12));
+		mainForm.setBounds(100, 100, 450, 300);
+		mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
