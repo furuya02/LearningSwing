@@ -1,9 +1,13 @@
 package sample;
 
+import javax.swing.JFrame;
+
 public class AppFunc  implements SelectMenuListener {
 	private AppMenu appMenu;
-	public AppFunc(AppMenu appMenu) {
-		this.appMenu = appMenu;
+	private JFrame frame;
+	public AppFunc(AppMenu anAppMenu,JFrame aFrame) {
+		frame = aFrame;
+		appMenu = anAppMenu;
 		appMenu.addListener(this); //自身をイベント送信先リストに追加
 	}
 	public void dispose() {
@@ -18,7 +22,9 @@ public class AppFunc  implements SelectMenuListener {
 			System.exit(0);
 			break;
 		case "Option":
-			//System.exit(0);
+			OptionDlg dlg = new OptionDlg(frame);
+			boolean b = dlg.showDialog();
+			System.out.println("isOk = "+b);	
 			break;
 		default:
 			break;

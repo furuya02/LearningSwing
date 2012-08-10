@@ -3,6 +3,8 @@ package sample;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
@@ -41,14 +43,11 @@ public final class App {
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				OptionDlg dlg = new OptionDlg();
-				dlg.setModal(true);
-				dlg.setVisible(true);
-				System.out.println("button");
+				
 			}
 		});
 		frame.getContentPane().add(btnNewButton, BorderLayout.NORTH);
-		appFunc = new AppFunc(appMenu);
+		appFunc = new AppFunc(appMenu,frame);
 
 		//appFunc.dispose();
 		//appMeu.dispase();
