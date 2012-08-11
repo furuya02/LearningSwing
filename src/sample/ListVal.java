@@ -3,23 +3,24 @@ package sample;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ListVal implements Iterable<OneVal> , Iterator<OneVal>{
+public class ListVal implements Iterable<OneVal>, Iterator<OneVal> {
 	private ArrayList<OneVal> ar = new ArrayList<OneVal>();
 	private int index;
+
 	public ListVal() {
 		index = 0;
 	}
-	
+
 	public void add(OneVal oneVal) {
 		ar.add(oneVal);
 	}
 
 	@Override
-	public Iterator iterator() {
+	public Iterator<OneVal> iterator() {
 		return this;
 	}
 
-	@Override
+	// @Override
 	public boolean hasNext() {
 		return index < ar.size();
 	}

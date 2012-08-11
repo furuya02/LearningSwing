@@ -1,6 +1,6 @@
 package sample;
 
-public class OneCtrl {
+public abstract class OneCtrl {
 	private String help;
 	private OneVal oneVal;
 	
@@ -15,4 +15,5 @@ public class OneCtrl {
 	public void setOneVal(OneVal value) {
 		oneVal = value;
 	}
+    public abstract CtrlType getCtrlType();
 }

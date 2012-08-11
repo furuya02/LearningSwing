@@ -6,4 +6,9 @@ public class CtrlCheckBox extends OneCtrl {
 		
 	}
 
+	@Override
+	public CtrlType getCtrlType() {
+		return CtrlType.CHECKBOX;
+	}
+
 }

@@ -5,7 +5,6 @@ import javax.swing.JCheckBox;
 
 public class OptionDlg extends Dlg {
 
-
 	private static final int DLG_WIDTH = 500;
 	private static final int DLG_HEIGHT = 400;
 	

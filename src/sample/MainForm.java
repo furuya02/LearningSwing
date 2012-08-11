@@ -35,9 +35,9 @@ public final class MainForm {
 	 */
 	private MainForm() {
 		initialize();
-		
+
 		appMenu = new AppMenu(mainForm);
-		
+
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -45,7 +45,7 @@ public final class MainForm {
 			}
 		});
 		mainForm.getContentPane().add(btnNewButton, BorderLayout.NORTH);
-		appFunc = new AppFunc(appMenu , mainForm);
+		appFunc = new AppFunc(appMenu, mainForm);
 
 		// appFunc.dispose();
 		// appMeu.dispase();
