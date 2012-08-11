@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
-<<<<<<< HEAD
   <fileset name="すべて" enabled="true" check-config-name="コピー" local="false">
-=======
-  <fileset name="all" enabled="true" check-config-name="Copy of Sun Checks (Eclipse)" local="false">
->>>>>>> f460185d3e1ed1a87b0f348c9fe7e1bae0f19a73
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
 </fileset-config>

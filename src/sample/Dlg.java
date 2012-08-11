@@ -15,18 +15,20 @@ public class Dlg extends JDialog {
 	
 	// ダイアログの戻り値（OKボタンで閉じたかどうか）
 	private boolean isOk = false;
+	protected JPanel mainPanel = new JPanel();
 
 	public Dlg(JFrame frame, int width, int height) {
 		super(frame);
-		setSize(width, height);
+		setSize(338, 316);
 		setLocationRelativeTo(frame); // 親ウインドウの中央）
 
-		JPanel contentPanel = new JPanel();
+		//JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(null);
+		//mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-	
+		getContentPane().add(mainPanel, BorderLayout.CENTER);
+		
 		//ボタンPanel
 		JPanel buttonPanel = new JPanel();
 		//OK　ボタン
