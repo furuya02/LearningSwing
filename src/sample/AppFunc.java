@@ -24,9 +24,10 @@ public class AppFunc  implements SelectMenuListener {
 			break;
 		case "Option":
 			Option option = new Option();
-			OneVal oneVal = new OneVal("useServer" , true , Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する"));
-			option.add(oneVal);
-			option.add(oneVal);
+			OneVal o1 = new OneVal("useServer1" , true , Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する"));
+			option.add(o1);
+			OneVal o2 = new OneVal("useServer2" , true , Crlf.CONTONIE, new CtrlCheckBox("サーバを使用する"));
+			option.add(o2);
 			OptionDlg dlg = new OptionDlg(mainFrame, option);
 			boolean b = dlg.showDialog();
 			System.out.println("isOk = " + b);

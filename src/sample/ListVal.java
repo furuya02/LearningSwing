@@ -5,9 +5,9 @@ import java.util.Iterator;
 
 public class ListVal implements Iterable<OneVal> , Iterator<OneVal>{
 	private ArrayList<OneVal> ar = new ArrayList<OneVal>();
-	
+	private int index;
 	public ListVal() {
-		
+		index = 0;
 	}
 	
 	public void add(OneVal oneVal) {
@@ -21,18 +21,19 @@ public class ListVal implements Iterable<OneVal> , Iterator<OneVal>{
 
 	@Override
 	public boolean hasNext() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		return index < ar.size();
 	}
 
 	@Override
 	public OneVal next() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		OneVal oneVal = ar.get(index);
+        index++;
+		return oneVal;
 	}
 
 	@Override
 	public void remove() {
-		// TODO 自動生成されたメソッド・スタブ
+		ar.remove(index);
+        index--;
 	}
 }

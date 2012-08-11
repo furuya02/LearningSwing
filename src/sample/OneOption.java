@@ -6,9 +6,10 @@ public class OneOption {
 	
 	private ListVal listVal = new ListVal();
 	
-	public void CreateDlg(JPanel mainPanel){
-		for(OneVal o : listVal){
-		
+	public void createDlg(JPanel mainPanel) {
+		for (OneVal o : listVal) {
+			System.out.println("name="+o.getName()+"crlf="+o.getCrlf());
+			OneVal i = o;
 		}
 	}
 	

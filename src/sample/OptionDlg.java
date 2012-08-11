@@ -14,7 +14,7 @@ public class OptionDlg extends Dlg {
 		
 		//getContentPane().setLayout(null);
 		
-		//oneOption.CreateDlg(panelMain);
+		oneOption.createDlg(mainPanel);
 		
 		//getContentPane()
 		
