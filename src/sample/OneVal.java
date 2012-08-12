@@ -89,11 +89,11 @@ public class OneVal {
 //                Value = dat;
                 break;
             case CHECKBOX:
-                try {
-                    value = Boolean.parseBoolean(str);
-                } catch (Exception e) {
-                    value = false;
-                }
+            	if(str.equalsIgnoreCase("false") || str.equalsIgnoreCase("true")) {
+                	value = Boolean.parseBoolean(str);
+            	} else {
+            		return false;
+            	}
                 break;
             case FONT:
                 value = null;
