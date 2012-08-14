@@ -1,4 +1,4 @@
-package sample;
+package bjd;
 
 import java.awt.EventQueue;
 

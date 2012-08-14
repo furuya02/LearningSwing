@@ -1,4 +1,5 @@
-package sample;
+package bjd.ctrl;
+
 
 public class CtrlFile extends OneCtrl {
 	public CtrlFile(String help) {

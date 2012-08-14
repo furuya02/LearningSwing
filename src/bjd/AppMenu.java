@@ -1,4 +1,4 @@
-package sample;
+package bjd;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

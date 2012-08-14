@@ -1,6 +1,11 @@
-package sample;
+package bjd;
 
 import javax.swing.JFrame;
+
+import bjd.ctrl.CtrlCheckBox;
+import bjd.option.Crlf;
+import bjd.option.OneVal;
+import bjd.option.Option;
 
 public class AppFunc  implements SelectMenuListener {
 	private AppMenu appMenu;

@@ -1,4 +1,5 @@
-package sample;
+package bjd.ctrl;
+
 
 public class CtrlTextBox extends OneCtrl {
 

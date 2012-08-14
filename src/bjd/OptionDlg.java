@@ -1,7 +1,9 @@
-package sample;
+package bjd;
 
 import javax.swing.JFrame;
 import javax.swing.JCheckBox;
+
+import bjd.option.OneOption;
 
 public class OptionDlg extends Dlg {
 

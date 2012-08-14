@@ -1,7 +1,8 @@
-package sample;
+package bjd.option;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 
 public class ListVal implements Iterable<OneVal>, Iterator<OneVal> {
 	private ArrayList<OneVal> ar = new ArrayList<OneVal>();

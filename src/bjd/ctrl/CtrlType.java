@@ -1,6 +1,6 @@
-package sample;
+package bjd.ctrl;
 
-enum CtrlType {
+public enum CtrlType {
     CHECKBOX,
     TEXTBOX,
     ADDRESSV4,

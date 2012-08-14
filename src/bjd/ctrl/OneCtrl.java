@@ -1,4 +1,6 @@
-package sample;
+package bjd.ctrl;
+
+import bjd.option.OneVal;
 
 public abstract class OneCtrl {
 	private String help;

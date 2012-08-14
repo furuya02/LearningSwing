@@ -1,6 +1,7 @@
-package sample;
+package bjd.option;
 
 import javax.swing.JPanel;
+
 
 public class OneOption {
 

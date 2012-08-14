@@ -1,4 +1,6 @@
-package sample;
+package bjd.option;
+
+import bjd.ctrl.OneCtrl;
 
 public class OneVal {
 
