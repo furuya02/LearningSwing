@@ -1,5 +1,7 @@
 package bjd.option;
 
+import java.awt.Font;
+
 import bjd.ctrl.OneCtrl;
 
 public class OneVal {
@@ -47,11 +49,10 @@ public class OneVal {
 			case CHECKBOX:
 				return String.valueOf(value);
 			case FONT:
-				// if (value != null) {
-				// var font = (Font)Value;
-				// return string.Format("{0},{1},{2}", font.FontFamily.Name,
-				// font.Size, font.Style.ToString());
-				// }
+				if (value != null) {
+					Font font = (Font) value;
+					return String.format("%s,%s,%s", font.getName(), font.getStyle(),font.getSize());
+				}
 				return "";
 			case FILE:
 			case FOLDER:
@@ -104,16 +105,22 @@ public class OneVal {
 				break;
 			case FONT:
 				value = null;
-				// if (str != null) {
-				// var tmp = str.Split(',');
-				// if (tmp.Length == 3) {
-				// var family = new FontFamily(tmp[0]);
-				// var size = (float)Convert.ToDouble(tmp[1]);
-				// var style = (FontStyle)Enum.Parse(typeof(FontStyle), tmp[2]);
-				// Value = new Font(family, size, style);
-				// }
-				// }
-				// break;
+				 if (str != null) {
+					 String[] tmp = str.split(",");
+					 if (tmp.length == 3) {
+						 String name = tmp[0];
+						 int style = Integer.parseInt(tmp[1]);
+						 int size = Integer.parseInt(tmp[2]);
+						 value = new Font(name, style, size);
+						 //åüèÿ
+						 Font f = (Font) value;
+						 if (f.getStyle() != style || f.getSize() < 0){
+							 value = null;
+							 return false;
+						 }
+					 }
+				 }
+				 break;
 			case MEMO:
 				// Value = Util.SwapStr("\t", "\r\n", str);
 				break;
@@ -126,6 +133,17 @@ public class OneVal {
 				// Value = Crypt.Decrypt(str);
 				break;
 			case RADIO:
+				try {
+					value = Integer.parseInt(str);
+				} catch (Exception e) {
+					value = 0;
+					return false;
+				}
+				if ((int) value < 0) {
+					value = 0;
+					return false;
+				}
+				break;
 			case INT:
 				try {
 					value = Integer.parseInt(str);
