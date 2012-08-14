@@ -12,178 +12,176 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-
-/**
- * @author ws09
- * 
- */
 @RunWith(Enclosed.class)
 public class OneValTest {
 
 	@RunWith(Theories.class)
-	public static class デフォルト値で設定した値が正しく取得できているか {
+	public static class デフォルト値をtoRegで取り出す {
 
 		@DataPoint
 		public static Fixture d1 = new Fixture(CtrlType.CHECKBOX, true, "true");
 		@DataPoint
 		public static Fixture d2 = new Fixture(CtrlType.CHECKBOX, false, "false");
-
-		// @DataPoint
-		// public static Fixture d3 = new Fixture(CtrlType.INT, 100, "100");
-
+		@DataPoint
+		public static Fixture d3 = new Fixture(CtrlType.INT, 100, "100");
+		@DataPoint
+		public static Fixture d4 = new Fixture(CtrlType.INT, 0, "0");
+		@DataPoint
+		public static Fixture d5 = new Fixture(CtrlType.INT, -100, "-100");
+		@DataPoint
+		public static Fixture d6 = new Fixture(CtrlType.FILE,"c:\\test.txt", "c:\\test.txt");
+		@DataPoint
+		public static Fixture d7 = new Fixture(CtrlType.FOLDER,"c:\\test", "c:\\test");
+		@DataPoint
+		public static Fixture d8 = new Fixture(CtrlType.TEXTBOX,"abcdefg１２３", "abcdefg１２３");
+		
 		@Theory
-		public void TestFunc(Fixture fx) {
-			OneVal oneVal = null;
-			switch (fx.ctrlType) {
-			case CHECKBOX:
-				oneVal = new OneVal("testName", fx.defaultValue, Crlf.NEXTLINE,
-						new CtrlCheckBox("help"));
-				break;
-			default:
-				assertThat(fx.ctrlType.toString(), is("not implement"));
-			}
-			boolean isDebug = false;
-			// String expected = fx.expected;
-			// String actual = oneVal.toReg(isDebug);
-			// assertThat(actual, is(expected));
-			assertThat(oneVal.toReg(isDebug), is(fx.expected));
+		public void test(Fixture fx) {
 
-			System.out.println("デフォルト値で設定した値が正しく取得できているか:" + fx);
+			String className = this.getClass().getName().split("\\$")[1];
+			System.out.printf("%s [%s] default値=%s toReg()=\"%s\"\n", className, fx.ctrlType, fx.actual, fx.expected);
+
+			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
+
+			boolean isDebug = false;
+			assertThat(oneVal.toReg(isDebug), is(fx.expected));
 		}
 
 		static class Fixture {
-			private Object defaultValue;
-			private String expected;
 			private CtrlType ctrlType;
+			private Object actual;
+			private String expected;
 
-			public Fixture(CtrlType ctrlType, Object defaultValue,
-					String expected) {
+			public Fixture(CtrlType ctrlType, Object actual, String expected) {
 				this.ctrlType = ctrlType;
-				this.defaultValue = defaultValue;
+				this.actual = actual;
 				this.expected = expected;
-			}
-
-			public String toString() {
-				return ctrlType + " " + defaultValue + " " + expected;
 			}
 		}
 	}
 
 	@RunWith(Theories.class)
-	public static class fromRegで成否の判断は正しいか {
+	public static class fromRegで設定した値をtoRegで取り出す {
 
 		@DataPoint
-		public static Fixture d1 = new Fixture(CtrlType.CHECKBOX, "true",
-				Status.SUCCESS);
+		public static Fixture d1 = new Fixture(CtrlType.CHECKBOX, "true");
 		@DataPoint
-		public static Fixture d2 = new Fixture(CtrlType.CHECKBOX, "TRUE",
-				Status.SUCCESS);
+		public static Fixture d2 = new Fixture(CtrlType.CHECKBOX, "false");
 		@DataPoint
-		public static Fixture d3 = new Fixture(CtrlType.CHECKBOX, "false",
-				Status.SUCCESS);
+		public static Fixture d3 = new Fixture(CtrlType.INT, "100");
 		@DataPoint
-		public static Fixture d4 = new Fixture(CtrlType.CHECKBOX, "FALSE",
-				Status.SUCCESS);
+		public static Fixture d4 = new Fixture(CtrlType.INT, "0");
+
 		@DataPoint
-		public static Fixture d5 = new Fixture(CtrlType.CHECKBOX, "t",
-				Status.ERROR);
+		public static Fixture d5 = new Fixture(CtrlType.FILE,"c:\\test.txt");
 		@DataPoint
-		public static Fixture d6 = new Fixture(CtrlType.CHECKBOX, "",
-				Status.ERROR);
+		public static Fixture d6 = new Fixture(CtrlType.FOLDER,"c:\\test");
+		@DataPoint
+		public static Fixture d7 = new Fixture(CtrlType.TEXTBOX,"abcdefg１２３");
 
 		@Theory
-		public void TestFunc(Fixture fx) {
-			OneVal oneVal = null;
-			switch (fx.ctrlType) {
-			case CHECKBOX:
-				oneVal = new OneVal("testName", true, Crlf.NEXTLINE,
-						new CtrlCheckBox("help"));
-				break;
-			default:
-				assertThat(fx.ctrlType.toString(), is("not implement"));
-			}
-			if (fx.expected == Status.SUCCESS) {
-				assertTrue(oneVal.fromReg(fx.actual));
-			} else {
-				assertFalse(oneVal.fromReg(fx.actual));
+		public void test(Fixture fx) {
 
-			}
-			System.out.println("fromReg()で成否の判断は正しいか:" + fx);
-		}
+			String className = this.getClass().getName().split("\\$")[1];
+			System.out.printf("%s [%s] fromReg(\"%s\") toReg()=\"%s\"\n", className, fx.ctrlType, fx.actual, fx.actual);
 
-		enum Status {
-			SUCCESS, ERROR
+			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
+
+			boolean isDebug = false;
+			oneVal.fromReg(fx.actual);
+			assertThat(oneVal.toReg(isDebug), is(fx.actual));
 		}
 
 		static class Fixture {
 			private CtrlType ctrlType;
 			private String actual;
-			private Status expected;
-			public Fixture(CtrlType ctrlType, String actual, Status expected) {
+
+			public Fixture(CtrlType ctrlType, String actual) {
 				this.ctrlType = ctrlType;
 				this.actual = actual;
-				this.expected = expected;
-			}
-			public String toString() {
-				return ctrlType + " " + actual + " " + expected;
 			}
 		}
 	}
 
-	// public static class Next {
-	//
-	// @Before
-	// public void setUp() throws Exception {
-	// System.out.println("setUp");
-	// }
-	//
-	// @After
-	// public void tearDown() throws Exception {
-	// System.out.println("tearDown");
-	// }
-	//
-	// @Test
-	// public void testToRegCheckBox() {
-	// System.out.println("■testToRegCheckBox");
-	// OneVal oneVal = new OneVal("testName", true, Crlf.NEXTLINE,
-	// new CtrlCheckBox("help"));
-	// boolean isDebug = false;
-	// // デフォルト値　確認 "true"
-	// assertEquals("true", oneVal.toReg(isDebug));
-	// // セットした値を確認
-	// oneVal.fromReg("false");
-	// assertEquals(false, oneVal.getValue());
-	// // 値設の設定の失敗
-	// assertEquals(false, oneVal.fromReg(""));
-	// assertEquals(false, oneVal.fromReg("ccc"));
-	// assertEquals(false, oneVal.fromReg("F"));
-	// // 値設の設定の成功
-	// assertEquals(true, oneVal.fromReg("true"));
-	// assertEquals(true, oneVal.fromReg("false"));
-	// assertEquals(true, oneVal.fromReg("TRUE"));
-	// assertEquals(true, oneVal.fromReg("FALSE"));
-	//
-	// System.out.println("END");
-	//
-	// }
-	//
-	// /**
-	// * {@link sample.OneVal#toReg(boolean)} のためのテスト・メソッド。
-	// */
-	// @Test
-	// public void testToReg() {
-	// System.out.println("testToReg");
-	// // assertEquals(true, false);
-	// }
-	//
-	// /**
-	// * {@link sample.OneVal#fromReg(java.lang.String)} のためのテスト・メソッド。
-	// */
-	// @Test
-	// public void testFromReg() {
-	// System.out.println("testFromReg");
-	// assertEquals(true, true);
-	// }
-	// }
+	@RunWith(Theories.class)
+	public static class fromRegの不正パラメータ判定 {
 
+		@DataPoint
+		public static Fixture d1 = new Fixture(CtrlType.CHECKBOX, "true", true);
+		@DataPoint
+		public static Fixture d2 = new Fixture(CtrlType.CHECKBOX, "TRUE", true);
+		@DataPoint
+		public static Fixture d3 = new Fixture(CtrlType.CHECKBOX, "false", true);
+		@DataPoint
+		public static Fixture d4 = new Fixture(CtrlType.CHECKBOX, "FALSE", true);
+		@DataPoint
+		public static Fixture d5 = new Fixture(CtrlType.CHECKBOX, "t", false); // 不正入力
+		@DataPoint
+		public static Fixture d6 = new Fixture(CtrlType.CHECKBOX, "", false); // 不正入力
+		@DataPoint
+		public static Fixture d7 = new Fixture(CtrlType.INT, "100", true);
+		@DataPoint
+		public static Fixture d8 = new Fixture(CtrlType.INT, "-100", true);
+		@DataPoint
+		public static Fixture d9 = new Fixture(CtrlType.INT, "0", true);
+		@DataPoint
+		public static Fixture d10 = new Fixture(CtrlType.INT, "aaa", false); // 不正入力
+		@DataPoint
+		public static Fixture d11 = new Fixture(CtrlType.FILE,"c:\\test.txt",true);
+		@DataPoint
+		public static Fixture d12 = new Fixture(CtrlType.FOLDER,"c:\\test", true);
+		@DataPoint
+		public static Fixture d13 = new Fixture(CtrlType.TEXTBOX,"abcdefg１２３", true);
+
+		@Theory
+		public void test(Fixture fx) {
+
+			String className = this.getClass().getName().split("\\$")[1];
+			System.out.printf("%s [%s] fromReg(\"%s\") = %s\n", className, fx.ctrlType, fx.actual, fx.expected);
+
+			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
+
+			assertSame(oneVal.fromReg(fx.actual), fx.expected);
+		}
+
+		static class Fixture {
+			private CtrlType ctrlType;
+			private String actual;
+			private boolean expected;
+
+			public Fixture(CtrlType ctrlType, String actual, boolean expected) {
+				this.ctrlType = ctrlType;
+				this.actual = actual;
+				this.expected = expected;
+			}
+		}
+	}
+
+	private static class Util {
+		/**
+		 * OneValを生成する（共通利用）
+		 *
+		 * @param val
+		 *     デフォルト値(nullを設定した場合、適切な値を自動でセットする)
+		 */
+		public static OneVal createOneVal(CtrlType ctrlType, Object val) {
+			final String help = "help";
+			final String name = "name";
+			switch (ctrlType) {
+				case CHECKBOX:
+					return new OneVal(name, (val != null) ? val : true    , Crlf.NEXTLINE, new CtrlCheckBox(help));
+				case INT:
+					return new OneVal(name, (val != null) ? val : 1       , Crlf.NEXTLINE, new CtrlInt(help));
+				case FILE:
+					return new OneVal(name, (val != null) ? val : "1.txt" , Crlf.NEXTLINE, new CtrlFile(help));
+				case FOLDER:
+					return new OneVal(name, (val != null) ? val : "c:\tmp", Crlf.NEXTLINE, new CtrlFolder(help));
+				case TEXTBOX:
+					return new OneVal(name, (val != null) ? val : "abc"   , Crlf.NEXTLINE, new CtrlTextBox(help));
+				default:
+					// not implement.
+					throw new IllegalArgumentException(ctrlType.toString());
+			}
+		}
+	}
 }
