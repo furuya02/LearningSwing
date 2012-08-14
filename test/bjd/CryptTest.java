@@ -1,6 +1,8 @@
 package bjd;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertSame;
+import static org.hamcrest.CoreMatchers.is;
 
 import org.junit.After;
 import org.junit.AfterClass;

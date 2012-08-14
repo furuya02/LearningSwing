@@ -125,7 +125,7 @@ public class OneVal {
 				try {
 					value = str.replaceAll("\t", "\r\n");
 				} catch (Exception ex) {
-					value="";
+					value = "";
 					return false;
 				}
 				break;

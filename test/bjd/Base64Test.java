@@ -22,7 +22,7 @@ public class Base64Test {
 
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("A001", "Base64のエンコード及びデコード");
+			Util.dispClass("Base64Test-A001", "Base64のエンコード及びデコード");
 		}
 
 		@DataPoints

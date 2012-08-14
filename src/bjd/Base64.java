@@ -36,7 +36,7 @@ public class Base64 {
 		}
 		if (outStream != null) {
 			res = outStream.toString();
-			if(res.length()>=2){
+			if (res.length() >= 2) {
 				res = res.substring(0, res.length() - 2); // \r\n�̍폜
 			}
 		}

@@ -35,7 +35,7 @@ public class OneValTest {
 		
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("A001", "デフォルト値をtoReg()で取り出す");
+			Util.dispClass("OneValTest-A001", "デフォルト値をtoReg()で取り出す");
 		}
 
 		@DataPoints
@@ -84,7 +84,7 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("A002", "fromReg()で設定した値をtoReg()で取り出す");
+			Util.dispClass("OneValTest-A002", "fromReg()で設定した値をtoReg()で取り出す");
 		}
 
 		@DataPoints
@@ -131,7 +131,7 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("A003", "fromReg()の不正パラメータ判定");
+			Util.dispClass("OneValTest-A003", "fromReg()の不正パラメータ判定");
 		}
 
 		@DataPoints
