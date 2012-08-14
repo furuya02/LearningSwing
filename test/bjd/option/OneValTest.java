@@ -21,6 +21,7 @@ import bjd.ctrl.CtrlFile;
 import bjd.ctrl.CtrlFolder;
 import bjd.ctrl.CtrlFont;
 import bjd.ctrl.CtrlInt;
+import bjd.ctrl.CtrlMemo;
 import bjd.ctrl.CtrlRadio;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.CtrlType;
@@ -52,6 +53,8 @@ public class OneValTest {
 			new Fixture(CtrlType.RADIO, 5, "5"),
 			new Fixture(CtrlType.FONT, new Font("Times New Roman", Font.ITALIC, 15), "Times New Roman,2,15"),
 			new Fixture(CtrlType.FONT, new Font("Serif", Font.BOLD, 8), "Serif,1,8"),
+			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
+			new Fixture(CtrlType.MEMO, "123", "123"),
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -98,6 +101,7 @@ public class OneValTest {
 			new Fixture(CtrlType.RADIO, "0"),
 			new Fixture(CtrlType.FONT, "Times New Roman,2,15"),
 			new Fixture(CtrlType.FONT, "Serif,1,8"),
+			new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -139,7 +143,6 @@ public class OneValTest {
 			new Fixture(CtrlType.CHECKBOX, "FALSE", true),
 			new Fixture(CtrlType.CHECKBOX, "t", false), // 不正入力
 			new Fixture(CtrlType.CHECKBOX, "", false), // 不正入力
-			new Fixture(CtrlType.INT, "100", true),
 			new Fixture(CtrlType.INT, "-100", true),
 			new Fixture(CtrlType.INT, "0", true),
 			new Fixture(CtrlType.INT, "aaa", false), // 不正入力
@@ -153,6 +156,7 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, "Default,2,-1", false), //不正入力(sizeが0以下)
 			new Fixture(CtrlType.FONT, "XXX,1,8", true), //　(Font名ではエラーが発生しない)
 			new Fixture(CtrlType.FONT, "Serif,1,8", true), //不正入力
+			new Fixture(CtrlType.MEMO, null, false), //不正入力
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -230,6 +234,12 @@ public class OneValTest {
 						val = new Font("Default", Font.PLAIN, 9);
 					}
 					oneCtrl = new CtrlFont(help);
+					break;
+				case MEMO:
+					if (val == null) {
+						val = "1";
+					}
+					oneCtrl = new CtrlMemo(help);
 					break;
 				default:
 					// not implement.

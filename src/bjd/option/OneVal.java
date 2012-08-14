@@ -51,7 +51,7 @@ public class OneVal {
 			case FONT:
 				if (value != null) {
 					Font font = (Font) value;
-					return String.format("%s,%s,%s", font.getName(), font.getStyle(),font.getSize());
+					return String.format("%s,%s,%s", font.getName(), font.getStyle(), font.getSize());
 				}
 				return "";
 			case FILE:
@@ -61,7 +61,7 @@ public class OneVal {
 			case HIDDEN:
 				// return isDebug ? "***" : Crypt.Encrypt((string)Value);
 			case MEMO:
-				// return Util.SwapStr("\r\n", "\t", (String)value);
+				return ((String) value).replaceAll("\r\n", "\t");
 			case RADIO:
 			case INT:
 				return String.valueOf(value);
@@ -105,24 +105,29 @@ public class OneVal {
 				break;
 			case FONT:
 				value = null;
-				 if (str != null) {
-					 String[] tmp = str.split(",");
-					 if (tmp.length == 3) {
-						 String name = tmp[0];
-						 int style = Integer.parseInt(tmp[1]);
-						 int size = Integer.parseInt(tmp[2]);
-						 value = new Font(name, style, size);
-						 //åüèÿ
-						 Font f = (Font) value;
-						 if (f.getStyle() != style || f.getSize() < 0){
-							 value = null;
-							 return false;
-						 }
-					 }
-				 }
-				 break;
+				if (str != null) {
+					String[] tmp = str.split(",");
+					if (tmp.length == 3) {
+						String name = tmp[0];
+						int style = Integer.parseInt(tmp[1]);
+						int size = Integer.parseInt(tmp[2]);
+						value = new Font(name, style, size);
+						// åüèÿ
+						Font f = (Font) value;
+						if (f.getStyle() != style || f.getSize() < 0) {
+							value = null;
+							return false;
+						}
+					}
+				}
+				break;
 			case MEMO:
-				// Value = Util.SwapStr("\t", "\r\n", str);
+				try {
+					value = str.replaceAll("\t", "\r\n");
+				} catch (Exception ex) {
+					value="";
+					return false;
+				}
 				break;
 			case FILE:
 			case FOLDER:
