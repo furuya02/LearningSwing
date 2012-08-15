@@ -5,6 +5,7 @@ import javax.swing.JCheckBox;
 
 import bjd.option.OneOption;
 
+@SuppressWarnings("serial")
 public class OptionDlg extends Dlg {
 
 	private static final int DLG_WIDTH = 500;

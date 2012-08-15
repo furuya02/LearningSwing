@@ -1,6 +1,6 @@
 package bjd;
 
-public class TestUtil {
+public final class TestUtil {
 	private TestUtil() {
 		//デフォルトコンストラクタの隠蔽
 	}

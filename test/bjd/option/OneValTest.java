@@ -21,6 +21,7 @@ import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlFile;
 import bjd.ctrl.CtrlFolder;
 import bjd.ctrl.CtrlFont;
+import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlInt;
 import bjd.ctrl.CtrlMemo;
 import bjd.ctrl.CtrlRadio;
@@ -56,6 +57,7 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, new Font("Serif", Font.BOLD, 8), "Serif,1,8"),
 			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
 			new Fixture(CtrlType.MEMO, "123", "123"),
+			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"),//その他はA004でテストする
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -158,6 +160,7 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, "XXX,1,8", true), //　(Font名ではエラーが発生しない)
 			new Fixture(CtrlType.FONT, "Serif,1,8", true), //不正入力
 			new Fixture(CtrlType.MEMO, null, false), //不正入力
+			//new Fixture(CtrlType.HIDDEN, null, false), //不正入力
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -179,6 +182,49 @@ public class OneValTest {
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
 
 			assertSame(oneVal.fromReg(fx.actual), fx.expected);
+		}
+	}
+	
+	@RunWith(Theories.class)
+	public static class A004 {
+
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("isDebugを使用したtoReg()出力");
+		}
+
+		@DataPoints
+		public static Fixture[] datas = { 
+				// コントロールの種類,isDebug,fromRegに入力する文字列,toRegの出力
+				new Fixture(CtrlType.HIDDEN, true, "123", "***"),
+				new Fixture(CtrlType.HIDDEN, false, "123", "2d7ee3636680c1f6"),
+				new Fixture(CtrlType.HIDDEN, false, "", "60392a0d922b9077"),
+				new Fixture(CtrlType.HIDDEN, false, "本日は晴天なり", "503c983b94f87e6a9295796bb439a054"), 
+		};
+		
+		static class Fixture {
+			private CtrlType ctrlType;
+			private boolean isDebug;
+			private String actual;
+			private String expected;
+			public Fixture(CtrlType ctrlType, boolean isDebug,String actual, String expected) {
+				this.ctrlType = ctrlType;
+				this.isDebug = isDebug;
+				this.actual = actual;
+				this.expected = expected;
+			}
+		}
+	
+		@Theory
+		public void test(Fixture fx) {
+			
+			TestUtil.dispPrompt(this);
+			System.out.printf("(%s) Default=\"%s\" toReg(%s) = %s\n", fx.ctrlType, fx.actual, fx.isDebug, fx.expected);
+
+			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
+			String s = oneVal.toReg(fx.isDebug);
+
+			assertThat(oneVal.toReg(fx.isDebug), is(fx.expected));
 		}
 	}
 	/**
@@ -241,6 +287,12 @@ public class OneValTest {
 						val = "1";
 					}
 					oneCtrl = new CtrlMemo(help);
+					break;
+				case HIDDEN:
+					if (val == null) {
+						val = "";
+					}
+					oneCtrl = new CtrlHidden(help);
 					break;
 				default:
 					// not implement.

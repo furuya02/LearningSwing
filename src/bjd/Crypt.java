@@ -7,7 +7,7 @@ import javax.crypto.spec.DESedeKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
 
-public class Crypt {
+public final class Crypt {
 
 	private Crypt() {
 		// デフォルトコンストラクタの隠蔽

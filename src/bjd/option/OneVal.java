@@ -2,6 +2,7 @@ package bjd.option;
 
 import java.awt.Font;
 
+import bjd.Crypt;
 import bjd.ctrl.OneCtrl;
 
 public class OneVal {
@@ -59,7 +60,7 @@ public class OneVal {
 			case TEXTBOX:
 				return (String) value;
 			case HIDDEN:
-				// return isDebug ? "***" : Crypt.Encrypt((string)Value);
+				return isDebug ? "***" : Crypt.encrypt((String) value);
 			case MEMO:
 				return ((String) value).replaceAll("\r\n", "\t");
 			case RADIO:
@@ -135,7 +136,12 @@ public class OneVal {
 				value = str;
 				break;
 			case HIDDEN:
-				// Value = Crypt.Decrypt(str);
+				String s = Crypt.decrypt(str);
+				if (s.equals("ERROR")) {
+					value = "";
+					return false;
+				}
+				value = s;
 				break;
 			case RADIO:
 				try {

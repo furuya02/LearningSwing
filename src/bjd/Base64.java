@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
-public class Base64 {
+public final class Base64 {
 
 	private static final String CHARSET = "UTF-8";
 	private static final String ENCODING = "base64";

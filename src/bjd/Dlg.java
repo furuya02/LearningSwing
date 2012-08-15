@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Dlg extends JDialog {
 	
 	// ダイアログの戻り値（OKボタンで閉じたかどうか）
