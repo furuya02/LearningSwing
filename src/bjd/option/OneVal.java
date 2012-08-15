@@ -60,7 +60,10 @@ public class OneVal {
 			case TEXTBOX:
 				return (String) value;
 			case HIDDEN:
-				return isDebug ? "***" : Crypt.encrypt((String) value);
+				if (isDebug) {
+					return "***";
+				}
+				return Crypt.encrypt((String) value);
 			case MEMO:
 				return ((String) value).replaceAll("\r\n", "\t");
 			case RADIO:

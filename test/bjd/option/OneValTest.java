@@ -57,7 +57,7 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, new Font("Serif", Font.BOLD, 8), "Serif,1,8"),
 			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
 			new Fixture(CtrlType.MEMO, "123", "123"),
-			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"),//その他はA004でテストする
+			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -92,7 +92,7 @@ public class OneValTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//コントロールの種類,fromRegで設定してtoRegで取得する文字列
+			//コントロールの種類,fromRegで設定してtoRegで取得する文字列(isDebug=false)
 			new Fixture(CtrlType.CHECKBOX, "true"),
 			new Fixture(CtrlType.CHECKBOX, "false"),
 			new Fixture(CtrlType.INT, "100"),
@@ -105,6 +105,9 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, "Times New Roman,2,15"),
 			new Fixture(CtrlType.FONT, "Serif,1,8"),
 			new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
+			new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
+			new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
+			new Fixture(CtrlType.HIDDEN, "503c983b94f87e6a9295796bb439a054"), 
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -160,7 +163,7 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, "XXX,1,8", true), //　(Font名ではエラーが発生しない)
 			new Fixture(CtrlType.FONT, "Serif,1,8", true), //不正入力
 			new Fixture(CtrlType.MEMO, null, false), //不正入力
-			//new Fixture(CtrlType.HIDDEN, null, false), //不正入力
+			new Fixture(CtrlType.HIDDEN, null, false), //不正入力
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -190,12 +193,12 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("isDebugを使用したtoReg()出力");
+			TestUtil.dispHeader("isDebug=trueの時のtoReg()出力");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = { 
-				// コントロールの種類,isDebug,fromRegに入力する文字列,toRegの出力
+				// コントロールの種類,isDebug,デフォルト値,toRegの出力
 				new Fixture(CtrlType.HIDDEN, true, "123", "***"),
 				new Fixture(CtrlType.HIDDEN, false, "123", "2d7ee3636680c1f6"),
 				new Fixture(CtrlType.HIDDEN, false, "", "60392a0d922b9077"),
@@ -207,7 +210,7 @@ public class OneValTest {
 			private boolean isDebug;
 			private String actual;
 			private String expected;
-			public Fixture(CtrlType ctrlType, boolean isDebug,String actual, String expected) {
+			public Fixture(CtrlType ctrlType, boolean isDebug, String actual, String expected) {
 				this.ctrlType = ctrlType;
 				this.isDebug = isDebug;
 				this.actual = actual;
