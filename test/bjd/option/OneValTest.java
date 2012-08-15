@@ -16,6 +16,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.TestUtil;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlFile;
 import bjd.ctrl.CtrlFolder;
@@ -35,7 +36,7 @@ public class OneValTest {
 		
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("OneValTest-A001", "デフォルト値をtoReg()で取り出す");
+			TestUtil.dispHeader("デフォルト値をtoReg()で取り出す");
 		}
 
 		@DataPoints
@@ -69,9 +70,9 @@ public class OneValTest {
 
 		@Theory
 		public void test(Fixture fx) {
-
-			Util.dispCtrlType(fx.ctrlType);
-			System.out.printf("default値=%s toReg()=\"%s\"\n", fx.actual, fx.expected);
+			
+			TestUtil.dispPrompt(this);
+			System.out.printf("(%s) default値=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
 
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
 			boolean isDebug = false;
@@ -84,7 +85,7 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("OneValTest-A002", "fromReg()で設定した値をtoReg()で取り出す");
+			TestUtil.dispHeader("fromReg()で設定した値をtoReg()で取り出す");
 		}
 
 		@DataPoints
@@ -115,8 +116,8 @@ public class OneValTest {
 		@Theory
 		public void test(Fixture fx) {
 
-			Util.dispCtrlType(fx.ctrlType);
-			System.out.printf("fromReg(\"%s\") toReg()=\"%s\"\n", fx.actual, fx.actual);
+			TestUtil.dispPrompt(this);
+			System.out.printf("(%s) fromReg(\"%s\") toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.actual);
 
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
 
@@ -131,7 +132,7 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("OneValTest-A003", "fromReg()の不正パラメータ判定");
+			TestUtil.dispHeader("fromReg()の不正パラメータ判定");
 		}
 
 		@DataPoints
@@ -171,9 +172,9 @@ public class OneValTest {
 	
 		@Theory
 		public void test(Fixture fx) {
-
-			Util.dispCtrlType(fx.ctrlType);
-			System.out.printf("fromReg(\"%s\") = %s\n", fx.actual, fx.expected);
+			
+			TestUtil.dispPrompt(this);
+			System.out.printf("(%s) fromReg(\"%s\") = %s\n", fx.ctrlType, fx.actual, fx.expected);
 			
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
 
@@ -247,19 +248,6 @@ public class OneValTest {
 			}
 			return new OneVal("name", val, Crlf.NEXTLINE, oneCtrl);
 		}
-		/**
-		 * コンソール表示
-		 */
-		//public static void dispClass(Object cls) {
-		//	System.out.printf("%s ", cls.getClass().getName().split("\\$")[1]);
-		// }
-		public static void dispClass(String className, String msg) {
-			System.out.println("\n----------------------------------------------------");
-			System.out.printf("[%s] %s\n", className, msg);
-			System.out.println("----------------------------------------------------");
-		}
-		public static void dispCtrlType(CtrlType ctrlType) {
-			System.out.printf(" (%s) ", ctrlType);
-		}
+	
 	}
 }

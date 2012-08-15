@@ -22,7 +22,7 @@ public class Base64Test {
 
 		@BeforeClass
 		public static void before() {
-			Util.dispClass("Base64Test-A001", "Base64のエンコード及びデコード");
+			TestUtil.dispHeader("Base64のエンコード及びデコード");
 		}
 
 		@DataPoints
@@ -47,22 +47,12 @@ public class Base64Test {
 
 		@Theory
 		public void test(Fixture fx) throws MessagingException, IOException {
+			TestUtil.dispPrompt(this);
+			
 			String s = Base64.encode(fx.actual);
 			String expected = Base64.decode(s);
 			System.out.printf("encode(%s)=%s  decode(%s)=%s\n", fx.actual, s, s, expected);
 			assertThat(expected, is(fx.expected));
 		}
 	}
-
-	/**
-	 * 共通的に利用されるメソッド
-	 */
-	private static class Util {
-		public static void dispClass(String className, String msg) {
-			System.out.println("\n----------------------------------------------------");
-			System.out.printf("[%s] %s\n", className, msg);
-			System.out.println("----------------------------------------------------");
-		}
-	}
-
 }
