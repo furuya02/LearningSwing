@@ -122,7 +122,14 @@ public final class Ip {
 					sb.append(":");
 				}
 				sb.append(ipStr.substring(n));
-				tmp = sb.toString().split(":");
+				tmp = sb.toString().split(":", -1);
+				if (tmp.length != 8) {
+					String[] m = new String[] { "", "", "", "", "", "", "", "" };
+					for (int i = 0; i < 8; i++) {
+						m[i] = tmp[i];
+					}
+					tmp = m;
+				}
 			}
 			if (tmp.length != 8) {
 				init(inetKind); // デフォルト値での初期化
@@ -218,42 +225,7 @@ public final class Ip {
 		return true;
 		
 	}
-	 
-	// public override bool Equals(object o) {
-	// if (((Ip)o).InetKind == InetKind) {
-	// if (InetKind == InetKind.V4) {
-	// if (IpV4 == null && ((Ip)o).IpV4 == null)
-	// return true;
-	// return IpV4 != null && !IpV4.Where((t, i) => ((Ip) o).IpV4[i] !=
-	// t).Any();
-	// }
-	// if (IpV6 == null && ((Ip)o).IpV6 == null)
-	// return true;
-	// return IpV6 != null && !IpV6.Where((t, i) => ((Ip) o).IpV6[i] !=
-	// t).Any();
-	// }
-	// return false;
-	// }
-	// public override int GetHashCode() {
-	// return base.GetHashCode();
-	// }
 
-	// //Ver5.4.1で修正
-	// public static bool operator ==(Ip a, Ip b) {
-	// if (ReferenceEquals(a, b)) {
-	// return true;
-	// }
-	// if (((object)a == null) || ((object)b == null)) {
-	// return false;
-	// }
-	// return a.Equals(b);
-	// }
-	//
-	// //// 「!=」演算子のオーバーロード
-	// public static bool operator !=(Ip a, Ip b) {
-	// return !(a == b);
-	// }
-	//
 	@Override
 	public String toString() {
 		if (inetKind == InetKind.V4) {
@@ -305,6 +277,9 @@ public final class Ip {
 				}
 				// sb.AppendFormat(i == 0 ? "{0:x}" : ":{0:x}", u);
 			}
+		}
+		if (flg == 1) { // 使用中で終了した場合は:を足す
+	sb.append(":");
 		}
 		// Ver5.4.9
 		if (scopeId != 0) {

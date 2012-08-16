@@ -44,7 +44,8 @@ public class IpTest {
 			new Fixture("fe80::7090:40f5:96f7:17db%13", "fe80::7090:40f5:96f7:17db%13"), 
 			new Fixture("12::78:90ab", "12::78:90ab"), 
 			new Fixture("[12::78:90ab]", "12::78:90ab"),  //[括弧付きで指定された場合]
-			
+			new Fixture("fff::", "fff::"),
+		
 		};
 		static class Fixture {
 			private String actual;
@@ -256,7 +257,7 @@ public class IpTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("演算子==の判定（null判定）テスト");
+			TestUtil.dispHeader("演算子==の判定（null判定）");
 		}
 		
 		@DataPoints
@@ -305,8 +306,84 @@ public class IpTest {
 		}
 	}
 	
-	//getAddrV6H()とgetAddrV6L()で取得した値からコンストラクタIp(long h,long l)を使用して再構築する
+	@RunWith(Theories.class)
+	public static class A006 {
+		
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("getAddrV4()で取得した値からコンストラクタIp(int ip)を使用して再構築する");
+		}
+		
+		@DataPoints
+		public static Fixture[] datas = {
+			// IP1.IP2,==の判定
+			new Fixture("1.2.3.4"),
+			new Fixture("192.168.0.1"),
+			new Fixture("255.255.255.255"),
+			new Fixture("INADDR_ANY"),
+		};
+		static class Fixture {
+			private String ipStr;
+
+			public Fixture(String ipStr) {
+				this.ipStr = ipStr;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this);
+			
+			Ip p1 = new Ip(fx.ipStr);
+			int i = p1.getAddrV4();
+			Ip p2 = new Ip(i);
+			System.out.printf("Ip(%s) => ip.getAddrV4()=0x%x(%d) => new Ip(0x%x) => %s \n", fx.ipStr,i,i,i,p2.toString());
+
+			assertThat(p2.toString(),is(fx.ipStr));
+			
+		}
+	}
 	
-	//getAddrV4()で取得した値からコンストラクタIp(int ip)を使用して再構築する
+	@RunWith(Theories.class)
+	public static class A007 {
+		
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("getAddrV6H()とgetAddrV6L()で取得した値からコンストラクタIp(long h,long l)を使用して再構築する");
+		}
+		
+		@DataPoints
+		public static Fixture[] datas = {
+			// IP1.IP2,==の判定
+			new Fixture("102:304:506:708:90a:b0c:d0e:f01"),
+			new Fixture("ff83::e:f01"),
+			new Fixture("::1"),
+			new Fixture("fff::"),
+		};
+		static class Fixture {
+			private String ipStr;
+
+			public Fixture(String ipStr) {
+				this.ipStr = ipStr;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this);
+			
+			Ip p1 = new Ip(fx.ipStr);
+			long h = p1.getAddrV6H();
+			long l = p1.getAddrV6L();
+			Ip p2 = new Ip(h, l);
+			System.out.printf("Ip(%s) => ip.getAddrV6H()=0x%x  ip.getAddrV6L()=0x%x => new Ip(0x%x,0x%x) => %s \n", fx.ipStr, h, l, h, l, p2.toString());
+
+			assertThat(p2.toString(), is(fx.ipStr));
+			
+		}
+	}
+	
 
 }
