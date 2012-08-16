@@ -17,6 +17,10 @@ public final class Ip {
 	private byte[] ipV6;
 	private int scopeId;
 
+	public int getScopeId() {
+		return scopeId;
+	}
+
 	public byte[] getIpV4() {
 		return ipV4;
 	}
@@ -132,7 +136,7 @@ public final class Ip {
 					//short u = Short.valueOf(tmp[i], 16);
 					int u = Integer.valueOf(tmp[i], 16);
 					// UInt16 u = Convert.ToUInt16(tmp[i], 16);
-					byte[] b = ByteBuffer.allocate(2).putShort((short)u).array();
+					byte[] b = ByteBuffer.allocate(2).putShort((short) u).array();
 					// byte[] b = BitConverter.GetBytes(u);
 					ipV6[i * 2] = b[0];
 					ipV6[i * 2 + 1] = b[1];
@@ -184,6 +188,37 @@ public final class Ip {
 		status = true; // ‰Šú‰»¬Œ÷
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		// ”ñNULL‹y‚ÑŒ^‚ÌŠm”F
+		if (o == null || !(o instanceof Ip)) {
+			return false;
+		}
+		Ip ip = (Ip) o;
+		if (ip.getInetKind() == inetKind) {
+			if (inetKind == InetKind.V4) {
+				byte[] b = ip.getIpV4();
+				for (int i = 0; i < 4; i++) {
+					if (ipV4[i] != b[i]) {
+						return false;
+					}
+				}
+			} else {
+				if (ip.getScopeId() != scopeId) {
+					return false;
+				}
+				byte[] b = ip.getIpV6();
+				for (int i = 0; i < 16; i++) {
+					if (ipV6[i] != b[i]) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+		
+	}
+	 
 	// public override bool Equals(object o) {
 	// if (((Ip)o).InetKind == InetKind) {
 	// if (InetKind == InetKind.V4) {
@@ -241,7 +276,7 @@ public final class Ip {
 			//short h = ByteBuffer.allocate(4).put(ipV6[i * 2]).getShort();
 			//short l = ByteBuffer.allocate(4).put(ipV6[i * 2 + 1]).getShort();
 			//short u = (short) ((h << 8) | l);
-			ByteBuffer b = ByteBuffer.allocate(2).put(ipV6, i*2,2);
+			ByteBuffer b = ByteBuffer.allocate(2).put(ipV6, i * 2, 2);
 			b.position(0);
 			short u = b.getShort();
 			//int u = ByteBuffer.allocate(4).put(ipV6, i*2,2).getInt();
