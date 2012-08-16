@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.ByteBuffer;
 
+import junit.framework.Assert;
+
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
@@ -32,9 +34,8 @@ public class IpTest {
 			// コンストラクタ文字列,toString()出力
 			new Fixture("192.168.0.1", "192.168.0.1"), 
 			new Fixture("255.255.0.254", "255.255.0.254"), 
-			new Fixture("IN_ADDR_ANY", "0.0.0.0"), 
+			new Fixture("INADDR_ANY", "INADDR_ANY"), 
 			new Fixture("0.0.0.0", "0.0.0.0"), 
-			new Fixture("", "0.0.0.0"), 
 			new Fixture("IN6ADDR_ANY_INIT", "IN6ADDR_ANY_INIT"), 
 			new Fixture("::", "::0"), 
 			new Fixture("::1", "::1"), 
@@ -80,9 +81,8 @@ public class IpTest {
 			// コンストラクタ文字列,toString()出力
 			new Fixture("192.168.0.1", "/192.168.0.1"), 
 			new Fixture("255.255.0.254", "/255.255.0.254"), 
-			new Fixture("IN_ADDR_ANY", "/0.0.0.0"), 
+			new Fixture("INADDR_ANY", "/0.0.0.0"), 
 			new Fixture("0.0.0.0", "/0.0.0.0"), 
-			new Fixture("", "/0.0.0.0"), 
 			new Fixture("IN6ADDR_ANY_INIT", "/0:0:0:0:0:0:0:0"), 
 			new Fixture("::", "/0:0:0:0:0:0:0:0%0"), 
 			new Fixture("::1", "/0:0:0:0:0:0:0:1%0"), 
@@ -384,6 +384,52 @@ public class IpTest {
 			
 		}
 	}
+	
+	@RunWith(Theories.class)
+	public static class A008 {
+		
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("文字列によるコンストラクタで例外(IllegalArgumentException)が発生することを確認する");
+		}
+		
+		@DataPoints
+		public static Fixture[] datas = {
+			//コンストラクタに与える文字列
+			new Fixture(""),
+			new Fixture("IN_ADDR_ANY"),
+			new Fixture("xxx"),
+			new Fixture("192.168.0.1.2"),
+			new Fixture(null),
+			new Fixture("11111::"),
+		};
+		static class Fixture {
+			private String ipStr;
+
+			public Fixture(String ipStr) {
+				this.ipStr = ipStr;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this);
+
+			System.out.printf("Ip(%s) => throw IllegalArgumentException\n",fx.ipStr);
+			
+			try {
+				Ip p1 = new Ip(fx.ipStr);
+				Assert.fail("この行が実行されたらエラー");
+			} catch (IllegalArgumentException ex) {
+				return;
+			}
+			Assert.fail("この行が実行されたらエラー");
+		}
+	}
+//IllegalArgumentExceptionが発生することを確認する	
+//	new Fixture("", "0.0.0.0"), 
+//	new Fixture("", "IN_ADDR_AAA_ANY"), 
 	
 
 }

@@ -169,7 +169,8 @@ public class OneValTest {
 			new Fixture(CtrlType.MEMO, null, false), //不正入力
 			new Fixture(CtrlType.HIDDEN, null, false), //不正入力
 			new Fixture(CtrlType.ADDRESSV4, null, false), //不正入力
-			new Fixture(CtrlType.ADDRESSV4, "102", false), //不正入力
+			new Fixture(CtrlType.ADDRESSV4, "xxx", false), //不正入力
+			new Fixture(CtrlType.ADDRESSV4, "1", false), //不正入力
 		};
 		static class Fixture {
 			private CtrlType ctrlType;

@@ -58,6 +58,11 @@ public final class Ip {
 	// コンストラクタ
 	public Ip(String ipStr) {
 		init(InetKind.V4);
+		
+		if (ipStr == null) {
+			throwException(ipStr); //例外終了
+		}
+		
 		if (ipStr == "INADDR_ANY") { // IPV4
 			any = true;
 		} else if (ipStr == "IN6ADDR_ANY_INIT") { // IPV6
@@ -68,8 +73,7 @@ public final class Ip {
 			for (int i = 0; i < ipStr.length(); i++) {
 				char c = ipStr.charAt(i);
 				if (c != '.' && (c < '0' || '9' < c)) {
-					init(inetKind); // デフォルト値での初期化
-					return;
+					throwException(ipStr); //例外終了
 				}
 			}
 			String[] tmp = ipStr.split("\\.");
@@ -80,17 +84,15 @@ public final class Ip {
 						int n = Integer.valueOf(tmp[i]);
 						if (n < 0 || 255 < n) {
 							init(inetKind); // デフォルト値での初期化
-							return;
+							throwException(ipStr); //例外終了
 						}
 						ipV4[i] = (byte) n;
 					}
 				} else {
-					init(inetKind); // デフォルト値での初期化
-					return;
+					throwException(ipStr); //例外終了
 				}
 			} catch (Exception ex) {
-				init(inetKind); // デフォルト値での初期化
-				return;
+				throwException(ipStr); //例外終了
 			}
 		} else if (ipStr.indexOf(":") >= 0) { // IPV6
 			init(InetKind.V6);
@@ -132,10 +134,13 @@ public final class Ip {
 				}
 			}
 			if (tmp.length != 8) {
-				init(inetKind); // デフォルト値での初期化
-				return;
+				throwException(ipStr); //例外終了
 			}
 			for (int i = 0; i < 8; i++) {
+				if(tmp[i].length()>4){
+					throwException(ipStr); //例外終了
+				}
+				
 				if (tmp[i].equals("")) {
 					ipV6[i * 2] = 0;
 					ipV6[i * 2 + 1] = 0;
@@ -150,10 +155,15 @@ public final class Ip {
 				}
 			}
 		} else {
-			init(inetKind); // デフォルト値での初期化
-			return;
+			throwException(ipStr); //例外終了
 		}
 		status = true; // 初期化成功
+	}
+
+	//データを初期化し、例外を発生させる
+	private void throwException(String ipStr) {
+		init(inetKind); // デフォルト値での初期化
+		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
 	}
 
 	// ホストバイトオーダのデータで初期化する

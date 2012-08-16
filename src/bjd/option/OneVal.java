@@ -177,7 +177,12 @@ public class OneVal {
 				// value = new BindAddr(str);
 				break;
 			case ADDRESSV4:
-				value = new Ip(str);
+				try {
+					value = new Ip(str);
+				} catch (Exception ex) {
+					value = null;
+					return false;
+				}
 				break;
 			case TABPAGE:
 			case GROUP:
