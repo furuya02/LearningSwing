@@ -4,6 +4,7 @@ import java.awt.Font;
 
 import bjd.Crypt;
 import bjd.ctrl.OneCtrl;
+import bjd.net.Ip;
 
 public class OneVal {
 
@@ -74,7 +75,7 @@ public class OneVal {
 			case BINDADDR:
 				// return Value.ToString();
 			case ADDRESSV4:
-				// return Value.ToString();
+				return value.toString();
 			case TABPAGE:
 			case GROUP:
 				return "";
@@ -94,6 +95,10 @@ public class OneVal {
 	 * @return ê¨î€
 	 */
 	public boolean fromReg(String str) {
+		if (str == null) {
+			value = null;
+			return false;
+		}
 		switch (oneCtrl.getCtrlType()) {
 			case DAT:
 				// var dat = new Dat();
@@ -109,19 +114,17 @@ public class OneVal {
 				break;
 			case FONT:
 				value = null;
-				if (str != null) {
-					String[] tmp = str.split(",");
-					if (tmp.length == 3) {
-						String name = tmp[0];
-						int style = Integer.parseInt(tmp[1]);
-						int size = Integer.parseInt(tmp[2]);
-						value = new Font(name, style, size);
-						// åüèÿ
-						Font f = (Font) value;
-						if (f.getStyle() != style || f.getSize() < 0) {
-							value = null;
-							return false;
-						}
+				String[] tmp = str.split(",");
+				if (tmp.length == 3) {
+					String name = tmp[0];
+					int style = Integer.parseInt(tmp[1]);
+					int size = Integer.parseInt(tmp[2]);
+					value = new Font(name, style, size);
+					// åüèÿ
+					Font f = (Font) value;
+					if (f.getStyle() != style || f.getSize() < 0) {
+						value = null;
+						return false;
 					}
 				}
 				break;
@@ -174,7 +177,7 @@ public class OneVal {
 				// value = new BindAddr(str);
 				break;
 			case ADDRESSV4:
-				// value = new Ip(str);
+				value = new Ip(str);
 				break;
 			case TABPAGE:
 			case GROUP:

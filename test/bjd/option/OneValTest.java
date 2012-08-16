@@ -17,6 +17,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.TestUtil;
+import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlFile;
 import bjd.ctrl.CtrlFolder;
@@ -58,6 +59,7 @@ public class OneValTest {
 			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
 			new Fixture(CtrlType.MEMO, "123", "123"),
 			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
+			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -108,6 +110,8 @@ public class OneValTest {
 			new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
 			new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
 			new Fixture(CtrlType.HIDDEN, "503c983b94f87e6a9295796bb439a054"), 
+			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), 
+			
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -164,6 +168,8 @@ public class OneValTest {
 			new Fixture(CtrlType.FONT, "Serif,1,8", true), //不正入力
 			new Fixture(CtrlType.MEMO, null, false), //不正入力
 			new Fixture(CtrlType.HIDDEN, null, false), //不正入力
+			new Fixture(CtrlType.ADDRESSV4, null, false), //不正入力
+			new Fixture(CtrlType.ADDRESSV4, "102", false), //不正入力
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -296,6 +302,12 @@ public class OneValTest {
 						val = "";
 					}
 					oneCtrl = new CtrlHidden(help);
+					break;
+				case ADDRESSV4:
+					if (val == null) {
+						val = "";
+					}
+					oneCtrl = new CtrlAddress(help);
 					break;
 				default:
 					// not implement.
