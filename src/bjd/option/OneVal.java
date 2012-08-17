@@ -2,11 +2,12 @@ package bjd.option;
 
 import java.awt.Font;
 
-import bjd.Crypt;
 import bjd.ctrl.OneCtrl;
 import bjd.net.Ip;
+import bjd.util.Crypt;
+import bjd.util.IDispose;
 
-public class OneVal {
+public class OneVal implements IDispose {
 
 	private String name;
 	private Object value;
@@ -20,7 +21,10 @@ public class OneVal {
 		this.oneCtrl = oneCtrl;
 		oneCtrl.setOneVal(this); // OneCtrlÇÃOneValÇÕÇ±Ç±Ç≈èâä˙âªÇ≥ÇÍÇÈ
 	}
-
+	@Override
+	public void dispose() {
+	}
+	
 	public OneCtrl getOneCtrl() {
 		return oneCtrl;
 	}

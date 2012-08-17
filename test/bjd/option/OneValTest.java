@@ -16,7 +16,6 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import bjd.TestUtil;
 import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlFile;
@@ -29,6 +28,7 @@ import bjd.ctrl.CtrlRadio;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.CtrlType;
 import bjd.ctrl.OneCtrl;
+import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
 public class OneValTest {

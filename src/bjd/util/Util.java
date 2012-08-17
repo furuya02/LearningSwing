@@ -1,4 +1,4 @@
-package bjd;
+package bjd.util;
 
 public final class Util {
 	
