@@ -21,7 +21,7 @@ public class OneDatTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("コンストラクタで初期化してtoReg()の出力を確認する [*]はisSecretList toReg()のパラメータは needSecret");
+			TestUtil.dispHeader("コンストラクタで初期化してtoReg()の出力を確認する [*]はisSecretList toReg()のパラメータは isSecret");
 		}
 
 		@DataPoints
@@ -35,15 +35,15 @@ public class OneDatTest {
 			private boolean enable;
 			private String[] list;
 			private boolean[] isSecretList;
-			private boolean needSecret;
+			private boolean isSecret;
 			private String expected;
 
-			public Fixture(boolean enable, String[] list, boolean[] isSecretList, boolean needSecret, String expected) {
+			public Fixture(boolean enable, String[] list, boolean[] isSecretList, boolean isSecret, String expected) {
 
 				this.enable = enable;
 				this.list = list;
 				this.isSecretList = isSecretList;
-				this.needSecret = needSecret;
+				this.isSecret = isSecret;
 				this.expected = expected;
 			}
 		}
@@ -60,10 +60,10 @@ public class OneDatTest {
 				sb.append(fx.list[i]);
 				sb.append(String.format("[%s]", fx.isSecretList[i] ? "*" : ""));
 			}
-			System.out.printf("new OneDat(%s,{%s}) toReg(%s)=\"%s\"\n", fx.enable, sb.toString(), fx.needSecret, fx.expected);
+			System.out.printf("new OneDat(%s,{%s}) toReg(%s)=\"%s\"\n", fx.enable, sb.toString(), fx.isSecret, fx.expected);
 
 			OneDat oneDat = new OneDat(fx.enable, fx.list, fx.isSecretList);
-			assertThat(oneDat.toReg(fx.needSecret), is(fx.expected));
+			assertThat(oneDat.toReg(fx.isSecret), is(fx.expected));
 		}
 	}
 	

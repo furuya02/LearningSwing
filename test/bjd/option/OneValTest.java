@@ -8,6 +8,8 @@ import static org.junit.Assert.assertSame;
 import static org.hamcrest.CoreMatchers.is;
 
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -18,6 +20,7 @@ import org.junit.runner.RunWith;
 
 import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlFile;
 import bjd.ctrl.CtrlFolder;
 import bjd.ctrl.CtrlFont;
@@ -60,6 +63,7 @@ public class OneValTest {
 			new Fixture(CtrlType.MEMO, "123", "123"),
 			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
 			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
+			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDatはTESTBOX×2で初期化されている
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -111,6 +115,8 @@ public class OneValTest {
 			new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
 			new Fixture(CtrlType.HIDDEN, "503c983b94f87e6a9295796bb439a054"), 
 			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), 
+			new Fixture(CtrlType.DAT, "\tn1\tn2"), 
+			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"), 
 			
 		};
 		static class Fixture {
@@ -171,6 +177,9 @@ public class OneValTest {
 			new Fixture(CtrlType.ADDRESSV4, null, false), //不正入力
 			new Fixture(CtrlType.ADDRESSV4, "xxx", false), //不正入力
 			new Fixture(CtrlType.ADDRESSV4, "1", false), //不正入力
+			new Fixture(CtrlType.DAT, "", false), //不正入力
+			new Fixture(CtrlType.DAT, null, false), //不正入力
+			new Fixture(CtrlType.DAT, "\tn1", false), //不正入力(カラム不一致)
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -309,6 +318,18 @@ public class OneValTest {
 						val = "";
 					}
 					oneCtrl = new CtrlAddress(help);
+					break;
+				case DAT:
+					//カラムはTEXTBOX×2で決め打ち
+					ArrayList<CtrlType> ctrlTypeList = new ArrayList<CtrlType>();
+					ctrlTypeList.add(CtrlType.TEXTBOX);
+					ctrlTypeList.add(CtrlType.TEXTBOX);
+
+					if (val == null) {
+						val = (Dat) new Dat(ctrlTypeList);
+					}
+					
+					oneCtrl = new CtrlDat(help, ctrlTypeList);
 					break;
 				default:
 					// not implement.

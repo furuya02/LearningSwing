@@ -40,13 +40,13 @@ public class Dat extends ListBase<OneDat> {
 		return true;
 	}
 	
-    public String toReg(boolean needSecret) {
+    public String toReg(boolean isSecret) {
     	StringBuilder sb = new StringBuilder();
         for (OneDat o : ar) {
             if (sb.length() != 0) {
                 sb.append("\b");
             }
-            sb.append(o.toReg(needSecret));
+            sb.append(o.toReg(isSecret));
         }
         return sb.toString();
     }

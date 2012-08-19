@@ -2,6 +2,7 @@ package bjd.option;
 
 import java.awt.Font;
 
+import bjd.ctrl.CtrlDat;
 import bjd.ctrl.OneCtrl;
 import bjd.net.Ip;
 import bjd.util.Crypt;
@@ -21,10 +22,11 @@ public class OneVal implements IDispose {
 		this.oneCtrl = oneCtrl;
 		oneCtrl.setOneVal(this); // OneCtrlのOneValはここで初期化される
 	}
+
 	@Override
 	public void dispose() {
 	}
-	
+
 	public OneCtrl getOneCtrl() {
 		return oneCtrl;
 	}
@@ -44,14 +46,13 @@ public class OneVal implements IDispose {
 	/**
 	 * 設定ファイル(Option.ini)への出力
 	 * 
-	 * @param isDebug
+	 * @param isSecret
 	 *            デバッグ用の設定ファイル出力用（パスワード等を***で表現する）
 	 */
-	public String toReg(boolean isDebug) {
+	public String toReg(boolean isSecret) {
 		switch (oneCtrl.getCtrlType()) {
 			case DAT:
-				// var listVal = ((CtrlDat)OneCtrl).ListVal;
-				// return ((Dat)Value).ToReg(isDebug, listVal);
+				return ((Dat) value).toReg(isSecret);
 			case CHECKBOX:
 				return String.valueOf(value);
 			case FONT:
@@ -65,7 +66,7 @@ public class OneVal implements IDispose {
 			case TEXTBOX:
 				return (String) value;
 			case HIDDEN:
-				if (isDebug) {
+				if (isSecret) {
 					return "***";
 				}
 				return Crypt.encrypt((String) value);
@@ -105,9 +106,13 @@ public class OneVal implements IDispose {
 		}
 		switch (oneCtrl.getCtrlType()) {
 			case DAT:
-				// var dat = new Dat();
-				// dat.FromReg(str);
-				// Value = dat;
+				CtrlDat ctrlDat = (CtrlDat) oneCtrl;
+				Dat dat = new Dat(ctrlDat.getCtrlTypeList());
+				if (!dat.fromReg(str)) {
+					value = null;
+					return false;
+				}
+				value = dat;
 				break;
 			case CHECKBOX:
 				if (str.equalsIgnoreCase("false") || str.equalsIgnoreCase("true")) {

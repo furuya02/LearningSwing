@@ -77,14 +77,14 @@ public class OneDat implements IDispose {
 		return true;
 	}
 
-	public String toReg(boolean needSecret) {
+	public String toReg(boolean isSecret) {
 		StringBuilder sb = new StringBuilder();
 		if (!enable) {
 			sb.append("#");
 		}
 		for (int i = 0; i < strList.size(); i++) {
 			sb.append('\t');
-			if (needSecret && isSecretList[i]) { // シークレットカラム
+			if (isSecret && isSecretList[i]) { // シークレットカラム
 				sb.append("***");
 			} else {
 				sb.append(strList.get(i));
