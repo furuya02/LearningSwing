@@ -416,7 +416,7 @@ public class IpTest {
 
 			TestUtil.dispPrompt(this);
 
-			System.out.printf("Ip(%s) => throw IllegalArgumentException\n",fx.ipStr);
+			System.out.printf("new Ip(%s) => throw IllegalArgumentException\n",fx.ipStr);
 			
 			try {
 				Ip p1 = new Ip(fx.ipStr);

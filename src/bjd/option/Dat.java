@@ -1,59 +1,81 @@
 package bjd.option;
-/*
+
+import java.util.ArrayList;
+
+import bjd.ctrl.CtrlType;
+import bjd.util.ListBase;
+
 public class Dat extends ListBase<OneDat> {
-        public void Add(bool enable, string str) {
-            Ar.Add(new OneDat(enable, str));
-        }
-        public OneDat this[int index] {
-            get {
-                return Ar[index];
-            }
-            set {
-                Ar[index] = value;
-            }
-        }
+	
+	//private ArrayList<CtrlType> ctrlTypeList;
+	private boolean[] isSecretList; //シークレット化が必要なカラム
+	private int colMax;
+	
+	public Dat(ArrayList<CtrlType> ctrlTypeList) {
+		//this.ctrlTypeList = ctrlTypeList;
+		//カラム数の初期化
+		colMax = ctrlTypeList.size();
+		//isSecretListの生成
+		isSecretList = new boolean[colMax];
+		for (int i = 0; i < colMax; i++) {
+			isSecretList[i] = false;
+			if (ctrlTypeList.get(i) == CtrlType.HIDDEN) {
+				isSecretList[i] = true;
+			}
+		}
+	}
+	
+	public boolean add(boolean enable, String str) {
+		if (str == null) {
+			throw new IllegalArgumentException("引数にnullが渡されました");
+		}
+		String[] list = str.split("\t");
+		if (list.length != colMax) {
+			throw new IllegalArgumentException("カラム数が一致しません");
+		}
 
-        //TODO: ToReg FromRegは、BidAddrのようにToString()とConstractor(string)に統一するべき？
-        //設定ファイル(Option.ini)への読み書きのため
-        public string ToReg(bool isDebug,ListVal listVal){
-            var sb = new StringBuilder();
-            foreach (var o in Ar) {
-                var str = o.Str;
-                if (isDebug) {
-                    //ZIPでlistValのOneCtrlと混合しisDebug+HIDENNの場合は、***を出力する（Option.txt用）
-                    //Datの１データである文字列のうち、HIDDENのテキストを***に変更する
-                    var tmpStr = o.Str.Split('\t');
-                    var tmp = new StringBuilder();
-                    foreach (var a in tmpStr.Zip(listVal, (s, l) => new { s, l.OneCtrl })){
-                        //if (tmp.Length == 0)
-                        //    tmp.Append('\t');
-                        if (tmp.Length != 0)
-                                tmp.Append("\t");
-                        tmp.Append(a.OneCtrl.GetType() == CtrlType.Hidden ? "***" : a.s);
-                    }
-                    str = tmp.ToString();
-                }
-
-                if (sb.Length != 0)
-                    sb.Append("\b");
-                sb.Append(o.Enable ? "" : "#");
-                sb.Append(str);
+		if (!ar.add(new OneDat(enable, list, isSecretList))) {
+			return false;
+		}
+		return true;
+	}
+	
+    public String toReg(boolean needSecret) {
+    	StringBuilder sb = new StringBuilder();
+        for (OneDat o : ar) {
+            if (sb.length() != 0) {
+                sb.append("\b");
             }
-            return sb.ToString();
+            sb.append(o.toReg(needSecret));
         }
-        public void FromReg(string str){
-            Ar.Clear();
-            if (str != "") {
-                foreach (var l in str.Split('\b')) {
-                    if (l.Length>0 && l[0] == '#') {
-                        Ar.Add(new OneDat(false, l.Substring(1)));
-                    } else {
-                        Ar.Add(new OneDat(true, l));
-                    }
-                }
-            }
-        }
-
+        return sb.toString();
     }
+
+	public boolean fromReg(String str) {
+		ar.clear();
+		if (str == null) {
+			return false;
+		}
+		if (str.equals("")) {
+			return false;
+		}
+		// 各行処理
+		String [] lines = str.split("\b");
+		if (lines.length <= 0) {
+			return false;
+		}
+		for (String l : lines) { 
+			//ダミーのOneDatを作成
+			OneDat oneDat = new OneDat(true, new String[colMax], isSecretList);
+			if (oneDat.fromReg(l)) {
+				if (ar.add(oneDat)) {
+					continue; // 処理成功
+				}
+			}
+			//処理失敗
+			ar.clear();
+			return false;
+		}
+		return true;
+	}
 }
-*/
