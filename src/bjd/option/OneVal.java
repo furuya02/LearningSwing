@@ -2,6 +2,7 @@ package bjd.option;
 
 import java.awt.Font;
 
+import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.OneCtrl;
 import bjd.net.BindAddr;
@@ -49,6 +50,7 @@ public class OneVal implements IDispose {
 	 * 
 	 * @param isSecret
 	 *            デバッグ用の設定ファイル出力用（パスワード等を***で表現する）
+	 * @throws Exception 
 	 */
 	public String toReg(boolean isSecret) {
 		switch (oneCtrl.getCtrlType()) {
@@ -74,10 +76,9 @@ public class OneVal implements IDispose {
 			case MEMO:
 				return ((String) value).replaceAll("\r\n", "\t");
 			case RADIO:
+			case COMBOBOX:
 			case INT:
 				return String.valueOf(value);
-			case COMBOBOX:
-				// return ((CtrlComboBox)OneCtrl).StrList[(int)Value];
 			case BINDADDR:
 				return value.toString();
 			case ADDRESSV4:
@@ -86,11 +87,8 @@ public class OneVal implements IDispose {
 			case GROUP:
 				return "";
 			default:
-				// throw new
-				// Exception("コントロールの型に応じたテキスト化が実装されていません OneVal::ToText()　" +
-				// OneCtrl.GetType());
+				return ""; //"実装されていないCtrlTypeが指定されました OneVal.toReg()"
 		}
-		return "ERROR";
 	}
 
 	/**
@@ -99,6 +97,7 @@ public class OneVal implements IDispose {
 	 * @param str
 	 *            　読み込み行
 	 * @return 成否
+	 * @throws Exception 
 	 */
 	public boolean fromReg(String str) {
 		if (str == null) {
@@ -171,6 +170,20 @@ public class OneVal implements IDispose {
 					return false;
 				}
 				break;
+			case COMBOBOX:
+				try {
+					int max = ((CtrlComboBox) oneCtrl).getList().size();
+					int n = Integer.parseInt(str);
+					if (n < 0 || max <= n) {
+						value = 0;
+						return false;
+					}
+					value = n;
+				} catch (Exception e) {
+					value = 0;
+					return false;
+				}
+				break;
 			case INT:
 				try {
 					value = Integer.parseInt(str);
@@ -179,12 +192,8 @@ public class OneVal implements IDispose {
 					return false;
 				}
 				break;
-			case COMBOBOX:
-				// var i = ((CtrlComboBox)OneCtrl).StrList.IndexOf(str);
-				// Value = i >= 0 ? i : 0;
-				break;
 			case BINDADDR:
-				try{
+				try {
 					value = new BindAddr(str);
 				} catch (Exception ex) {
 					value = 0;
@@ -203,9 +212,9 @@ public class OneVal implements IDispose {
 			case GROUP:
 				break;
 			default:
-				// throw new
-				// Exception("コントロールの型に応じたテキストからの変換が実装されていません OneVal::FromText()　"
-				// + OneCtrl.GetType());
+				value = 0;
+				return false;
+				//"実装されていないCtrlTypeが指定されました OneVal.fromReg()"
 		}
 		return true;
 	}

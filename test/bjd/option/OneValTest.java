@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlFile;
 import bjd.ctrl.CtrlFolder;
@@ -70,6 +71,8 @@ public class OneValTest {
 			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDatはTESTBOX×2で初期化されている
 			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),		
 			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),		
+			new Fixture(CtrlType.COMBOBOX, 0, "0"),
+			new Fixture(CtrlType.COMBOBOX, 1, "1"),
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -125,6 +128,7 @@ public class OneValTest {
 			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"), 
 			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), 
 			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"), 
+			new Fixture(CtrlType.COMBOBOX, "1"), 
 		
 		};
 		static class Fixture {
@@ -190,6 +194,9 @@ public class OneValTest {
 			new Fixture(CtrlType.DAT, "\tn1", false), //不正入力(カラム不一致)
 			new Fixture(CtrlType.BINDADDR, null, false), //不正入力
 			new Fixture(CtrlType.BINDADDR, "XXX", false), //不正入力
+			new Fixture(CtrlType.COMBOBOX, "XXX", false), //不正入力
+			new Fixture(CtrlType.COMBOBOX, null, false), //不正入力
+			new Fixture(CtrlType.COMBOBOX, "2", false), //不正入力 list.size()オーバー
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -334,6 +341,17 @@ public class OneValTest {
 						val = "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT";
 					}
 					oneCtrl = new CtrlBindAddr(help);
+					break;
+				case COMBOBOX:
+					//listを{"1","2"}で決め打ち
+					ArrayList<String> list = new ArrayList<String>();
+					list.add("1");
+					list.add("2");
+
+					if (val == null) {
+						val = 0;
+					}
+					oneCtrl = new CtrlComboBox(help, list);
 					break;
 				case DAT:
 					//カラムはTEXTBOX×2で決め打ち
