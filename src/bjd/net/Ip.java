@@ -28,11 +28,11 @@ public final class Ip {
 		return ipV6;
 	}
 
-	public boolean isStatus() {
+	public boolean setStatus() {
 		return status;
 	}
 
-	public boolean isAny() {
+	public boolean getAny() {
 		return any;
 	}
 
@@ -62,9 +62,9 @@ public final class Ip {
 			throwException(ipStr); //—áŠOI—¹
 		}
 		
-		if (ipStr == "INADDR_ANY") { // IPV4
+		if (ipStr.equals("INADDR_ANY")) { // IPV4
 			any = true;
-		} else if (ipStr == "IN6ADDR_ANY_INIT") { // IPV6
+		} else if (ipStr.equals("IN6ADDR_ANY_INIT")) { // IPV6
 			init(InetKind.V6);
 			any = true;
 		} else if (ipStr.indexOf('.') > 0) { // IPV4
@@ -220,7 +220,12 @@ public final class Ip {
 			}
 		}
 		return true;
-		
+	}
+
+	@Override
+	public int hashCode() {
+	    assert false : "Use is not assumed.";
+	    return 100; 
 	}
 
 	@Override

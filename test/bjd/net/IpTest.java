@@ -154,10 +154,11 @@ public class IpTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\") ipV4[0]=%d ipV4[1]=%d ipV4[2]=%d ipV4[3]=%d\n", ipStr, ipV4[0], ipV4[1], ipV4[2], ipV4[3]);
 			
-			assertSame(ipV4[0], (byte) fx.n1);
-			assertSame(ipV4[1], (byte) fx.n2);
-			assertSame(ipV4[2], (byte) fx.n3);
-			assertSame(ipV4[3], (byte) fx.n4);
+			assertSame(((byte) fx.n1) == ipV4[0], true);
+			assertSame(((byte) fx.n2) == ipV4[1], true);
+			assertSame(((byte) fx.n3) == ipV4[2], true);
+			assertSame(((byte) fx.n4) == ipV4[3], true);
+
 		}
 	}
 	
@@ -232,23 +233,22 @@ public class IpTest {
 			}
 			System.out.printf("\n");
 
-			assertSame(ipV6[0], (byte) fx.n1);
-			assertSame(ipV6[1], (byte) fx.n2);
-			assertSame(ipV6[2], (byte) fx.n3);
-			assertSame(ipV6[3], (byte) fx.n4);
-			assertSame(ipV6[4], (byte) fx.n5);
-			assertSame(ipV6[5], (byte) fx.n6);
-			assertSame(ipV6[6], (byte) fx.n7);
-			assertSame(ipV6[7], (byte) fx.n8);
-			assertSame(ipV6[8], (byte) fx.n9);
-			assertSame(ipV6[9], (byte) fx.n10);
-			assertSame(ipV6[10], (byte) fx.n11);
-			assertSame(ipV6[11], (byte) fx.n12);
-			assertSame(ipV6[12], (byte) fx.n13);
-			assertSame(ipV6[13], (byte) fx.n14);
-			assertSame(ipV6[14], (byte) fx.n15);
-			assertSame(ipV6[15], (byte) fx.n16);
-			
+			assertSame(((byte) fx.n1) == ipV6[0], true);
+			assertSame(((byte) fx.n2) == ipV6[1], true);
+			assertSame(((byte) fx.n3) == ipV6[2], true);
+			assertSame(((byte) fx.n4) == ipV6[3], true);
+			assertSame(((byte) fx.n5) == ipV6[4], true);
+			assertSame(((byte) fx.n6) == ipV6[5], true);
+			assertSame(((byte) fx.n7) == ipV6[6], true);
+			assertSame(((byte) fx.n8) == ipV6[7], true);
+			assertSame(((byte) fx.n9) == ipV6[8], true);
+			assertSame(((byte) fx.n10) == ipV6[9], true);
+			assertSame(((byte) fx.n11) == ipV6[10], true);
+			assertSame(((byte) fx.n12) == ipV6[11], true);
+			assertSame(((byte) fx.n13) == ipV6[12], true);
+			assertSame(((byte) fx.n14) == ipV6[13], true);
+			assertSame(((byte) fx.n15) == ipV6[14], true);
+			assertSame(((byte) fx.n16) == ipV6[15], true);
 		}
 	}
 
@@ -289,18 +289,20 @@ public class IpTest {
 
 			TestUtil.dispPrompt(this);
 
-			String ipStr0 = "null";
+			String ipStr0 = null;
 			if (fx.ip0 != null) {
 				ipStr0 = fx.ip0.toString();
 			}
-			String ipStr1 = "null";
+			String ipStr1 = null;
 			if (fx.ip1 != null) {
-				ipStr1 = fx.ip1.toString();
+				ipStr0 = fx.ip1.toString();
 			}
 
 			System.out.printf("Ip(%s) ip.equals(%s) => %s\n", ipStr0, ipStr1, fx.expected);
 
-			boolean b = fx.ip0.equals(fx.ip1);
+			if (fx.ip0 == null) {
+				assert false : "fx.ip0 is null";
+			}
 			assertSame(fx.ip0.equals(fx.ip1), fx.expected);
 			
 		}
@@ -427,9 +429,4 @@ public class IpTest {
 			Assert.fail("この行が実行されたらエラー");
 		}
 	}
-//IllegalArgumentExceptionが発生することを確認する	
-//	new Fixture("", "0.0.0.0"), 
-//	new Fixture("", "IN_ADDR_AAA_ANY"), 
-	
-
 }

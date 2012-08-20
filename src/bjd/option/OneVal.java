@@ -4,6 +4,7 @@ import java.awt.Font;
 
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.OneCtrl;
+import bjd.net.BindAddr;
 import bjd.net.Ip;
 import bjd.util.Crypt;
 import bjd.util.IDispose;
@@ -78,7 +79,7 @@ public class OneVal implements IDispose {
 			case COMBOBOX:
 				// return ((CtrlComboBox)OneCtrl).StrList[(int)Value];
 			case BINDADDR:
-				// return Value.ToString();
+				return value.toString();
 			case ADDRESSV4:
 				return value.toString();
 			case TABPAGE:
@@ -183,7 +184,12 @@ public class OneVal implements IDispose {
 				// Value = i >= 0 ? i : 0;
 				break;
 			case BINDADDR:
-				// value = new BindAddr(str);
+				try{
+					value = new BindAddr(str);
+				} catch (Exception ex) {
+					value = 0;
+					return false;
+				}
 				break;
 			case ADDRESSV4:
 				try {

@@ -19,6 +19,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.ctrl.CtrlAddress;
+import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlFile;
@@ -31,6 +32,9 @@ import bjd.ctrl.CtrlRadio;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.CtrlType;
 import bjd.ctrl.OneCtrl;
+import bjd.net.BindAddr;
+import bjd.net.BindStyle;
+import bjd.net.Ip;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -64,6 +68,8 @@ public class OneValTest {
 			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
 			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
 			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDatはTESTBOX×2で初期化されている
+			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),		
+			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),		
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -117,7 +123,9 @@ public class OneValTest {
 			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), 
 			new Fixture(CtrlType.DAT, "\tn1\tn2"), 
 			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"), 
-			
+			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), 
+			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"), 
+		
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -180,6 +188,8 @@ public class OneValTest {
 			new Fixture(CtrlType.DAT, "", false), //不正入力
 			new Fixture(CtrlType.DAT, null, false), //不正入力
 			new Fixture(CtrlType.DAT, "\tn1", false), //不正入力(カラム不一致)
+			new Fixture(CtrlType.BINDADDR, null, false), //不正入力
+			new Fixture(CtrlType.BINDADDR, "XXX", false), //不正入力
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -318,6 +328,12 @@ public class OneValTest {
 						val = "";
 					}
 					oneCtrl = new CtrlAddress(help);
+					break;
+				case BINDADDR:
+					if (val == null) {
+						val = "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT";
+					}
+					oneCtrl = new CtrlBindAddr(help);
 					break;
 				case DAT:
 					//カラムはTEXTBOX×2で決め打ち
