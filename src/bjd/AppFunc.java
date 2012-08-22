@@ -3,6 +3,8 @@ package bjd;
 import javax.swing.JFrame;
 
 import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlFile;
+import bjd.ctrl.CtrlInt;
 import bjd.option.Crlf;
 import bjd.option.OneVal;
 import bjd.option.Option;
@@ -29,10 +31,14 @@ public class AppFunc  implements SelectMenuListener {
 			break;
 		case "Option":
 			Option option = new Option();
-			OneVal o1 = new OneVal("useServer1" , true , Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する"));
+			OneVal o1 = new OneVal("useServer1", true, Crlf.CONTONIE, new CtrlInt("サーバを使用する", 3));
 			option.add(o1);
-			OneVal o2 = new OneVal("useServer2" , true , Crlf.CONTONIE, new CtrlCheckBox("サーバを使用する"));
+			OneVal o2 = new OneVal("xxx2", 123, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する"));
 			option.add(o2);
+
+			OneVal o3 = new OneVal("fileName", "c:\text.txt", Crlf.CONTONIE, new CtrlFile("ファイル名",200));
+			option.add(o3);
+
 			OptionDlg dlg = new OptionDlg(mainFrame, option);
 			boolean b = dlg.showDialog();
 			System.out.println("isOk = " + b);

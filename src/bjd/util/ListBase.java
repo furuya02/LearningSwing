@@ -2,9 +2,7 @@ package bjd.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import bjd.option.OneVal;
 
 //****************************************************************
 // オリジナルのListクラスを生成する場合の基底クラス

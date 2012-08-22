@@ -286,13 +286,13 @@ public class OneValTest {
 					if (val == null) {
 						val = 1;
 					}
-					oneCtrl = new CtrlInt(help);
+					oneCtrl = new CtrlInt(help, 3); // ‚RŒ…‚ÅŒˆ‚ß‘Å‚¿
 					break;
 				case FILE:
 					if (val == null) {
 						val = "1.txt";
 					}
-					oneCtrl = new CtrlFile(help);
+					oneCtrl = new CtrlFile(help,200);
 					break;
 				case FOLDER:
 					if (val == null) {

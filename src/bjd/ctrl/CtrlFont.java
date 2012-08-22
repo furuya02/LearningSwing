@@ -10,5 +10,10 @@ public class CtrlFont extends OneCtrl {
 	public CtrlType getCtrlType() {
 		return CtrlType.FONT;
 	}
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

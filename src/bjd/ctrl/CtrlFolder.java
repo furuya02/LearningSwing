@@ -11,5 +11,10 @@ public class CtrlFolder extends OneCtrl {
 	public CtrlType getCtrlType() {
 		return CtrlType.FOLDER;
 	}
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

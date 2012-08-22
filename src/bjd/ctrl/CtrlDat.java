@@ -19,4 +19,10 @@ public class CtrlDat extends OneCtrl {
 		return CtrlType.DAT;
 	}
 
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

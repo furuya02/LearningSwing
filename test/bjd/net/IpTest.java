@@ -306,7 +306,7 @@ public class IpTest {
 			assertSame(fx.ip0.equals(fx.ip1), fx.expected);
 			
 		}
-	}
+	}	
 	
 	@RunWith(Theories.class)
 	public static class A006 {
@@ -340,9 +340,9 @@ public class IpTest {
 			Ip p1 = new Ip(fx.ipStr);
 			int i = p1.getAddrV4();
 			Ip p2 = new Ip(i);
-			System.out.printf("Ip(%s) => ip.getAddrV4()=0x%x(%d) => new Ip(0x%x) => %s \n", fx.ipStr,i,i,i,p2.toString());
+			System.out.printf("Ip(%s) => ip.getAddrV4()=0x%x(%d) => new Ip(0x%x) => %s \n", fx.ipStr, i, i, i, p2.toString());
 
-			assertThat(p2.toString(),is(fx.ipStr));
+			assertThat(p2.toString(), is(fx.ipStr));
 			
 		}
 	}
@@ -418,7 +418,7 @@ public class IpTest {
 
 			TestUtil.dispPrompt(this);
 
-			System.out.printf("new Ip(%s) => throw IllegalArgumentException\n",fx.ipStr);
+			System.out.printf("new Ip(%s) => throw IllegalArgumentException\n", fx.ipStr);
 			
 			try {
 				Ip p1 = new Ip(fx.ipStr);

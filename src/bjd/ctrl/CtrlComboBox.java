@@ -19,5 +19,11 @@ public class CtrlComboBox extends OneCtrl {
 		return CtrlType.COMBOBOX;
 	}
 
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
 

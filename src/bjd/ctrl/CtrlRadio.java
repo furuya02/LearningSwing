@@ -9,5 +9,10 @@ public class CtrlRadio extends OneCtrl {
 	public CtrlType getCtrlType() {
 		return CtrlType.RADIO;
 	}
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

@@ -12,4 +12,10 @@ public class CtrlAddress extends OneCtrl {
 		return CtrlType.ADDRESSV4;
 	}
 
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

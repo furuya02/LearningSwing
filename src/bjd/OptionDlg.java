@@ -14,8 +14,6 @@ public class OptionDlg extends Dlg {
 	public OptionDlg(JFrame frame, OneOption oneOption) {
 		super(frame, DLG_WIDTH, DLG_HEIGHT);
 
-		// getContentPane().setLayout(null);
-
 		oneOption.createDlg(mainPanel);
 
 		// getContentPane()

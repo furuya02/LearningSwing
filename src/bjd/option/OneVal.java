@@ -2,8 +2,11 @@ package bjd.option;
 
 import java.awt.Font;
 
+import javax.swing.JPanel;
+
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
+import bjd.ctrl.CtrlSize;
 import bjd.ctrl.OneCtrl;
 import bjd.net.BindAddr;
 import bjd.net.Ip;
@@ -43,6 +46,15 @@ public class OneVal implements IDispose {
 
 	public String getName() {
 		return name;
+	}
+
+	public int createCtrl(JPanel mainPanel, int baseX, int baseY , int tabIndex) {
+		System.out.println(String.format("OneVal.createCtrl() name=%s", name));
+		return oneCtrl.create(mainPanel, baseX, baseY, tabIndex);
+	}
+	
+	public CtrlSize getCtrlSize() {
+		return oneCtrl.getCtrlSize();
 	}
 
 	/**

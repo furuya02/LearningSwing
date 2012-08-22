@@ -9,5 +9,10 @@ public class CtrlHidden extends OneCtrl {
 	public CtrlType getCtrlType() {
 		return CtrlType.HIDDEN;
 	}
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

@@ -1,10 +1,10 @@
 package bjd.ctrl;
 
 
-public class CtrlFile extends OneCtrl {
-	public CtrlFile(String help) {
-		super(help);
-		
+public class CtrlFile extends CtrlBrowse {
+	
+	public CtrlFile(String help , int width) {
+		super(help, width);
 	}
 	@Override
 	public CtrlType getCtrlType() {

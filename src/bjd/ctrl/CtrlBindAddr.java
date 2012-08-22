@@ -11,4 +11,10 @@ public class CtrlBindAddr extends OneCtrl {
 		return CtrlType.BINDADDR;
 	}
 
+	@Override
+	public int abstractCreate(int tabIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
