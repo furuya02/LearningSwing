@@ -18,4 +18,11 @@ public class OneOption {
 	public void add(OneVal oneVal) {
 		listVal.add(oneVal);
 	}
+	public Object getValue(String name){
+		if (name.equals("editBrowse")) {
+			return true;
+		}
+		//–¢ŽÀ‘•
+		return null;
+	}
 }

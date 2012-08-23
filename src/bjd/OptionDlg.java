@@ -8,22 +8,13 @@ import bjd.option.OneOption;
 @SuppressWarnings("serial")
 public class OptionDlg extends Dlg {
 
-	private static final int DLG_WIDTH = 500;
+	private static final int DLG_WIDTH = 600;
 	private static final int DLG_HEIGHT = 400;
 
 	public OptionDlg(JFrame frame, OneOption oneOption) {
 		super(frame, DLG_WIDTH, DLG_HEIGHT);
 
 		oneOption.createDlg(mainPanel);
-
-		// getContentPane()
-
-		JCheckBox chckbxNewCheckBox = new JCheckBox("New check box");
-		// chckbxNewCheckBox.setBounds(8, 6, 103, 21);
-		chckbxNewCheckBox.setSize(120, 21);
-		chckbxNewCheckBox.setLocation(30, 10);
-		// getContentPane().add(chckbxNewCheckBox);
-		mainPanel.add(chckbxNewCheckBox);
 
 		/*
 		 * //メニューの項目名をダイアログのタイトルにする var text =

@@ -12,9 +12,11 @@ import bjd.option.Option;
 public class AppFunc  implements SelectMenuListener {
 	private AppMenu appMenu;
 	private JFrame mainFrame;
-	public AppFunc(AppMenu appMenu , JFrame mainFrame) {
+	private Kernel kernel;
+	public AppFunc(AppMenu appMenu , JFrame mainFrame, Kernel kernel) {
 		this.mainFrame = mainFrame;
 		this.appMenu = appMenu;
+		this.kernel = kernel;
 
 		appMenu.addListener(this); //自身をイベント送信先リストに追加
 	}
@@ -36,7 +38,7 @@ public class AppFunc  implements SelectMenuListener {
 			OneVal o2 = new OneVal("xxx2", 123, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する"));
 			option.add(o2);
 
-			OneVal o3 = new OneVal("fileName", "c:\text.txt", Crlf.CONTONIE, new CtrlFile("ファイル名",200));
+			OneVal o3 = new OneVal("fileName", "c:\text.txt", Crlf.CONTONIE, new CtrlFile("ファイル名",20,kernel));
 			option.add(o3);
 
 			OptionDlg dlg = new OptionDlg(mainFrame, option);

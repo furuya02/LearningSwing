@@ -53,6 +53,12 @@ public class OneVal implements IDispose {
 		return oneCtrl.create(mainPanel, baseX, baseY, tabIndex);
 	}
 	
+	public void deleteCtrl() {
+		System.out.println(String.format("OneVal.deleteCtrl() name=%s", name));
+		oneCtrl.delete();
+	}
+	
+	
 	public CtrlSize getCtrlSize() {
 		return oneCtrl.getCtrlSize();
 	}

@@ -1,5 +1,9 @@
 package bjd.ctrl;
-
+/**
+ * 
+ * 各Ctrlオブジェクトのサイズを表現するクラス
+ * 
+ */
 public class CtrlSize {
 	private int width;
 	private int height;

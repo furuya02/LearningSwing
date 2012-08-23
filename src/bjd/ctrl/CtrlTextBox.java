@@ -16,5 +16,10 @@ public class CtrlTextBox extends OneCtrl {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	@Override
+	public int abstractDelete() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

@@ -16,6 +16,7 @@ public final class MainForm {
 	private JFrame mainForm;
 	private AppMenu appMenu;
 	private AppFunc appFunc;
+	private Kernel kernel;
 	/**
 	 * Launch the application.
 	 */
@@ -47,7 +48,11 @@ public final class MainForm {
 			}
 		});
 		mainForm.getContentPane().add(btnNewButton, BorderLayout.NORTH);
-		appFunc = new AppFunc(appMenu, mainForm);
+		
+
+		kernel = new Kernel();
+		
+		appFunc = new AppFunc(appMenu, mainForm, kernel);
 
 		// appFunc.dispose();
 		// appMeu.dispase();

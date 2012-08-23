@@ -13,6 +13,7 @@ import bjd.option.OneVal;
 public abstract class OneCtrl {
 	protected String help;
 	//private OneVal oneVal;
+	private JPanel owner;
 	protected JPanel panel = null;
 	protected final int MARGIN = 3;
 	protected final int DEFAULT_HEIGHT = 28;
@@ -38,6 +39,7 @@ public abstract class OneCtrl {
     
     public abstract int abstractCreate(int tabIndex);
     public int create(JPanel owner, int x, int y, int tabIndex) {
+    	this.owner = owner;
         //this.oneVal = oneVal;
         if (panel == null) {
             //if (GetType() == CtrlType.TabPage) {
@@ -57,6 +59,20 @@ public abstract class OneCtrl {
         }
         return tabIndex;
     }
+    
+    public abstract int abstractDelete();
+    public void delete(){
+        if (panel != null) {
+        	abstractDelete();
+        	owner.remove(panel);
+        	panel = null;
+            //CtrlTabPageの時は、PanelはTabControlを指しているので破棄できない
+            //if (GetType() != CtrlType.TabPage) {
+            //    Panel.Dispose();
+            //}
+            //Panel = null;
+        }    	
+    }
 
     //DOTO int w,hは不要ではないか
 	//コントロール生成の共通作業関数
@@ -64,6 +80,8 @@ public abstract class OneCtrl {
     	JComponent control = self;
     	control.setLocation(x, y);
     	control.setSize(w, h);
+    	setAutoSize(control); // サイズ自動調整(この時点でテキストが適切に設定されているばあ、これでサイズの調整は終わる)
+    	
     	control.setLayout(null); //　子コントロールを絶対位置で表示する
 //    	if (tabIndex == -1) {
 //    		control.TabStop = false;

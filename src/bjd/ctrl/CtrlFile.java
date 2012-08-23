@@ -1,14 +1,15 @@
 package bjd.ctrl;
 
+import bjd.Kernel;
+
 
 public class CtrlFile extends CtrlBrowse {
 	
-	public CtrlFile(String help , int width) {
-		super(help, width);
+	public CtrlFile(String help , int digits, Kernel kernel) {
+		super(help, digits, kernel);
 	}
 	@Override
 	public CtrlType getCtrlType() {
 		return CtrlType.FILE;
 	}
-
 }

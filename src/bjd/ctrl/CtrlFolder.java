@@ -1,20 +1,15 @@
 package bjd.ctrl;
 
+import bjd.Kernel;
 
-public class CtrlFolder extends OneCtrl {
+public class CtrlFolder extends CtrlBrowse {
 	
-	public CtrlFolder(String help) {
-		super(help);
-		
+	public CtrlFolder(String help, int digits, Kernel kernel) {
+		super(help, digits, kernel);
 	}
+
 	@Override
 	public CtrlType getCtrlType() {
 		return CtrlType.FOLDER;
 	}
-	@Override
-	public int abstractCreate(int tabIndex) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

@@ -14,6 +14,7 @@ import javax.swing.text.DocumentFilter;
 
 public class CtrlInt extends OneCtrl {
 
+	private JLabel label = null;
 	private JTextField textField = null;
 	private int digits;
 	
@@ -28,27 +29,29 @@ public class CtrlInt extends OneCtrl {
 	}
 
 	@Override
+	public int abstractDelete() {
+		panel.remove(label);
+		label = null;
+		panel.remove(textField);
+		textField = null;
+		
+		return 0;
+	}
+
+	@Override
 	public int abstractCreate(int tabIndex) {
 		int left = MARGIN;
 		int top = MARGIN;
 
 		//ラベルの作成
-		JLabel label = (JLabel) create(panel, new JLabel(), -1/* tabIndex */, left, top + 3 /* +3 は後のテキストボックスとの整合のため*/, 0, 0);
-		label.setText(help); 
-		setAutoSize(label); //サイズ自動調整
+		label = (JLabel) create(panel, new JLabel(help), -1/* tabIndex */, left, top + 3 /* +3 は後のテキストボックスとの整合のため*/, 0, 0);
 		//label.setBorder(new LineBorder(Color.RED, 2, true)); //Debug 赤枠
-        
-		//オフセット移動
-		left += label.getWidth() + MARGIN;
+		left += label.getWidth() + MARGIN; //オフセット移動
 		
 		//テキストボックスの配置
-		textField = (JTextField) create(panel, new JTextField(), -1/* tabIndex */, left, top, 0, 0);
+		textField = (JTextField) create(panel, new JTextField(digits), -1/* tabIndex */, left, top, 0, 0);
 		((AbstractDocument) textField.getDocument()).setDocumentFilter(new IntegerDocumentFilter(digits));
-        textField.setColumns(digits);
-		setAutoSize(textField); //サイズ自動調整
-
-		//オフセット移動
-		left += textField.getWidth();
+		left += textField.getWidth(); //オフセット移動
 
         //パネルのサイズ設定
 		panel.setSize(left + MARGIN, DEFAULT_HEIGHT);
@@ -106,4 +109,5 @@ public class CtrlInt extends OneCtrl {
 			return ret;
 		}
 	}
+
 }

@@ -19,7 +19,7 @@ public class Dlg extends JDialog {
 
 	public Dlg(JFrame frame, int width, int height) {
 		super(frame);
-		setSize(338, 316);
+		setSize(width, height);
 		setLocationRelativeTo(frame); // 親ウインドウの中央）
 
 		//JPanel mainPanel = new JPanel();
@@ -38,6 +38,7 @@ public class Dlg extends JDialog {
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				isOk = true;
+				
 				setVisible(false);
 			}
 		});

@@ -44,6 +44,11 @@ public class ListVal extends ListBase<OneVal> {
 		
 		return tabIndex;
 	}
+	public void deleteCtrl(){
+		for (OneVal o : ar) {
+			o.deleteCtrl();
+		}		
+	}
 	public CtrlSize getCtrlSize() {
 		if (ctrlSize == null) {
 			throw new ExceptionInInitializerError();
