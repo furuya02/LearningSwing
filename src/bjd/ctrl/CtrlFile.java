@@ -1,4 +1,4 @@
-package bjd.ctrl;
+﻿package bjd.ctrl;
 
 import bjd.Kernel;
 

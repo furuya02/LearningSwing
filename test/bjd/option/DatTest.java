@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,7 +24,7 @@ public class DatTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("fromReg()‚Å‰Šú‰»‚µ‚ÄtoReg(false)‚Åæ‚èo‚·");
+			TestUtil.dispHeader("fromReg()ã§åˆæœŸåŒ–ã—ã¦toReg(false)ã§å–ã‚Šå‡ºã™");
 		}
 
 		@DataPoints
@@ -65,15 +65,15 @@ public class DatTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("fromReg()‚É–³Œø‚È•¶š—ñ‚ğ—^‚¦‚é‚Æfalse‚ª•Ô‚é");
+			TestUtil.dispHeader("fromReg()ã«ç„¡åŠ¹ãªæ–‡å­—åˆ—ã‚’ä¸ãˆã‚‹ã¨falseãŒè¿”ã‚‹");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//new Fixture(3, "#\tn1\tn2\b\tn1\tn2"), //ƒJƒ‰ƒ€”•sˆê’v		
-			//new Fixture(1, "#\tn1\b\tn1\tn2"), //ƒJƒ‰ƒ€”•sˆê’v		
-			//new Fixture(1, "_\tn1"), //–µ‚ƒf[ƒ^		
-			new Fixture(1, "\b"), //–µ‚ƒf[ƒ^		
+			//new Fixture(3, "#\tn1\tn2\b\tn1\tn2"), //ã‚«ãƒ©ãƒ æ•°ä¸ä¸€è‡´		
+			//new Fixture(1, "#\tn1\b\tn1\tn2"), //ã‚«ãƒ©ãƒ æ•°ä¸ä¸€è‡´		
+			//new Fixture(1, "_\tn1"), //çŸ›ç›¾ãƒ‡ãƒ¼ã‚¿		
+			new Fixture(1, "\b"), //çŸ›ç›¾ãƒ‡ãƒ¼ã‚¿		
 			//new Fixture(1, ""),		
 			//new Fixture(1, null),		
 		};
@@ -107,17 +107,17 @@ public class DatTest {
 	
 //	@Test
 //	public void testAdd() {
-//		fail("‚Ü‚¾À‘•‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+//		fail("ã¾ã å®Ÿè£…ã•ã‚Œã¦ã„ã¾ã›ã‚“");
 //	}
 //
 //	@Test
 //	public void testToReg() {
-//		fail("‚Ü‚¾À‘•‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+//		fail("ã¾ã å®Ÿè£…ã•ã‚Œã¦ã„ã¾ã›ã‚“");
 //	}
 //
 //	@Test
 //	public void testFromReg() {
-//		fail("‚Ü‚¾À‘•‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+//		fail("ã¾ã å®Ÿè£…ã•ã‚Œã¦ã„ã¾ã›ã‚“");
 //	}
 
 }

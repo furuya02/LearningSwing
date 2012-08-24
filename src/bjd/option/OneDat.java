@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 
 import java.util.ArrayList;
 import bjd.util.IDispose;
@@ -18,7 +18,7 @@ public class OneDat implements IDispose {
 		return enable;
 	}
 
-	// •K—v‚É‚È‚Á‚½‚ç—LŒø‚É‚·‚é
+	// å¿…è¦ã«ãªã£ãŸã‚‰æœ‰åŠ¹ã«ã™ã‚‹
 	// public void setEnable(boolean enable) {
 	// this.enable = enable;
 	// }
@@ -28,13 +28,13 @@ public class OneDat implements IDispose {
 	}
 
 	private OneDat() {
-		// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì‰B•Á
+		// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®éš è”½
 	}
 
 	public OneDat(boolean enable, String[] list, boolean[] isSecretList) {
 
 		if (list == null || isSecretList == null || list.length != isSecretList.length) {
-			throw new IllegalArgumentException("ˆø”‚É–µ‚‚ª‚ ‚è‚Ü‚·");
+			throw new IllegalArgumentException("å¼•æ•°ã«çŸ›ç›¾ãŒã‚ã‚Šã¾ã™");
 		}
 
 		this.enable = enable;
@@ -45,7 +45,7 @@ public class OneDat implements IDispose {
 		}
 	}
 
-	// @ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å’è‹`‚µ‚½Œ^‚Éˆê’v‚µ‚Ä‚¢‚È‚¢‚Æ‚«false‚ğ•Ô‚·
+	// ã€€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å®šç¾©ã—ãŸå‹ã«ä¸€è‡´ã—ã¦ã„ãªã„ã¨ãfalseã‚’è¿”ã™
 	public boolean fromReg(String str) {
 		
 		if (str == null) {
@@ -53,12 +53,12 @@ public class OneDat implements IDispose {
 		}
 		String[] tmp = str.split("\t");
 
-		//ƒJƒ‰ƒ€”Šm”F
+		//ã‚«ãƒ©ãƒ æ•°ç¢ºèª
 		if (tmp.length != strList.size() + 1) {
 			return false;
 		}
 		
-		//enableƒJƒ‰ƒ€
+		//enableã‚«ãƒ©ãƒ 
 		switch (tmp[0]) {
 			case "":
 				enable = true;
@@ -69,7 +69,7 @@ public class OneDat implements IDispose {
 			default:
 				return false;
 		}
-		//ˆÈ~‚Ì•¶š—ñƒJƒ‰ƒ€
+		//ä»¥é™ã®æ–‡å­—åˆ—ã‚«ãƒ©ãƒ 
 		strList = new ArrayList<String>();
 		for (int i = 1; i < tmp.length; i++) {
 			strList.add(tmp[i]);
@@ -84,7 +84,7 @@ public class OneDat implements IDispose {
 		}
 		for (int i = 0; i < strList.size(); i++) {
 			sb.append('\t');
-			if (isSecret && isSecretList[i]) { // ƒV[ƒNƒŒƒbƒgƒJƒ‰ƒ€
+			if (isSecret && isSecretList[i]) { // ã‚·ãƒ¼ã‚¯ãƒ¬ãƒƒãƒˆã‚«ãƒ©ãƒ 
 				sb.append("***");
 			} else {
 				sb.append(strList.get(i));
@@ -95,6 +95,6 @@ public class OneDat implements IDispose {
 
 	@Override
 	public String toString() {
-		throw new UnsupportedOperationException(); // Œë‚Á‚Äg—p‚³‚ê‚È‚¢‚æ‚¤‚É—áŠOi–¢À‘•j‚Æ‚·‚é
+		throw new UnsupportedOperationException(); // èª¤ã£ã¦ä½¿ç”¨ã•ã‚Œãªã„ã‚ˆã†ã«ä¾‹å¤–ï¼ˆæœªå®Ÿè£…ï¼‰ã¨ã™ã‚‹
 	}
 }

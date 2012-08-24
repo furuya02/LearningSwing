@@ -1,7 +1,7 @@
-package bjd.ctrl;
+ï»¿package bjd.ctrl;
 /**
  * 
- * ŠeCtrlƒIƒuƒWƒFƒNƒg‚ÌƒTƒCƒY‚ğ•\Œ»‚·‚éƒNƒ‰ƒX
+ * å„Ctrlã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚µã‚¤ã‚ºã‚’è¡¨ç¾ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  */
 public class CtrlSize {

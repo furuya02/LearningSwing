@@ -1,4 +1,4 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +15,7 @@ public final class Base64 {
 	private static final String ENCODING = "base64";
 
 	private Base64() {
-		// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì‰B•Á
+		// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®éš è”½
 	}
 
 	public static String encode(String src) throws IOException, MessagingException {
@@ -37,7 +37,7 @@ public final class Base64 {
 		if (outStream != null) {
 			res = outStream.toString();
 			if (res.length() >= 2) {
-				res = res.substring(0, res.length() - 2); // \r\n‚Ìíœ
+				res = res.substring(0, res.length() - 2); // \r\nã®å‰Šé™¤
 			}
 		}
 		return res;

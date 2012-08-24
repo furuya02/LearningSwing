@@ -1,4 +1,4 @@
-package bjd;
+ï»¿package bjd;
 
 import javax.swing.JFrame;
 
@@ -18,10 +18,10 @@ public class AppFunc  implements SelectMenuListener {
 		this.appMenu = appMenu;
 		this.kernel = kernel;
 
-		appMenu.addListener(this); //©g‚ğƒCƒxƒ“ƒg‘—MæƒŠƒXƒg‚É’Ç‰Á
+		appMenu.addListener(this); //è‡ªèº«ã‚’ã‚¤ãƒ™ãƒ³ãƒˆé€ä¿¡å…ˆãƒªã‚¹ãƒˆã«è¿½åŠ 
 	}
 	public void dispose() {
-		appMenu.removeListener(this); //ƒCƒxƒ“ƒg‘—MæƒŠƒXƒg‚©‚çíœ
+		appMenu.removeListener(this); //ã‚¤ãƒ™ãƒ³ãƒˆé€ä¿¡å…ˆãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤
 	}
 
 	@Override
@@ -33,12 +33,12 @@ public class AppFunc  implements SelectMenuListener {
 			break;
 		case "Option":
 			Option option = new Option();
-			OneVal o1 = new OneVal("useServer1", true, Crlf.CONTONIE, new CtrlInt("ƒT[ƒo‚ğg—p‚·‚é", 3));
+			OneVal o1 = new OneVal("useServer1", true, Crlf.CONTONIE, new CtrlInt("ã‚µãƒ¼ãƒã‚’ä½¿ç”¨ã™ã‚‹", 3));
 			option.add(o1);
-			OneVal o2 = new OneVal("xxx2", 123, Crlf.NEXTLINE, new CtrlCheckBox("ƒT[ƒo‚ğg—p‚·‚é"));
+			OneVal o2 = new OneVal("xxx2", 123, Crlf.NEXTLINE, new CtrlCheckBox("ã‚µãƒ¼ãƒã‚’ä½¿ç”¨ã™ã‚‹"));
 			option.add(o2);
 
-			OneVal o3 = new OneVal("fileName", "c:\text.txt", Crlf.CONTONIE, new CtrlFile("ƒtƒ@ƒCƒ‹–¼",20,kernel));
+			OneVal o3 = new OneVal("fileName", "c:\text.txt", Crlf.CONTONIE, new CtrlFile("ãƒ•ã‚¡ã‚¤ãƒ«å",20,kernel));
 			option.add(o3);
 
 			OptionDlg dlg = new OptionDlg(mainFrame, option);

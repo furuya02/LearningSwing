@@ -1,4 +1,4 @@
-package bjd.ctrl;
+ï»¿package bjd.ctrl;
 
 
 import javax.swing.JCheckBox;
@@ -22,11 +22,11 @@ public class CtrlCheckBox extends OneCtrl {
 		int left = MARGIN;
 		int top = MARGIN;
 
-		//ƒ`ƒFƒbƒNƒ{ƒbƒNƒXì¬
+		//ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ä½œæˆ
 		checkBox = (JCheckBox) create(panel, new JCheckBox(help), -1/* tabIndex */, left, top, 0, 0);
-		left += checkBox.getWidth() + MARGIN; //ƒIƒtƒZƒbƒgˆÚ“®
+		left += checkBox.getWidth() + MARGIN; //ã‚ªãƒ•ã‚»ãƒƒãƒˆç§»å‹•
 		
-        //ƒpƒlƒ‹‚ÌƒTƒCƒYİ’è
+        //ãƒ‘ãƒãƒ«ã®ã‚µã‚¤ã‚ºè¨­å®š
 		panel.setSize(left + MARGIN, DEFAULT_HEIGHT);
 		return tabIndex;
 	}

@@ -1,4 +1,4 @@
-package bjd.net;
+﻿package bjd.net;
 
 public enum InetKind {
     V4,

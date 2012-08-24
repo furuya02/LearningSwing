@@ -1,4 +1,4 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -10,10 +10,10 @@ import org.apache.commons.codec.binary.Hex;
 public final class Crypt {
 
 	private Crypt() {
-		// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì‰B•Á
+		// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®éš è”½
 	}
 
-	private static String key = "ABCDEFGHIJKLMNOPQRSTUVWX"; //ƒL[(24ƒoƒCƒg)
+	private static String key = "ABCDEFGHIJKLMNOPQRSTUVWX"; //ã‚­ãƒ¼(24ãƒã‚¤ãƒˆ)
 	
 	public static String encrypt(String str) {
 		try {

@@ -1,4 +1,4 @@
-package bjd.util;
+﻿package bjd.util;
 
 public interface IDispose {
 	void dispose();

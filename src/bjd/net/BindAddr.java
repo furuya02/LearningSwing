@@ -1,4 +1,4 @@
-package bjd.net;
+ï»¿package bjd.net;
 
 public class BindAddr {
     private Ip ipV4;
@@ -17,26 +17,26 @@ public class BindAddr {
 		return bindStyle;
 	}
     
-    //ƒfƒtƒHƒ‹ƒg’l‚Ì‰Šú‰»
+    //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã®åˆæœŸåŒ–
     private void init() {
         bindStyle = BindStyle.V4ONLY;
         ipV4 = new Ip("INADDR_ANY");
         ipV6 = new Ip("IN6ADDR_ANY_INIT");
     }
     
-    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	public BindAddr() {
-		init(); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
+		init(); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
     }
 
-    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	public BindAddr(BindStyle bindStyle, Ip ipV4, Ip ipV6) {
         this.bindStyle = bindStyle;
         this.ipV4 = ipV4;
         this.ipV6 = ipV6;
     }
 
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     public BindAddr(String str) {
 		try {
 			String[] tmp = str.split(",");
@@ -59,11 +59,11 @@ public class BindAddr {
 					throw new IllegalArgumentException("ipV6!=IPV6");
 				}
 			} else {
-				init(); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
+				init(); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
 				throw new IllegalArgumentException(str);
 			}
 		} catch (Exception ex) {
-			init(); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
+			init(); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
 			throw new IllegalArgumentException(ex);
 		}
 		
@@ -76,7 +76,7 @@ public class BindAddr {
 
     @Override
 	public boolean equals(Object o) {
-		// ”ñNULL‹y‚ÑŒ^‚ÌŠm”F
+		// éNULLåŠã³å‹ã®ç¢ºèª
 		if (o == null || !(o instanceof BindAddr)) {
 			return false;
 		}
@@ -98,10 +98,10 @@ public class BindAddr {
 		return 101;
 	}
 
-	// ‹£‡‚ª‚ ‚é‚©‚Ç‚¤‚©‚ÌŠm”F
+	// ç«¶åˆãŒã‚ã‚‹ã‹ã©ã†ã‹ã®ç¢ºèª
 	public boolean checkCompetition(BindAddr b) {
-		boolean v4Competition = false; // V4‹£‡‚Ì‰Â”\«
-		boolean v6Competition = false; // V6‹£‡‚Ì‰Â”\«
+		boolean v4Competition = false; // V4ç«¶åˆã®å¯èƒ½æ€§
+		boolean v6Competition = false; // V6ç«¶åˆã®å¯èƒ½æ€§
 		switch (bindStyle) {
             case V46DUAL:
                 if (b.getBindStyle().equals(BindStyle.V46DUAL)) {
@@ -127,9 +127,9 @@ public class BindAddr {
             	break;
         }
 		
-        //V4‹£‡‚Ì‰Â”\«‚ª‚ ‚éê‡
+        //V4ç«¶åˆã®å¯èƒ½æ€§ãŒã‚ã‚‹å ´åˆ
         if (v4Competition) {
-			// ‚Ç‚¿‚ç‚©‚ªANY‚Ìê‡‚ÍA‹£‡‚µ‚Ä‚¢‚é
+			// ã©ã¡ã‚‰ã‹ãŒANYã®å ´åˆã¯ã€ç«¶åˆã—ã¦ã„ã‚‹
 			if (ipV4.getAny() || b.getIpV4().getAny()) {
 				return true;
 			}
@@ -137,9 +137,9 @@ public class BindAddr {
 				return true;
 			}
 		}
-		// V6‹£‡‚Ì‰Â”\«‚ª‚ ‚éê‡
+		// V6ç«¶åˆã®å¯èƒ½æ€§ãŒã‚ã‚‹å ´åˆ
 		if (v6Competition) {
-			// ‚Ç‚¿‚ç‚©‚ªANY‚Ìê‡‚ÍA‹£‡‚µ‚Ä‚¢‚é
+			// ã©ã¡ã‚‰ã‹ãŒANYã®å ´åˆã¯ã€ç«¶åˆã—ã¦ã„ã‚‹
 			if (ipV6.getAny() || b.ipV6.getAny()) {
 				return true;
 			}

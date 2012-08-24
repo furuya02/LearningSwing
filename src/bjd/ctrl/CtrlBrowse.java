@@ -1,4 +1,4 @@
-package bjd.ctrl;
+ï»¿package bjd.ctrl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +14,7 @@ import bjd.RunMode;
 import bjd.net.Ip;
 import bjd.option.OneOption;
 
-//CtrlFile‹y‚ÑCtrlFolder‚ÌeƒNƒ‰ƒX
+//CtrlFileåŠã³CtrlFolderã®è¦ªã‚¯ãƒ©ã‚¹
 public abstract class CtrlBrowse extends OneCtrl{
 	
 	private JLabel label = null;
@@ -36,24 +36,24 @@ public abstract class CtrlBrowse extends OneCtrl{
 		int top = MARGIN;
 
 
-		// ƒ‰ƒxƒ‹‚Ìì¬(top‚Ì+3‚ÍAŒã‚ÌƒeƒLƒXƒgƒ{ƒbƒNƒX‚Æ‚Ì‚‚³’²®)
+		// ãƒ©ãƒ™ãƒ«ã®ä½œæˆ(topã®+3ã¯ã€å¾Œã®ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã¨ã®é«˜ã•èª¿æ•´)
 		label = (JLabel) create(panel, new JLabel(help), -1/* tabIndex */, left, top + 3, 0, 0);
-		left += label.getWidth() + MARGIN; // ƒIƒtƒZƒbƒgˆÚ“®
+		left += label.getWidth() + MARGIN; // ã‚ªãƒ•ã‚»ãƒƒãƒˆç§»å‹•
 
-		// ƒeƒLƒXƒgƒ{ƒbƒNƒX‚Ì”z’u
+		// ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é…ç½®
 		textField = (JTextField) create(panel, new JTextField(digits), -1/* tabIndex */, left, top, 0, 0);
 		OneOption op = kernel.getListOption().get("Basic");
 		boolean editBrowse = (boolean) op.getValue("editBrowse");
 		if (!editBrowse) {
-			textField.setEditable(false); // “Ç‚İæ‚èê—p
+			textField.setEditable(false); // èª­ã¿å–ã‚Šå°‚ç”¨
 		}
 
 
 		
-		left += textField.getWidth() + MARGIN; // ƒIƒtƒZƒbƒgˆÚ“®
+		left += textField.getWidth() + MARGIN; // ã‚ªãƒ•ã‚»ãƒƒãƒˆç§»å‹•
 		
-		//ƒ{ƒ^ƒ“‚Ì”z’u(top‚Ì-2‚ÍA‘O‚ÌƒeƒLƒXƒgƒ{ƒbƒNƒX‚Æ‚Ì‚‚³’²®)
-		String buttonText = kernel.getJp() ? "QÆ" : "Browse";
+		//ãƒœã‚¿ãƒ³ã®é…ç½®(topã®-2ã¯ã€å‰ã®ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã¨ã®é«˜ã•èª¿æ•´)
+		String buttonText = kernel.getJp() ? "å‚ç…§" : "Browse";
 		button = (JButton) create(panel, new JButton(buttonText), -1/* tabIndex */, left, top - 2, 0, 0);
 		
 		final CtrlType ctrlType = this.getCtrlType(); 
@@ -81,9 +81,9 @@ public abstract class CtrlBrowse extends OneCtrl{
 		});
 
 		
-		left += button.getWidth() + MARGIN; // ƒIƒtƒZƒbƒgˆÚ“®
+		left += button.getWidth() + MARGIN; // ã‚ªãƒ•ã‚»ãƒƒãƒˆç§»å‹•
         
-        //ƒpƒlƒ‹‚ÌƒTƒCƒYİ’è
+        //ãƒ‘ãƒãƒ«ã®ã‚µã‚¤ã‚ºè¨­å®š
 		panel.setSize(left + MARGIN, DEFAULT_HEIGHT);
 		
         return tabIndex;

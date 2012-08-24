@@ -1,8 +1,8 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 public final class TestUtil {
 	private TestUtil() {
-		//ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì‰B•Á
+		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®éš è”½
 	}
 	
 	public static void dispHeader(String msg) {

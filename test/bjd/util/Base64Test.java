@@ -1,4 +1,4 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -24,13 +24,13 @@ public class Base64Test {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("Base64‚ÌƒGƒ“ƒR[ƒh‹y‚ÑƒfƒR[ƒh");
+			TestUtil.dispHeader("Base64ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰åŠã³ãƒ‡ã‚³ãƒ¼ãƒ‰");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			// “ü—Í•¶š—ñ,o—Í•¶š—ñ
-			new Fixture("–{“ú‚Í°“V‚È‚è", "–{“ú‚Í°“V‚È‚è"),
+			// å…¥åŠ›æ–‡å­—åˆ—,å‡ºåŠ›æ–‡å­—åˆ—
+			new Fixture("æœ¬æ—¥ã¯æ™´å¤©ãªã‚Š", "æœ¬æ—¥ã¯æ™´å¤©ãªã‚Š"),
 			new Fixture("123", "123"),
 			new Fixture("", ""),
 			new Fixture(null, ""),

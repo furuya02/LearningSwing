@@ -1,4 +1,4 @@
-package bjd.ctrl;
+﻿package bjd.ctrl;
 
 public class CtrlHidden extends OneCtrl {
 	public CtrlHidden(String help) {

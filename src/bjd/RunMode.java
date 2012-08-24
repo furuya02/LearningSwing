@@ -1,8 +1,8 @@
-package bjd;
+ï»¿package bjd;
 
 public enum RunMode {
-    Normal, //’Êí‹N“®  (ƒEƒCƒ“ƒh‚ ‚è)
-    NormalRegist, //’Êí‹N“®iƒT-ƒrƒX“o˜^Ï‚Ýj(ƒEƒCƒ“ƒh‚ ‚è)
-    Remote, //ƒŠƒ‚[ƒgiƒEƒCƒ“ƒh‚ ‚èj
-    Service, //ƒT[ƒrƒX‹N“®@(ƒEƒCƒ“ƒh‚È‚µ)
+    Normal, //é€šå¸¸èµ·å‹•  (ã‚¦ã‚¤ãƒ³ãƒ‰ã‚ã‚Š)
+    NormalRegist, //é€šå¸¸èµ·å‹•ï¼ˆã‚µ-ãƒ“ã‚¹ç™»éŒ²æ¸ˆã¿ï¼‰(ã‚¦ã‚¤ãƒ³ãƒ‰ã‚ã‚Š)
+    Remote, //ãƒªãƒ¢ãƒ¼ãƒˆï¼ˆã‚¦ã‚¤ãƒ³ãƒ‰ã‚ã‚Šï¼‰
+    Service, //ã‚µãƒ¼ãƒ“ã‚¹èµ·å‹•ã€€(ã‚¦ã‚¤ãƒ³ãƒ‰ãªã—)
 }

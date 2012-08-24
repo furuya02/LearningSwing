@@ -1,4 +1,4 @@
-package bjd.ctrl;
+ï»¿package bjd.ctrl;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -43,18 +43,18 @@ public abstract class OneCtrl {
         //this.oneVal = oneVal;
         if (panel == null) {
             //if (GetType() == CtrlType.TabPage) {
-            //    //TabPage‚Ìê‡‚ÍATabControl‚ğeƒpƒlƒ‹‚Æ‚·‚é
+            //    //TabPageã®å ´åˆã¯ã€TabControlã‚’è¦ªãƒ‘ãƒãƒ«ã¨ã™ã‚‹
             //    Panel = owner;
             //} else {
-                //‘S•”‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğ•ï‚İ‚Şƒpƒlƒ‹(Width,HJeight‚ÍŒã‚ÅqƒNƒ‰ƒX‚Ì_create()‚ÅC³‚³‚ê‚é)
+                //å…¨éƒ¨ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’åŒ…ã¿è¾¼ã‚€ãƒ‘ãƒãƒ«(Width,HJeightã¯å¾Œã§å­ã‚¯ãƒ©ã‚¹ã®_create()ã§ä¿®æ­£ã•ã‚Œã‚‹)
                 panel = (JPanel) create(owner, new JPanel(), -1/*tabIndex*/, x, y, 0, 0);
         		
-                //Debug F•t‚¯‚é 
+                //Debug è‰²ä»˜ã‘ã‚‹ 
                 Random r = new Random();
                 Color bc = new Color(r.nextInt(205), r.nextInt(205), r.nextInt(205));
                 panel.setBackground(bc);
             //}
-            //panel‚Ìã‚É“Æ©ƒRƒ“ƒgƒ[ƒ‹‚ğ”z’u‚·‚é
+            //panelã®ä¸Šã«ç‹¬è‡ªã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’é…ç½®ã™ã‚‹
             return abstractCreate(tabIndex);
         }
         return tabIndex;
@@ -66,7 +66,7 @@ public abstract class OneCtrl {
         	abstractDelete();
         	owner.remove(panel);
         	panel = null;
-            //CtrlTabPage‚Ì‚ÍAPanel‚ÍTabControl‚ğw‚µ‚Ä‚¢‚é‚Ì‚Å”jŠü‚Å‚«‚È‚¢
+            //CtrlTabPageã®æ™‚ã¯ã€Panelã¯TabControlã‚’æŒ‡ã—ã¦ã„ã‚‹ã®ã§ç ´æ£„ã§ããªã„
             //if (GetType() != CtrlType.TabPage) {
             //    Panel.Dispose();
             //}
@@ -74,29 +74,29 @@ public abstract class OneCtrl {
         }    	
     }
 
-    //DOTO int w,h‚Í•s—v‚Å‚Í‚È‚¢‚©
-	//ƒRƒ“ƒgƒ[ƒ‹¶¬‚Ì‹¤’Êì‹ÆŠÖ”
+    //DOTO int w,hã¯ä¸è¦ã§ã¯ãªã„ã‹
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ç”Ÿæˆã®å…±é€šä½œæ¥­é–¢æ•°
     protected JComponent create(JPanel owner, JComponent self, int tabIndex, int x, int y, int w, int h) {
     	JComponent control = self;
     	control.setLocation(x, y);
     	control.setSize(w, h);
-    	setAutoSize(control); // ƒTƒCƒY©“®’²®(‚±‚Ì“_‚ÅƒeƒLƒXƒg‚ª“KØ‚Éİ’è‚³‚ê‚Ä‚¢‚é‚Î‚ A‚±‚ê‚ÅƒTƒCƒY‚Ì’²®‚ÍI‚í‚é)
+    	setAutoSize(control); // ã‚µã‚¤ã‚ºè‡ªå‹•èª¿æ•´(ã“ã®æ™‚ç‚¹ã§ãƒ†ã‚­ã‚¹ãƒˆãŒé©åˆ‡ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹ã°ã‚ã€ã“ã‚Œã§ã‚µã‚¤ã‚ºã®èª¿æ•´ã¯çµ‚ã‚ã‚‹)
     	
-    	control.setLayout(null); //@qƒRƒ“ƒgƒ[ƒ‹‚ğâ‘ÎˆÊ’u‚Å•\¦‚·‚é
+    	control.setLayout(null); //ã€€å­ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’çµ¶å¯¾ä½ç½®ã§è¡¨ç¤ºã™ã‚‹
 //    	if (tabIndex == -1) {
 //    		control.TabStop = false;
 //    	} else {
 //    		control.TabIndex = tabIndex;
 //    	}
     	owner.add(control);
-    	control.setFont(owner.getFont()); //ƒtƒHƒ“ƒg‚ÌŒp³
+    	control.setFont(owner.getFont()); //ãƒ•ã‚©ãƒ³ãƒˆã®ç¶™æ‰¿
     	return control;
     }
 
-    //ƒtƒB[ƒ‹ƒhƒeƒLƒXƒg‚É‡‚í‚¹‚ÄƒTƒCƒY‚ğ©“®’²®‚·‚é
+    //ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ†ã‚­ã‚¹ãƒˆã«åˆã‚ã›ã¦ã‚µã‚¤ã‚ºã‚’è‡ªå‹•èª¿æ•´ã™ã‚‹
 	protected void setAutoSize(JComponent component) {
-		Dimension dimension = component.getPreferredSize(); //“KØƒTƒCƒY‚ğæ“¾
-		dimension.width += 8; //”÷’²®
+		Dimension dimension = component.getPreferredSize(); //é©åˆ‡ã‚µã‚¤ã‚ºã‚’å–å¾—
+		dimension.width += 8; //å¾®èª¿æ•´
 		component.setSize(dimension);
     }
     

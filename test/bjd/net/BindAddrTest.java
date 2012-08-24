@@ -1,4 +1,4 @@
-package bjd.net;
+ï»¿package bjd.net;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -21,7 +21,7 @@ public class BindAddrTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("new BindAddr()‚Å¶¬‚µ‚ÄtotoString()‚ÅŠm”F‚·‚é");
+			TestUtil.dispHeader("new BindAddr()ã§ç”Ÿæˆã—ã¦totoString()ã§ç¢ºèªã™ã‚‹");
 		}
 
 		@DataPoints
@@ -52,7 +52,7 @@ public class BindAddrTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("new BindAddr(BindStyle,ipv4,ipv6)‚Å¶¬‚µ‚ÄtotoString()‚ÅŠm”F‚·‚é");
+			TestUtil.dispHeader("new BindAddr(BindStyle,ipv4,ipv6)ã§ç”Ÿæˆã—ã¦totoString()ã§ç¢ºèªã™ã‚‹");
 		}
 
 		@DataPoints
@@ -90,7 +90,7 @@ public class BindAddrTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("new BindAddr(str)‚Å¶¬‚µ‚ÄtotoString()‚ÅŠm”F‚·‚é");
+			TestUtil.dispHeader("new BindAddr(str)ã§ç”Ÿæˆã—ã¦totoString()ã§ç¢ºèªã™ã‚‹");
 		}
 
 		@DataPoints
@@ -123,15 +123,15 @@ public class BindAddrTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("new BindAddr(str)‚É–³•²•¶š—ñ‚ğİ’è‚·‚é‚Æ—áŠO‚ª”­¶‚·‚é");
+			TestUtil.dispHeader("new BindAddr(str)ã«ç„¡ç²‰æ–‡å­—åˆ—ã‚’è¨­å®šã™ã‚‹ã¨ä¾‹å¤–ãŒç™ºç”Ÿã™ã‚‹");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
 			new Fixture(null),
-			new Fixture("XXX,INADDR_ANY,IN6ADDR_ANY_INIT"), // –³Œø‚È—ñ‹“–¼
-			new Fixture("V4ONLY,INADDR_ANY,192.168.0.1"), // IpV6‚ÉV4‚ÌƒAƒhƒŒƒX‚ğw’è
-			new Fixture("V4ONLY,::1,IN6ADDR_ANY_INIT"), // IpV4‚ÉV6‚ÌƒAƒhƒŒƒX‚ğw’è
+			new Fixture("XXX,INADDR_ANY,IN6ADDR_ANY_INIT"), // ç„¡åŠ¹ãªåˆ—æŒ™å
+			new Fixture("V4ONLY,INADDR_ANY,192.168.0.1"), // IpV6ã«V4ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æŒ‡å®š
+			new Fixture("V4ONLY,::1,IN6ADDR_ANY_INIT"), // IpV4ã«V6ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æŒ‡å®š
 		};
 		static class Fixture {
 			private String actual;
@@ -149,11 +149,11 @@ public class BindAddrTest {
 			
 			try {
 				BindAddr bindAddr = new BindAddr(fx.actual);
-				Assert.fail("‚±‚Ìs‚ªÀs‚³‚ê‚½‚çƒGƒ‰[");
+				Assert.fail("ã“ã®è¡ŒãŒå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã‚¨ãƒ©ãƒ¼");
 			} catch (IllegalArgumentException ex) {
 				return;
 			}
-			Assert.fail("‚±‚Ìs‚ªÀs‚³‚ê‚½‚çƒGƒ‰[");
+			Assert.fail("ã“ã®è¡ŒãŒå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã‚¨ãƒ©ãƒ¼");
 		}
 	}
 	
@@ -162,7 +162,7 @@ public class BindAddrTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("equals()‚ÌŠm”F");
+			TestUtil.dispHeader("equals()ã®ç¢ºèª");
 		}
 
 		@DataPoints
@@ -199,7 +199,7 @@ public class BindAddrTest {
 		
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader(" ‹£‡‚ª‚ ‚é‚©‚Ç‚¤‚©‚ÌŠm”F");
+			TestUtil.dispHeader(" ç«¶åˆãŒã‚ã‚‹ã‹ã©ã†ã‹ã®ç¢ºèª");
 		}
 
 		@DataPoints

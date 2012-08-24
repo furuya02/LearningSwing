@@ -1,4 +1,4 @@
-package bjd.net;
+ï»¿package bjd.net;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -40,7 +40,7 @@ public final class Ip {
 		return inetKind;
 	}
 
-	// ƒfƒtƒHƒ‹ƒg’l‚Ì‰Šú‰»
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã®åˆæœŸåŒ–
 	void init(InetKind inetKind) {
 		this.inetKind = inetKind;
 		ipV4 = new byte[] { 0, 0, 0, 0 };
@@ -49,17 +49,17 @@ public final class Ip {
 		scopeId = 0;
 	}
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^(‰B•Á)
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(éš è”½)
 	private Ip() {
 
 	}
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	public Ip(String ipStr) {
 		init(InetKind.V4);
 		
 		if (ipStr == null) {
-			throwException(ipStr); //—áŠOI—¹
+			throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 		}
 		
 		if (ipStr.equals("INADDR_ANY")) { // IPV4
@@ -68,30 +68,30 @@ public final class Ip {
 			init(InetKind.V6);
 			any = true;
 		} else if (ipStr.indexOf('.') > 0) { // IPV4
-			// –¼‘O‚Åw’è‚³‚ê‚½ê‡‚ÍA—áŠO‚É—Š‚ç‚¸‚±‚±‚Åˆ—‚·‚éi‚‘¬‰»j
+			// åå‰ã§æŒ‡å®šã•ã‚ŒãŸå ´åˆã¯ã€ä¾‹å¤–ã«é ¼ã‚‰ãšã“ã“ã§å‡¦ç†ã™ã‚‹ï¼ˆé«˜é€ŸåŒ–ï¼‰
 			for (int i = 0; i < ipStr.length(); i++) {
 				char c = ipStr.charAt(i);
 				if (c != '.' && (c < '0' || '9' < c)) {
-					throwException(ipStr); //—áŠOI—¹
+					throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 				}
 			}
 			String[] tmp = ipStr.split("\\.");
 			try {
-				// length==3 ƒlƒbƒgƒAƒhƒŒƒX‚Ånew‚³‚ê‚½ê‡
+				// length==3 ãƒãƒƒãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹ã§newã•ã‚ŒãŸå ´åˆ
 				if (tmp.length == 4 || tmp.length == 3) {
 					for (int i = 0; i < tmp.length; i++) {
 						int n = Integer.valueOf(tmp[i]);
 						if (n < 0 || 255 < n) {
-							init(inetKind); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
-							throwException(ipStr); //—áŠOI—¹
+							init(inetKind); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
+							throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 						}
 						ipV4[i] = (byte) n;
 					}
 				} else {
-					throwException(ipStr); //—áŠOI—¹
+					throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 				}
 			} catch (Exception ex) {
-				throwException(ipStr); //—áŠOI—¹
+				throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 			}
 		} else if (ipStr.indexOf(":") >= 0) { // IPV6
 			init(InetKind.V6);
@@ -129,11 +129,11 @@ public final class Ip {
 				}
 			}
 			if (tmp.length != 8) {
-				throwException(ipStr); //—áŠOI—¹
+				throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 			}
 			for (int i = 0; i < 8; i++) {
 				if (tmp[i].length() > 4) {
-					throwException(ipStr); // —áŠOI—¹
+					throwException(ipStr); // ä¾‹å¤–çµ‚äº†
 			}
 				
 				if (tmp[i].equals("")) {
@@ -147,20 +147,20 @@ public final class Ip {
 				}
 			}
 		} else {
-			throwException(ipStr); //—áŠOI—¹
+			throwException(ipStr); //ä¾‹å¤–çµ‚äº†
 		}
-		status = true; // ‰Šú‰»¬Œ÷
+		status = true; // åˆæœŸåŒ–æˆåŠŸ
 	}
 
-	//ƒf[ƒ^‚ğ‰Šú‰»‚µA—áŠO‚ğ”­¶‚³‚¹‚é
+	//ãƒ‡ãƒ¼ã‚¿ã‚’åˆæœŸåŒ–ã—ã€ä¾‹å¤–ã‚’ç™ºç”Ÿã•ã›ã‚‹
 	private void throwException(String ipStr) {
-		init(inetKind); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
-		throw new IllegalArgumentException(String.format("ˆø”‚ª•s³‚Å‚· \"%s\"", ipStr));
+		init(inetKind); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
+		throw new IllegalArgumentException(String.format("å¼•æ•°ãŒä¸æ­£ã§ã™ \"%s\"", ipStr));
 	}
 
-	// ƒzƒXƒgƒoƒCƒgƒI[ƒ_‚Ìƒf[ƒ^‚Å‰Šú‰»‚·‚é
+	// ãƒ›ã‚¹ãƒˆãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ã®ãƒ‡ãƒ¼ã‚¿ã§åˆæœŸåŒ–ã™ã‚‹
 	public Ip(int ip) {
-		init(InetKind.V4); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
+		init(InetKind.V4); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
 
 		byte[] tmp = ByteBuffer.allocate(4).putInt(ip).array();
 
@@ -170,17 +170,17 @@ public final class Ip {
 		if (isAllZero(ipV4)) {
 			any = true;
 		}
-		status = true; // ‰Šú‰»¬Œ÷
+		status = true; // åˆæœŸåŒ–æˆåŠŸ
 
 		ByteBuffer bb = ByteBuffer.wrap(tmp);
 		bb.array();
 
 	}
 
-	// ƒzƒXƒgƒoƒCƒgƒI[ƒ_‚Ìƒf[ƒ^‚Å‰Šú‰»‚·‚é
+	// ãƒ›ã‚¹ãƒˆãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ã®ãƒ‡ãƒ¼ã‚¿ã§åˆæœŸåŒ–ã™ã‚‹
 	public Ip(long h, long l) {
 
-		init(InetKind.V6); // ƒfƒtƒHƒ‹ƒg’l‚Å‚Ì‰Šú‰»
+		init(InetKind.V6); // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã§ã®åˆæœŸåŒ–
 		byte[] b = ByteBuffer.allocate(8).putLong(h).array();
 		for (int i = 0; i < 8; i++) {
 			ipV6[7 - i] = b[i];
@@ -189,12 +189,12 @@ public final class Ip {
 		for (int i = 0; i < 8; i++) {
 			ipV6[15 - i] = b[i];
 		}
-		status = true; // ‰Šú‰»¬Œ÷
+		status = true; // åˆæœŸåŒ–æˆåŠŸ
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		// ”ñNULL‹y‚ÑŒ^‚ÌŠm”F
+		// éNULLåŠã³å‹ã®ç¢ºèª
 		if (o == null || !(o instanceof Ip)) {
 			return false;
 		}
@@ -245,24 +245,24 @@ public final class Ip {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		int flg = 0; // 1‰ñ‚¾‚¯È—ª•\‹L‚ğg—p‚·‚é 0:–¢g—p 1:g—p’† 2:g—pÏ
+		int flg = 0; // 1å›ã ã‘çœç•¥è¡¨è¨˜ã‚’ä½¿ç”¨ã™ã‚‹ 0:æœªä½¿ç”¨ 1:ä½¿ç”¨ä¸­ 2:ä½¿ç”¨æ¸ˆ
 		for (int i = 0; i < 8; i++) {
 			ByteBuffer b = ByteBuffer.allocate(2).put(ipV6, i * 2, 2);
 			b.position(0);
 			short u = b.getShort();
 			if (u == 0) {
-				if (flg == 0) { // –¢g—p‚Ìê‡
-					flg = 1; // g—p’†‚Éİ’è‚·‚é
+				if (flg == 0) { // æœªä½¿ç”¨ã®å ´åˆ
+					flg = 1; // ä½¿ç”¨ä¸­ã«è¨­å®šã™ã‚‹
 					sb.append(":");
-				} else if (flg == 1) { // g—p’†‚Ìê‡
-					// ˆ—‚È‚µ
-				} else { // g—pÏ‚Ìê‡A0‚ğ•\‹L‚·‚é
+				} else if (flg == 1) { // ä½¿ç”¨ä¸­ã®å ´åˆ
+					// å‡¦ç†ãªã—
+				} else { // ä½¿ç”¨æ¸ˆã®å ´åˆã€0ã‚’è¡¨è¨˜ã™ã‚‹
 					sb.append(String.format(":%x", u));
 					// sb.AppendFormat(":{0:x}", u);
 				}
 			} else {
-				if (flg == 1) { // g—p’†‚Ìê‡‚Í
-					flg = 2; // g—pÏ‚Éİ’è‚·‚é
+				if (flg == 1) { // ä½¿ç”¨ä¸­ã®å ´åˆã¯
+					flg = 2; // ä½¿ç”¨æ¸ˆã«è¨­å®šã™ã‚‹
 				}
 				if (i == 0) {
 					sb.append(String.format("%x", u));
@@ -271,7 +271,7 @@ public final class Ip {
 				}
 			}
 		}
-		if (flg == 1) { // g—p’†‚ÅI—¹‚µ‚½ê‡‚Í:‚ğ‘«‚·
+		if (flg == 1) { // ä½¿ç”¨ä¸­ã§çµ‚äº†ã—ãŸå ´åˆã¯:ã‚’è¶³ã™
 	sb.append(":");
 		}
 		if (scopeId != 0) {
@@ -280,7 +280,7 @@ public final class Ip {
 		return sb.toString();
 	}
 
-	// ƒlƒbƒgƒ[ƒNƒoƒCƒgƒI[ƒ_
+	// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€
 	public byte[] netBytes() {
 		if (inetKind == InetKind.V4) {
 			return ipV4;
@@ -288,7 +288,7 @@ public final class Ip {
 		return ipV6;
 	}
 
-	// ƒzƒXƒgƒoƒCƒgƒI[ƒ_
+	// ãƒ›ã‚¹ãƒˆãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€
 	public int getAddrV4() {
 		if (inetKind == InetKind.V4) {
 			byte[] tmp = new byte[4];
@@ -301,7 +301,7 @@ public final class Ip {
 		return 0;
 	}
 
-	// ƒzƒXƒgƒoƒCƒgƒI[ƒ_
+	// ãƒ›ã‚¹ãƒˆãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€
 	public long getAddrV6H() {
 		if (inetKind == InetKind.V6) {
 			byte[] tmp = new byte[8];
@@ -318,7 +318,7 @@ public final class Ip {
 		return 0;
 	}
 
-	// ƒzƒXƒgƒoƒCƒgƒI[ƒ_
+	// ãƒ›ã‚¹ãƒˆãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€
 	public long getAddrV6L() {
 		if (inetKind == InetKind.V6) {
 			byte[] tmp = new byte[8];

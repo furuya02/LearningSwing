@@ -1,4 +1,4 @@
-package bjd;
+ï»¿package bjd;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +16,9 @@ interface SelectMenuListener extends EventListener {
 public class AppMenu implements ActionListener {
 	private boolean jp = true;
 	private Menu menu;
-	//ƒCƒxƒ“ƒg
+	//ã‚¤ãƒ™ãƒ³ãƒˆ
 	private Vector<SelectMenuListener> listenerList = new Vector<SelectMenuListener>();
-	
+
 	public AppMenu(JFrame frame) {
 		menu = new Menu(frame, this);
 		init(jp);
@@ -26,35 +26,35 @@ public class AppMenu implements ActionListener {
 	public void dispose() {
 		menu.dispose();
 	}
-	//ƒCƒxƒ“ƒg’Ç‰Á
+	//ã‚¤ãƒ™ãƒ³ãƒˆè¿½åŠ 
 	void addListener(SelectMenuListener l) {
 		if (!listenerList.contains(l)) {
 			listenerList.add(l);
 		}
 	}
-	//ƒCƒxƒ“ƒgíœ
+	//ã‚¤ãƒ™ãƒ³ãƒˆå‰Šé™¤
 	void removeListener(SelectMenuListener l) {
 		listenerList.remove(l);
 	}
-	
+
 	public void init(boolean setJp) {
 		this.jp = setJp;
-		
-		//uƒtƒ@ƒCƒ‹v
-		JMenu m = add("ƒtƒ@ƒCƒ‹", "File", 'F');
-		//    ƒZƒpƒŒ[ƒ^
-		m.addSeparator();
-		//@I—¹
-		add(m, "I—¹" , "Exit" , 'X' , "alt pressed F4");	
-		
 
-		//uƒc[ƒ‹v
-		JMenu t = add("ƒc[ƒ‹", "Tool", 'T');
-		//@XXX
-		add(t, "ƒIƒvƒVƒ‡ƒ“", "Option", 'O', null);
+		//ã€Œãƒ•ã‚¡ã‚¤ãƒ«ã€
+		JMenu m = add("ãƒ•ã‚¡ã‚¤ãƒ«", "File", 'F');
+		//    ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
+		m.addSeparator();
+		//ã€€çµ‚äº†
+		add(m, "çµ‚äº†" , "Exit" , 'X' , "alt pressed F4");
+
+
+		//ã€Œãƒ„ãƒ¼ãƒ«ã€
+		JMenu t = add("ãƒ„ãƒ¼ãƒ«", "Tool", 'T');
+		//ã€€XXX
+		add(t, "ã‚ªãƒ—ã‚·ãƒ§ãƒ³", "Option", 'O', null);
 
 	}
-	//JMenu‚Ì’Ç‰Á
+	//JMenuã®è¿½åŠ 
 	JMenu add(String jpStr, String enStr, char mnemonic) {
 		String title = enStr;
 		if (jp) {
@@ -63,8 +63,8 @@ public class AppMenu implements ActionListener {
 		return menu.add(title, mnemonic);
 	}
 
-	
-	// JMenuItem‚Ì’Ç‰Á
+
+	// JMenuItemã®è¿½åŠ 
 	void add(JMenu owner, String jpStr, String enStr, char mnemonic,	String strAccelerator) {
 		String title = enStr;
 		if (jp) {

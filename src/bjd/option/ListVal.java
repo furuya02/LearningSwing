@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlSize;
@@ -15,15 +15,15 @@ public class ListVal extends ListBase<OneVal> {
 	
 	public int createCtrl(JPanel mainPanel, int baseX, int baseY , int tabIndex) {
 		
-		//ƒIƒtƒZƒbƒgŒvZ—p
+		//ã‚ªãƒ•ã‚»ãƒƒãƒˆè¨ˆç®—ç”¨
 		int x = baseX;
 		int y = baseY;
-		int h = 0; //‚Ps‚Ì’†‚Åˆê”Ô”w‚Ì‚‚¢ƒIƒuƒWƒFƒNƒg‚Ì‚‚³‚ğ•Û‚·‚éE
-		int w = 0; //xƒIƒtƒZƒbƒg‚ÌÅ‘å’l‚ğ•Û‚·‚é
+		int h = 0; //ï¼‘è¡Œã®ä¸­ã§ä¸€ç•ªèƒŒã®é«˜ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é«˜ã•ã‚’ä¿æŒã™ã‚‹ãƒ»
+		int w = 0; //xã‚ªãƒ•ã‚»ãƒƒãƒˆã®æœ€å¤§å€¤ã‚’ä¿æŒã™ã‚‹
 		for (OneVal o : ar) {
 			tabIndex = o.createCtrl(mainPanel, x, y, tabIndex);
 
-			//‚·‚×‚Ä‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğì¬‚µ‚½‘ƒTƒCƒY‚ğ‹‚ß‚é
+			//ã™ã¹ã¦ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’ä½œæˆã—ãŸç·ã‚µã‚¤ã‚ºã‚’æ±‚ã‚ã‚‹
 			CtrlSize ctrlSize = o.getCtrlSize();
 			if (h < ctrlSize.getHeight()) {
 				h = ctrlSize.getHeight();
@@ -39,7 +39,7 @@ public class ListVal extends ListBase<OneVal> {
 				}
 			}
 		}
-		//ŠJnˆÊ’u‚©‚çˆÚ“®‚µ‚½ƒIƒtƒZƒbƒg‚ÅA‚±‚ÌListValƒIƒuƒWƒFƒNƒg‚Ìwidth,height‚ğZo‚·‚é
+		//é–‹å§‹ä½ç½®ã‹ã‚‰ç§»å‹•ã—ãŸã‚ªãƒ•ã‚»ãƒƒãƒˆã§ã€ã“ã®ListValã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®width,heightã‚’ç®—å‡ºã™ã‚‹
 		ctrlSize = new CtrlSize(w - baseX, y - baseY + h);
 		
 		return tabIndex;

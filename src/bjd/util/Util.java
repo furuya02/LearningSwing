@@ -1,9 +1,9 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 public final class Util {
 	
 	private Util() {
-		//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì‰B•Á
+		//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®éš è”½
 	}
 	
 

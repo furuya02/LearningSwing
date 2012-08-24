@@ -1,5 +1,5 @@
-/**
- * 
+ï»¿/**
+ *
  */
 package bjd.option;
 
@@ -44,15 +44,15 @@ public class OneValTest {
 
 	@RunWith(Theories.class)
 	public static class A001 {
-		
+
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("ƒfƒtƒHƒ‹ƒg’l‚ğtoReg()‚Åæ‚èo‚·");
+			TestUtil.dispHeader("ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’toReg()ã§å–ã‚Šå‡ºã™");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//ƒRƒ“ƒgƒ[ƒ‹‚Ìí—Ş,ƒfƒtƒHƒ‹ƒg’l,toReg‚Ìo—Í
+			//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç¨®é¡,ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤,toRegã®å‡ºåŠ›
 			new Fixture(CtrlType.CHECKBOX, true, "true"),
 			new Fixture(CtrlType.CHECKBOX, false, "false"),
 			new Fixture(CtrlType.INT, 100, "100"),
@@ -60,18 +60,18 @@ public class OneValTest {
 			new Fixture(CtrlType.INT, -100, "-100"),
 			new Fixture(CtrlType.FILE, "c:\\test.txt", "c:\\test.txt"),
 			new Fixture(CtrlType.FOLDER, "c:\\test", "c:\\test"),
-			new Fixture(CtrlType.TEXTBOX, "abcdefg‚P‚Q‚R", "abcdefg‚P‚Q‚R"),
+			new Fixture(CtrlType.TEXTBOX, "abcdefgï¼‘ï¼’ï¼“", "abcdefgï¼‘ï¼’ï¼“"),
 			new Fixture(CtrlType.RADIO, 1, "1"),
 			new Fixture(CtrlType.RADIO, 5, "5"),
 			new Fixture(CtrlType.FONT, new Font("Times New Roman", Font.ITALIC, 15), "Times New Roman,2,15"),
 			new Fixture(CtrlType.FONT, new Font("Serif", Font.BOLD, 8), "Serif,1,8"),
 			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
 			new Fixture(CtrlType.MEMO, "123", "123"),
-			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //‚»‚Ì‘¼‚ÍA004‚ÅƒeƒXƒg‚·‚é
+			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //ãã®ä»–ã¯A004ã§ãƒ†ã‚¹ãƒˆã™ã‚‹
 			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
-			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDat‚ÍTESTBOX~2‚Å‰Šú‰»‚³‚ê‚Ä‚¢‚é
-			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),		
-			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),		
+			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDatã¯TESTBOXÃ—2ã§åˆæœŸåŒ–ã•ã‚Œã¦ã„ã‚‹
+			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),
+			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),
 			new Fixture(CtrlType.COMBOBOX, 0, "0"),
 			new Fixture(CtrlType.COMBOBOX, 1, "1"),
 		};
@@ -88,9 +88,9 @@ public class OneValTest {
 
 		@Theory
 		public void test(Fixture fx) {
-			
+
 			TestUtil.dispPrompt(this);
-			System.out.printf("(%s) default’l=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
+			System.out.printf("(%s) defaultå€¤=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
 
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
 			boolean isDebug = false;
@@ -103,19 +103,19 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("fromReg()‚Åİ’è‚µ‚½’l‚ğtoReg()‚Åæ‚èo‚·");
+			TestUtil.dispHeader("fromReg()ã§è¨­å®šã—ãŸå€¤ã‚’toReg()ã§å–ã‚Šå‡ºã™");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//ƒRƒ“ƒgƒ[ƒ‹‚Ìí—Ş,fromReg‚Åİ’è‚µ‚ÄtoReg‚Åæ“¾‚·‚é•¶š—ñ(isDebug=false)
+			//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç¨®é¡,fromRegã§è¨­å®šã—ã¦toRegã§å–å¾—ã™ã‚‹æ–‡å­—åˆ—(isDebug=false)
 			new Fixture(CtrlType.CHECKBOX, "true"),
 			new Fixture(CtrlType.CHECKBOX, "false"),
 			new Fixture(CtrlType.INT, "100"),
 			new Fixture(CtrlType.INT, "0"),
 			new Fixture(CtrlType.FILE, "c:\\test.txt"),
 			new Fixture(CtrlType.FOLDER, "c:\\test"),
-			new Fixture(CtrlType.TEXTBOX, "abcdefg‚P‚Q‚R"),
+			new Fixture(CtrlType.TEXTBOX, "abcdefgï¼‘ï¼’ï¼“"),
 			new Fixture(CtrlType.RADIO, "1"),
 			new Fixture(CtrlType.RADIO, "0"),
 			new Fixture(CtrlType.FONT, "Times New Roman,2,15"),
@@ -123,14 +123,14 @@ public class OneValTest {
 			new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
 			new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
 			new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
-			new Fixture(CtrlType.HIDDEN, "503c983b94f87e6a9295796bb439a054"), 
-			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), 
-			new Fixture(CtrlType.DAT, "\tn1\tn2"), 
-			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"), 
-			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), 
-			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"), 
-			new Fixture(CtrlType.COMBOBOX, "1"), 
-		
+			new Fixture(CtrlType.HIDDEN, "4abdba16713af9b64bd917d2cd073e457632a9da9148e27e966df5b0135e997b"),
+			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"),
+			new Fixture(CtrlType.DAT, "\tn1\tn2"),
+			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"),
+			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),
+			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"),
+			new Fixture(CtrlType.COMBOBOX, "1"),
+
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -140,7 +140,7 @@ public class OneValTest {
 				this.actual = actual;
 			}
 		}
-		
+
 		@Theory
 		public void test(Fixture fx) {
 
@@ -160,44 +160,44 @@ public class OneValTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("fromReg()‚Ì•s³ƒpƒ‰ƒ[ƒ^”»’è");
+			TestUtil.dispHeader("fromReg()ã®ä¸æ­£ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åˆ¤å®š");
 		}
 
 		@DataPoints
-		public static Fixture[] datas = { 
-			//ƒRƒ“ƒgƒ[ƒ‹‚Ìí—Ş,fromReg‚É“ü—Í‚·‚é•¶š—ñ,fromReg‚Ì–ß‚è’l
+		public static Fixture[] datas = {
+			//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç¨®é¡,fromRegã«å…¥åŠ›ã™ã‚‹æ–‡å­—åˆ—,fromRegã®æˆ»ã‚Šå€¤
 			new Fixture(CtrlType.CHECKBOX, "true", true),
 			new Fixture(CtrlType.CHECKBOX, "TRUE", true),
 			new Fixture(CtrlType.CHECKBOX, "false", true),
 			new Fixture(CtrlType.CHECKBOX, "FALSE", true),
-			new Fixture(CtrlType.CHECKBOX, "t", false), // •s³“ü—Í
-			new Fixture(CtrlType.CHECKBOX, "", false), // •s³“ü—Í
+			new Fixture(CtrlType.CHECKBOX, "t", false), // ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.CHECKBOX, "", false), // ä¸æ­£å…¥åŠ›
 			new Fixture(CtrlType.INT, "-100", true),
 			new Fixture(CtrlType.INT, "0", true),
-			new Fixture(CtrlType.INT, "aaa", false), // •s³“ü—Í
-			new Fixture(CtrlType.FILE, "c:\\test.txt", true), 
-			new Fixture(CtrlType.FOLDER, "c:\\test", true), 
-			new Fixture(CtrlType.TEXTBOX, "abcdefg‚P‚Q‚R", true), 
-			new Fixture(CtrlType.RADIO, "0", true), 
-			new Fixture(CtrlType.RADIO, "5", true), 
-			new Fixture(CtrlType.RADIO, "-1", false), //•s³“ü—Í Radio‚Í0ˆÈã
-			new Fixture(CtrlType.FONT, "Default,-1,1", false), //•s³“ü—Í(style‚ª–³Œø’l)
-			new Fixture(CtrlType.FONT, "Default,2,-1", false), //•s³“ü—Í(size‚ª0ˆÈ‰º)
-			new Fixture(CtrlType.FONT, "XXX,1,8", true), //@(Font–¼‚Å‚ÍƒGƒ‰[‚ª”­¶‚µ‚È‚¢)
-			new Fixture(CtrlType.FONT, "Serif,1,8", true), //•s³“ü—Í
-			new Fixture(CtrlType.MEMO, null, false), //•s³“ü—Í
-			new Fixture(CtrlType.HIDDEN, null, false), //•s³“ü—Í
-			new Fixture(CtrlType.ADDRESSV4, null, false), //•s³“ü—Í
-			new Fixture(CtrlType.ADDRESSV4, "xxx", false), //•s³“ü—Í
-			new Fixture(CtrlType.ADDRESSV4, "1", false), //•s³“ü—Í
-			new Fixture(CtrlType.DAT, "", false), //•s³“ü—Í
-			new Fixture(CtrlType.DAT, null, false), //•s³“ü—Í
-			new Fixture(CtrlType.DAT, "\tn1", false), //•s³“ü—Í(ƒJƒ‰ƒ€•sˆê’v)
-			new Fixture(CtrlType.BINDADDR, null, false), //•s³“ü—Í
-			new Fixture(CtrlType.BINDADDR, "XXX", false), //•s³“ü—Í
-			new Fixture(CtrlType.COMBOBOX, "XXX", false), //•s³“ü—Í
-			new Fixture(CtrlType.COMBOBOX, null, false), //•s³“ü—Í
-			new Fixture(CtrlType.COMBOBOX, "2", false), //•s³“ü—Í list.size()ƒI[ƒo[
+			new Fixture(CtrlType.INT, "aaa", false), // ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.FILE, "c:\\test.txt", true),
+			new Fixture(CtrlType.FOLDER, "c:\\test", true),
+			new Fixture(CtrlType.TEXTBOX, "abcdefgï¼‘ï¼’ï¼“", true),
+			new Fixture(CtrlType.RADIO, "0", true),
+			new Fixture(CtrlType.RADIO, "5", true),
+			new Fixture(CtrlType.RADIO, "-1", false), //ä¸æ­£å…¥åŠ› Radioã¯0ä»¥ä¸Š
+			new Fixture(CtrlType.FONT, "Default,-1,1", false), //ä¸æ­£å…¥åŠ›(styleãŒç„¡åŠ¹å€¤)
+			new Fixture(CtrlType.FONT, "Default,2,-1", false), //ä¸æ­£å…¥åŠ›(sizeãŒ0ä»¥ä¸‹)
+			new Fixture(CtrlType.FONT, "XXX,1,8", true), //ã€€(Fontåã§ã¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ãªã„)
+			new Fixture(CtrlType.FONT, "Serif,1,8", true), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.MEMO, null, false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.HIDDEN, null, false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.ADDRESSV4, null, false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.ADDRESSV4, "xxx", false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.ADDRESSV4, "1", false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.DAT, "", false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.DAT, null, false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.DAT, "\tn1", false), //ä¸æ­£å…¥åŠ›(ã‚«ãƒ©ãƒ ä¸ä¸€è‡´)
+			new Fixture(CtrlType.BINDADDR, null, false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.BINDADDR, "XXX", false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.COMBOBOX, "XXX", false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.COMBOBOX, null, false), //ä¸æ­£å…¥åŠ›
+			new Fixture(CtrlType.COMBOBOX, "2", false), //ä¸æ­£å…¥åŠ› list.size()ã‚ªãƒ¼ãƒãƒ¼
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -209,36 +209,38 @@ public class OneValTest {
 				this.expected = expected;
 			}
 		}
-	
+
 		@Theory
 		public void test(Fixture fx) {
-			
+
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) fromReg(\"%s\") = %s\n", fx.ctrlType, fx.actual, fx.expected);
-			
+
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
 
 			assertSame(oneVal.fromReg(fx.actual), fx.expected);
 		}
 	}
-	
+
 	@RunWith(Theories.class)
 	public static class A004 {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("isDebug=true‚Ì‚ÌtoReg()o—Í");
+			TestUtil.dispHeader("isDebug=trueã®æ™‚ã®toReg()å‡ºåŠ›");
 		}
 
 		@DataPoints
-		public static Fixture[] datas = { 
-				// ƒRƒ“ƒgƒ[ƒ‹‚Ìí—Ş,isDebug,ƒfƒtƒHƒ‹ƒg’l,toReg‚Ìo—Í
+		public static Fixture[] datas = {
+				// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç¨®é¡,isDebug,ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤,toRegã®å‡ºåŠ›
 				new Fixture(CtrlType.HIDDEN, true, "123", "***"),
 				new Fixture(CtrlType.HIDDEN, false, "123", "2d7ee3636680c1f6"),
 				new Fixture(CtrlType.HIDDEN, false, "", "60392a0d922b9077"),
-				new Fixture(CtrlType.HIDDEN, false, "–{“ú‚Í°“V‚È‚è", "503c983b94f87e6a9295796bb439a054"), 
+
+				//new Fixture(CtrlType.HIDDEN, false, "æœ¬æ—¥ã¯æ™´å¤©ãªã‚Š", "503c983b94f87e6a9295796bb439a054"),
+				new Fixture(CtrlType.HIDDEN, false, "æœ¬æ—¥ã¯æ™´å¤©ãªã‚Š", "35c9f14ba7b574f21d70ddaa6e9277658992ffef4868a5be"),
 		};
-		
+
 		static class Fixture {
 			private CtrlType ctrlType;
 			private boolean isDebug;
@@ -251,10 +253,10 @@ public class OneValTest {
 				this.expected = expected;
 			}
 		}
-	
+
 		@Theory
 		public void test(Fixture fx) {
-			
+
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) Default=\"%s\" toReg(%s) = %s\n", fx.ctrlType, fx.actual, fx.isDebug, fx.expected);
 
@@ -265,13 +267,13 @@ public class OneValTest {
 		}
 	}
 	/**
-	 * ‹¤’Ê“I‚É—˜—p‚³‚ê‚éƒƒ\ƒbƒh
+	 * å…±é€šçš„ã«åˆ©ç”¨ã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	 */
 	private static class Util {
 		/**
-		 * OneVal‚Ì¶¬
+		 * OneValã®ç”Ÿæˆ
 		 * @param val
-		 *            ƒfƒtƒHƒ‹ƒg’l(null‚ğİ’è‚µ‚½ê‡A“KØ‚È’l‚ğ©“®‚ÅƒZƒbƒg‚·‚é)
+		 *            ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤(nullã‚’è¨­å®šã—ãŸå ´åˆã€é©åˆ‡ãªå€¤ã‚’è‡ªå‹•ã§ã‚»ãƒƒãƒˆã™ã‚‹)
 		 */
 		public static OneVal createOneVal(CtrlType ctrlType, Object val) {
 			Kernel kernel = new Kernel();
@@ -288,7 +290,7 @@ public class OneValTest {
 					if (val == null) {
 						val = 1;
 					}
-					oneCtrl = new CtrlInt(help, 3); // ‚RŒ…‚ÅŒˆ‚ß‘Å‚¿
+					oneCtrl = new CtrlInt(help, 3); // ï¼“æ¡ã§æ±ºã‚æ‰“ã¡
 					break;
 				case FILE:
 					if (val == null) {
@@ -345,7 +347,7 @@ public class OneValTest {
 					oneCtrl = new CtrlBindAddr(help);
 					break;
 				case COMBOBOX:
-					//list‚ğ{"1","2"}‚ÅŒˆ‚ß‘Å‚¿
+					//listã‚’{"1","2"}ã§æ±ºã‚æ‰“ã¡
 					ArrayList<String> list = new ArrayList<String>();
 					list.add("1");
 					list.add("2");
@@ -356,7 +358,7 @@ public class OneValTest {
 					oneCtrl = new CtrlComboBox(help, list);
 					break;
 				case DAT:
-					//ƒJƒ‰ƒ€‚ÍTEXTBOX~2‚ÅŒˆ‚ß‘Å‚¿
+					//ã‚«ãƒ©ãƒ ã¯TEXTBOXÃ—2ã§æ±ºã‚æ‰“ã¡
 					ArrayList<CtrlType> ctrlTypeList = new ArrayList<CtrlType>();
 					ctrlTypeList.add(CtrlType.TEXTBOX);
 					ctrlTypeList.add(CtrlType.TEXTBOX);
@@ -364,7 +366,7 @@ public class OneValTest {
 					if (val == null) {
 						val = (Dat) new Dat(ctrlTypeList);
 					}
-					
+
 					oneCtrl = new CtrlDat(help, ctrlTypeList);
 					break;
 				default:
@@ -373,6 +375,6 @@ public class OneValTest {
 			}
 			return new OneVal("name", val, Crlf.NEXTLINE, oneCtrl);
 		}
-	
+
 	}
 }

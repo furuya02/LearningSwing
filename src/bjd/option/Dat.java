@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 
 import java.util.ArrayList;
 
@@ -8,14 +8,14 @@ import bjd.util.ListBase;
 public class Dat extends ListBase<OneDat> {
 	
 	//private ArrayList<CtrlType> ctrlTypeList;
-	private boolean[] isSecretList; //ƒV[ƒNƒŒƒbƒg‰»‚ª•K—v‚ÈƒJƒ‰ƒ€
+	private boolean[] isSecretList; //ã‚·ãƒ¼ã‚¯ãƒ¬ãƒƒãƒˆåŒ–ãŒå¿…è¦ãªã‚«ãƒ©ãƒ 
 	private int colMax;
 	
 	public Dat(ArrayList<CtrlType> ctrlTypeList) {
 		//this.ctrlTypeList = ctrlTypeList;
-		//ƒJƒ‰ƒ€”‚Ì‰Šú‰»
+		//ã‚«ãƒ©ãƒ æ•°ã®åˆæœŸåŒ–
 		colMax = ctrlTypeList.size();
-		//isSecretList‚Ì¶¬
+		//isSecretListã®ç”Ÿæˆ
 		isSecretList = new boolean[colMax];
 		for (int i = 0; i < colMax; i++) {
 			isSecretList[i] = false;
@@ -27,11 +27,11 @@ public class Dat extends ListBase<OneDat> {
 	
 	public boolean add(boolean enable, String str) {
 		if (str == null) {
-			throw new IllegalArgumentException("ˆø”‚Énull‚ª“n‚³‚ê‚Ü‚µ‚½");
+			throw new IllegalArgumentException("å¼•æ•°ã«nullãŒæ¸¡ã•ã‚Œã¾ã—ãŸ");
 		}
 		String[] list = str.split("\t");
 		if (list.length != colMax) {
-			throw new IllegalArgumentException("ƒJƒ‰ƒ€”‚ªˆê’v‚µ‚Ü‚¹‚ñ");
+			throw new IllegalArgumentException("ã‚«ãƒ©ãƒ æ•°ãŒä¸€è‡´ã—ã¾ã›ã‚“");
 		}
 
 		if (!ar.add(new OneDat(enable, list, isSecretList))) {
@@ -59,20 +59,20 @@ public class Dat extends ListBase<OneDat> {
 		if (str.equals("")) {
 			return false;
 		}
-		// Šesˆ—
+		// å„è¡Œå‡¦ç†
 		String [] lines = str.split("\b");
 		if (lines.length <= 0) {
 			return false;
 		}
 		for (String l : lines) { 
-			//ƒ_ƒ~[‚ÌOneDat‚ğì¬
+			//ãƒ€ãƒŸãƒ¼ã®OneDatã‚’ä½œæˆ
 			OneDat oneDat = new OneDat(true, new String[colMax], isSecretList);
 			if (oneDat.fromReg(l)) {
 				if (ar.add(oneDat)) {
-					continue; // ˆ—¬Œ÷
+					continue; // å‡¦ç†æˆåŠŸ
 				}
 			}
-			//ˆ—¸”s
+			//å‡¦ç†å¤±æ•—
 			ar.clear();
 			return false;
 		}

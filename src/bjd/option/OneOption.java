@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 
 import javax.swing.JPanel;
 
@@ -8,7 +8,7 @@ public class OneOption {
 	private ListVal listVal = new ListVal();
 
 	public void createDlg(JPanel mainPanel) {
-		//•\¦ŠJn‚ÌŠî€ˆÊ’u
+		//è¡¨ç¤ºé–‹å§‹ã®åŸºæº–ä½ç½®
 		int x = 0;
 		int y = 0;
 		int tabIndex = 0;
@@ -22,7 +22,7 @@ public class OneOption {
 		if (name.equals("editBrowse")) {
 			return true;
 		}
-		//–¢À‘•
+		//æœªå®Ÿè£…
 		return null;
 	}
 }

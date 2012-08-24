@@ -1,4 +1,4 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -26,13 +26,13 @@ public class CryptTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("encrypt‹y‚Ñdecrypt");
+			TestUtil.dispHeader("encryptåŠã³decrypt");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			// “ü—Í•¶š—ñ
-			new Fixture("–{“ú‚Í°“V‚È‚è"),
+			// å…¥åŠ›æ–‡å­—åˆ—
+			new Fixture("æœ¬æ—¥ã¯æ™´å¤©ãªã‚Š"),
 			new Fixture("123"),
 			new Fixture(""),
 			new Fixture("1\r\n2"),
@@ -53,7 +53,7 @@ public class CryptTest {
 			String s = Crypt.encrypt(fx.actual);
 			String expected = Crypt.decrypt(s);
 			System.out.printf("encrypt(%s)=%s  decrypt(%s)=%s\n", fx.actual, s, s, expected);
-			assertThat(expected, is(not("ERROR"))); //ERROR‚ªo—Í‚³‚ê‚½ê‡‚ÍAƒeƒXƒg¸”s
+			assertThat(expected, is(not("ERROR"))); //ERRORãŒå‡ºåŠ›ã•ã‚ŒãŸå ´åˆã¯ã€ãƒ†ã‚¹ãƒˆå¤±æ•—
 			assertThat(expected, is(expected));
 		}
 	}
@@ -63,12 +63,12 @@ public class CryptTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("encrypt‚ÌƒGƒ‰[”­¶");
+			TestUtil.dispHeader("encryptã®ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			// “ü—Í•¶š—ñ
+			// å…¥åŠ›æ–‡å­—åˆ—
 			new Fixture(null),
 		};
 
@@ -86,7 +86,7 @@ public class CryptTest {
 			
 			String expected = Crypt.encrypt(fx.actual);
 			System.out.printf("encrypt(%s)=%s\n", fx.actual, expected);
-			assertThat(expected, is("ERROR")); //ERROR‚ªo—Í‚³‚ê‚½ê‡‚ÍAƒeƒXƒg¬Œ÷
+			assertThat(expected, is("ERROR")); //ERRORãŒå‡ºåŠ›ã•ã‚ŒãŸå ´åˆã¯ã€ãƒ†ã‚¹ãƒˆæˆåŠŸ
 		}
 	}
 
@@ -95,16 +95,16 @@ public class CryptTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("decrypt‚ÌƒGƒ‰[”­¶");
+			TestUtil.dispHeader("decryptã®ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			// “ü—Í•¶š—ñ
+			// å…¥åŠ›æ–‡å­—åˆ—
 			new Fixture(null),
 			new Fixture(""),
 			new Fixture("123"),
-			new Fixture("–{“ú‚Í°“V‚È‚è"),
+			new Fixture("æœ¬æ—¥ã¯æ™´å¤©ãªã‚Š"),
 		};
 
 		static class Fixture {
@@ -121,7 +121,7 @@ public class CryptTest {
 			
 			String expected = Crypt.decrypt(fx.actual);
 			System.out.printf("encrypt(%s)=%s\n", fx.actual, expected);
-			assertThat(expected, is("ERROR")); //ERROR‚ªo—Í‚³‚ê‚½ê‡‚ÍAƒeƒXƒg¬Œ÷
+			assertThat(expected, is("ERROR")); //ERRORãŒå‡ºåŠ›ã•ã‚ŒãŸå ´åˆã¯ã€ãƒ†ã‚¹ãƒˆæˆåŠŸ
 		}
 	}
 

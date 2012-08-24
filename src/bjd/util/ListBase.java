@@ -1,12 +1,12 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
 //****************************************************************
-// ƒIƒŠƒWƒiƒ‹‚ÌListƒNƒ‰ƒX‚ğ¶¬‚·‚éê‡‚ÌŠî’êƒNƒ‰ƒX
-// T‚Ìw’è‚·‚éƒNƒ‰ƒX‚Í IDisposable‚Ì§–ñ‚ª‚ ‚é
+// ã‚ªãƒªã‚¸ãƒŠãƒ«ã®Listã‚¯ãƒ©ã‚¹ã‚’ç”Ÿæˆã™ã‚‹å ´åˆã®åŸºåº•ã‚¯ãƒ©ã‚¹
+// Tã®æŒ‡å®šã™ã‚‹ã‚¯ãƒ©ã‚¹ã¯ IDisposableã®åˆ¶ç´„ãŒã‚ã‚‹
 //****************************************************************
 public abstract class ListBase<T extends IDispose> implements Iterable<T>, Iterator<T> {	
 	protected ArrayList<T> ar = new ArrayList<T>();
@@ -18,9 +18,9 @@ public abstract class ListBase<T extends IDispose> implements Iterable<T>, Itera
 
 	public void dispose() {
 		for (T o : ar) {
-			o.dispose(); //I—¹ˆ—
+			o.dispose(); //çµ‚äº†å‡¦ç†
 		}
-		ar.clear(); //”jŠü
+		ar.clear(); //ç ´æ£„
 	}
 	public int size() {
 		return ar.size();
@@ -48,7 +48,7 @@ public abstract class ListBase<T extends IDispose> implements Iterable<T>, Itera
 
 	@Override
 	public void remove() {
-		; //–¢À‘•
+		; //æœªå®Ÿè£…
 	}
 }
 

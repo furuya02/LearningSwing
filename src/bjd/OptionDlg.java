@@ -1,4 +1,4 @@
-package bjd;
+ï»¿package bjd;
 
 import javax.swing.JFrame;
 import javax.swing.JCheckBox;
@@ -17,17 +17,17 @@ public class OptionDlg extends Dlg {
 		oneOption.createDlg(mainPanel);
 
 		/*
-		 * //ƒƒjƒ…[‚Ì€–Ú–¼‚ğƒ_ƒCƒAƒƒO‚Ìƒ^ƒCƒgƒ‹‚É‚·‚é var text =
+		 * //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®é …ç›®åã‚’ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¿ã‚¤ãƒˆãƒ«ã«ã™ã‚‹ var text =
 		 * kernel.Jp?oneOption.JpMenu:oneOption.EnMenu;
 		 * 
 		 * var index = text.LastIndexOf(','); Text = index != 0 ?
-		 * text.Substring(index+1) : text; //(&R)‚Ì‚æ‚¤‚ÈƒVƒ‡[ƒgƒJƒbƒgw’è‚ğ”rœ‚·‚é index =
+		 * text.Substring(index+1) : text; //(&R)ã®ã‚ˆã†ãªã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆæŒ‡å®šã‚’æ’é™¤ã™ã‚‹ index =
 		 * Text.IndexOf('('); if (0 <= index) { Text = Text.Substring(0, index);
-		 * } //&‚ğ”rœ‚·‚é Text = Util.SwapChar('&','\b',Text);
+		 * } //&ã‚’æ’é™¤ã™ã‚‹ Text = Util.SwapChar('&','\b',Text);
 		 * 
 		 * _oneOption = oneOption; oneOption.DlgCreate(panelMain);
 		 * 
-		 * buttonCancel.Text = (kernel.Jp) ? "ƒLƒƒƒ“ƒZƒ‹" : "Cancel";
+		 * buttonCancel.Text = (kernel.Jp) ? "ã‚­ãƒ£ãƒ³ã‚»ãƒ«" : "Cancel";
 		 */
 
 	}

@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 
 import java.awt.Font;
 
@@ -25,7 +25,7 @@ public class OneVal implements IDispose {
 		this.value = value;
 		this.crlf = crlf;
 		this.oneCtrl = oneCtrl;
-		oneCtrl.setOneVal(this); // OneCtrl‚ÌOneVal‚Í‚±‚±‚Å‰Šú‰»‚³‚ê‚é
+		oneCtrl.setOneVal(this); // OneCtrlã®OneValã¯ã“ã“ã§åˆæœŸåŒ–ã•ã‚Œã‚‹
 	}
 
 	@Override
@@ -64,10 +64,10 @@ public class OneVal implements IDispose {
 	}
 
 	/**
-	 * İ’èƒtƒ@ƒCƒ‹(Option.ini)‚Ö‚Ìo—Í
+	 * è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«(Option.ini)ã¸ã®å‡ºåŠ›
 	 * 
 	 * @param isSecret
-	 *            ƒfƒoƒbƒO—p‚Ìİ’èƒtƒ@ƒCƒ‹o—Í—piƒpƒXƒ[ƒh“™‚ğ***‚Å•\Œ»‚·‚éj
+	 *            ãƒ‡ãƒãƒƒã‚°ç”¨ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ç”¨ï¼ˆãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ç­‰ã‚’***ã§è¡¨ç¾ã™ã‚‹ï¼‰
 	 * @throws Exception 
 	 */
 	public String toReg(boolean isSecret) {
@@ -105,16 +105,16 @@ public class OneVal implements IDispose {
 			case GROUP:
 				return "";
 			default:
-				return ""; //"À‘•‚³‚ê‚Ä‚¢‚È‚¢CtrlType‚ªw’è‚³‚ê‚Ü‚µ‚½ OneVal.toReg()"
+				return ""; //"å®Ÿè£…ã•ã‚Œã¦ã„ãªã„CtrlTypeãŒæŒ‡å®šã•ã‚Œã¾ã—ãŸ OneVal.toReg()"
 		}
 	}
 
 	/**
-	 * o—Íƒtƒ@ƒCƒ‹(Option.ini)‚©‚ç‚Ì“ü—Í—p
+	 * å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«(Option.ini)ã‹ã‚‰ã®å…¥åŠ›ç”¨
 	 * 
 	 * @param str
-	 *            @“Ç‚İ‚İs
-	 * @return ¬”Û
+	 *            ã€€èª­ã¿è¾¼ã¿è¡Œ
+	 * @return æˆå¦
 	 * @throws Exception 
 	 */
 	public boolean fromReg(String str) {
@@ -147,7 +147,7 @@ public class OneVal implements IDispose {
 					int style = Integer.parseInt(tmp[1]);
 					int size = Integer.parseInt(tmp[2]);
 					value = new Font(name, style, size);
-					// ŒŸØ
+					// æ¤œè¨¼
 					Font f = (Font) value;
 					if (f.getStyle() != style || f.getSize() < 0) {
 						value = null;
@@ -232,7 +232,7 @@ public class OneVal implements IDispose {
 			default:
 				value = 0;
 				return false;
-				//"À‘•‚³‚ê‚Ä‚¢‚È‚¢CtrlType‚ªw’è‚³‚ê‚Ü‚µ‚½ OneVal.fromReg()"
+				//"å®Ÿè£…ã•ã‚Œã¦ã„ãªã„CtrlTypeãŒæŒ‡å®šã•ã‚Œã¾ã—ãŸ OneVal.fromReg()"
 		}
 		return true;
 	}

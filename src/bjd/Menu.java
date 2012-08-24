@@ -1,4 +1,4 @@
-package bjd;
+﻿package bjd;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -30,7 +30,7 @@ public class Menu {
 		menuBar.invalidate();
 	}
 	
-	//JMenuItem�̒ǉ�
+	//JMenuItemの追加
 	public void add(JMenu owner, String str, String name, char mnemonic, String strAccelerator) {
 		JMenuItem menuItem = new JMenuItem(str);
 		menuItem.setMnemonic(mnemonic);
@@ -46,7 +46,7 @@ public class Menu {
 		owner.add(menuItem);
 	}
 
-	//JMenu�̒ǉ�
+	//JMenuの追加
 	public JMenu add(String str, char mnemonic) {
 		JMenu menu = new JMenu(str);
 		menu.setMnemonic(mnemonic);

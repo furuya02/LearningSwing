@@ -1,4 +1,4 @@
-package bjd;
+ï»¿package bjd;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -13,14 +13,14 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class Dlg extends JDialog {
 	
-	// ƒ_ƒCƒAƒƒO‚Ì–ß‚è’liOKƒ{ƒ^ƒ“‚Å•Â‚¶‚½‚©‚Ç‚¤‚©j
+	// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®æˆ»ã‚Šå€¤ï¼ˆOKãƒœã‚¿ãƒ³ã§é–‰ã˜ãŸã‹ã©ã†ã‹ï¼‰
 	private boolean isOk = false;
 	protected JPanel mainPanel = new JPanel();
 
 	public Dlg(JFrame frame, int width, int height) {
 		super(frame);
 		setSize(width, height);
-		setLocationRelativeTo(frame); // eƒEƒCƒ“ƒhƒE‚Ì’†‰›j
+		setLocationRelativeTo(frame); // è¦ªã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ä¸­å¤®ï¼‰
 
 		//JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(null);
@@ -29,9 +29,9 @@ public class Dlg extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 		
-		//ƒ{ƒ^ƒ“Panel
+		//ãƒœã‚¿ãƒ³Panel
 		JPanel buttonPanel = new JPanel();
-		//OK@ƒ{ƒ^ƒ“
+		//OKã€€ãƒœã‚¿ãƒ³
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		JButton okButton = new JButton("OK");
@@ -45,7 +45,7 @@ public class Dlg extends JDialog {
 		buttonPanel.add(okButton);
 		getRootPane().setDefaultButton(okButton);
 		
-		//Cancel@ƒ{ƒ^ƒ“
+		//Cancelã€€ãƒœã‚¿ãƒ³
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

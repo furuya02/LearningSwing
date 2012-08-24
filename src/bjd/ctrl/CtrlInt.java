@@ -1,4 +1,4 @@
-package bjd.ctrl;
+ï»¿package bjd.ctrl;
 
 import java.awt.Color;
 
@@ -43,22 +43,22 @@ public class CtrlInt extends OneCtrl {
 		int left = MARGIN;
 		int top = MARGIN;
 
-		//ƒ‰ƒxƒ‹‚Ìì¬
-		label = (JLabel) create(panel, new JLabel(help), -1/* tabIndex */, left, top + 3 /* +3 ‚ÍŒã‚ÌƒeƒLƒXƒgƒ{ƒbƒNƒX‚Æ‚Ì®‡‚Ì‚½‚ß*/, 0, 0);
-		//label.setBorder(new LineBorder(Color.RED, 2, true)); //Debug Ô˜g
-		left += label.getWidth() + MARGIN; //ƒIƒtƒZƒbƒgˆÚ“®
+		//ãƒ©ãƒ™ãƒ«ã®ä½œæˆ
+		label = (JLabel) create(panel, new JLabel(help), -1/* tabIndex */, left, top + 3 /* +3 ã¯å¾Œã®ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã¨ã®æ•´åˆã®ãŸã‚*/, 0, 0);
+		//label.setBorder(new LineBorder(Color.RED, 2, true)); //Debug èµ¤æ 
+		left += label.getWidth() + MARGIN; //ã‚ªãƒ•ã‚»ãƒƒãƒˆç§»å‹•
 		
-		//ƒeƒLƒXƒgƒ{ƒbƒNƒX‚Ì”z’u
+		//ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é…ç½®
 		textField = (JTextField) create(panel, new JTextField(digits), -1/* tabIndex */, left, top, 0, 0);
 		((AbstractDocument) textField.getDocument()).setDocumentFilter(new IntegerDocumentFilter(digits));
-		left += textField.getWidth(); //ƒIƒtƒZƒbƒgˆÚ“®
+		left += textField.getWidth(); //ã‚ªãƒ•ã‚»ãƒƒãƒˆç§»å‹•
 
-        //ƒpƒlƒ‹‚ÌƒTƒCƒYİ’è
+        //ãƒ‘ãƒãƒ«ã®ã‚µã‚¤ã‚ºè¨­å®š
 		panel.setSize(left + MARGIN, DEFAULT_HEIGHT);
 		return tabIndex;
 	}
 
-	//”’l“ü—Í‚É§ŒÀ‚·‚é
+	//æ•°å€¤å…¥åŠ›ã«åˆ¶é™ã™ã‚‹
 	class IntegerDocumentFilter extends DocumentFilter {
 		private int digits;
 
@@ -89,7 +89,7 @@ public class CtrlInt extends OneCtrl {
 			String after = currentContent.substring(length + offset, currentLength);
 			String newValue = before + (text == null ? "" : text) + after;
 
-			if (newValue.length() > digits) { // Œ…ƒI[ƒo[
+			if (newValue.length() > digits) { // æ¡ã‚ªãƒ¼ãƒãƒ¼
 				return;
 			}
 

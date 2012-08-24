@@ -1,4 +1,4 @@
-package bjd.option;
+ï»¿package bjd.option;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -21,7 +21,7 @@ public class OneDatTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‰Šú‰»‚µ‚ÄtoReg()‚Ìo—Í‚ğŠm”F‚·‚é [*]‚ÍisSecretList toReg()‚Ìƒpƒ‰ƒ[ƒ^‚Í isSecret");
+			TestUtil.dispHeader("ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§åˆæœŸåŒ–ã—ã¦toReg()ã®å‡ºåŠ›ã‚’ç¢ºèªã™ã‚‹ [*]ã¯isSecretList toReg()ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¯ isSecret");
 		}
 
 		@DataPoints
@@ -69,7 +69,7 @@ public class OneDatTest {
 	
 	@RunWith(Theories.class) public static class A002 {
 		@BeforeClass public static void before() {
-			TestUtil.dispHeader("fromReg‚Å‰Šú‰»‚µ‚ÄtoReg()‚Åo—Í‚·‚é"); 
+			TestUtil.dispHeader("fromRegã§åˆæœŸåŒ–ã—ã¦toReg()ã§å‡ºåŠ›ã™ã‚‹"); 
 		}
 		
 		@DataPoints public static Fixture[] datas = { 
@@ -79,7 +79,7 @@ public class OneDatTest {
 		};
 		
 		static class Fixture {
-			private int max; //ƒJƒ‰ƒ€” (ƒRƒ“ƒXƒgƒ‰ƒNƒ^‰Šú‰»—p)
+			private int max; //ã‚«ãƒ©ãƒ æ•° (ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿åˆæœŸåŒ–ç”¨)
 			private String actual;
 			private String expected;
 
@@ -109,19 +109,19 @@ public class OneDatTest {
 
 	@RunWith(Theories.class) public static class A003 {
 		@BeforeClass public static void before() {
-			TestUtil.dispHeader("// fromReg‚É–³Œø‚È“ü—Í‚ª‚ ‚Á‚½Afalse‚ª‹A‚é"); 
+			TestUtil.dispHeader("// fromRegã«ç„¡åŠ¹ãªå…¥åŠ›ãŒã‚ã£ãŸæ™‚ã€falseãŒå¸°ã‚‹"); 
 		}
 		
 		@DataPoints public static Fixture[] datas = { 
-				new Fixture(3, "\tuser1\tpass"), //ƒJƒ‰ƒ€”‰Fˆê’v
+				new Fixture(3, "\tuser1\tpass"), //ã‚«ãƒ©ãƒ æ•°å®‡ä¸€è‡´
 				new Fixture(2, null),
-				new Fixture(3, "_\tn1\tn2\tn3"), //–³Œø•¶š—ñ
-				new Fixture(3, ""), //–³Œø•¶š—ñ
-				new Fixture(3, "\t"), //–³Œø•¶š—ñ
+				new Fixture(3, "_\tn1\tn2\tn3"), //ç„¡åŠ¹æ–‡å­—åˆ—
+				new Fixture(3, ""), //ç„¡åŠ¹æ–‡å­—åˆ—
+				new Fixture(3, "\t"), //ç„¡åŠ¹æ–‡å­—åˆ—
 		};
 		
 		static class Fixture {
-			private int max; //ƒJƒ‰ƒ€” (ƒRƒ“ƒXƒgƒ‰ƒNƒ^‰Šú‰»—p)
+			private int max; //ã‚«ãƒ©ãƒ æ•° (ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿åˆæœŸåŒ–ç”¨)
 			private String str;
 
 			public Fixture(int max, String str) {
@@ -146,7 +146,7 @@ public class OneDatTest {
 		}
 	}
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å’è‹`‚µ‚½ƒJƒ‰ƒ€Œ^‚Æ‚Ì‰Fˆê’v‚âA–³Œø•¶š—ñfromReg‚É‘—‚Á‚½‚Æ‚«Afalse‚ª‹A‚é
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å®šç¾©ã—ãŸã‚«ãƒ©ãƒ å‹ã¨ã®å®‡ä¸€è‡´ã‚„ã€ç„¡åŠ¹æ–‡å­—åˆ—fromRegã«é€ã£ãŸã¨ãã€falseãŒå¸°ã‚‹
 	
 }
 

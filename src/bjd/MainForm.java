@@ -1,4 +1,4 @@
-package bjd;
+ï»¿package bjd;
 
 import java.awt.EventQueue;
 
@@ -64,7 +64,7 @@ public final class MainForm {
 	private void initialize() {
 		mainForm = new JFrame();
 		mainForm.setTitle("\u30BF\u30A4\u30C8\u30EB");
-		mainForm.setFont(new Font("ƒƒCƒŠƒI", Font.PLAIN, 12));
+		mainForm.setFont(new Font("ãƒ¡ã‚¤ãƒªã‚ª", Font.PLAIN, 12));
 		mainForm.setBounds(100, 100, 450, 300);
 		mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

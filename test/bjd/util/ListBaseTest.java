@@ -1,4 +1,4 @@
-package bjd.util;
+ï»¿package bjd.util;
 
 import junit.framework.Assert;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class ListBaseTest {
 
-	//ListBase‚ğŒp³‚·‚”‚éƒNƒ‰ƒX‚ğ’è‹`
+	//ListBaseã‚’ç¶™æ‰¿ã™ï½”ã‚‹ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©
 	class OneClass implements IDispose {
 		private String s;
 		public OneClass(String s) {
@@ -27,7 +27,7 @@ public class ListBaseTest {
 		
 	@Test
 	public void a001() {
-		System.out.println("a001 3—v‘f’Ç‰Á‚µ‚Äsize()‚ğŠm”F‚·‚é");
+		System.out.println("a001 3è¦ç´ è¿½åŠ ã—ã¦size()ã‚’ç¢ºèªã™ã‚‹");
 			
 		TestClass ts = new TestClass();
 	
@@ -40,7 +40,7 @@ public class ListBaseTest {
 
 	@Test
 	public void a002() {
-		System.out.println("a002 Šg’£forƒ‹[ƒv‚Å—v‘f‚ğæ‚èo‚·");
+		System.out.println("a002 æ‹¡å¼µforãƒ«ãƒ¼ãƒ—ã§è¦ç´ ã‚’å–ã‚Šå‡ºã™");
 
 		TestClass ts = new TestClass();
 
@@ -57,7 +57,7 @@ public class ListBaseTest {
 	
 	@Test
 	public void a003() {
-		System.out.println("a003 3—v‘f’Ç‰Á‚µ‚Äremobve()‚ÌŒãA—v‘f‚ğŠm”F‚·‚é");
+		System.out.println("a003 3è¦ç´ è¿½åŠ ã—ã¦remobve()ã®å¾Œã€è¦ç´ ã‚’ç¢ºèªã™ã‚‹");
 
 		TestClass ts = new TestClass();
 
@@ -74,7 +74,7 @@ public class ListBaseTest {
 	
 	@Test
 	public void a004() {
-		System.out.println("a004 3—v‘f’Ç‰Á‚µ‚Äwhile()‚Å‰ñ‚µ‚Ä‚İ‚é");
+		System.out.println("a004 3è¦ç´ è¿½åŠ ã—ã¦while()ã§å›ã—ã¦ã¿ã‚‹");
 
 		TestClass ts = new TestClass();
 
