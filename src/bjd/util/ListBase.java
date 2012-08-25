@@ -1,4 +1,4 @@
-﻿package bjd.util;
+package bjd.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;

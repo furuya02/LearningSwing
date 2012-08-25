@@ -1,4 +1,4 @@
-﻿package bjd;
+package bjd;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +18,7 @@ public class AppMenu implements ActionListener {
 	private Menu menu;
 	//イベント
 	private Vector<SelectMenuListener> listenerList = new Vector<SelectMenuListener>();
-
+	
 	public AppMenu(JFrame frame) {
 		menu = new Menu(frame, this);
 		init(jp);
@@ -36,17 +36,17 @@ public class AppMenu implements ActionListener {
 	void removeListener(SelectMenuListener l) {
 		listenerList.remove(l);
 	}
-
+	
 	public void init(boolean setJp) {
 		this.jp = setJp;
-
+		
 		//「ファイル」
 		JMenu m = add("ファイル", "File", 'F');
 		//    セパレータ
 		m.addSeparator();
 		//　終了
-		add(m, "終了" , "Exit" , 'X' , "alt pressed F4");
-
+		add(m, "終了" , "Exit" , 'X' , "alt pressed F4");	
+		
 
 		//「ツール」
 		JMenu t = add("ツール", "Tool", 'T');
@@ -63,7 +63,7 @@ public class AppMenu implements ActionListener {
 		return menu.add(title, mnemonic);
 	}
 
-
+	
 	// JMenuItemの追加
 	void add(JMenu owner, String jpStr, String enStr, char mnemonic,	String strAccelerator) {
 		String title = enStr;

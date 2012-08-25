@@ -1,4 +1,4 @@
-﻿package bjd;
+package bjd;
 
 import javax.swing.JFrame;
 import javax.swing.JCheckBox;

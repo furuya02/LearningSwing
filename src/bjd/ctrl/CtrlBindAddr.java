@@ -1,4 +1,4 @@
-﻿package bjd.ctrl;
+package bjd.ctrl;
 
 public class CtrlBindAddr extends OneCtrl {
 	public CtrlBindAddr(String help) {

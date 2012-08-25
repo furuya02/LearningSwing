@@ -1,4 +1,4 @@
-﻿package bjd;
+package bjd;
 
 import javax.swing.JFrame;
 
@@ -37,7 +37,6 @@ public class AppFunc  implements SelectMenuListener {
 			option.add(o1);
 			OneVal o2 = new OneVal("xxx2", 123, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する"));
 			option.add(o2);
-
 			OneVal o3 = new OneVal("fileName", "c:\text.txt", Crlf.CONTONIE, new CtrlFile("ファイル名",20,kernel));
 			option.add(o3);
 

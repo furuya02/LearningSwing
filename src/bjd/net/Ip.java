@@ -1,4 +1,4 @@
-﻿package bjd.net;
+package bjd.net;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;

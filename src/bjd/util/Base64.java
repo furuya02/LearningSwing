@@ -1,4 +1,4 @@
-﻿package bjd.util;
+package bjd.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

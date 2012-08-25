@@ -1,4 +1,4 @@
-﻿package bjd;
+package bjd;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;

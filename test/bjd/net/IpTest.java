@@ -1,4 +1,4 @@
-﻿package bjd.net;
+package bjd.net;
 
 
 import static org.hamcrest.CoreMatchers.is;
@@ -23,7 +23,7 @@ public class IpTest {
 
 	@RunWith(Theories.class)
 	public static class A001 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("文字列のコンストラクタで生成してtoString()で確認する");
@@ -32,21 +32,21 @@ public class IpTest {
 		@DataPoints
 		public static Fixture[] datas = {
 			// コンストラクタ文字列,toString()出力
-			new Fixture("192.168.0.1", "192.168.0.1"),
-			new Fixture("255.255.0.254", "255.255.0.254"),
-			new Fixture("INADDR_ANY", "INADDR_ANY"),
-			new Fixture("0.0.0.0", "0.0.0.0"),
-			new Fixture("IN6ADDR_ANY_INIT", "IN6ADDR_ANY_INIT"),
-			new Fixture("::", "::0"),
-			new Fixture("::1", "::1"),
-			new Fixture("::809f", "::809f"),
-			new Fixture("ff34::809f", "ff34::809f"),
-			new Fixture("1234:56::1234:5678:90ab", "1234:56::1234:5678:90ab"),
-			new Fixture("fe80::7090:40f5:96f7:17db%13", "fe80::7090:40f5:96f7:17db%13"),
-			new Fixture("12::78:90ab", "12::78:90ab"),
+			new Fixture("192.168.0.1", "192.168.0.1"), 
+			new Fixture("255.255.0.254", "255.255.0.254"), 
+			new Fixture("INADDR_ANY", "INADDR_ANY"), 
+			new Fixture("0.0.0.0", "0.0.0.0"), 
+			new Fixture("IN6ADDR_ANY_INIT", "IN6ADDR_ANY_INIT"), 
+			new Fixture("::", "::0"), 
+			new Fixture("::1", "::1"), 
+			new Fixture("::809f", "::809f"), 
+			new Fixture("ff34::809f", "ff34::809f"), 
+			new Fixture("1234:56::1234:5678:90ab", "1234:56::1234:5678:90ab"), 
+			new Fixture("fe80::7090:40f5:96f7:17db%13", "fe80::7090:40f5:96f7:17db%13"), 
+			new Fixture("12::78:90ab", "12::78:90ab"), 
 			new Fixture("[12::78:90ab]", "12::78:90ab"),  //[括弧付きで指定された場合]
 			new Fixture("fff::", "fff::"),
-
+		
 		};
 		static class Fixture {
 			private String actual;
@@ -59,7 +59,7 @@ public class IpTest {
 
 		@Theory
 		public void test(Fixture fx) {
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\") toString()=\"%s\"\n", fx.actual, fx.expected);
 
@@ -67,10 +67,10 @@ public class IpTest {
 			assertThat(ip.toString(), is(fx.expected));
 		}
 	}
-
+	
 	@RunWith(Theories.class)
 	public static class A002 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("文字列のコンストラクタで生成してIP.getInetAddress().toString()で確認する");
@@ -79,18 +79,18 @@ public class IpTest {
 		@DataPoints
 		public static Fixture[] datas = {
 			// コンストラクタ文字列,toString()出力
-			new Fixture("192.168.0.1", "/192.168.0.1"),
-			new Fixture("255.255.0.254", "/255.255.0.254"),
-			new Fixture("INADDR_ANY", "/0.0.0.0"),
-			new Fixture("0.0.0.0", "/0.0.0.0"),
-			new Fixture("IN6ADDR_ANY_INIT", "/0:0:0:0:0:0:0:0"),
-			new Fixture("::", "/0:0:0:0:0:0:0:0%0"),
-			new Fixture("::1", "/0:0:0:0:0:0:0:1%0"),
-			new Fixture("::809f", "/0:0:0:0:0:0:0:809f%0"),
-			new Fixture("ff34::809f", "/ff34:0:0:0:0:0:0:809f%0"),
-			new Fixture("1234:56::1234:5678:90ab", "/1234:56:0:0:0:1234:5678:90ab%0"),
-			new Fixture("fe80::7090:40f5:96f7:17db%13", "/fe80:0:0:0:7090:40f5:96f7:17db%13"),
-			new Fixture("12::78:90ab", "/12:0:0:0:0:0:78:90ab%0"),
+			new Fixture("192.168.0.1", "/192.168.0.1"), 
+			new Fixture("255.255.0.254", "/255.255.0.254"), 
+			new Fixture("INADDR_ANY", "/0.0.0.0"), 
+			new Fixture("0.0.0.0", "/0.0.0.0"), 
+			new Fixture("IN6ADDR_ANY_INIT", "/0:0:0:0:0:0:0:0"), 
+			new Fixture("::", "/0:0:0:0:0:0:0:0%0"), 
+			new Fixture("::1", "/0:0:0:0:0:0:0:1%0"), 
+			new Fixture("::809f", "/0:0:0:0:0:0:0:809f%0"), 
+			new Fixture("ff34::809f", "/ff34:0:0:0:0:0:0:809f%0"), 
+			new Fixture("1234:56::1234:5678:90ab", "/1234:56:0:0:0:1234:5678:90ab%0"), 
+			new Fixture("fe80::7090:40f5:96f7:17db%13", "/fe80:0:0:0:7090:40f5:96f7:17db%13"), 
+			new Fixture("12::78:90ab", "/12:0:0:0:0:0:78:90ab%0"), 
 			new Fixture("[12::78:90ab]", "/12:0:0:0:0:0:78:90ab%0"),  //[括弧付きで指定された場合]
 		};
 		static class Fixture {
@@ -104,7 +104,7 @@ public class IpTest {
 
 		@Theory
 		public void test(Fixture fx) {
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\") IP.getInetAddress().toString()=\"%s\"\n", fx.actual, fx.expected);
 
@@ -112,10 +112,10 @@ public class IpTest {
 			assertThat(ip.getInetAddress().toString(), is(fx.expected));
 		}
 	}
-
+	
 	@RunWith(Theories.class)
 	public static class A003 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("getIpV4()テスト");
@@ -125,10 +125,10 @@ public class IpTest {
 			// コンストラクタ文字列,toString()出力
 			new Fixture(192, 168, 0, 1),
 			new Fixture(127, 0, 0, 1),
-			new Fixture(0, 0, 0, 0),
-			new Fixture(255, 255, 255, 255),
+			new Fixture(0, 0, 0, 0), 
+			new Fixture(255, 255, 255, 255), 
 			new Fixture(255, 255, 0, 254),
-
+			
 		};
 		static class Fixture {
 			private int n1;
@@ -150,10 +150,10 @@ public class IpTest {
 			String ipStr = String.format("%d.%d.%d.%d", fx.n1, fx.n2, fx.n3, fx.n4);
 			Ip ip = new Ip(ipStr);
 			byte[] ipV4 = ip.getIpV4();
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\") ipV4[0]=%d ipV4[1]=%d ipV4[2]=%d ipV4[3]=%d\n", ipStr, ipV4[0], ipV4[1], ipV4[2], ipV4[3]);
-
+			
 			assertSame(((byte) fx.n1) == ipV4[0], true);
 			assertSame(((byte) fx.n2) == ipV4[1], true);
 			assertSame(((byte) fx.n3) == ipV4[2], true);
@@ -161,10 +161,10 @@ public class IpTest {
 
 		}
 	}
-
+	
 	@RunWith(Theories.class)
 	public static class A004 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("getIpV6()テスト");
@@ -177,7 +177,7 @@ public class IpTest {
 			new Fixture("ff04::f234", 0xff, 0xff04, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xf2, 0x34),
 			new Fixture("1::1%16", 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 			new Fixture("[1::1]", 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-
+			
 		};
 		static class Fixture {
 			private String ipStr;
@@ -225,7 +225,7 @@ public class IpTest {
 
 			Ip ip = new Ip(fx.ipStr);
 			byte[] ipV6 = ip.getIpV6();
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\")", fx.ipStr);
 			for (int i = 0; i < 16; i++) {
@@ -254,21 +254,21 @@ public class IpTest {
 
 	@RunWith(Theories.class)
 	public static class A005 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("演算子==の判定（null判定）");
 		}
-
+		
 		@DataPoints
 		public static Fixture[] datas = {
 			// IP1.IP2,==の判定
 			new Fixture(new Ip("192.168.0.1"), new Ip("192.168.0.1"), true),
 			new Fixture(new Ip("192.168.0.1"), new Ip("192.168.0.2"), false),
 			new Fixture(new Ip("192.168.0.1"), null, false),
-			new Fixture(new Ip("::1"), new Ip("::1"), true),
-			new Fixture(new Ip("::1%1"), new Ip("::1%1"), true),
-			new Fixture(new Ip("::1%1"), new Ip("::1"), false),
+			new Fixture(new Ip("::1"), new Ip("::1"), true), 
+			new Fixture(new Ip("::1%1"), new Ip("::1%1"), true), 
+			new Fixture(new Ip("::1%1"), new Ip("::1"), false), 
 			new Fixture(new Ip("ff01::1"), new Ip("::1"), false),
 			new Fixture(new Ip("::1"), null, false),
 		};
@@ -304,18 +304,18 @@ public class IpTest {
 				assert false : "fx.ip0 is null";
 			}
 			assertSame(fx.ip0.equals(fx.ip1), fx.expected);
-
+			
 		}
-	}
-
+	}	
+	
 	@RunWith(Theories.class)
 	public static class A006 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("getAddrV4()で取得した値からコンストラクタIp(int ip)を使用して再構築する");
 		}
-
+		
 		@DataPoints
 		public static Fixture[] datas = {
 			// IP1.IP2,==の判定
@@ -336,27 +336,28 @@ public class IpTest {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this);
-
+			
 			Ip p1 = new Ip(fx.ipStr);
 			int i = p1.getAddrV4();
 			Ip p2 = new Ip(i);
 			System.out.printf("Ip(%s) => ip.getAddrV4()=0x%x(%d) => new Ip(0x%x) => %s \n", fx.ipStr, i, i, i, p2.toString());
 
 			assertThat(p2.toString(), is(fx.ipStr));
-
+			
 		}
 	}
-
+	
 	@RunWith(Theories.class)
 	public static class A007 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("getAddrV6H()とgetAddrV6L()で取得した値からコンストラクタIp(long h,long l)を使用して再構築する");
 		}
-
+		
 		@DataPoints
-		public static Fixture[] datas = {// IP1.IP2,==の判定
+		public static Fixture[] datas = {
+			// IP1.IP2,==の判定
 			new Fixture("102:304:506:708:90a:b0c:d0e:f01"),
 			new Fixture("ff83::e:f01"),
 			new Fixture("::1"),
@@ -374,7 +375,7 @@ public class IpTest {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this);
-
+			
 			Ip p1 = new Ip(fx.ipStr);
 			long h = p1.getAddrV6H();
 			long l = p1.getAddrV6L();
@@ -382,18 +383,18 @@ public class IpTest {
 			System.out.printf("Ip(%s) => ip.getAddrV6H()=0x%x  ip.getAddrV6L()=0x%x => new Ip(0x%x,0x%x) => %s \n", fx.ipStr, h, l, h, l, p2.toString());
 
 			assertThat(p2.toString(), is(fx.ipStr));
-
+			
 		}
 	}
-
+	
 	@RunWith(Theories.class)
 	public static class A008 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("文字列によるコンストラクタで例外(IllegalArgumentException)が発生することを確認する");
 		}
-
+		
 		@DataPoints
 		public static Fixture[] datas = {
 			//コンストラクタに与える文字列
@@ -418,7 +419,7 @@ public class IpTest {
 			TestUtil.dispPrompt(this);
 
 			System.out.printf("new Ip(%s) => throw IllegalArgumentException\n", fx.ipStr);
-
+			
 			try {
 				Ip p1 = new Ip(fx.ipStr);
 				Assert.fail("この行が実行されたらエラー");

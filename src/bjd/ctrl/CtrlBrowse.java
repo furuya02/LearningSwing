@@ -1,4 +1,4 @@
-﻿package bjd.ctrl;
+package bjd.ctrl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

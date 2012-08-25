@@ -1,4 +1,4 @@
-﻿package bjd.ctrl;
+package bjd.ctrl;
 /**
  * 
  * 各Ctrlオブジェクトのサイズを表現するクラス

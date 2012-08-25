@@ -1,4 +1,4 @@
-﻿package bjd.util;
+package bjd.util;
 
 public final class TestUtil {
 	private TestUtil() {

@@ -1,4 +1,4 @@
-﻿package bjd.util;
+package bjd.util;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

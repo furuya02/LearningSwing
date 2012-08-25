@@ -1,4 +1,4 @@
-﻿package bjd.net;
+package bjd.net;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

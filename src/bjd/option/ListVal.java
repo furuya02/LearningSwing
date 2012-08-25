@@ -1,4 +1,4 @@
-﻿package bjd.option;
+package bjd.option;
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlSize;

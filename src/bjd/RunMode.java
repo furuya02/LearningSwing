@@ -1,4 +1,4 @@
-﻿package bjd;
+package bjd;
 
 public enum RunMode {
     Normal, //通常起動  (ウインドあり)

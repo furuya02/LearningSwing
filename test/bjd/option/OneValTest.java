@@ -1,5 +1,5 @@
-﻿/**
- *
+/**
+ * 
  */
 package bjd.option;
 
@@ -44,7 +44,7 @@ public class OneValTest {
 
 	@RunWith(Theories.class)
 	public static class A001 {
-
+		
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("デフォルト値をtoReg()で取り出す");
@@ -70,8 +70,8 @@ public class OneValTest {
 			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
 			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
 			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDatはTESTBOX×2で初期化されている
-			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),
-			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),
+			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),		
+			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),		
 			new Fixture(CtrlType.COMBOBOX, 0, "0"),
 			new Fixture(CtrlType.COMBOBOX, 1, "1"),
 		};
@@ -88,7 +88,7 @@ public class OneValTest {
 
 		@Theory
 		public void test(Fixture fx) {
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) default値=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
 
@@ -123,14 +123,14 @@ public class OneValTest {
 			new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
 			new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
 			new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
-			new Fixture(CtrlType.HIDDEN, "4abdba16713af9b64bd917d2cd073e457632a9da9148e27e966df5b0135e997b"),
-			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"),
-			new Fixture(CtrlType.DAT, "\tn1\tn2"),
-			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"),
-			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),
-			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"),
-			new Fixture(CtrlType.COMBOBOX, "1"),
-
+			new Fixture(CtrlType.HIDDEN, "503c983b94f87e6a9295796bb439a054"), 
+			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), 
+			new Fixture(CtrlType.DAT, "\tn1\tn2"), 
+			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"), 
+			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), 
+			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"), 
+			new Fixture(CtrlType.COMBOBOX, "1"), 
+		
 		};
 		static class Fixture {
 			private CtrlType ctrlType;
@@ -140,7 +140,7 @@ public class OneValTest {
 				this.actual = actual;
 			}
 		}
-
+		
 		@Theory
 		public void test(Fixture fx) {
 
@@ -164,7 +164,7 @@ public class OneValTest {
 		}
 
 		@DataPoints
-		public static Fixture[] datas = {
+		public static Fixture[] datas = { 
 			//コントロールの種類,fromRegに入力する文字列,fromRegの戻り値
 			new Fixture(CtrlType.CHECKBOX, "true", true),
 			new Fixture(CtrlType.CHECKBOX, "TRUE", true),
@@ -175,11 +175,11 @@ public class OneValTest {
 			new Fixture(CtrlType.INT, "-100", true),
 			new Fixture(CtrlType.INT, "0", true),
 			new Fixture(CtrlType.INT, "aaa", false), // 不正入力
-			new Fixture(CtrlType.FILE, "c:\\test.txt", true),
-			new Fixture(CtrlType.FOLDER, "c:\\test", true),
-			new Fixture(CtrlType.TEXTBOX, "abcdefg１２３", true),
-			new Fixture(CtrlType.RADIO, "0", true),
-			new Fixture(CtrlType.RADIO, "5", true),
+			new Fixture(CtrlType.FILE, "c:\\test.txt", true), 
+			new Fixture(CtrlType.FOLDER, "c:\\test", true), 
+			new Fixture(CtrlType.TEXTBOX, "abcdefg１２３", true), 
+			new Fixture(CtrlType.RADIO, "0", true), 
+			new Fixture(CtrlType.RADIO, "5", true), 
 			new Fixture(CtrlType.RADIO, "-1", false), //不正入力 Radioは0以上
 			new Fixture(CtrlType.FONT, "Default,-1,1", false), //不正入力(styleが無効値)
 			new Fixture(CtrlType.FONT, "Default,2,-1", false), //不正入力(sizeが0以下)
@@ -209,19 +209,19 @@ public class OneValTest {
 				this.expected = expected;
 			}
 		}
-
+	
 		@Theory
 		public void test(Fixture fx) {
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) fromReg(\"%s\") = %s\n", fx.ctrlType, fx.actual, fx.expected);
-
+			
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
 
 			assertSame(oneVal.fromReg(fx.actual), fx.expected);
 		}
 	}
-
+	
 	@RunWith(Theories.class)
 	public static class A004 {
 
@@ -231,16 +231,14 @@ public class OneValTest {
 		}
 
 		@DataPoints
-		public static Fixture[] datas = {
+		public static Fixture[] datas = { 
 				// コントロールの種類,isDebug,デフォルト値,toRegの出力
 				new Fixture(CtrlType.HIDDEN, true, "123", "***"),
 				new Fixture(CtrlType.HIDDEN, false, "123", "2d7ee3636680c1f6"),
 				new Fixture(CtrlType.HIDDEN, false, "", "60392a0d922b9077"),
-
-				//new Fixture(CtrlType.HIDDEN, false, "本日は晴天なり", "503c983b94f87e6a9295796bb439a054"),
-				new Fixture(CtrlType.HIDDEN, false, "本日は晴天なり", "35c9f14ba7b574f21d70ddaa6e9277658992ffef4868a5be"),
+				new Fixture(CtrlType.HIDDEN, false, "本日は晴天なり", "503c983b94f87e6a9295796bb439a054"), 
 		};
-
+		
 		static class Fixture {
 			private CtrlType ctrlType;
 			private boolean isDebug;
@@ -253,10 +251,10 @@ public class OneValTest {
 				this.expected = expected;
 			}
 		}
-
+	
 		@Theory
 		public void test(Fixture fx) {
-
+			
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) Default=\"%s\" toReg(%s) = %s\n", fx.ctrlType, fx.actual, fx.isDebug, fx.expected);
 
@@ -366,7 +364,7 @@ public class OneValTest {
 					if (val == null) {
 						val = (Dat) new Dat(ctrlTypeList);
 					}
-
+					
 					oneCtrl = new CtrlDat(help, ctrlTypeList);
 					break;
 				default:
@@ -375,6 +373,6 @@ public class OneValTest {
 			}
 			return new OneVal("name", val, Crlf.NEXTLINE, oneCtrl);
 		}
-
+	
 	}
 }
