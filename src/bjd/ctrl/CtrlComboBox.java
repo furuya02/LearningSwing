@@ -31,5 +31,11 @@ public class CtrlComboBox extends OneCtrl {
 		return 0;
 	}
 
+	@Override
+	public Object abstractRead() {
+		//return combobox.getSelectedItem();
+		return -1;
+	}
+
 }
 

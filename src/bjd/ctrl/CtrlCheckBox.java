@@ -38,4 +38,9 @@ public class CtrlCheckBox extends OneCtrl {
 		return 0;
 	}
 
+	@Override
+	public Object abstractRead() {
+		return checkBox.isSelected();
+	}
+
 }

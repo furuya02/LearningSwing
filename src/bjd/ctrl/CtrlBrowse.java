@@ -98,4 +98,9 @@ public abstract class CtrlBrowse extends OneCtrl{
 		button = null;
 		return 0;
 	}	
+	@Override
+	public Object abstractRead() {
+		return textField.getText();
+	}
+	
 }

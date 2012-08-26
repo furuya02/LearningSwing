@@ -18,9 +18,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.event.AncestorListener;
 
 @SuppressWarnings("serial")
-public class Dlg extends JDialog implements WindowListener {
+public abstract class Dlg extends JDialog implements WindowListener, ActionListener {
 	
 	// ダイアログの戻り値（OKボタンで閉じたかどうか）
 	private boolean isOk = false;
@@ -53,29 +54,30 @@ public class Dlg extends JDialog implements WindowListener {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 		
-		//ボタンPanel
-		JPanel buttonPanel = new JPanel();
-		//OK　ボタン
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				isOk = true;
-				dispose();
+		//ボタンパネル
+		{
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+			//OK　ボタン
+			{
+				JButton btn = new JButton("OK");
+				btn.setActionCommand("OK");
+				btn.addActionListener(this);
+				buttonPanel.add(btn);
+				getRootPane().setDefaultButton(btn);
 			}
-		});
-		buttonPanel.add(okButton);
-		getRootPane().setDefaultButton(okButton);
-		
-		//Cancel　ボタン
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
+
+			//Cancel　ボタン
+			{
+				JButton btn = new JButton("Cancel");
+				btn.setActionCommand("CALCEL");
+				btn.addActionListener(this);
+				buttonPanel.add(btn);
 			}
-		});
-		buttonPanel.add(cancelButton);
+		}
+
 
 	}
 	public boolean showDialog() {
@@ -84,6 +86,19 @@ public class Dlg extends JDialog implements WindowListener {
 		return isOk;
 	}
 	
+	protected abstract void onOk();
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//System.out.println(String.format("actionPerformed() getActionCommand=%s",e.getActionCommand()));
+		if (e.getActionCommand().equals("OK")) {
+			isOk = true;
+			onOk();
+		}
+		dispose();
+		
+	}
+
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {

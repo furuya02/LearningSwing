@@ -18,6 +18,8 @@ public class OptionDlg extends Dlg {
 		super(frame, DLG_WIDTH, DLG_HEIGHT);
 
 		this.oneOption = oneOption;
+
+		//ダイアログ作成時の処理
 		oneOption.createDlg(mainPanel);
 
 		/*
@@ -33,15 +35,17 @@ public class OptionDlg extends Dlg {
 		 * 
 		 * buttonCancel.Text = (kernel.Jp) ? "キャンセル" : "Cancel";
 		 */
-
 	}
+	
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		System.out.println("DlgClosed");
+		//ダイアログ破棄時の処理
 		oneOption.deleteDlg();
 	}
 
-	
-	
-	
+	@Override
+	protected void onOk() {
+		//ダイアログでOKボタンが押された時の処理 
+		oneOption.onOk();
+	}
 }

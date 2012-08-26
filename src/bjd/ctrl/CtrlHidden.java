@@ -19,5 +19,10 @@ public class CtrlHidden extends OneCtrl {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	@Override
+	public Object abstractRead() {
+		//return textField.getText();
+		return null;
+	}
 
 }

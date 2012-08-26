@@ -57,6 +57,21 @@ public class CtrlInt extends OneCtrl {
 		panel.setSize(left + MARGIN, DEFAULT_HEIGHT);
 		return tabIndex;
 	}
+	
+	//コントロールの値の読み込み
+	@Override
+	public Object abstractRead() {
+		String str = textField.getText();
+		if (str.equals("")) {
+			str = "0";
+		}
+		try {
+			return Integer.valueOf(str);
+		} catch (Exception e) {
+			System.out.println(String.format("■ %s",e));
+			return 0;
+		}
+	}
 
 	//数値入力に制限する
 	class IntegerDocumentFilter extends DocumentFilter {

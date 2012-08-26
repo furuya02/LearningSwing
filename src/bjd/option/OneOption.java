@@ -19,7 +19,10 @@ public class OneOption {
 	public void deleteDlg() {
 		listVal.deleteCtrl();
 	}
-
+	//ダイアログでOKボタンが押された時の処理 
+	public void onOk() {
+		listVal.readCtrl();
+	}
 	public void add(OneVal oneVal) {
 		listVal.add(oneVal);
 	}

@@ -50,6 +50,12 @@ public class ListVal extends ListBase<OneVal> {
 			o.deleteCtrl();
 		}		
 	}
+	//コントロールからの値のコピー
+	public void readCtrl() {
+		for (OneVal o : ar) {
+			o.readCtrl();
+		}		
+	}
 	public CtrlSize getCtrlSize() {
 		if (ctrlSize == null) {
 			throw new ExceptionInInitializerError();

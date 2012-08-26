@@ -23,4 +23,10 @@ public class CtrlBindAddr extends OneCtrl {
 		return 0;
 	}
 
+	@Override
+	public Object abstractRead() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

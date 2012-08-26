@@ -22,7 +22,7 @@ public class Kernel {
 	
 	
 	public Kernel(){
-		listOption = new ListOption();
+		listOption = new ListOption(this);
 	}
 
 }

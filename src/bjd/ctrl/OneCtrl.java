@@ -36,7 +36,7 @@ public abstract class OneCtrl {
 
     public abstract CtrlType getCtrlType();
     
-    
+    //コントロールの生成
     public abstract int abstractCreate(int tabIndex);
     public int create(JPanel owner, int x, int y, int tabIndex) {
     	this.owner = owner;
@@ -59,7 +59,7 @@ public abstract class OneCtrl {
         }
         return tabIndex;
     }
-    
+    //コントロールの破棄
     public abstract int abstractDelete();
     public void delete() {
         if (panel != null) {
@@ -74,6 +74,13 @@ public abstract class OneCtrl {
         }    	
     }
 
+    //コントロールからの値の読み込み
+    public abstract Object abstractRead();
+	public Object read() {
+        return abstractRead();
+	}
+
+	
     //DOTO int w,hは不要ではないか
 	//コントロール生成の共通作業関数
     protected JComponent create(JPanel owner, JComponent self, int tabIndex, int x, int y, int w, int h) {

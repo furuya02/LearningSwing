@@ -50,13 +50,19 @@ public class OneVal implements IDispose {
 
 	//コントロール生成
 	public int createCtrl(JPanel mainPanel, int baseX, int baseY , int tabIndex) {
-		System.out.println(String.format("OneVal.createCtrl() name=%s", name));
+		//System.out.println(String.format("OneVal.createCtrl() name=%s", name));
 		return oneCtrl.create(mainPanel, baseX, baseY, tabIndex);
 	}
 	//コントロール破棄
 	public void deleteCtrl() {
-		System.out.println(String.format("OneVal.deleteCtrl() name=%s", name));
+		//System.out.println(String.format("OneVal.deleteCtrl() name=%s", name));
 		oneCtrl.delete();
+	}
+	//コントロールからの値のコピー
+	public void readCtrl() {
+		value = oneCtrl.read();
+		System.out.println(String.format("OneVal.readCtrl() name=%s %s", name, value));
+		
 	}
 	
 	
@@ -237,4 +243,5 @@ public class OneVal implements IDispose {
 		}
 		return true;
 	}
+
 }
