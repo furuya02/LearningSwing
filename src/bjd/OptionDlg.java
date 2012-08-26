@@ -1,5 +1,7 @@
 package bjd;
 
+import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JCheckBox;
 
@@ -10,10 +12,12 @@ public class OptionDlg extends Dlg {
 
 	private static final int DLG_WIDTH = 600;
 	private static final int DLG_HEIGHT = 400;
+	private OneOption oneOption;
 
 	public OptionDlg(JFrame frame, OneOption oneOption) {
 		super(frame, DLG_WIDTH, DLG_HEIGHT);
 
+		this.oneOption = oneOption;
 		oneOption.createDlg(mainPanel);
 
 		/*
@@ -31,4 +35,13 @@ public class OptionDlg extends Dlg {
 		 */
 
 	}
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		System.out.println("DlgClosed");
+		oneOption.deleteDlg();
+	}
+
+	
+	
+	
 }

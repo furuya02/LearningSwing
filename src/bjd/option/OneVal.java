@@ -48,11 +48,12 @@ public class OneVal implements IDispose {
 		return name;
 	}
 
+	//コントロール生成
 	public int createCtrl(JPanel mainPanel, int baseX, int baseY , int tabIndex) {
 		System.out.println(String.format("OneVal.createCtrl() name=%s", name));
 		return oneCtrl.create(mainPanel, baseX, baseY, tabIndex);
 	}
-	
+	//コントロール破棄
 	public void deleteCtrl() {
 		System.out.println(String.format("OneVal.deleteCtrl() name=%s", name));
 		oneCtrl.delete();

@@ -12,7 +12,7 @@ public class ListVal extends ListBase<OneVal> {
 	public void add(OneVal oneVal) {
 		ar.add(oneVal);
 	}
-	
+	//コントロール生成
 	public int createCtrl(JPanel mainPanel, int baseX, int baseY , int tabIndex) {
 		
 		//オフセット計算用
@@ -44,6 +44,7 @@ public class ListVal extends ListBase<OneVal> {
 		
 		return tabIndex;
 	}
+	//コントロール破棄
 	public void deleteCtrl(){
 		for (OneVal o : ar) {
 			o.deleteCtrl();

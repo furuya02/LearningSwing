@@ -41,8 +41,10 @@ public class AppFunc  implements SelectMenuListener {
 			option.add(o3);
 
 			OptionDlg dlg = new OptionDlg(mainFrame, option);
-			boolean b = dlg.showDialog();
-			System.out.println("isOk = " + b);
+			if(dlg.showDialog()){
+				System.out.println("isOk");
+			}				
+			
 			break;
 		default:
 			break;

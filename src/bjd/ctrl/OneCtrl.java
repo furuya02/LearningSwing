@@ -61,7 +61,7 @@ public abstract class OneCtrl {
     }
     
     public abstract int abstractDelete();
-    public void delete(){
+    public void delete() {
         if (panel != null) {
         	abstractDelete();
         	owner.remove(panel);
