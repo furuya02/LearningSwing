@@ -3,10 +3,12 @@ package bjd.ctrl;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -16,8 +18,10 @@ import bjd.option.Dat;
 import bjd.option.ListVal;
 import bjd.option.OneDat;
 import bjd.option.OneVal;
+import bjd.util.Crypt;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
+import bjd.util.Util;
 
 public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionListener, ICtrlEventListener {
 
@@ -163,7 +167,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		if (checkListBox.getItemCount() > 0) {
 			checkListBox.setSelectedIndex(0);
 		}
-		
+
 	}
 
 	@Override
@@ -210,17 +214,19 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 				checkListBox.remove(selectedIndex);
 			}
 		} else if (cmd.equals(tagList[IMPORT])) {
+			JFileChooser dlg = new JFileChooser();
+			if (dlg.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File file = dlg.getSelectedFile();
+				importDat(file);
+			}
 			//TODO CtrlDat IMPORT未実装
-			//var d = new OpenFileDialog();
-			//if (DialogResult.OK == d.ShowDialog()) {
-			//    Import(d.FileName);
-			//}
 		} else if (cmd.equals(tagList[EXPORT])) {
 			//TODO CtrlDat EXPORTT未実装
-			//var dlg = new SaveFileDialog();
-			//if (DialogResult.OK == dlg.ShowDialog()) {
-			//    Export(dlg.FileName);
-			//}
+			JFileChooser dlg = new JFileChooser();
+			if (dlg.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File file = dlg.getSelectedFile();
+				exportDat(file);
+			}
 		} else if (cmd.equals(tagList[CLEAR])) {
 			int n = Msg.show(MsgKind.Question, kernel.getJp() ? "すべてのデータを削除してよろしいですか" : "May I eliminate all data?");
 			if (n == 0) {
@@ -298,6 +304,80 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		buttonList[CLEAR].setEnabled(count > 0);
 		buttonList[DEL].setEnabled(index >= 0);
 		buttonList[EDIT].setEnabled(index >= 0 && isComplete);
+	}
+
+	//***********************************************************************
+	// Import Export
+	//***********************************************************************
+	//インポート
+	private void importDat(File file) {
+		if (!file.exists()) {
+			return;
+		}
+		ArrayList<String> lines = Util.textFileRead(file);
+		//var lines = File.ReadAllLines(fileName, Encoding.GetEncoding(932));
+		for (String s : lines) {
+			String str = s;
+			boolean isChecked = str[0] != '#';
+			str = str.substring(2);
+
+			//カラム数の確認
+			String[] tmp = str.split("\t");
+			if (listVal.size() != tmp.length) {
+				//                if (DialogResult.Cancel ==
+				//                    Msg.Show(MsgKind.Stop, string.Format("カラム数が一致しません。この行をインポートできません。 [ {0} ] ", str))){
+				//                    return;
+				//                }
+				continue;
+			}
+			//Ver5.0.0-a9 パスワード等で暗号化されていない（平文の）場合は、ここで
+			boolean isChange = false;
+			int i = 0;
+			for (OneVal v : listVal) {
+				if (v.getOneCtrl().getCtrlType() == CtrlType.HIDDEN) {
+					if (null == Crypt.decrypt(tmp[i])) {
+						tmp[i] = Crypt.encrypt(tmp[i]);
+						isChange = true;
+					}
+				}
+				i++;
+			}
+			if (isChange) {
+				StringBuilder sb = new StringBuilder();
+				for (String l : tmp) {
+					if (sb.length() != 0) {
+						sb.append('\t');
+					}
+					sb.append(l);
+				}
+				str = sb.toString();
+			}
+			//同一のデータがあるかどうかを確認する
+			if (checkListBox.indexOf(str) != -1) {
+				//                if (DialogResult.Cancel ==
+				//                    Msg.Show(MsgKind.Stop, string.Format("データが重複しています。この行をインポートできません。[ {0} ] ", str))){
+				//                    return;
+				//                }
+				continue;
+			}
+			int index = checkListBox.add(str);
+			//最初にチェック（有効）状態にする
+			checkListBox.setItemChecked(index, isChecked);
+			checkListBox.setSelectedIndex(index);
+		}
+	}
+
+	//エクスポート
+	private void exportDat(File file) {
+
+		//チェックリストボックスの内容からDatオブジェクトを生成する
+		ArrayList<String> lines = new ArrayList<>();
+		for (int i = 0; i < checkListBox.getItemCount(); i++) {
+			String s = checkListBox.getItemText(i);
+			lines.add(checkListBox.getItemChecked(i) ? String.format(" \t%s", s) : String.format("#\t%s", s));
+		}
+		Util.textFileSave(file, lines);
+		//File.WriteAllLines(fileName, lines.ToArray(), Encoding.GetEncoding(932));
 	}
 
 	//***********************************************************************
