@@ -1,7 +1,7 @@
 package bjd.util;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
@@ -13,8 +13,6 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
-
-import bjd.util.Base64;
 
 @RunWith(Enclosed.class)
 public class Base64Test {

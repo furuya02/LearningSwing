@@ -5,7 +5,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
-
 public final class Ip {
 
 	private boolean status = false;
@@ -49,19 +48,18 @@ public final class Ip {
 		scopeId = 0;
 	}
 
-	// コンストラクタ(隠蔽)
 	private Ip() {
-
+		// デフォルトコンストラクタの隠蔽
 	}
 
 	// コンストラクタ
 	public Ip(String ipStr) {
 		init(InetKind.V4);
-		
+
 		if (ipStr == null) {
 			throwException(ipStr); //例外終了
 		}
-		
+
 		if (ipStr.equals("INADDR_ANY")) { // IPV4
 			any = true;
 		} else if (ipStr.equals("IN6ADDR_ANY_INIT")) { // IPV6
@@ -134,8 +132,8 @@ public final class Ip {
 			for (int i = 0; i < 8; i++) {
 				if (tmp[i].length() > 4) {
 					throwException(ipStr); // 例外終了
-			}
-				
+				}
+
 				if (tmp[i].equals("")) {
 					ipV6[i * 2] = 0;
 					ipV6[i * 2 + 1] = 0;
@@ -224,8 +222,15 @@ public final class Ip {
 
 	@Override
 	public int hashCode() {
-	    assert false : "Use is not assumed.";
-	    return 100; 
+		assert false : "Use is not assumed.";
+		return 100;
+	}
+
+	// 1回だけ省略表記を使用する
+	enum State {
+		UNUSED, //未使用
+		USING, //使用中
+		FINISH, //使用済
 	}
 
 	@Override
@@ -245,24 +250,22 @@ public final class Ip {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		int flg = 0; // 1回だけ省略表記を使用する 0:未使用 1:使用中 2:使用済
+		State state = State.UNUSED; //未使用
 		for (int i = 0; i < 8; i++) {
 			ByteBuffer b = ByteBuffer.allocate(2).put(ipV6, i * 2, 2);
 			b.position(0);
 			short u = b.getShort();
 			if (u == 0) {
-				if (flg == 0) { // 未使用の場合
-					flg = 1; // 使用中に設定する
+				if (state == State.UNUSED) { // 未使用の場合
+					state = State.USING; // 使用中に設定する
 					sb.append(":");
-				} else if (flg == 1) { // 使用中の場合
-					// 処理なし
-				} else { // 使用済の場合、0を表記する
+				} else if (state == State.FINISH) { // 使用済の場合、0を表記する
 					sb.append(String.format(":%x", u));
 					// sb.AppendFormat(":{0:x}", u);
 				}
 			} else {
-				if (flg == 1) { // 使用中の場合は
-					flg = 2; // 使用済に設定する
+				if (state == State.USING) { // 使用中の場合は
+					state = State.FINISH; // 使用済に設定する
 				}
 				if (i == 0) {
 					sb.append(String.format("%x", u));
@@ -271,8 +274,8 @@ public final class Ip {
 				}
 			}
 		}
-		if (flg == 1) { // 使用中で終了した場合は:を足す
-	sb.append(":");
+		if (state == State.USING) { // 使用中で終了した場合は:を足す
+			sb.append(":");
 		}
 		if (scopeId != 0) {
 			sb.append(String.format("%%%d", scopeId));

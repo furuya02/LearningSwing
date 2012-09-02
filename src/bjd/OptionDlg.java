@@ -3,7 +3,6 @@ package bjd;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JCheckBox;
 
 import bjd.option.OneOption;
 
@@ -11,7 +10,7 @@ import bjd.option.OneOption;
 public class OptionDlg extends Dlg {
 
 	private static final int DLG_WIDTH = 600;
-	private static final int DLG_HEIGHT = 400;
+	private static final int DLG_HEIGHT = 600;
 	private OneOption oneOption;
 
 	public OptionDlg(JFrame frame, OneOption oneOption) {
@@ -21,6 +20,12 @@ public class OptionDlg extends Dlg {
 
 		//ダイアログ作成時の処理
 		oneOption.createDlg(mainPanel);
+		
+		
+//		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});
+//		JScrollPane srl = new JScrollPane(listBox);
+//		srl.setSize(100,100);
+//		mainPanel.add(srl);
 
 		/*
 		 * //メニューの項目名をダイアログのタイトルにする var text =
@@ -36,16 +41,21 @@ public class OptionDlg extends Dlg {
 		 * buttonCancel.Text = (kernel.Jp) ? "キャンセル" : "Cancel";
 		 */
 	}
-	
+
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		//ダイアログ破棄時の処理
 		oneOption.deleteDlg();
 	}
 
+	//ダイアログでOKボタンが押された時の処理
 	@Override
-	protected void onOk() {
-		//ダイアログでOKボタンが押された時の処理 
-		oneOption.onOk();
+	protected boolean onOk() {
+		boolean isComfirm = true; // コントロールのデータが全て正常に読めるかどうかの確認(エラーの場合は、ポップアップ表示)
+		if (!oneOption.onOk(isComfirm)) {
+			return false;
+		}
+		oneOption.onOk(false); //値の読み込み
+		return true;
 	}
 }

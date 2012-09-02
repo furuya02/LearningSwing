@@ -3,13 +3,12 @@
  */
 package bjd.option;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertSame;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -44,7 +43,7 @@ public class OneValTest {
 
 	@RunWith(Theories.class)
 	public static class A001 {
-		
+
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("デフォルト値をtoReg()で取り出す");
@@ -52,33 +51,29 @@ public class OneValTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//コントロールの種類,デフォルト値,toRegの出力
-			new Fixture(CtrlType.CHECKBOX, true, "true"),
-			new Fixture(CtrlType.CHECKBOX, false, "false"),
-			new Fixture(CtrlType.INT, 100, "100"),
-			new Fixture(CtrlType.INT, 0, "0"),
-			new Fixture(CtrlType.INT, -100, "-100"),
-			new Fixture(CtrlType.FILE, "c:\\test.txt", "c:\\test.txt"),
-			new Fixture(CtrlType.FOLDER, "c:\\test", "c:\\test"),
-			new Fixture(CtrlType.TEXTBOX, "abcdefg１２３", "abcdefg１２３"),
-			new Fixture(CtrlType.RADIO, 1, "1"),
-			new Fixture(CtrlType.RADIO, 5, "5"),
-			new Fixture(CtrlType.FONT, new Font("Times New Roman", Font.ITALIC, 15), "Times New Roman,2,15"),
-			new Fixture(CtrlType.FONT, new Font("Serif", Font.BOLD, 8), "Serif,1,8"),
-			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
-			new Fixture(CtrlType.MEMO, "123", "123"),
-			new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
-			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
-			new Fixture(CtrlType.DAT, new Dat(new ArrayList<CtrlType>(Arrays.asList(CtrlType.TEXTBOX, CtrlType.TEXTBOX))), ""), // CtrlDatはTESTBOX×2で初期化されている
-			new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),		
-			new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),		
-			new Fixture(CtrlType.COMBOBOX, 0, "0"),
-			new Fixture(CtrlType.COMBOBOX, 1, "1"),
-		};
+				//コントロールの種類,デフォルト値,toRegの出力
+				new Fixture(CtrlType.CHECKBOX, true, "true"), new Fixture(CtrlType.CHECKBOX, false, "false"), new Fixture(CtrlType.INT, 100, "100"),
+				new Fixture(CtrlType.INT, 0, "0"), new Fixture(CtrlType.INT, -100, "-100"), new Fixture(CtrlType.FILE, "c:\\test.txt", "c:\\test.txt"),
+				new Fixture(CtrlType.FOLDER, "c:\\test", "c:\\test"),
+				new Fixture(CtrlType.TEXTBOX, "abcdefg１２３", "abcdefg１２３"),
+				new Fixture(CtrlType.RADIO, 1, "1"),
+				new Fixture(CtrlType.RADIO, 5, "5"),
+				new Fixture(CtrlType.FONT, new Font("Times New Roman", Font.ITALIC, 15), "Times New Roman,2,15"),
+				new Fixture(CtrlType.FONT, new Font("Serif", Font.BOLD, 8), "Serif,1,8"),
+				new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n", "1\t2\t3\t"),
+				new Fixture(CtrlType.MEMO, "123", "123"),
+				new Fixture(CtrlType.HIDDEN, null, "60392a0d922b9077"), //その他はA004でテストする
+				new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
+				new Fixture(CtrlType.DAT, new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.TEXTBOX }), ""), // CtrlDatはTESTBOX×2で初期化されている
+				new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),
+				new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),
+				new Fixture(CtrlType.COMBOBOX, 0, "0"), new Fixture(CtrlType.COMBOBOX, 1, "1"), };
+
 		static class Fixture {
 			private CtrlType ctrlType;
 			private Object actual;
 			private String expected;
+
 			public Fixture(CtrlType ctrlType, Object actual, String expected) {
 				this.ctrlType = ctrlType;
 				this.actual = actual;
@@ -88,7 +83,7 @@ public class OneValTest {
 
 		@Theory
 		public void test(Fixture fx) {
-			
+
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) default値=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
 
@@ -108,39 +103,30 @@ public class OneValTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//コントロールの種類,fromRegで設定してtoRegで取得する文字列(isDebug=false)
-			new Fixture(CtrlType.CHECKBOX, "true"),
-			new Fixture(CtrlType.CHECKBOX, "false"),
-			new Fixture(CtrlType.INT, "100"),
-			new Fixture(CtrlType.INT, "0"),
-			new Fixture(CtrlType.FILE, "c:\\test.txt"),
-			new Fixture(CtrlType.FOLDER, "c:\\test"),
-			new Fixture(CtrlType.TEXTBOX, "abcdefg１２３"),
-			new Fixture(CtrlType.RADIO, "1"),
-			new Fixture(CtrlType.RADIO, "0"),
-			new Fixture(CtrlType.FONT, "Times New Roman,2,15"),
-			new Fixture(CtrlType.FONT, "Serif,1,8"),
-			new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
-			new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
-			new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
-			//new Fixture(CtrlType.HIDDEN, "4abdba16713af9b64bd917d2cd073e457632a9da9148e27e966df5b0135e997b"), 
-			new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), 
-			new Fixture(CtrlType.DAT, "\tn1\tn2"), 
-			new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"), 
-			new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), 
-			new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"), 
-			new Fixture(CtrlType.COMBOBOX, "1"), 
-		
+				//コントロールの種類,fromRegで設定してtoRegで取得する文字列(isDebug=false)
+				new Fixture(CtrlType.CHECKBOX, "true"), new Fixture(CtrlType.CHECKBOX, "false"), new Fixture(CtrlType.INT, "100"),
+				new Fixture(CtrlType.INT, "0"), new Fixture(CtrlType.FILE, "c:\\test.txt"), new Fixture(CtrlType.FOLDER, "c:\\test"),
+				new Fixture(CtrlType.TEXTBOX, "abcdefg１２３"), new Fixture(CtrlType.RADIO, "1"), new Fixture(CtrlType.RADIO, "0"),
+				new Fixture(CtrlType.FONT, "Times New Roman,2,15"), new Fixture(CtrlType.FONT, "Serif,1,8"), new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
+				new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
+				new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
+				//new Fixture(CtrlType.HIDDEN, "4abdba16713af9b64bd917d2cd073e457632a9da9148e27e966df5b0135e997b"), 
+				new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), new Fixture(CtrlType.DAT, "\tn1\tn2"), new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"),
+				new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"),
+				new Fixture(CtrlType.COMBOBOX, "1"),
+
 		};
+
 		static class Fixture {
 			private CtrlType ctrlType;
 			private String actual;
+
 			public Fixture(CtrlType ctrlType, String actual) {
 				this.ctrlType = ctrlType;
 				this.actual = actual;
 			}
 		}
-		
+
 		@Theory
 		public void test(Fixture fx) {
 
@@ -164,64 +150,63 @@ public class OneValTest {
 		}
 
 		@DataPoints
-		public static Fixture[] datas = { 
-			//コントロールの種類,fromRegに入力する文字列,fromRegの戻り値
-			new Fixture(CtrlType.CHECKBOX, "true", true),
-			new Fixture(CtrlType.CHECKBOX, "TRUE", true),
-			new Fixture(CtrlType.CHECKBOX, "false", true),
-			new Fixture(CtrlType.CHECKBOX, "FALSE", true),
-			new Fixture(CtrlType.CHECKBOX, "t", false), // 不正入力
-			new Fixture(CtrlType.CHECKBOX, "", false), // 不正入力
-			new Fixture(CtrlType.INT, "-100", true),
-			new Fixture(CtrlType.INT, "0", true),
-			new Fixture(CtrlType.INT, "aaa", false), // 不正入力
-			new Fixture(CtrlType.FILE, "c:\\test.txt", true), 
-			new Fixture(CtrlType.FOLDER, "c:\\test", true), 
-			new Fixture(CtrlType.TEXTBOX, "abcdefg１２３", true), 
-			new Fixture(CtrlType.RADIO, "0", true), 
-			new Fixture(CtrlType.RADIO, "5", true), 
-			new Fixture(CtrlType.RADIO, "-1", false), //不正入力 Radioは0以上
-			new Fixture(CtrlType.FONT, "Default,-1,1", false), //不正入力(styleが無効値)
-			new Fixture(CtrlType.FONT, "Default,2,-1", false), //不正入力(sizeが0以下)
-			new Fixture(CtrlType.FONT, "XXX,1,8", true), //　(Font名ではエラーが発生しない)
-			new Fixture(CtrlType.FONT, "Serif,1,8", true), //不正入力
-			new Fixture(CtrlType.MEMO, null, false), //不正入力
-			new Fixture(CtrlType.HIDDEN, null, false), //不正入力
-			new Fixture(CtrlType.ADDRESSV4, null, false), //不正入力
-			new Fixture(CtrlType.ADDRESSV4, "xxx", false), //不正入力
-			new Fixture(CtrlType.ADDRESSV4, "1", false), //不正入力
-			new Fixture(CtrlType.DAT, "", false), //不正入力
-			new Fixture(CtrlType.DAT, null, false), //不正入力
-			new Fixture(CtrlType.DAT, "\tn1", false), //不正入力(カラム不一致)
-			new Fixture(CtrlType.BINDADDR, null, false), //不正入力
-			new Fixture(CtrlType.BINDADDR, "XXX", false), //不正入力
-			new Fixture(CtrlType.COMBOBOX, "XXX", false), //不正入力
-			new Fixture(CtrlType.COMBOBOX, null, false), //不正入力
-			new Fixture(CtrlType.COMBOBOX, "2", false), //不正入力 list.size()オーバー
+		public static Fixture[] datas = {
+				//コントロールの種類,fromRegに入力する文字列,fromRegの戻り値
+				new Fixture(CtrlType.CHECKBOX, "true", true),
+				new Fixture(CtrlType.CHECKBOX, "TRUE", true),
+				new Fixture(CtrlType.CHECKBOX, "false", true),
+				new Fixture(CtrlType.CHECKBOX, "FALSE", true),
+				new Fixture(CtrlType.CHECKBOX, "t", false), // 不正入力
+				new Fixture(CtrlType.CHECKBOX, "", false), // 不正入力
+				new Fixture(CtrlType.INT, "-100", true),
+				new Fixture(CtrlType.INT, "0", true),
+				new Fixture(CtrlType.INT, "aaa", false), // 不正入力
+				new Fixture(CtrlType.FILE, "c:\\test.txt", true), new Fixture(CtrlType.FOLDER, "c:\\test", true),
+				new Fixture(CtrlType.TEXTBOX, "abcdefg１２３", true), new Fixture(CtrlType.RADIO, "0", true), new Fixture(CtrlType.RADIO, "5", true),
+				new Fixture(CtrlType.RADIO, "-1", false), //不正入力 Radioは0以上
+				new Fixture(CtrlType.FONT, "Default,-1,1", false), //不正入力(styleが無効値)
+				new Fixture(CtrlType.FONT, "Default,2,-1", false), //不正入力(sizeが0以下)
+				new Fixture(CtrlType.FONT, "XXX,1,8", true), //　(Font名ではエラーが発生しない)
+				new Fixture(CtrlType.FONT, "Serif,1,8", true), //不正入力
+				new Fixture(CtrlType.MEMO, null, false), //不正入力
+				new Fixture(CtrlType.HIDDEN, null, false), //不正入力
+				new Fixture(CtrlType.ADDRESSV4, null, false), //不正入力
+				new Fixture(CtrlType.ADDRESSV4, "xxx", false), //不正入力
+				new Fixture(CtrlType.ADDRESSV4, "1", false), //不正入力
+				new Fixture(CtrlType.DAT, "", false), //不正入力
+				new Fixture(CtrlType.DAT, null, false), //不正入力
+				new Fixture(CtrlType.DAT, "\tn1", false), //不正入力(カラム不一致)
+				new Fixture(CtrlType.BINDADDR, null, false), //不正入力
+				new Fixture(CtrlType.BINDADDR, "XXX", false), //不正入力
+				new Fixture(CtrlType.COMBOBOX, "XXX", false), //不正入力
+				new Fixture(CtrlType.COMBOBOX, null, false), //不正入力
+				new Fixture(CtrlType.COMBOBOX, "2", false), //不正入力 list.size()オーバー
 		};
+
 		static class Fixture {
 			private CtrlType ctrlType;
 			private String actual;
 			private boolean expected;
+
 			public Fixture(CtrlType ctrlType, String actual, boolean expected) {
 				this.ctrlType = ctrlType;
 				this.actual = actual;
 				this.expected = expected;
 			}
 		}
-	
+
 		@Theory
 		public void test(Fixture fx) {
-			
+
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) fromReg(\"%s\") = %s\n", fx.ctrlType, fx.actual, fx.expected);
-			
+
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
 
 			assertSame(oneVal.fromReg(fx.actual), fx.expected);
 		}
 	}
-	
+
 	@RunWith(Theories.class)
 	public static class A004 {
 
@@ -231,19 +216,20 @@ public class OneValTest {
 		}
 
 		@DataPoints
-		public static Fixture[] datas = { 
+		public static Fixture[] datas = {
 				// コントロールの種類,isDebug,デフォルト値,toRegの出力
-				new Fixture(CtrlType.HIDDEN, true, "123", "***"),
-				new Fixture(CtrlType.HIDDEN, false, "123", "2d7ee3636680c1f6"),
+				new Fixture(CtrlType.HIDDEN, true, "123", "***"), new Fixture(CtrlType.HIDDEN, false, "123", "2d7ee3636680c1f6"),
 				new Fixture(CtrlType.HIDDEN, false, "", "60392a0d922b9077"),
-				//new Fixture(CtrlType.HIDDEN, false, "本日は晴天なり", "35c9f14ba7b574f21d70ddaa6e9277658992ffef4868a5be"), 
+		//new Fixture(CtrlType.HIDDEN, false, null, "60392a0d922b9077"),
+		//new Fixture(CtrlType.HIDDEN, false, "本日は晴天なり", "35c9f14ba7b574f21d70ddaa6e9277658992ffef4868a5be"), 
 		};
-		
+
 		static class Fixture {
 			private CtrlType ctrlType;
 			private boolean isDebug;
 			private String actual;
 			private String expected;
+
 			public Fixture(CtrlType ctrlType, boolean isDebug, String actual, String expected) {
 				this.ctrlType = ctrlType;
 				this.isDebug = isDebug;
@@ -251,19 +237,20 @@ public class OneValTest {
 				this.expected = expected;
 			}
 		}
-	
+
 		@Theory
 		public void test(Fixture fx) {
-			
+
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) Default=\"%s\" toReg(%s) = %s\n", fx.ctrlType, fx.actual, fx.isDebug, fx.expected);
 
 			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
-			String s = oneVal.toReg(fx.isDebug);
+			//String s = oneVal.toReg(fx.isDebug);
 
 			assertThat(oneVal.toReg(fx.isDebug), is(fx.expected));
 		}
 	}
+
 	/**
 	 * 共通的に利用されるメソッド
 	 */
@@ -306,31 +293,31 @@ public class OneValTest {
 					if (val == null) {
 						val = "abc";
 					}
-					oneCtrl = new CtrlTextBox(help);
+					oneCtrl = new CtrlTextBox(help, 20);
 					break;
 				case RADIO:
 					if (val == null) {
 						val = 0;
 					}
-					oneCtrl = new CtrlRadio(help);
+					oneCtrl = new CtrlRadio(help, new String[] { "1", "2", "3" }, 30, 3);
 					break;
 				case FONT:
 					if (val == null) {
 						val = new Font("Default", Font.PLAIN, 9);
 					}
-					oneCtrl = new CtrlFont(help);
+					oneCtrl = new CtrlFont(help, kernel);
 					break;
 				case MEMO:
 					if (val == null) {
 						val = "1";
 					}
-					oneCtrl = new CtrlMemo(help);
+					oneCtrl = new CtrlMemo(help, 10, 10);
 					break;
 				case HIDDEN:
 					if (val == null) {
 						val = "";
 					}
-					oneCtrl = new CtrlHidden(help);
+					oneCtrl = new CtrlHidden(help, 30);
 					break;
 				case ADDRESSV4:
 					if (val == null) {
@@ -342,30 +329,30 @@ public class OneValTest {
 					if (val == null) {
 						val = "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT";
 					}
-					oneCtrl = new CtrlBindAddr(help);
+					ArrayList<Ip> list = new ArrayList<>();
+					list.add(new Ip("INADDR_ANY"));
+					list.add(new Ip("192.168.0.1"));
+					oneCtrl = new CtrlBindAddr(help, list, list);
 					break;
 				case COMBOBOX:
 					//listを{"1","2"}で決め打ち
-					ArrayList<String> list = new ArrayList<String>();
-					list.add("1");
-					list.add("2");
 
 					if (val == null) {
 						val = 0;
 					}
-					oneCtrl = new CtrlComboBox(help, list);
+					oneCtrl = new CtrlComboBox(help, new String[] { "1", "2" }, 10);
 					break;
 				case DAT:
 					//カラムはTEXTBOX×2で決め打ち
-					ArrayList<CtrlType> ctrlTypeList = new ArrayList<CtrlType>();
-					ctrlTypeList.add(CtrlType.TEXTBOX);
-					ctrlTypeList.add(CtrlType.TEXTBOX);
+					ListVal listVal = new ListVal();
+					listVal.add(new OneVal("name1", true, Crlf.NEXTLINE, new CtrlCheckBox("help")));
+					listVal.add(new OneVal("name2", true, Crlf.NEXTLINE, new CtrlCheckBox("help")));
 
 					if (val == null) {
-						val = (Dat) new Dat(ctrlTypeList);
+						val = (Dat) new Dat(new CtrlType[] { CtrlType.CHECKBOX, CtrlType.CHECKBOX });
 					}
-					
-					oneCtrl = new CtrlDat(help, ctrlTypeList);
+
+					oneCtrl = new CtrlDat(help, listVal, 500, 300, kernel);
 					break;
 				default:
 					// not implement.
@@ -373,6 +360,6 @@ public class OneValTest {
 			}
 			return new OneVal("name", val, Crlf.NEXTLINE, oneCtrl);
 		}
-	
+
 	}
 }

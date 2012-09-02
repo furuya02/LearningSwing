@@ -1,15 +1,16 @@
 package bjd;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.Font;
-import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JLabel;
-import java.awt.Color;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+
+import bjd.util.Msg;
+import bjd.util.MsgKind;
 
 public final class MainForm {
 
@@ -17,6 +18,7 @@ public final class MainForm {
 	private AppMenu appMenu;
 	private AppFunc appFunc;
 	private Kernel kernel;
+
 	/**
 	 * Launch the application.
 	 */
@@ -38,20 +40,29 @@ public final class MainForm {
 	 */
 	private MainForm() {
 		initialize();
+		
+		try {
+			//UIManager.put("Button.font", new Font("SansSerif", Font.PLAIN, 20));
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		appMenu = new AppMenu(mainForm);
 
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				int i = Msg.show(MsgKind.Question, "テストメッセージ");
+				System.out.print(i);
 			}
 		});
 		mainForm.getContentPane().add(btnNewButton, BorderLayout.NORTH);
-		
+
 
 		kernel = new Kernel();
-		
+
 		appFunc = new AppFunc(appMenu, mainForm, kernel);
 
 		// appFunc.dispose();
@@ -64,7 +75,7 @@ public final class MainForm {
 	private void initialize() {
 		mainForm = new JFrame();
 		mainForm.setTitle("\u30BF\u30A4\u30C8\u30EB");
-		mainForm.setFont(new Font("メイリオ", Font.PLAIN, 12));
+		//mainForm.setFont(new Font("メイリオ", Font.PLAIN, 12));
 		mainForm.setBounds(100, 100, 450, 300);
 		mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

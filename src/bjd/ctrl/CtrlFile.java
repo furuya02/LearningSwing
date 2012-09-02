@@ -12,4 +12,5 @@ public class CtrlFile extends CtrlBrowse {
 	public CtrlType getCtrlType() {
 		return CtrlType.FILE;
 	}
+
 }

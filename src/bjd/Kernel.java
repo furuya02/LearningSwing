@@ -5,7 +5,7 @@ import bjd.option.ListOption;
 public class Kernel {
 	private RunMode runMode = RunMode.Normal;
 	private boolean jp = true;
-	
+
 	private ListOption listOption;
 
 	public ListOption getListOption() {
@@ -19,9 +19,8 @@ public class Kernel {
 	public RunMode getRunMode() {
 		return runMode;
 	}
-	
-	
-	public Kernel(){
+
+	public Kernel() {
 		listOption = new ListOption(this);
 	}
 

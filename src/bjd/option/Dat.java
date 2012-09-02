@@ -1,7 +1,5 @@
 package bjd.option;
 
-import java.util.ArrayList;
-
 import bjd.ctrl.CtrlType;
 import bjd.util.ListBase;
 
@@ -11,15 +9,15 @@ public class Dat extends ListBase<OneDat> {
 	private boolean[] isSecretList; //シークレット化が必要なカラム
 	private int colMax;
 	
-	public Dat(ArrayList<CtrlType> ctrlTypeList) {
+	public Dat(CtrlType [] ctrlTypeList) {
 		//this.ctrlTypeList = ctrlTypeList;
 		//カラム数の初期化
-		colMax = ctrlTypeList.size();
+		colMax = ctrlTypeList.length;
 		//isSecretListの生成
 		isSecretList = new boolean[colMax];
 		for (int i = 0; i < colMax; i++) {
 			isSecretList[i] = false;
-			if (ctrlTypeList.get(i) == CtrlType.HIDDEN) {
+			if (ctrlTypeList[i] == CtrlType.HIDDEN) {
 				isSecretList[i] = true;
 			}
 		}

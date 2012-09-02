@@ -1,10 +1,8 @@
 package bjd.option;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertSame;
-
-import java.util.ArrayList;
+import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -14,7 +12,6 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.ctrl.CtrlType;
-import bjd.option.OneDatTest.A001.Fixture;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -47,9 +44,10 @@ public class DatTest {
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this);
 
-			ArrayList<CtrlType> ctrlTypeList = new ArrayList<CtrlType>();
+			CtrlType[]  ctrlTypeList = new CtrlType[fx.colMax];
+			
 			for (int i = 0; i < fx.colMax; i++) {
-				ctrlTypeList.add(CtrlType.INT);
+				ctrlTypeList[i] = CtrlType.INT;
 			}
 
 			System.out.printf("fromReg(\"%s\") => toReg(\"%s\")\n", fx.colMax, fx.str);
@@ -92,9 +90,9 @@ public class DatTest {
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this);
 
-			ArrayList<CtrlType> ctrlTypeList = new ArrayList<CtrlType>();
+			CtrlType[] ctrlTypeList = new CtrlType[fx.colMax];
 			for (int i = 0; i < fx.colMax; i++) {
-				ctrlTypeList.add(CtrlType.INT);
+				ctrlTypeList[i] = CtrlType.INT;
 			}
 
 			System.out.printf("colMax=%d fromReg(\"%s\") => false\n", fx.colMax, fx.str);

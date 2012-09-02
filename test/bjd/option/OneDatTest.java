@@ -1,8 +1,8 @@
 package bjd.option;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;

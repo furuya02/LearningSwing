@@ -1,13 +1,14 @@
 package bjd.ctrl;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 
+public class CtrlCheckBox extends OneCtrl implements ActionListener {
 
-public class CtrlCheckBox extends OneCtrl {
-	
 	private JCheckBox checkBox = null;
-	
+
 	public CtrlCheckBox(String help) {
 		super(help);
 	}
@@ -18,29 +19,75 @@ public class CtrlCheckBox extends OneCtrl {
 	}
 
 	@Override
-	public int abstractCreate(int tabIndex) {
-		int left = MARGIN;
-		int top = MARGIN;
+	protected void abstractCreate(Object value) {
+		int left = margin;
+		int top = margin;
 
-		//チェックボックス作成
-		checkBox = (JCheckBox) create(panel, new JCheckBox(help), -1/* tabIndex */, left, top, 0, 0);
-		left += checkBox.getWidth() + MARGIN; //オフセット移動
-		
-        //パネルのサイズ設定
-		panel.setSize(left + MARGIN, DEFAULT_HEIGHT);
-		return tabIndex;
+		// チェックボックス作成
+		checkBox = (JCheckBox) create(panel, new JCheckBox(help), left, top);
+		checkBox.addActionListener(this);
+		left += checkBox.getWidth() + margin; // オフセット移動
+
+		//値の設定
+		abstractWrite(value);
+
+		// パネルのサイズ設定
+		panel.setSize(left + margin, defaultHeight + margin * 2);
 	}
 
 	@Override
-	public int abstractDelete() {
-		panel.remove(checkBox);
+	protected void abstractDelete() {
+		remove(panel, checkBox);
 		checkBox = null;
-		return 0;
 	}
 
 	@Override
-	public Object abstractRead() {
+	protected Object abstractRead() {
 		return checkBox.isSelected();
 	}
 
+	@Override
+	protected void abstractWrite(Object value) {
+		checkBox.setSelected((boolean) value);
+	}
+
+	//***********************************************************************
+	// コントロールへの有効・無効
+	//***********************************************************************
+	protected void abstractSetEnable(boolean enabled) {
+		if (checkBox != null) {
+			checkBox.setEnabled(enabled);
+		}
+	}
+
+	//***********************************************************************
+	// OnChange関連
+	//***********************************************************************
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		setOnChange();
+	}
+
+	//***********************************************************************
+	// CtrlDat関連
+	//***********************************************************************
+	@Override
+	protected boolean abstractIsComplete() {
+		return true; // チェックの有無は、常にCompleteしている
+	}
+
+	@Override
+	protected String abstractToText() {
+		return String.valueOf(checkBox.isSelected());
+	}
+
+	@Override
+	protected void abstractFromText(String s) {
+		checkBox.setSelected(Boolean.valueOf(s));
+	}
+
+	@Override
+	protected void abstractClear() {
+		checkBox.setSelected(false);
+	}
 }

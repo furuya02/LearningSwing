@@ -1,17 +1,23 @@
 package bjd.option;
 
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
+import bjd.ctrl.CtrlGroup;
 import bjd.ctrl.CtrlSize;
+import bjd.ctrl.CtrlType;
+import bjd.ctrl.ICtrlEventListener;
 import bjd.ctrl.OneCtrl;
 import bjd.net.BindAddr;
 import bjd.net.Ip;
 import bjd.util.Crypt;
 import bjd.util.IDispose;
+import bjd.util.Msg;
+import bjd.util.MsgKind;
 
 public class OneVal implements IDispose {
 
@@ -25,8 +31,51 @@ public class OneVal implements IDispose {
 		this.value = value;
 		this.crlf = crlf;
 		this.oneCtrl = oneCtrl;
-		oneCtrl.setOneVal(this); // OneCtrlのOneValはここで初期化される
+
+		ListVal listVal = null;
+		if (oneCtrl.getCtrlType() == CtrlType.DAT) {
+			listVal = ((CtrlDat) oneCtrl).getListVal();
+		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
+			listVal = ((CtrlGroup) oneCtrl).getListVal();
+		}
+		if (listVal != null) {
+			ArrayList<OneVal> list = listVal.getOneValList(null);
+			for (OneVal o : list) {
+				if (name.equals(o.getName())) {
+					Msg.show(MsgKind.Error, String.format("名前に重複があります %s", name));
+				}
+			}
+		}
 	}
+
+	//階層下のOneValを一覧する
+	public ArrayList<OneVal> getOneValList(ArrayList<OneVal> list) {
+		if (list == null) {
+			list = new ArrayList<>();
+		}
+
+		if (oneCtrl.getCtrlType() == CtrlType.DAT) {
+			list = ((CtrlDat) oneCtrl).getListVal().getOneValList(list);
+		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
+			list = ((CtrlGroup) oneCtrl).getListVal().getOneValList(list);
+		}
+		list.add(this);
+		return list;
+	}
+
+	public boolean isComplete() {
+		ListVal listVal = null;
+		if (oneCtrl.getCtrlType() == CtrlType.DAT) {
+			listVal = ((CtrlDat) oneCtrl).getListVal();
+		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
+			listVal = ((CtrlGroup) oneCtrl).getListVal();
+		}
+		if (listVal != null) {
+			return listVal.isComplete();
+		}
+		return oneCtrl.isComplete();
+	}
+	
 
 	@Override
 	public void dispose() {
@@ -49,25 +98,36 @@ public class OneVal implements IDispose {
 	}
 
 	//コントロール生成
-	public int createCtrl(JPanel mainPanel, int baseX, int baseY , int tabIndex) {
+	public void createCtrl(JPanel mainPanel, int baseX, int baseY) {
 		//System.out.println(String.format("OneVal.createCtrl() name=%s", name));
-		return oneCtrl.create(mainPanel, baseX, baseY, tabIndex);
+		oneCtrl.create(mainPanel, baseX, baseY, value);
 	}
+
 	//コントロール破棄
 	public void deleteCtrl() {
 		//System.out.println(String.format("OneVal.deleteCtrl() name=%s", name));
 		oneCtrl.delete();
 	}
-	//コントロールからの値のコピー
-	public void readCtrl() {
-		value = oneCtrl.read();
-		System.out.println(String.format("OneVal.readCtrl() name=%s %s", name, value));
-		
+
+	//コントロールからの値のコピー (isComfirm==true 確認のみ)
+	public boolean readCtrl(boolean isConfirm) {
+		Object o = oneCtrl.read();
+		if (o == null) {
+			if (isConfirm) { //確認だけの場合は、valueへの値セットは行わない
+				Msg.show(MsgKind.Error, String.format("データに誤りがあります 「%s」", oneCtrl.getHelp()));
+			}
+			return false;
+		}
+		value = o; //値の読込
+		return true;
 	}
-	
-	
+
 	public CtrlSize getCtrlSize() {
 		return oneCtrl.getCtrlSize();
+	}
+
+	public void setListener(ICtrlEventListener listener) {
+		oneCtrl.setListener(listener);
 	}
 
 	/**
@@ -197,7 +257,7 @@ public class OneVal implements IDispose {
 				break;
 			case COMBOBOX:
 				try {
-					int max = ((CtrlComboBox) oneCtrl).getList().size();
+					int max = ((CtrlComboBox) oneCtrl).getMax();
 					int n = Integer.parseInt(str);
 					if (n < 0 || max <= n) {
 						value = 0;
