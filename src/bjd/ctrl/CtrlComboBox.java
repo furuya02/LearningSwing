@@ -59,6 +59,9 @@ public class CtrlComboBox extends OneCtrl implements ActionListener {
 		comboBox = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		return comboBox.getSelectedIndex();

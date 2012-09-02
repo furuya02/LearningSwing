@@ -52,7 +52,9 @@ public class CtrlTextBox extends OneCtrl implements DocumentListener {
 		textField = null;
 	}
 
-	// コントロールの値の読み込み
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		return textField.getText();

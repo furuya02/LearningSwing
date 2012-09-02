@@ -41,6 +41,9 @@ public class CtrlCheckBox extends OneCtrl implements ActionListener {
 		checkBox = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		return checkBox.isSelected();

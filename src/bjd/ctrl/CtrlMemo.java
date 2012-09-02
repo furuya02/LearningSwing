@@ -61,6 +61,9 @@ public class CtrlMemo extends OneCtrl implements DocumentListener {
 		textArea = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		return textArea.getText();

@@ -80,6 +80,9 @@ public class CtrlFont extends OneCtrl implements ActionListener {
 		button = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		return font;

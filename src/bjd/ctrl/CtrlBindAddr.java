@@ -108,6 +108,9 @@ public class CtrlBindAddr extends OneCtrl implements ActionListener {
 		}
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		BindStyle byndStyle = BindStyle.V46DUAL;

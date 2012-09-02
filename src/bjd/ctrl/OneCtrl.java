@@ -81,18 +81,7 @@ public abstract class OneCtrl {
 	}
 
 	//***********************************************************************
-	// コントロールへの有効・無効
-	//***********************************************************************
-	protected abstract void abstractSetEnable(boolean enabled);
-
-	public void setEnable(boolean enabled) {
-		if (panel != null) {
-			abstractSetEnable(enabled);
-		}
-	}
-
-	//***********************************************************************
-	// コントロールへの値の設定・取得
+	// コントロールの値の読み書き
 	//***********************************************************************
 	// データが無効なときnullが返る
 	protected abstract Object abstractRead();
@@ -105,6 +94,17 @@ public abstract class OneCtrl {
 
 	public void write(Object value) {
 		abstractWrite(value);
+	}
+
+	//***********************************************************************
+	// コントロールへの有効・無効
+	//***********************************************************************
+	protected abstract void abstractSetEnable(boolean enabled);
+
+	public void setEnable(boolean enabled) {
+		if (panel != null) {
+			abstractSetEnable(enabled);
+		}
 	}
 
 	//***********************************************************************

@@ -68,6 +68,9 @@ public class CtrlGroup extends OneCtrl {
 		border = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		listVal.readCtrl(false);

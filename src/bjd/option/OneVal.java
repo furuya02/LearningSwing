@@ -38,6 +38,8 @@ public class OneVal implements IDispose {
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			listVal = ((CtrlGroup) oneCtrl).getListVal();
 		}
+		//TODO ここのCtrlTabPageの処理も追加する
+		
 		if (listVal != null) {
 			ArrayList<OneVal> list = listVal.getOneValList(null);
 			for (OneVal o : list) {
@@ -59,6 +61,7 @@ public class OneVal implements IDispose {
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			list = ((CtrlGroup) oneCtrl).getListVal().getOneValList(list);
 		}
+		//TODO ここのCtrlTabPageの処理も追加する
 		list.add(this);
 		return list;
 	}
@@ -70,6 +73,8 @@ public class OneVal implements IDispose {
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			listVal = ((CtrlGroup) oneCtrl).getListVal();
 		}
+		//TODO ここのCtrlTabPageの処理も追加する
+
 		if (listVal != null) {
 			return listVal.isComplete();
 		}

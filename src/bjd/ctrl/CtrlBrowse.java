@@ -101,6 +101,9 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		button = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		return textField.getText();

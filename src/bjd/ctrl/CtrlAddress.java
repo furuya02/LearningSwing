@@ -61,6 +61,9 @@ public class CtrlAddress extends OneCtrl implements DocumentListener {
 		textFieldList = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected void abstractWrite(Object value) {
 		Ip ip = (Ip) value;

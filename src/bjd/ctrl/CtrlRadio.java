@@ -97,6 +97,9 @@ public class CtrlRadio extends OneCtrl implements ActionListener {
 		groupPanel = null;
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		for (int i = 0; i < list.length; i++) {

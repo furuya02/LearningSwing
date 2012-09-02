@@ -55,7 +55,9 @@ public class CtrlInt extends OneCtrl implements DocumentListener {
 		textField = null;
 	}
 
-	// コントロールの値の読み込み
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
 		String str = textField.getText();

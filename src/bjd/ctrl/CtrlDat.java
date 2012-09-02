@@ -134,41 +134,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		border = null;
 	}
 
-	@Override
-	protected Object abstractRead() {
-		Dat dat = new Dat(getCtrlTypeList());
-		//チェックリストボックスの内容からDatオブジェクトを生成する
-		for (int i = 0; i < checkListBox.getItemCount(); i++) {
-			boolean enable = checkListBox.getItemChecked(i);
-			dat.add(enable, checkListBox.getItemText(i));
-		}
-		return dat;
-	}
-
-	@Override
-	protected void abstractWrite(Object value) {
-		if (value == null) {
-			return;
-		}
-		Dat dat = (Dat) value;
-		for (OneDat d : dat) {
-			StringBuilder sb = new StringBuilder();
-			ArrayList<String> strList = d.getStrList();
-			for (String s : strList) {
-				if (sb.length() != 0) {
-					sb.append("\t");
-				}
-				sb.append(s);
-			}
-			int i = checkListBox.add(sb.toString());
-			checkListBox.setItemChecked(i, d.isEnable());
-		}
-		//データがある場合は、１行目を選択する
-		if (checkListBox.getItemCount() > 0) {
-			checkListBox.setSelectedIndex(0);
-		}
-
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -318,7 +283,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		//var lines = File.ReadAllLines(fileName, Encoding.GetEncoding(932));
 		for (String s : lines) {
 			String str = s;
-			boolean isChecked = str[0] != '#';
+			boolean isChecked = str.charAt(0) != '#';
 			str = str.substring(2);
 
 			//カラム数の確認
@@ -388,6 +353,44 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		return listVal.isComplete();
 	}
 
+	//***********************************************************************
+	// コントロールの値の読み書き
+	//***********************************************************************
+	@Override
+	protected Object abstractRead() {
+		Dat dat = new Dat(getCtrlTypeList());
+		//チェックリストボックスの内容からDatオブジェクトを生成する
+		for (int i = 0; i < checkListBox.getItemCount(); i++) {
+			boolean enable = checkListBox.getItemChecked(i);
+			dat.add(enable, checkListBox.getItemText(i));
+		}
+		return dat;
+	}
+
+	@Override
+	protected void abstractWrite(Object value) {
+		if (value == null) {
+			return;
+		}
+		Dat dat = (Dat) value;
+		for (OneDat d : dat) {
+			StringBuilder sb = new StringBuilder();
+			ArrayList<String> strList = d.getStrList();
+			for (String s : strList) {
+				if (sb.length() != 0) {
+					sb.append("\t");
+				}
+				sb.append(s);
+			}
+			int i = checkListBox.add(sb.toString());
+			checkListBox.setItemChecked(i, d.isEnable());
+		}
+		//データがある場合は、１行目を選択する
+		if (checkListBox.getItemCount() > 0) {
+			checkListBox.setSelectedIndex(0);
+		}
+
+	}
 	//***********************************************************************
 	// コントロールへの有効・無効
 	//***********************************************************************
