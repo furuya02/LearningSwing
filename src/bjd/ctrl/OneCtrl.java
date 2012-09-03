@@ -52,9 +52,9 @@ public abstract class OneCtrl {
 			panel = (JPanel) create(owner, new JPanel(), x, y);
 
 			// Debug 色付ける
-			Random r = new Random();
-			Color bc = new Color(r.nextInt(205), r.nextInt(205), r.nextInt(205));
-			panel.setBackground(bc);
+			//Random r = new Random();
+			//Color bc = new Color(r.nextInt(205), r.nextInt(205), r.nextInt(205));
+			//panel.setBackground(bc);
 
 			// 全部の子コントロールをベースとなるpanelのサイズは、abstractCreate()で変更される
 			abstractCreate(value); // panelの上に独自コントロールを配置する
