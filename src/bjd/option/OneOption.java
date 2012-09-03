@@ -1,6 +1,7 @@
 package bjd.option;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import bjd.ctrl.CtrlTabPage;
 
@@ -15,14 +16,6 @@ public class OneOption {
 		int x = 0;
 		int y = 0;
 		listVal.createCtrl(mainPanel, x, y);
-		
-//		OneVal oneVal = listVal.search("tab");
-//		if(oneVal!=null){
-//		    CtrlTabPage t = (CtrlTabPage)oneVal.getOneCtrl();
-//		    t.SetVisible();
-//		    System.out.println(String.format("setVisible()"));
-//		}
-		
 	}
 	//ダイアログ破棄時の処理
 	public void deleteDlg() {

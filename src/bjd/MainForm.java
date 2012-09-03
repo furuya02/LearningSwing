@@ -7,10 +7,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import bjd.util.Msg;
 import bjd.util.MsgKind;
+import javax.swing.JTabbedPane;
 
 public final class MainForm {
 
@@ -48,17 +50,22 @@ public final class MainForm {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		appMenu = new AppMenu(mainForm);
 
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				tabbedPane.addTab("123",new JPanel());
 				int i = Msg.show(MsgKind.Question, "テストメッセージ");
 				System.out.print(i);
 			}
 		});
+
 		mainForm.getContentPane().add(btnNewButton, BorderLayout.NORTH);
+		mainForm.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		
 
 
 		kernel = new Kernel();

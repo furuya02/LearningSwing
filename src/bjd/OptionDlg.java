@@ -29,16 +29,7 @@ public class OptionDlg extends Dlg {
 		
 
 		
-		
-//		int top=100;
-//		JTabbedPane tabbedPane = new JTabbedPane();
-//		tabbedPane.setSize(DLG_WIDTH-14,DLG_HEIGHT-top);
-//        mainPanel.add(tabbedPane);
-//		//TODO 0.NEXT タブページ例外で表示できていない
-//        JPanel page1 = new JPanel();
-//        JButton button = new JButton("TEST");
-//        page1.add(button);
-//        tabbedPane.addTab("page1",page1);
+		//TODO 0.NEXT タブページ例外で表示できていない
 		
 		
 //		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});

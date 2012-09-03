@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 import bjd.util.Msg;
 import bjd.util.MsgKind;
@@ -28,6 +29,9 @@ public abstract class OneCtrl {
 	}
 
 	public CtrlSize getCtrlSize() {
+		if(panel==null){
+			return new CtrlSize(0,0);
+		}
 		return new CtrlSize(panel.getWidth(), panel.getHeight());
 	}
 
@@ -42,7 +46,8 @@ public abstract class OneCtrl {
 
 	public void create(JPanel owner, int x, int y, Object value) {
 		this.owner = owner;
-		// this.oneVal = oneVal;
+		
+		
 		if (panel == null) {
 			panel = (JPanel) create(owner, new JPanel(), x, y);
 
@@ -120,8 +125,10 @@ public abstract class OneCtrl {
 		} else {
 			setAutoSize(control); // サイズ自動調整(この時点でテキストが適切に設定されているばあ、これでサイズの調整は終わる)
 		}
-
-		if (!(self instanceof JScrollPane)) { //JScrollPaneは、textAreaを配置する関係で、setLayout(null)だと入力できなくなる
+		
+		//JScrollPaneは、textAreaを配置する関係で、setLayout(null)だと入力できなくなる
+		//JTabbedPaneは、setLayout(null)すると例外が発生する
+		if (!(self instanceof JScrollPane) && !(self instanceof JTabbedPane)) {
 			control.setLayout(null); // 子コントロールを絶対位置で表示する
 		}
 		owner.add(control);
