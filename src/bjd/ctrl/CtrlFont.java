@@ -45,8 +45,11 @@ public class CtrlFont extends OneCtrl implements ActionListener {
 		// ボタンの配置(topの-2は、前のテキストボックスとの高さ調整)
 		String buttonText = kernel.getJp() ? "フォント" : "Font";
 		button = (JButton) create(panel, new JButton(buttonText), left, top - 3);
-
+		
 		button.addActionListener(this);
+
+		//TODO CtrlFont ボタンの横にフォントの内容をテキスト表示する
+		
 		//		button.addActionListener(new ActionListener() {
 		//			@Override
 		//			public void actionPerformed(ActionEvent e) {

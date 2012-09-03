@@ -18,5 +18,6 @@ public enum CtrlType {
     FONT,
     RADIO,
     HIDDEN,
+    PAGE,
 }
 

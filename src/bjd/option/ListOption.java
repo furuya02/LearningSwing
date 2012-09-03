@@ -12,6 +12,8 @@ import bjd.ctrl.CtrlFolder;
 import bjd.ctrl.CtrlFont;
 import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlMemo;
+import bjd.ctrl.CtrlPage;
+import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.CtrlTextBox;
 import bjd.net.Ip;
 
@@ -33,8 +35,17 @@ public class ListOption {
 
 		option = new Option();
 
-		option.add(new OneVal("font", null, Crlf.NEXTLINE, new CtrlFont("フォント", kernel)));
+        
+		ListVal pageList = new ListVal();
+		    ListVal page = new ListVal();
+		    page.add(new OneVal("acl", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
+		pageList.add(new OneVal("page1",null,Crlf.NEXTLINE,new CtrlPage("ページ１",page)));
+        
+        
+        option.add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
+        
+        
 		//option.add(new OneVal("bindAddr", null, Crlf.NEXTLINE, new CtrlBindAddr(kernel.getJp() ? "待ち受けるネットワーク" : "BinfAddress", listV4, listV6)));
 
 		// option.add(new OneVal("xxx5", true, Crlf.NEXTLINE, new
@@ -63,13 +74,6 @@ public class ListOption {
 		// option.add(new OneVal("xxx", true, Crlf.NEXTLINE, new
 		// CtrlCheckBox("サーバを使用する2")));
 
-		ListVal listVal = new ListVal();
-		//
-		listVal.add(new OneVal("acl", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
-		//listVal.add(new OneVal("addr", new Ip("192.168.0.1"), Crlf.NEXTLINE, new CtrlAddress("アドレス")));
-		//listVal.add(new OneVal("user", "user1", Crlf.NEXTLINE, new CtrlTextBox("ユーザ名", 20)));
-		//listVal.add(new OneVal("pass", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 20)));
-		option.add(new OneVal("dat", null, Crlf.NEXTLINE, new CtrlDat("データ", listVal, 575, 400, kernel)));
 
 		// listVal.add(new OneVal("xxx31", true, Crlf.NEXTLINE, new
 		// CtrlCheckBox("サーバを使用する3")));

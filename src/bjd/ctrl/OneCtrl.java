@@ -84,6 +84,7 @@ public abstract class OneCtrl {
 	// コントロールの値の読み書き
 	//***********************************************************************
 	// データが無効なときnullが返る
+	//TODO abstractRead() nullを返す際に、コントロールを赤色表示にする
 	protected abstract Object abstractRead();
 
 	public Object read() {

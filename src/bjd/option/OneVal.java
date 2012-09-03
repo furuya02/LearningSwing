@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlGroup;
+import bjd.ctrl.CtrlTabPage;
+import bjd.ctrl.CtrlPage;
 import bjd.ctrl.CtrlSize;
 import bjd.ctrl.CtrlType;
 import bjd.ctrl.ICtrlEventListener;
@@ -37,8 +39,11 @@ public class OneVal implements IDispose {
 			listVal = ((CtrlDat) oneCtrl).getListVal();
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			listVal = ((CtrlGroup) oneCtrl).getListVal();
+        } else if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
+            listVal = ((CtrlTabPage) oneCtrl).getListVal();
+        } else if (oneCtrl.getCtrlType() == CtrlType.PAGE) {
+            listVal = ((CtrlPage) oneCtrl).getListVal();
 		}
-		//TODO ここのCtrlTabPageの処理も追加する
 		
 		if (listVal != null) {
 			ArrayList<OneVal> list = listVal.getOneValList(null);
@@ -60,8 +65,11 @@ public class OneVal implements IDispose {
 			list = ((CtrlDat) oneCtrl).getListVal().getOneValList(list);
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			list = ((CtrlGroup) oneCtrl).getListVal().getOneValList(list);
+        } else if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
+            list = ((CtrlTabPage) oneCtrl).getListVal().getOneValList(list);
+        } else if (oneCtrl.getCtrlType() == CtrlType.PAGE) {
+            list = ((CtrlPage) oneCtrl).getListVal().getOneValList(list);
 		}
-		//TODO ここのCtrlTabPageの処理も追加する
 		list.add(this);
 		return list;
 	}
@@ -72,8 +80,11 @@ public class OneVal implements IDispose {
 			listVal = ((CtrlDat) oneCtrl).getListVal();
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			listVal = ((CtrlGroup) oneCtrl).getListVal();
+        } else if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
+            listVal = ((CtrlTabPage) oneCtrl).getListVal();
+        } else if (oneCtrl.getCtrlType() == CtrlType.PAGE) {
+            listVal = ((CtrlPage) oneCtrl).getListVal();
 		}
-		//TODO ここのCtrlTabPageの処理も追加する
 
 		if (listVal != null) {
 			return listVal.isComplete();

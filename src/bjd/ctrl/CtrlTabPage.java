@@ -1,9 +1,16 @@
 package bjd.ctrl;
 
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
 import bjd.option.ListVal;
 
 public class CtrlTabPage extends OneCtrl {
 	private ListVal listVal;
+	private JTabbedPane tabbedPane = null;
 
 	public CtrlTabPage(String help, ListVal listVal) {
 		super(help);
@@ -21,13 +28,47 @@ public class CtrlTabPage extends OneCtrl {
 
 	@Override
 	protected void abstractCreate(Object value) {
-		// TODO CtrlTabPage Auto-generated method stub
+
+        int left = margin;
+        int top = margin;
+
+        // タブページの生成
+        tabbedPane = (JTabbedPane) create(panel, new JTabbedPane(), left, top);
+        tabbedPane.setSize(300,300);
+        //TODO 0.NEXT タブページ例外で表示できていない
+        JPanel page1 = new JPanel();
+        tabbedPane.addTab("page1", page1);
+        //JPanel page2 = new JPanel();
+        //tabbedPane.addTab("page2", page2);
+        //JPanel page3 = new JPanel();
+        //tabbedPane.addTab("page3", page3);
+
+//        //グループに含まれるコントロールを描画する
+//        int x = left + 8;
+//        int y = top + 12;
+//        listVal.createCtrl(border, x, y);
+//        CtrlSize ctrlSize = listVal.getCtrlSize();
+//
+//        // borderのサイズ指定
+//        border.setSize(width, ctrlSize.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
+
+        // オフセット移動
+        left += tabbedPane.getWidth();
+        top += tabbedPane.getHeight();
+
+        //値の設定
+        abstractWrite(value);
+
+        // パネルのサイズ設定
+        panel.setSize(left + margin, top + margin);
 
 	}
 
 	@Override
 	protected void abstractDelete() {
-		// TODO CtrlTabPage Auto-generated method stub
+		remove(panel,tabbedPane);
+		tabbedPane = null;
+	    // TODO CtrlTabPage Auto-generated method stub
 
 	}
 
@@ -37,7 +78,7 @@ public class CtrlTabPage extends OneCtrl {
 	@Override
 	protected Object abstractRead() {
 		// TODO CtrlTabPage Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
