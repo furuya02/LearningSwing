@@ -70,7 +70,6 @@ public class CtrlTabPage extends OneCtrl {
 		
 		remove(panel, tabbedPane);
 		tabbedPane = null;
-// TODO CtrlTabPage Auto-generated method stub
 	}
 
 	//***********************************************************************
@@ -78,14 +77,11 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
-		// TODO CtrlTabPage Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	protected void abstractWrite(Object value) {
-		// TODO CtrlTabPage Auto-generated method stub
-
 	}
 
 	//***********************************************************************
@@ -93,8 +89,7 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected void abstractSetEnable(boolean enabled) {
-		// TODO CtrlTabPage Auto-generated method stub
-
+	    tabbedPane.setEnabled(enabled);
 	}
 
 	//***********************************************************************
@@ -105,26 +100,22 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected boolean abstractIsComplete() {
-		// TODO CtrlTabPage Auto-generated method stub
-		return false;
+		return true; //未入力状態はない
 	}
 
 	@Override
 	protected String abstractToText() {
-		// TODO CtrlTabPage Auto-generated method stub
-		return null;
+	    throw new UnsupportedOperationException("*CtrlTabPage.java abstractToText()は未実装");
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		// TODO CtrlTabPage Auto-generated method stub
-
+        throw new UnsupportedOperationException("*CtrlTabPage.java abstractFromText()は未実装");
 	}
 
 	@Override
 	protected void abstractClear() {
-		// TODO CtrlTabPage Auto-generated method stub
-
+        throw new UnsupportedOperationException("*CtrlTabPage.java abstractClear()は未実装");
 	}
 
 }

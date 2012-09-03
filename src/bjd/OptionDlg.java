@@ -23,10 +23,7 @@ public class OptionDlg extends Dlg {
 		//ダイアログ作成時の処理
 		oneOption.createDlg(mainPanel);
 		
-
-		
-		//TODO 0.NEXT タブページ例外で表示できていない
-		
+		//TODO.0 タブの中身を実装
 		
 //		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});
 //		JScrollPane srl = new JScrollPane(listBox);
