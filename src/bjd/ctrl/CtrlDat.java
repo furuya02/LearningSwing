@@ -30,7 +30,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 	private CheckListBox checkListBox = null;
 	private ListVal listVal;
 
-	private int width;
 	private int height;
 	private Kernel kernel;
 
@@ -52,10 +51,9 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		return ctrlTypeList;
 	}
 
-	public CtrlDat(String help, ListVal listVal, int width, int height, Kernel kernel) {
+	public CtrlDat(String help, ListVal listVal, int height, Kernel kernel) {
 		super(help);
 		this.listVal = listVal;
-		this.width = width;
 		this.height = height;
 		this.kernel = kernel;
 	}
@@ -77,7 +75,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		// ボーダライン（groupPanel）の生成
 		border = (JPanel) create(panel, new JPanel(new GridLayout()), left, top);
 		border.setBorder(BorderFactory.createTitledBorder(help));
-		border.setSize(width, height); // サイズは、コンストラクタで指定されている
+		border.setSize(getBaseWidth() - 22, height); // サイズは、コンストラクタで指定されている
 
 		//Datに含まれるコントロールを配置
 
@@ -107,7 +105,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 
 		//チェックリストボックス配置
 		checkListBox = (CheckListBox) create(border, new CheckListBox(), left, top);
-		checkListBox.setSize(width - 20, height - top - 15);
+		checkListBox.setSize(getBaseWidth() - 42, height - top - 15);
 		checkListBox.addListSelectionListener(this);
 
 		//値の設定
@@ -133,7 +131,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		remove(panel, checkListBox);
 		border = null;
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -391,6 +388,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		}
 
 	}
+
 	//***********************************************************************
 	// コントロールへの有効・無効
 	//***********************************************************************

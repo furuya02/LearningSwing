@@ -1,9 +1,6 @@
 package bjd.option;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
-import bjd.ctrl.CtrlTabPage;
 
 
 public class OneOption {

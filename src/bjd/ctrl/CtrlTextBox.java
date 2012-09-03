@@ -63,8 +63,11 @@ public class CtrlTextBox extends OneCtrl implements DocumentListener {
 	@Override
 	protected void abstractWrite(Object value) {
 		//textField.setText(String.valueOf(value));
-		textField.setText((String) value);
+		if (value != null) {
+			textField.setText((String) value);
+		}
 	}
+
 	//***********************************************************************
 	// コントロールへの有効・無効
 	//***********************************************************************
@@ -73,12 +76,14 @@ public class CtrlTextBox extends OneCtrl implements DocumentListener {
 			textField.setEditable(enabled);
 		}
 	}
+
 	//***********************************************************************
 	// OnChange関連
 	//***********************************************************************
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 	}
+
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		setOnChange();

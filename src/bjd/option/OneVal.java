@@ -4,13 +4,10 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlGroup;
-import bjd.ctrl.CtrlTabPage;
-import bjd.ctrl.CtrlPage;
 import bjd.ctrl.CtrlSize;
 import bjd.ctrl.CtrlType;
 import bjd.ctrl.ICtrlEventListener;
@@ -41,9 +38,7 @@ public class OneVal implements IDispose {
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			listVal = ((CtrlGroup) oneCtrl).getListVal();
         } else if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
-            listVal = ((CtrlTabPage) oneCtrl).getListVal();
-        } else if (oneCtrl.getCtrlType() == CtrlType.PAGE) {
-            listVal = ((CtrlPage) oneCtrl).getListVal();
+            //TODO CtrlTabPageの特殊処理
 		}
 		
 		if (listVal != null) {
@@ -67,9 +62,7 @@ public class OneVal implements IDispose {
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			list = ((CtrlGroup) oneCtrl).getListVal().getOneValList(list);
         } else if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
-            list = ((CtrlTabPage) oneCtrl).getListVal().getOneValList(list);
-        } else if (oneCtrl.getCtrlType() == CtrlType.PAGE) {
-            list = ((CtrlPage) oneCtrl).getListVal().getOneValList(list);
+            //TODO CtrlTabPageの特殊処理
 		}
 		list.add(this);
 		return list;
@@ -82,9 +75,7 @@ public class OneVal implements IDispose {
 		} else if (oneCtrl.getCtrlType() == CtrlType.GROUP) {
 			listVal = ((CtrlGroup) oneCtrl).getListVal();
         } else if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
-            listVal = ((CtrlTabPage) oneCtrl).getListVal();
-        } else if (oneCtrl.getCtrlType() == CtrlType.PAGE) {
-            listVal = ((CtrlPage) oneCtrl).getListVal();
+            //TODO CtrlTabPageの特殊処理
 		}
 
 		if (listVal != null) {

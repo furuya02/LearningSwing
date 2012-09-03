@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlSize;
 import bjd.ctrl.ICtrlEventListener;
-import bjd.ctrl.OneCtrl;
 import bjd.util.ListBase;
 import bjd.util.Msg;
 import bjd.util.MsgKind;

@@ -1,26 +1,18 @@
 package bjd.ctrl;
 
-import java.awt.GridLayout;
+import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-
-import bjd.option.ListVal;
 
 public class CtrlTabPage extends OneCtrl {
-	private ListVal listVal;
+	private ArrayList<OnePage> pageList;
 	private JTabbedPane tabbedPane = null;
-	
-	public CtrlTabPage(String help, ListVal listVal) {
-		super(help);
-		this.listVal = listVal;
-	}
+	private ArrayList<JPanel> pagePanelList = null;
 
-	public ListVal getListVal() {
-		return listVal;
+	public CtrlTabPage(String help, ArrayList<OnePage> pageList) {
+		super(help);
+		this.pageList = pageList;
 	}
 
 	@Override
@@ -31,44 +23,54 @@ public class CtrlTabPage extends OneCtrl {
 	@Override
 	protected void abstractCreate(Object value) {
 
-        int left = margin;
-        int top = margin;
+		int left = margin;
+		int top = margin;
 
 		tabbedPane = (JTabbedPane) create(panel, new JTabbedPane(), left, top);
-        tabbedPane.setSize(300,300);
-        
-        panel.add(tabbedPane);
-        JPanel page1 = new JPanel();
-        tabbedPane.addTab("page1",page1);
-		
-        
-//        //グループに含まれるコントロールを描画する
-//        int x = left + 8;
-//        int y = top + 12;
-//        listVal.createCtrl(border, x, y);
-//        CtrlSize ctrlSize = listVal.getCtrlSize();
-//
-//        // borderのサイズ指定
-//        border.setSize(width, ctrlSize.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
+		tabbedPane.setSize(getBaseWidth() - 22, getBaseHeight());
 
-        // オフセット移動
-        left += tabbedPane.getWidth();
-        top += tabbedPane.getHeight();
+		panel.add(tabbedPane);
 
-        //値の設定
-        abstractWrite(value);
+		//グループに含まれるコントロールを描画する(listValはCtrlPageなので座標やサイズはもう関係ない)
 
-        // パネルのサイズ設定
-        panel.setSize(left + margin, top + margin);
+		pagePanelList = new ArrayList<>();
+		for (OnePage onePage : pageList) {
+			JPanel p = new JPanel();
+			
+			onePage.getListVal().createCtrl(p, 0, 0); //ページの中を作成
+			
+			tabbedPane.addTab(onePage.getTitle(), p);
+			pagePanelList.add(p);
+		}
+
+		// オフセット移動
+		left += tabbedPane.getWidth();
+		top += tabbedPane.getHeight();
+
+		//値の設定
+		//abstractWrite(value);
+
+		// パネルのサイズ設定
+		panel.setSize(left + margin, top + margin);
 
 	}
 
 	@Override
 	protected void abstractDelete() {
-		remove(panel,tabbedPane);
-		tabbedPane = null;
-	    // TODO CtrlTabPage Auto-generated method stub
 
+		for (OnePage onePage : pageList) {
+			onePage.getListVal().deleteCtrl(); //これが無いと、グループの中のコントロールが２回目以降表示されなくなる
+		}
+
+		while (pagePanelList.size() != 0) {
+			tabbedPane.remove(pagePanelList.get(0)); //タブから削除
+			pagePanelList.remove(0); // リストから削除
+		}
+		pagePanelList = null;
+		
+		remove(panel, tabbedPane);
+		tabbedPane = null;
+// TODO CtrlTabPage Auto-generated method stub
 	}
 
 	//***********************************************************************
@@ -85,6 +87,7 @@ public class CtrlTabPage extends OneCtrl {
 		// TODO CtrlTabPage Auto-generated method stub
 
 	}
+
 	//***********************************************************************
 	// コントロールへの有効・無効
 	//***********************************************************************
@@ -93,6 +96,7 @@ public class CtrlTabPage extends OneCtrl {
 		// TODO CtrlTabPage Auto-generated method stub
 
 	}
+
 	//***********************************************************************
 	// OnChange関連
 	//***********************************************************************

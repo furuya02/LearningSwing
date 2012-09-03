@@ -11,18 +11,15 @@ public class CtrlGroup extends OneCtrl {
 
 	private JPanel border = null;
 	private ListVal listVal;
-	private int width;
 
-	public CtrlGroup(String help, ListVal listVal, int width) {
+	public CtrlGroup(String help, ListVal listVal) {
 		super(help);
 		this.listVal = listVal;
-		this.width = width;
 	}
 
 	public ListVal getListVal() {
 		return listVal;
 	}
-	
 
 	@Override
 	public CtrlType getCtrlType() {
@@ -46,7 +43,7 @@ public class CtrlGroup extends OneCtrl {
 		CtrlSize ctrlSize = listVal.getCtrlSize();
 
 		// borderのサイズ指定
-		border.setSize(width, ctrlSize.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
+		border.setSize(getBaseWidth() - 22, ctrlSize.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
 
 		// オフセット移動
 		left += border.getWidth();
@@ -81,6 +78,7 @@ public class CtrlGroup extends OneCtrl {
 	protected void abstractWrite(Object value) {
 
 	}
+
 	//***********************************************************************
 	// コントロールへの有効・無効
 	//***********************************************************************
@@ -89,6 +87,7 @@ public class CtrlGroup extends OneCtrl {
 			border.setEnabled(enabled);
 		}
 	}
+
 	//***********************************************************************
 	// OnChange関連
 	//***********************************************************************
@@ -114,5 +113,5 @@ public class CtrlGroup extends OneCtrl {
 	@Override
 	protected void abstractClear() {
 	}
-	
+
 }

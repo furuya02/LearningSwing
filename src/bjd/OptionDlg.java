@@ -2,11 +2,7 @@ package bjd;
 
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 
 import bjd.option.OneOption;
 
@@ -14,7 +10,7 @@ import bjd.option.OneOption;
 public class OptionDlg extends Dlg {
 
 	private static final int DLG_WIDTH = 600;
-	private static final int DLG_HEIGHT = 600;
+	private static final int DLG_HEIGHT = 500;
 	private OneOption oneOption;
 
 	public OptionDlg(JFrame frame, OneOption oneOption) {

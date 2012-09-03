@@ -3,18 +3,9 @@ package bjd.option;
 import java.util.ArrayList;
 
 import bjd.Kernel;
-import bjd.ctrl.CtrlAddress;
-import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
-import bjd.ctrl.CtrlComboBox;
-import bjd.ctrl.CtrlDat;
-import bjd.ctrl.CtrlFolder;
-import bjd.ctrl.CtrlFont;
-import bjd.ctrl.CtrlHidden;
-import bjd.ctrl.CtrlMemo;
-import bjd.ctrl.CtrlPage;
 import bjd.ctrl.CtrlTabPage;
-import bjd.ctrl.CtrlTextBox;
+import bjd.ctrl.OnePage;
 import bjd.net.Ip;
 
 public class ListOption {
@@ -35,21 +26,31 @@ public class ListOption {
 
 		option = new Option();
 
-        
-		ListVal pageList = new ListVal();
-		    ListVal page = new ListVal();
-		    page.add(new OneVal("acl", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
-		pageList.add(new OneVal("page1",null,Crlf.NEXTLINE,new CtrlPage("ページ１",page)));
-        
-        
-        option.add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
+		option.add(new OneVal("useServer", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
+		option.add(new OneVal("server2", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
 
-        
-        
+		ArrayList<OnePage> pageList = new ArrayList<>();
+		
+		ListVal page1 = new ListVal();
+		page1.add(new OneVal("acl", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
+		pageList.add(new OnePage("name1", "page1", page1));
+		
+		ListVal page2 = new ListVal();
+		page2.add(new OneVal("acl2", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
+		pageList.add(new OnePage("name2", "page2", page1));
+		
+		option.add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
+
+		//CtrlDat テスト
+//		ListVal list = new ListVal();
+//		list.add(new OneVal("xxx2", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する2")));
+//		list.add(new OneVal("xxx3", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する3")));
+//		list.add(new OneVal("xxx4", "123", Crlf.NEXTLINE, new CtrlTextBox("サーバを使用する3", 10)));
+//		option.add(new OneVal("group", null, Crlf.NEXTLINE, new CtrlDat("グループ", list, 300, kernel)));
+
+		
 		//option.add(new OneVal("bindAddr", null, Crlf.NEXTLINE, new CtrlBindAddr(kernel.getJp() ? "待ち受けるネットワーク" : "BinfAddress", listV4, listV6)));
 
-		// option.add(new OneVal("xxx5", true, Crlf.NEXTLINE, new
-		// CtrlCheckBox("サーバを使用する")));
 		// option.add(new OneVal("xxx4", 123, Crlf.NEXTLINE, new
 		// CtrlInt("サーバを使用する", 3)));
 		// option.add(new OneVal("fileName", "c:\\text.txt", Crlf.NEXTLINE, new
@@ -73,7 +74,6 @@ public class ListOption {
 
 		// option.add(new OneVal("xxx", true, Crlf.NEXTLINE, new
 		// CtrlCheckBox("サーバを使用する2")));
-
 
 		// listVal.add(new OneVal("xxx31", true, Crlf.NEXTLINE, new
 		// CtrlCheckBox("サーバを使用する3")));

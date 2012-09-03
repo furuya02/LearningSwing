@@ -29,8 +29,8 @@ public abstract class OneCtrl {
 	}
 
 	public CtrlSize getCtrlSize() {
-		if(panel==null){
-			return new CtrlSize(0,0);
+		if (panel == null) {
+			return new CtrlSize(0, 0);
 		}
 		return new CtrlSize(panel.getWidth(), panel.getHeight());
 	}
@@ -46,8 +46,8 @@ public abstract class OneCtrl {
 
 	public void create(JPanel owner, int x, int y, Object value) {
 		this.owner = owner;
-		
-		
+		//System.out.println(String.format("GetWidth()=%d",owner.getRootPane().getParent().getWidth()));
+
 		if (panel == null) {
 			panel = (JPanel) create(owner, new JPanel(), x, y);
 
@@ -83,6 +83,17 @@ public abstract class OneCtrl {
 		Dimension dimension = component.getPreferredSize(); // 適切サイズを取得
 		dimension.width += 8; // 微調整
 		component.setSize(dimension);
+	}
+
+	protected int getBaseWidth() {
+		return owner.getRootPane().getParent().getWidth();
+	}
+
+	protected int getBaseHeight() {
+		int dlgHeight = owner.getRootPane().getParent().getHeight();
+		int panelTop = panel.getLocation().y;
+		//System.out.println(String.format("dlg_height=%d panel_top=%d",dlg_height,panel_top));
+		return dlgHeight - 80 - panelTop;
 	}
 
 	//***********************************************************************
@@ -125,7 +136,7 @@ public abstract class OneCtrl {
 		} else {
 			setAutoSize(control); // サイズ自動調整(この時点でテキストが適切に設定されているばあ、これでサイズの調整は終わる)
 		}
-		
+
 		//JScrollPaneは、textAreaを配置する関係で、setLayout(null)だと入力できなくなる
 		//JTabbedPaneは、setLayout(null)すると例外が発生する
 		if (!(self instanceof JScrollPane) && !(self instanceof JTabbedPane)) {
@@ -136,7 +147,7 @@ public abstract class OneCtrl {
 		return control;
 	}
 
-	protected void remove(JPanel owner, JComponent self) {
+	protected void remove(JComponent owner, JComponent self) {
 		if (self != null) {
 			controlCounter--;
 			owner.remove(self);

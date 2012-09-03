@@ -352,7 +352,7 @@ public class OneValTest {
 						val = (Dat) new Dat(new CtrlType[] { CtrlType.CHECKBOX, CtrlType.CHECKBOX });
 					}
 
-					oneCtrl = new CtrlDat(help, listVal, 500, 300, kernel);
+					oneCtrl = new CtrlDat(help, listVal, 300, kernel);
 					break;
 				default:
 					// not implement.
