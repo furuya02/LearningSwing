@@ -2,7 +2,11 @@ package bjd;
 
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 import bjd.option.OneOption;
 
@@ -18,8 +22,23 @@ public class OptionDlg extends Dlg {
 
 		this.oneOption = oneOption;
 
+		
+		
 		//ダイアログ作成時の処理
 		oneOption.createDlg(mainPanel);
+		
+
+		
+		
+//		int top=100;
+//		JTabbedPane tabbedPane = new JTabbedPane();
+//		tabbedPane.setSize(DLG_WIDTH-14,DLG_HEIGHT-top);
+//        mainPanel.add(tabbedPane);
+//		//TODO 0.NEXT タブページ例外で表示できていない
+//        JPanel page1 = new JPanel();
+//        JButton button = new JButton("TEST");
+//        page1.add(button);
+//        tabbedPane.addTab("page1",page1);
 		
 		
 //		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});

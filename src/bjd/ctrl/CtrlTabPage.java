@@ -3,8 +3,10 @@ package bjd.ctrl;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 import bjd.option.ListVal;
 
@@ -25,6 +27,10 @@ public class CtrlTabPage extends OneCtrl {
 	public CtrlType getCtrlType() {
 		return CtrlType.TABPAGE;
 	}
+	
+	//public void SetVisible(){
+	//    tabbedPane.setVisible(true);
+	//}
 
 	@Override
 	protected void abstractCreate(Object value) {
@@ -33,11 +39,25 @@ public class CtrlTabPage extends OneCtrl {
         int top = margin;
 
         // タブページの生成
-        tabbedPane = (JTabbedPane) create(panel, new JTabbedPane(), left, top);
+        tabbedPane = (JTabbedPane) create(panel, new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT), left, top);
         tabbedPane.setSize(300,300);
+               
+        //JPanel page1 = new JPanel();
+
+        //tabbedPane.setVisible(false);
+        //tabbedPane.addTab("title", page1);
+        
+        
+        //JPanel page1 = new JPanel();
+        //tabbedPane.addTab("TEST",page1);
+
+        //JButton button = new JButton("TEST");
+        //page1.add(button);
+        //tabbedPane.addTab("",null);
+        
         //TODO 0.NEXT タブページ例外で表示できていない
-        JPanel page1 = new JPanel();
-        tabbedPane.addTab("page1", page1);
+        //JPanel page1 = new JPanel();
+        //tabbedPane.addTab("page1",new JTable());
         //JPanel page2 = new JPanel();
         //tabbedPane.addTab("page2", page2);
         //JPanel page3 = new JPanel();
@@ -52,6 +72,7 @@ public class CtrlTabPage extends OneCtrl {
 //        // borderのサイズ指定
 //        border.setSize(width, ctrlSize.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
 
+        //tabbedPane.setVisible(true);
         // オフセット移動
         left += tabbedPane.getWidth();
         top += tabbedPane.getHeight();
