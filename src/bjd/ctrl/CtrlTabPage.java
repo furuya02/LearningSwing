@@ -45,10 +45,8 @@ public class CtrlTabPage extends OneCtrl {
 		int debug=100;
 		for (OnePage onePage : pageList) {
 			JPanel p = new JPanel();
-			
-	         //TODO DEBUG TabPage色付け
-            Color bc = new Color(255,debug+=30,debug+=30);
-            p.setBackground(bc);
+            p.setLayout(null); // 絶対位置表示
+            p.setName(onePage.getName());
 			
 			onePage.getListVal().createCtrl(p, 0, 0); //ページの中を作成
 			
@@ -90,7 +88,10 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
-		return 0;
+	    for (OnePage onePage : pageList) {
+            onePage.getListVal().readCtrl(false);
+        }
+	    return 0;
 	}
 
 	@Override

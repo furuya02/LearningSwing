@@ -33,6 +33,9 @@ public class OneVal implements IDispose {
 		this.crlf = crlf;
 		this.oneCtrl = oneCtrl;
 
+		
+		// TODO getListValの正規化
+		//　listValを持っているコントロールも、もっていないコントロールも統一したメソッドで正規化する
 		ListVal listVal = null;
 		if (oneCtrl.getCtrlType() == CtrlType.DAT) {
 			listVal = ((CtrlDat) oneCtrl).getListVal();

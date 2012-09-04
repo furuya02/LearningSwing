@@ -84,9 +84,6 @@ public class ListVal extends ListBase<OneVal> {
     // コントロール生成
     public void createCtrl(JPanel mainPanel, int baseX, int baseY) {
 
-        //TODO DEBUG
-        System.out.println(String.format("ListVal.createCtrl()"));
-       
         // オフセット計算用
         int x = baseX;
         int y = baseY;
@@ -96,6 +93,7 @@ public class ListVal extends ListBase<OneVal> {
             
             o.createCtrl(mainPanel, x, y);
 
+           
             // すべてのコントロールを作成した総サイズを求める
             CtrlSize ctrlSize = o.getCtrlSize();
             if (h < y + ctrlSize.getHeight()) {

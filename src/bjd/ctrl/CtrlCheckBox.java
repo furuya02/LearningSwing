@@ -1,8 +1,10 @@
 package bjd.ctrl;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
 public class CtrlCheckBox extends OneCtrl implements ActionListener {
@@ -20,10 +22,7 @@ public class CtrlCheckBox extends OneCtrl implements ActionListener {
 
 	@Override
 	protected void abstractCreate(Object value) {
-        //DEBUG
-        System.out.println(String.format("CtrlCheckBox.abstractCreate()"));
-		
-	    
+       
 	    int left = margin;
 		int top = margin;
 
@@ -37,6 +36,7 @@ public class CtrlCheckBox extends OneCtrl implements ActionListener {
 
 		// パネルのサイズ設定
 		panel.setSize(left + margin, defaultHeight + margin * 2);
+
 	}
 
 	@Override
