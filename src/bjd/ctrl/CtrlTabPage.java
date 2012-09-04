@@ -1,7 +1,10 @@
 package bjd.ctrl;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -22,6 +25,9 @@ public class CtrlTabPage extends OneCtrl {
 
 	@Override
 	protected void abstractCreate(Object value) {
+	    
+	    //DEBUG
+	    System.out.println(String.format("CtrlTabPage.abstractCreate()"));
 
 		int left = margin;
 		int top = margin;
@@ -34,8 +40,15 @@ public class CtrlTabPage extends OneCtrl {
 		//グループに含まれるコントロールを描画する(listValはCtrlPageなので座標やサイズはもう関係ない)
 
 		pagePanelList = new ArrayList<>();
+		
+		//DEBUG
+		int debug=100;
 		for (OnePage onePage : pageList) {
 			JPanel p = new JPanel();
+			
+	         //TODO DEBUG TabPage色付け
+            Color bc = new Color(255,debug+=30,debug+=30);
+            p.setBackground(bc);
 			
 			onePage.getListVal().createCtrl(p, 0, 0); //ページの中を作成
 			

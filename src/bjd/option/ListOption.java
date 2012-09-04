@@ -26,8 +26,8 @@ public class ListOption {
 
 		option = new Option();
 
-		option.add(new OneVal("useServer", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
-		option.add(new OneVal("server2", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
+		//option.add(new OneVal("useServer", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
+		//option.add(new OneVal("server2", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		
@@ -35,9 +35,9 @@ public class ListOption {
 		page1.add(new OneVal("acl", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
 		pageList.add(new OnePage("name1", "page1", page1));
 		
-		ListVal page2 = new ListVal();
-		page2.add(new OneVal("acl2", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
-		pageList.add(new OnePage("name2", "page2", page1));
+		//ListVal page2 = new ListVal();
+		//page2.add(new OneVal("acl2", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
+		//pageList.add(new OnePage("name2", "page2", page1));
 		
 		option.add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 

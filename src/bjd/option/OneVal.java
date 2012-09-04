@@ -3,6 +3,7 @@ package bjd.option;
 import java.awt.Font;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlComboBox;
@@ -107,7 +108,7 @@ public class OneVal implements IDispose {
 
 	//コントロール生成
 	public void createCtrl(JPanel mainPanel, int baseX, int baseY) {
-		oneCtrl.create(mainPanel, baseX, baseY, value);
+	    oneCtrl.create(mainPanel, baseX, baseY, value);
 		
 		//System.out.println(String.format("OneVal.createCtrl() name=%s", name));
 	}

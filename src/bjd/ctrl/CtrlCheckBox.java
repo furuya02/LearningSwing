@@ -20,7 +20,11 @@ public class CtrlCheckBox extends OneCtrl implements ActionListener {
 
 	@Override
 	protected void abstractCreate(Object value) {
-		int left = margin;
+        //DEBUG
+        System.out.println(String.format("CtrlCheckBox.abstractCreate()"));
+		
+	    
+	    int left = margin;
 		int top = margin;
 
 		// チェックボックス作成

@@ -2,6 +2,7 @@ package bjd.option;
 
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlSize;
@@ -83,12 +84,16 @@ public class ListVal extends ListBase<OneVal> {
     // コントロール生成
     public void createCtrl(JPanel mainPanel, int baseX, int baseY) {
 
+        //TODO DEBUG
+        System.out.println(String.format("ListVal.createCtrl()"));
+       
         // オフセット計算用
         int x = baseX;
         int y = baseY;
         int h = y; // １行の中で一番背の高いオブジェクトの高さを保持する・
         int w = x; // xオフセットの最大値を保持する
         for (OneVal o : ar) {
+            
             o.createCtrl(mainPanel, x, y);
 
             // すべてのコントロールを作成した総サイズを求める
