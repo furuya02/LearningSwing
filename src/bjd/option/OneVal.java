@@ -3,7 +3,6 @@ package bjd.option;
 import java.awt.Font;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlComboBox;
@@ -35,7 +34,7 @@ public class OneVal implements IDispose {
 
 		
 		// TODO getListValの正規化
-		//　listValを持っているコントロールも、もっていないコントロールも統一したメソッドで正規化する
+		//　TODO listValを持っているコントロールも、もっていないコントロールも統一したメソッドで正規化する
 		ListVal listVal = null;
 		if (oneCtrl.getCtrlType() == CtrlType.DAT) {
 			listVal = ((CtrlDat) oneCtrl).getListVal();

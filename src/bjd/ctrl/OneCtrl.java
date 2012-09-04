@@ -1,9 +1,7 @@
 package bjd.ctrl;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;

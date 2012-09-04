@@ -1,10 +1,7 @@
 package bjd.ctrl;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Random;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -25,9 +22,9 @@ public class CtrlTabPage extends OneCtrl {
 
 	@Override
 	protected void abstractCreate(Object value) {
-	    
-	    //DEBUG
-	    System.out.println(String.format("CtrlTabPage.abstractCreate()"));
+
+		//DEBUG
+		System.out.println(String.format("CtrlTabPage.abstractCreate()"));
 
 		int left = margin;
 		int top = margin;
@@ -40,16 +37,16 @@ public class CtrlTabPage extends OneCtrl {
 		//グループに含まれるコントロールを描画する(listValはCtrlPageなので座標やサイズはもう関係ない)
 
 		pagePanelList = new ArrayList<>();
-		
+
 		//DEBUG
-		int debug=100;
+		int debug = 100;
 		for (OnePage onePage : pageList) {
 			JPanel p = new JPanel();
-            p.setLayout(null); // 絶対位置表示
-            p.setName(onePage.getName());
-			
+			p.setLayout(null); // 絶対位置表示
+			p.setName(onePage.getName());
+
 			onePage.getListVal().createCtrl(p, 0, 0); //ページの中を作成
-			
+
 			tabbedPane.addTab(onePage.getTitle(), p);
 			pagePanelList.add(p);
 		}
@@ -78,7 +75,7 @@ public class CtrlTabPage extends OneCtrl {
 			pagePanelList.remove(0); // リストから削除
 		}
 		pagePanelList = null;
-		
+
 		remove(panel, tabbedPane);
 		tabbedPane = null;
 	}
@@ -88,10 +85,10 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected Object abstractRead() {
-	    for (OnePage onePage : pageList) {
-            onePage.getListVal().readCtrl(false);
-        }
-	    return 0;
+		for (OnePage onePage : pageList) {
+			onePage.getListVal().readCtrl(false);
+		}
+		return 0;
 	}
 
 	@Override
@@ -103,7 +100,7 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected void abstractSetEnable(boolean enabled) {
-	    tabbedPane.setEnabled(enabled);
+		tabbedPane.setEnabled(enabled);
 	}
 
 	//***********************************************************************
@@ -119,17 +116,17 @@ public class CtrlTabPage extends OneCtrl {
 
 	@Override
 	protected String abstractToText() {
-	    throw new UnsupportedOperationException("*CtrlTabPage.java abstractToText()は未実装");
+		throw new UnsupportedOperationException("*CtrlTabPage.java abstractToText()は未実装");
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-        throw new UnsupportedOperationException("*CtrlTabPage.java abstractFromText()は未実装");
+		throw new UnsupportedOperationException("*CtrlTabPage.java abstractFromText()は未実装");
 	}
 
 	@Override
 	protected void abstractClear() {
-        throw new UnsupportedOperationException("*CtrlTabPage.java abstractClear()は未実装");
+		throw new UnsupportedOperationException("*CtrlTabPage.java abstractClear()は未実装");
 	}
 
 }

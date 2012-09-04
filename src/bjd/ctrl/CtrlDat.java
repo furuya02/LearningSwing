@@ -176,18 +176,27 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 				checkListBox.remove(selectedIndex);
 			}
 		} else if (cmd.equals(tagList[IMPORT])) {
-			JFileChooser dlg = new JFileChooser();
-			if (dlg.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-				File file = dlg.getSelectedFile();
-				importDat(file);
+			File file = Util.fileChooser(null);
+			if (file != null) {
+				//TODO 形式の違うファイルを読み込んだ時の、適切なメッセージと途中でキャンセルできるようにする
+				//try {
+					importDat(file);
+				//} catch (Exception ex) {
+				//	Msg.show(MsgKind.Error, kernel.getJp() ? "ファイル形式が違います" : "File format is different");
+				//}
 			}
-			//TODO CtrlDat IMPORT未実装
 		} else if (cmd.equals(tagList[EXPORT])) {
-			//TODO CtrlDat EXPORTT未実装
-			JFileChooser dlg = new JFileChooser();
-			if (dlg.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-				File file = dlg.getSelectedFile();
-				exportDat(file);
+			File file = Util.fileChooser(null);
+			if (file != null) {
+				boolean isExecute = true;
+				if (file.exists()) {
+					if (0 != Msg.show(MsgKind.Question, kernel.getJp() ? "上書きして宜しいですか?" : "May I overwrite?")) {
+						isExecute = false; //キャンセル
+					}
+				}
+				if (isExecute) {
+					exportDat(file);
+				}
 			}
 		} else if (cmd.equals(tagList[CLEAR])) {
 			int n = Msg.show(MsgKind.Question, kernel.getJp() ? "すべてのデータを削除してよろしいですか" : "May I eliminate all data?");
@@ -198,8 +207,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 				v.getOneCtrl().clear();
 			}
 		}
-
-		System.out.println(e.getActionCommand());
 	}
 
 	//リストボックスの選択
@@ -249,7 +256,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 	@Override
 	public void onChange(OneCtrl oneCtrl) {
 		buttonsInitialise(); //ボタン状態の初期化
-		System.out.println(String.format("onChenge(%s)", oneCtrl.getCtrlType()));
 	}
 
 	//ボタン状態の初期化
@@ -286,24 +292,12 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 			//カラム数の確認
 			String[] tmp = str.split("\t");
 			if (listVal.size() != tmp.length) {
-				//                if (DialogResult.Cancel ==
-				//                    Msg.Show(MsgKind.Stop, string.Format("カラム数が一致しません。この行をインポートできません。 [ {0} ] ", str))){
-				//                    return;
-				//                }
+				Msg.show(MsgKind.Error, String.format("%s [ %s ] ", kernel.getJp() ? "カラム数が一致しません。この行はインポートできません。"
+						: "The number of column does not agree and cannot import this line.", str));
 				continue;
 			}
 			//Ver5.0.0-a9 パスワード等で暗号化されていない（平文の）場合は、ここで
 			boolean isChange = false;
-			int i = 0;
-			for (OneVal v : listVal) {
-				if (v.getOneCtrl().getCtrlType() == CtrlType.HIDDEN) {
-					if (null == Crypt.decrypt(tmp[i])) {
-						tmp[i] = Crypt.encrypt(tmp[i]);
-						isChange = true;
-					}
-				}
-				i++;
-			}
 			if (isChange) {
 				StringBuilder sb = new StringBuilder();
 				for (String l : tmp) {
@@ -316,10 +310,8 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 			}
 			//同一のデータがあるかどうかを確認する
 			if (checkListBox.indexOf(str) != -1) {
-				//                if (DialogResult.Cancel ==
-				//                    Msg.Show(MsgKind.Stop, string.Format("データが重複しています。この行をインポートできません。[ {0} ] ", str))){
-				//                    return;
-				//                }
+				Msg.show(MsgKind.Error, String.format("%s [ %s ] ", kernel.getJp() ? "データ重複があります。この行はインポートできません。"
+						: "There is data repetition and cannot import this line.", str));
 				continue;
 			}
 			int index = checkListBox.add(str);

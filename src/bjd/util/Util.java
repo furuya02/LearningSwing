@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 
 public final class Util {
 
@@ -25,6 +26,22 @@ public final class Util {
 		btn.setPreferredSize(new Dimension(75, 25));
 		owner.add(btn);
 		return btn;
+	}
+
+	private static File selectedFile = null; //前回選択したファイル
+	public static File fileChooser(File file) {
+		JFileChooser dlg = new JFileChooser();
+		//初期化
+		if (file != null) { //ファイルの指定がある場合は、それを使用する
+			dlg.setSelectedFile(file);
+		} else if (selectedFile != null) { //前回選択したものがある場合は、それを使用する
+			dlg.setSelectedFile(selectedFile);
+		}
+		if (dlg.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			selectedFile = dlg.getSelectedFile();
+			return selectedFile;
+		}
+		return null;
 	}
 
 	public static ArrayList<String> textFileRead(File file) {
@@ -52,8 +69,8 @@ public final class Util {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 			for (String l : lines) {
-				bw.newLine();
 				bw.write(l);
+				bw.newLine();
 			}
 			bw.close();
 		} catch (Exception e) {

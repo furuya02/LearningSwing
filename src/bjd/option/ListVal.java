@@ -2,7 +2,6 @@ package bjd.option;
 
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bjd.ctrl.CtrlSize;
