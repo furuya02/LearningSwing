@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 public class OneOption {
 
-	private ListVal listVal = new ListVal();
+	protected ListVal listVal = new ListVal();
 
 	//ダイアログ作成時の処理
 	public void createDlg(JPanel mainPanel) {
@@ -26,7 +26,7 @@ public class OneOption {
 		listVal.add(oneVal);
 	}
 	public Object getValue(String name) {
-		//DEBUG
+		//TODO DEBUG
 		if (name.equals("editBrowse")) {
 			return false;
 		}
