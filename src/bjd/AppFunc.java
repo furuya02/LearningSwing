@@ -21,7 +21,6 @@ public class AppFunc implements SelectMenuListener {
 
 	@Override
 	public void selectMenu(String name) {
-		System.out.println("selectMenu : " + name);
 		switch (name) {
 			case "Exit":
 				System.exit(0);
@@ -30,7 +29,7 @@ public class AppFunc implements SelectMenuListener {
 
 				OptionDlg dlg = new OptionDlg(mainFrame, kernel.getListOption().get("XXX"));
 				if (dlg.showDialog()) {
-					//System.out.println("isOk");
+
 				}
 
 				break;

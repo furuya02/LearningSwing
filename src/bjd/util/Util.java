@@ -54,13 +54,12 @@ public final class Util {
 					if (str == null) {
 						break;
 					}
-					System.out.println(str);
 					lines.add(str);
 				}
 				br.close();
 			}
-		} catch (Exception e) {
-			System.out.println(e);
+		} catch (Exception ex) {
+			System.out.println(ex);
 		}
 		return lines;
 	}
@@ -73,8 +72,8 @@ public final class Util {
 				bw.newLine();
 			}
 			bw.close();
-		} catch (Exception e) {
-			System.out.println(e);
+		} catch (Exception ex) {
+			System.out.println(ex);
 			return false;
 		}
 		return true;

@@ -16,8 +16,6 @@ public class ListVal extends ListBase<OneVal> {
 
     public void add(OneVal oneVal) {
 
-        // System.out.println(String.format(">ListVal.add(%s) 追加",oneVal.getName()));
-
         // 追加オブジェクトの一覧
         ArrayList<OneVal> list1 = new ArrayList<>();
         list1 = oneVal.getOneValList(list1);
@@ -25,7 +23,6 @@ public class ListVal extends ListBase<OneVal> {
         for (OneVal o : list1) {
             sb.append(String.format(" %s", o.getName()));
         }
-        // System.out.println(String.format("追加オブジェクトの一覧 = %s",sb.toString()));
 
         // 追加オブジェクトが既に重複している場合
 
@@ -38,7 +35,6 @@ public class ListVal extends ListBase<OneVal> {
         for (OneVal o : list2) {
             sb.append(String.format(" %s", o.getName()));
         }
-        // System.out.println(String.format("既存オブジェクトの一覧 = %s",sb.toString()));
 
         for (OneVal o1 : list1) {
             for (OneVal o2 : list2) {

@@ -67,7 +67,6 @@ public class CtrlInt extends OneCtrl implements DocumentListener {
 		try {
 			return Integer.valueOf(str);
 		} catch (Exception e) {
-			System.out.println(String.format("■ %s", e));
 			return 0;
 		}
 	}

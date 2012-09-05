@@ -57,9 +57,7 @@ public final class MainForm {
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tabbedPane.addTab("123", new JPanel());
-				int i = Msg.show(MsgKind.Question, "テストメッセージ");
-				System.out.print(i);
+			    Msg.show(MsgKind.Error,"TEST");
 			}
 		});
 

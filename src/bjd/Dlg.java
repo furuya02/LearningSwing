@@ -73,7 +73,6 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// System.out.println(String.format("actionPerformed() getActionCommand=%s",e.getActionCommand()));
 		if (e.getActionCommand().equals("OK")) {
 			isOk = true;
 			if (!onOk()) {
