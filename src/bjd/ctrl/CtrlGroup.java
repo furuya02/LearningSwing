@@ -1,5 +1,6 @@
 package bjd.ctrl;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -17,9 +18,10 @@ public class CtrlGroup extends OneCtrl {
 		this.listVal = listVal;
 	}
 
-	public ListVal getListVal() {
-		return listVal;
-	}
+    //OnePage(CtrlTabPage.pageList) CtrlGroup CtrlDatにのみ存在する
+    public ListVal getListVal() {
+        return listVal;
+    }
 
 	@Override
 	public CtrlType getCtrlType() {
@@ -40,10 +42,10 @@ public class CtrlGroup extends OneCtrl {
 		int x = left + 8;
 		int y = top + 12;
 		listVal.createCtrl(border, x, y);
-		CtrlSize ctrlSize = listVal.getCtrlSize();
+		Dimension dimension = listVal.getSize();
 
 		// borderのサイズ指定
-		border.setSize(getBaseWidth() - 22, ctrlSize.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
+		border.setSize(getBaseWidth() - 22, (int) dimension.getHeight() + 25); // 横はコンストラクタ、縦は、含まれるコントロールで決まる
 
 		// オフセット移動
 		left += border.getWidth();

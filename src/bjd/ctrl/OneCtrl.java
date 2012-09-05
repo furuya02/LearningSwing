@@ -26,11 +26,11 @@ public abstract class OneCtrl {
 		this.help = help;
 	}
 
-	public CtrlSize getCtrlSize() {
+	public Dimension getCtrlSize() {
 		if (panel == null) {
-			return new CtrlSize(0, 0);
+			return new Dimension(0, 0);
 		}
-		return new CtrlSize(panel.getWidth(), panel.getHeight());
+		return new Dimension(panel.getWidth(), panel.getHeight());
 	}
 
 	public Object getHelp() {
@@ -44,17 +44,17 @@ public abstract class OneCtrl {
 
 	public void create(JPanel owner, int x, int y, Object value) {
 		this.owner = owner;
-        
+
 		if (panel == null) {
 
-		    
-		    panel = (JPanel) create(owner, new JPanel(), x, y);
+			panel = (JPanel) create(owner, new JPanel(), x, y);
 
 			// Debug 色付ける
-			//Random r = new Random();
-			//Color bc = new Color(r.nextInt(205), r.nextInt(205), r.nextInt(205));
-			//panel.setBackground(bc);
-		    			
+			// Random r = new Random();
+			// Color bc = new Color(r.nextInt(205), r.nextInt(205),
+			// r.nextInt(205));
+			// panel.setBackground(bc);
+
 			// 全部の子コントロールをベースとなるpanelのサイズは、abstractCreate()で変更される
 			abstractCreate(value); // panelの上に独自コントロールを配置する
 		}
@@ -65,7 +65,10 @@ public abstract class OneCtrl {
 
 	public void delete() {
 		abstractDelete();
-		remove(owner, panel);
+
+		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
+			remove(owner, panel);
+		}
 		panel = null;
 		// CtrlTabPageの時は、PanelはTabControlを指しているので破棄できない
 		// if (GetType() != CtrlType.TabPage) {
@@ -73,7 +76,11 @@ public abstract class OneCtrl {
 		// }
 		// Panel = null;
 		if (controlCounter != 0) {
-			Msg.show(MsgKind.Error, String.format("生成したコントロールと破棄したコントロールの数が一致しません。 remove()に漏れが無いかを確認する必要があります。 %s", getCtrlType()));
+			Msg.show(
+					MsgKind.Error,
+					String.format(
+							"生成したコントロールと破棄したコントロールの数が一致しません。 remove()に漏れが無いかを確認する必要があります。 %s",
+							getCtrlType()));
 		}
 	}
 
@@ -85,20 +92,26 @@ public abstract class OneCtrl {
 	}
 
 	protected int getBaseWidth() {
-		return owner.getRootPane().getParent().getWidth();
+		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
+			return owner.getRootPane().getParent().getWidth();
+		}
+		return 0;
 	}
 
 	protected int getBaseHeight() {
-		int dlgHeight = owner.getRootPane().getParent().getHeight();
-		int panelTop = panel.getLocation().y;
-		return dlgHeight - 80 - panelTop;
+		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
+			int dlgHeight = owner.getRootPane().getParent().getHeight();
+			int panelTop = panel.getLocation().y;
+			return dlgHeight - 80 - panelTop;
+		}
+		return 0;
 	}
 
-	//***********************************************************************
+	// ***********************************************************************
 	// コントロールの値の読み書き
-	//***********************************************************************
+	// ***********************************************************************
 	// データが無効なときnullが返る
-	//TODO abstractRead() nullを返す際に、コントロールを赤色表示にする
+	// TODO abstractRead() nullを返す際に、コントロールを赤色表示にする
 	protected abstract Object abstractRead();
 
 	public Object read() {
@@ -111,9 +124,9 @@ public abstract class OneCtrl {
 		abstractWrite(value);
 	}
 
-	//***********************************************************************
+	// ***********************************************************************
 	// コントロールへの有効・無効
-	//***********************************************************************
+	// ***********************************************************************
 	protected abstract void abstractSetEnable(boolean enabled);
 
 	public void setEnable(boolean enabled) {
@@ -122,40 +135,44 @@ public abstract class OneCtrl {
 		}
 	}
 
-	//***********************************************************************
+	// ***********************************************************************
 	// コントロールの生成・破棄（共通関数）
-	//***********************************************************************
+	// ***********************************************************************
 	protected JComponent create(JPanel owner, JComponent self, int x, int y) {
 		controlCounter++;
 		JComponent control = self;
 		control.setLocation(x, y);
-		if (self instanceof JButton) { //JButtonは、AutoSizeだと小さくなってしまう
+		if (self instanceof JButton) { // JButtonは、AutoSizeだと小さくなってしまう
 			control.setSize(75, 22);
 		} else {
 			setAutoSize(control); // サイズ自動調整(この時点でテキストが適切に設定されているばあ、これでサイズの調整は終わる)
 		}
 
-		//JScrollPaneは、textAreaを配置する関係で、setLayout(null)だと入力できなくなる
-		//JTabbedPaneは、setLayout(null)すると例外が発生する
+		// JScrollPaneは、textAreaを配置する関係で、setLayout(null)だと入力できなくなる
+		// JTabbedPaneは、setLayout(null)すると例外が発生する
 		if (!(self instanceof JScrollPane) && !(self instanceof JTabbedPane)) {
 			control.setLayout(null); // 子コントロールを絶対位置で表示する
 		}
-		owner.add(control);
-		control.setFont(owner.getFont()); // フォントの継承
+		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
+			owner.add(control);
+			control.setFont(owner.getFont()); // フォントの継承
+		}
 		return control;
 	}
 
 	protected void remove(JComponent owner, JComponent self) {
 		if (self != null) {
 			controlCounter--;
-			owner.remove(self);
+			if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
+				owner.remove(self);
+			}
 		}
-		removeListener(); //リスナーも削除する
+		removeListener(); // リスナーも削除する
 	}
 
-	//***********************************************************************
+	// ***********************************************************************
 	// イベントリスナー関連
-	//***********************************************************************
+	// ***********************************************************************
 	public void setListener(ICtrlEventListener listener) {
 		listenerList.add(listener);
 	}
@@ -172,10 +189,10 @@ public abstract class OneCtrl {
 		}
 	}
 
-	//***********************************************************************
+	// ***********************************************************************
 	// CtrlDat関連　(Add/Del/Edit)の状態の変更、チェックリストボックスとのテキストの読み書き
-	//***********************************************************************
-	//CtrlDatで入力が入っているかどうかでボタン
+	// ***********************************************************************
+	// CtrlDatで入力が入っているかどうかでボタン
 	protected abstract boolean abstractIsComplete();
 
 	public boolean isComplete() {
@@ -185,7 +202,7 @@ public abstract class OneCtrl {
 		return false;
 	}
 
-	//CtrlDatでリストボックスに追加するため使用される
+	// CtrlDatでリストボックスに追加するため使用される
 	protected abstract String abstractToText();
 
 	public String toText() {
@@ -195,7 +212,7 @@ public abstract class OneCtrl {
 		return "";
 	}
 
-	//CtrlDatでリストボックスから値を戻す時、使用される
+	// CtrlDatでリストボックスから値を戻す時、使用される
 	protected abstract void abstractFromText(String s);
 
 	public void fromText(String s) {
@@ -204,7 +221,7 @@ public abstract class OneCtrl {
 		}
 	}
 
-	//CtrlDatでDelDelボタンを押したときに使用される
+	// CtrlDatでDelDelボタンを押したときに使用される
 	protected abstract void abstractClear();
 
 	public void clear() {

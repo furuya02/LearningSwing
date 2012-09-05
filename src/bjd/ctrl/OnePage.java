@@ -15,14 +15,15 @@ public class OnePage {
 		return name;
 	}
 
-	public ListVal getListVal() {
-		return listVal;
-	}
-
 	public OnePage(String name, String title, ListVal listVal) {
 		this.name = name;
 		this.title = title;
 		this.listVal = listVal;
 	}
+
+	//OnePage(CtrlTabPage.pageList) CtrlGroup CtrlDatにのみ存在する
+    public ListVal getListVal() {
+        return listVal;
+    }
 
 }

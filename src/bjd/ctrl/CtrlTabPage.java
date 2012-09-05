@@ -5,15 +5,21 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import bjd.option.ListVal;
+
 public class CtrlTabPage extends OneCtrl {
 	private ArrayList<OnePage> pageList;
-	private JTabbedPane tabbedPane = null;
+    private JTabbedPane tabbedPane = null;
 	private ArrayList<JPanel> pagePanelList = null;
 
 	public CtrlTabPage(String help, ArrayList<OnePage> pageList) {
 		super(help);
 		this.pageList = pageList;
 	}
+
+    public ArrayList<OnePage> getPageList() {
+        return pageList;
+    }
 
 	@Override
 	public CtrlType getCtrlType() {

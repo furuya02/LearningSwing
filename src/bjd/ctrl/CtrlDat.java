@@ -1,5 +1,6 @@
 package bjd.ctrl;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,10 +58,11 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		this.height = height;
 		this.kernel = kernel;
 	}
-
-	public ListVal getListVal() {
-		return listVal;
-	}
+	
+    //OnePage(CtrlTabPage.pageList) CtrlGroup CtrlDatにのみ存在する
+    public ListVal getListVal() {
+        return listVal;
+    }
 
 	@Override
 	public CtrlType getCtrlType() {
@@ -86,8 +88,8 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		listVal.setListener(this); //コントロールの変化を取得
 
 		//オフセット移動
-		CtrlSize ctrlSize = listVal.getCtrlSize();
-		top += ctrlSize.getHeight();
+		Dimension dimension = listVal.getSize();
+		top += dimension.height;
 
 		//ボタン配置
 		buttonList = new JButton[tagList.length];
