@@ -23,9 +23,6 @@ public class CtrlTabPage extends OneCtrl {
 	@Override
 	protected void abstractCreate(Object value) {
 
-		//DEBUG
-		System.out.println(String.format("CtrlTabPage.abstractCreate()"));
-
 		int left = margin;
 		int top = margin;
 

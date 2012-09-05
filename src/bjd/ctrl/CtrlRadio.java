@@ -45,7 +45,6 @@ public class CtrlRadio extends OneCtrl implements ActionListener {
 		}
 		// 1項目ごとの横幅
 		int spanWidth = width / colMax;
-		System.out.println(String.format("colMax=%d rowMax=%d spanWidth=%d", colMax, rowMax, spanWidth));
 
 		int left = margin;
 		int top = margin;
@@ -64,7 +63,6 @@ public class CtrlRadio extends OneCtrl implements ActionListener {
 		ButtonGroup buttonGroup = new ButtonGroup(); // ボタンのグループ化
 		for (int i = 0; i < list.length; i++) {
 			if (i % colMax == 0) {
-				System.out.println(String.format("i/colMax==0 i=%d", i));
 				l = 10;
 				if (i != 0) {
 					t += defaultHeight;

@@ -91,7 +91,6 @@ public abstract class OneCtrl {
 	protected int getBaseHeight() {
 		int dlgHeight = owner.getRootPane().getParent().getHeight();
 		int panelTop = panel.getLocation().y;
-		//System.out.println(String.format("dlg_height=%d panel_top=%d",dlg_height,panel_top));
 		return dlgHeight - 80 - panelTop;
 	}
 
