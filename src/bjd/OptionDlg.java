@@ -4,27 +4,26 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
+import bjd.ctrl.OneCtrl;
 import bjd.option.OneOption;
 
 @SuppressWarnings("serial")
 public class OptionDlg extends Dlg {
 
-	private static final int DLG_WIDTH = 600;
-	private static final int DLG_HEIGHT = 500;
 	private OneOption oneOption;
 
 	public OptionDlg(JFrame frame, OneOption oneOption) {
-		super(frame, DLG_WIDTH, DLG_HEIGHT);
+		super(frame, width(), height());
 
 		this.oneOption = oneOption;
 
 		//ダイアログ作成時の処理
 		oneOption.createDlg(mainPanel);
-		
-//		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});
-//		JScrollPane srl = new JScrollPane(listBox);
-//		srl.setSize(100,100);
-//		mainPanel.add(srl);
+
+		//		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});
+		//		JScrollPane srl = new JScrollPane(listBox);
+		//		srl.setSize(100,100);
+		//		mainPanel.add(srl);
 
 		/*
 		 * //メニューの項目名をダイアログのタイトルにする var text =
@@ -39,6 +38,15 @@ public class OptionDlg extends Dlg {
 		 * 
 		 * buttonCancel.Text = (kernel.Jp) ? "キャンセル" : "Cancel";
 		 */
+	}
+	
+	//オプションダイアログのサイズ（定数）
+	public static int width(){
+		return 600;
+	}
+	//オプションダイアログのサイズ（定数）
+	public static int height(){
+		return 500;
 	}
 
 	@Override

@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 import bjd.Kernel;
 import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlComboBox;
+import bjd.ctrl.CtrlDat;
+import bjd.ctrl.CtrlFolder;
 import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.OnePage;
 
-public class Option extends OneOption {
+public final class Option extends OneOption {
 	private Kernel kernel;
 
 	public Option(Kernel kernel) {
@@ -31,57 +34,49 @@ public class Option extends OneOption {
 		add(new OneVal("useServer", true, Crlf.NEXTLINE, new CtrlCheckBox("サーバを使用する")));
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
-		pageList.add(page1());
-		pageList.add(page2());
-		pageList.add(page3());
+		pageList.add(page1("page1", "ページ１"));
+		//pageList.add(page2("page2", "ページ２"));
+		//pageList.add(page3("page3", "ページ３"));
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
-		ArrayList<OneVal> list = listVal.getList(null);
-		for (OneVal oneVal : list) {
-			//TODO DEBUG
-			System.out.println(String.format("list-> %s", oneVal.getName()));
-		}
-
-		//		//CtrlDat テスト
-		//		ListVal list = new ListVal();
-		//		list.add(new OneVal("combo", 0, Crlf.NEXTLINE, new CtrlComboBox("コンボボックス", new String[] { "DOWN", "PU", "FULL" }, 200)));
-		//		list.add(new OneVal("fileName2", "c:\\work", Crlf.NEXTLINE, new CtrlFolder("フォルダ", 30, kernel)));
-		//		list.add(new OneVal("text", "user1", Crlf.NEXTLINE, new CtrlTextBox("テキスト入力", 30)));
-		//		list.add(new OneVal("hidden", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
-		//        list.add(new OneVal("hidden2", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
-		//		page3.add(new OneVal("dat", null, Crlf.NEXTLINE, new CtrlDat("データ",list, 300, kernel)));
-		//		pageList.add(new OnePage("name3", "page3", page3));
+		//ArrayList<OneVal> list = listVal.getList(null);
+		//for (OneVal oneVal : list) {
+		//	//TODO DEBUG
+		//	System.out.println(String.format("list-> %s", oneVal.getName()));
+		//}
 
 	}
 
-	private OnePage page1() {
-		String name = "page1";
-		String title = "ページ１";
-		ListVal listVal = new ListVal();
+	private OnePage page1(String name, String title) {
+		OnePage onePage = new OnePage(name, title);
 
-		listVal.add(new OneVal("n1", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
-		listVal.add(new OneVal("n2", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック2")));
+		ListVal list = new ListVal();
+		list.add(new OneVal("combo", 0, Crlf.NEXTLINE, new CtrlComboBox("コンボボックス", new String[] { "DOWN", "PU", "FULL" }, 200)));
+		list.add(new OneVal("fileName2", "c:\\work", Crlf.NEXTLINE, new CtrlFolder("フォルダ", 30, kernel)));
+		list.add(new OneVal("text", "user1", Crlf.NEXTLINE, new CtrlTextBox("テキスト入力", 30)));
+		list.add(new OneVal("hidden", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
+		list.add(new OneVal("hidden2", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
+		onePage.add(new OneVal("dat", null, Crlf.NEXTLINE, new CtrlDat("データ", list, 300, kernel)));
 
-		return new OnePage(name, title, listVal);
+		return onePage;
 	}
 
-	private OnePage page2() {
-		String name = "page2";
-		String title = "ページ2";
-		ListVal listVal = new ListVal();
+	private OnePage page2(String name, String title) {
+		OnePage onePage = new OnePage(name, title);
 
-		listVal.add(new OneVal("n3", "123", Crlf.NEXTLINE, new CtrlTextBox("文字列入力", 20)));
+		onePage.add(new OneVal("n1", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
+		onePage.add(new OneVal("n2", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック2")));
+		onePage.add(new OneVal("n3", "123", Crlf.NEXTLINE, new CtrlTextBox("文字列入力", 20)));
 
-		return new OnePage(name, title, listVal);
+		return onePage;
 	}
 
-	private OnePage page3() {
-		String name = "page2";
-		String title = "ページ2";
-		ListVal listVal = new ListVal();
-		listVal.add(new OneVal("n4", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 20)));
+	private OnePage page3(String name, String title) {
+		OnePage onePage = new OnePage(name, title);
 
-		return new OnePage(name, title, listVal);
+		onePage.add(new OneVal("n4", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 20)));
+
+		return onePage;
 	}
 
 }

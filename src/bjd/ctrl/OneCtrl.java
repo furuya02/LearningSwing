@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import bjd.OptionDlg;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 
@@ -21,7 +22,7 @@ public abstract class OneCtrl {
 	protected JPanel panel = null;
 	protected final int margin = 3;
 	protected final int defaultHeight = 22;
-
+	
 	public OneCtrl(String help) {
 		this.help = help;
 	}
@@ -66,21 +67,12 @@ public abstract class OneCtrl {
 	public void delete() {
 		abstractDelete();
 
-		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
+		if (owner != null) {
 			remove(owner, panel);
 		}
 		panel = null;
-		// CtrlTabPageの時は、PanelはTabControlを指しているので破棄できない
-		// if (GetType() != CtrlType.TabPage) {
-		// Panel.Dispose();
-		// }
-		// Panel = null;
 		if (controlCounter != 0) {
-			Msg.show(
-					MsgKind.Error,
-					String.format(
-							"生成したコントロールと破棄したコントロールの数が一致しません。 remove()に漏れが無いかを確認する必要があります。 %s",
-							getCtrlType()));
+			Msg.show(MsgKind.Error, String.format("生成したコントロールと破棄したコントロールの数が一致しません。 remove()に漏れが無いかを確認する必要があります。 %s", getCtrlType()));
 		}
 	}
 
@@ -91,21 +83,14 @@ public abstract class OneCtrl {
 		component.setSize(dimension);
 	}
 
-	protected int getBaseWidth() {
-		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
-			return owner.getRootPane().getParent().getWidth();
-		}
-		return 0;
+	public static int getDlgWidth() {
+		return OptionDlg.width();
 	}
 
-	protected int getBaseHeight() {
-		if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
-			int dlgHeight = owner.getRootPane().getParent().getHeight();
-			int panelTop = panel.getLocation().y;
-			return dlgHeight - 80 - panelTop;
-		}
-		return 0;
+	public static int getDlgHeight() {
+		return OptionDlg.height();
 	}
+
 
 	// ***********************************************************************
 	// コントロールの値の読み書き

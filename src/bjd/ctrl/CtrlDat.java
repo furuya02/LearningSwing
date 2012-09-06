@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -19,7 +18,6 @@ import bjd.option.Dat;
 import bjd.option.ListVal;
 import bjd.option.OneDat;
 import bjd.option.OneVal;
-import bjd.util.Crypt;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 import bjd.util.Util;
@@ -77,7 +75,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		// ボーダライン（groupPanel）の生成
 		border = (JPanel) create(panel, new JPanel(new GridLayout()), left, top);
 		border.setBorder(BorderFactory.createTitledBorder(help));
-		border.setSize(getBaseWidth() - 22, height); // サイズは、コンストラクタで指定されている
+		border.setSize(getDlgWidth() - 22, height); // サイズは、コンストラクタで指定されている
 
 		//Datに含まれるコントロールを配置
 
@@ -107,7 +105,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 
 		//チェックリストボックス配置
 		checkListBox = (CheckListBox) create(border, new CheckListBox(), left, top);
-		checkListBox.setSize(getBaseWidth() - 42, height - top - 15);
+		checkListBox.setSize(getDlgWidth() - 42, height - top - 15);
 		checkListBox.addListSelectionListener(this);
 
 		//値の設定

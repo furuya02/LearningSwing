@@ -1,24 +1,7 @@
 package bjd.option;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-
-import java.awt.Font;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
-
-import bjd.ctrl.CtrlType;
-import bjd.net.BindAddr;
-import bjd.net.BindStyle;
-import bjd.net.Ip;
-import bjd.option.OneValTest.A001.Fixture;
-import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
 public class ListValTest {

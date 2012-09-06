@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 public class OneOption {
 
-	protected ListVal listVal = new ListVal();
+	private ListVal listVal = new ListVal();
 
 	//ダイアログ作成時の処理
 	public void createDlg(JPanel mainPanel) {

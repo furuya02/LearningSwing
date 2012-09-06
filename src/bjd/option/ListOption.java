@@ -4,8 +4,8 @@ import bjd.Kernel;
 
 public class ListOption {
 
-	Option option;
-	Kernel kernel;
+	private Option option;
+	private Kernel kernel;
 
 	public ListOption(Kernel kernel) {
 		this.kernel = kernel;
