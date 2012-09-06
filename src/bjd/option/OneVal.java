@@ -3,6 +3,7 @@ package bjd.option;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.swing.JPanel;
 
@@ -34,11 +35,18 @@ public class OneVal implements IDispose {
         this.crlf = crlf;
         this.oneCtrl = oneCtrl;
 
-        for (OneVal o : getList(null)) {
-            if (o != this) { // 自分自身は検査対象外とする
+        //このlistの中に重複が無いかどうかをまず確認する
+        ArrayList<OneVal> list = getList(null);
+        //リストに今から登録しようとする名前が無いかどうかを確認するための名前一覧
+        ArrayList<String> tmp = new ArrayList<String>();
+        for (OneVal o : list) {
+        	if(0 <= tmp.indexOf(o.getName())){ //名前一覧に重複は無いか
+        		Msg.show(MsgKind.Error,String.format("名前に重複があります %s", o.getName()));
+        	}
+        	tmp.add(o.getName()); //名前一覧への蓄積
+        	if (o != this) { // 自分自身は検査対象外とする
                 if (name.equals(o.getName())) {
-                    Msg.show(MsgKind.Error,
-                            String.format("名前に重複があります %s", name));
+                    Msg.show(MsgKind.Error,String.format("名前に重複があります %s", name));
                 }
             }
         }

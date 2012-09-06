@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import bjd.Kernel;
 import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.OnePage;
@@ -37,7 +38,7 @@ public class Option extends OneOption {
 
 		ArrayList<OneVal> list = listVal.getList(null);
 		for (OneVal oneVal : list) {
-			//TODO ■　DEBUG　取り合えず一覧してみる n3が２つあるのに、重複エラーが出ていない
+			//TODO DEBUG
 			System.out.println(String.format("list-> %s", oneVal.getName()));
 		}
 
@@ -78,8 +79,7 @@ public class Option extends OneOption {
 		String name = "page2";
 		String title = "ページ2";
 		ListVal listVal = new ListVal();
-		//TODO ■DEBUG 名前重複しているはずなのに・・・・
-		listVal.add(new OneVal("n3", "123", Crlf.NEXTLINE, new CtrlTextBox("文字列入力", 20)));
+		listVal.add(new OneVal("n4", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 20)));
 
 		return new OnePage(name, title, listVal);
 	}
