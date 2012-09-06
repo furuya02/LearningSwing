@@ -33,12 +33,13 @@ public class OneVal implements IDispose {
 		this.value = value;
 		this.crlf = crlf;
 		this.oneCtrl = oneCtrl;
+		oneCtrl.setName(name);
 
 		//*************************************************************
 		//仕様上、階層構造をなすOneValの名前は、ユニークである必要がる
 		//プログラム作成時に重複を発見できるように、重複があった場合、ここでエラーをポップアップする
 		//*************************************************************
-		
+
 		//名前一覧
 		ArrayList<String> tmp = new ArrayList<String>();
 
@@ -49,11 +50,11 @@ public class OneVal implements IDispose {
 				Msg.show(MsgKind.Error, String.format("OneVal(OnePage)の名前に重複があります %s", o.getName()));
 			}
 			tmp.add(o.getName()); //名前一覧への蓄積
-//			if (o != this) { // 自分自身は検査対象外とする
-//				if (name.equals(o.getName())) {
-//					Msg.show(MsgKind.Error, String.format("OneVal(OnePage)の名前に重複があります %s", name));
-//				}
-//			}
+			//			if (o != this) { // 自分自身は検査対象外とする
+			//				if (name.equals(o.getName())) {
+			//					Msg.show(MsgKind.Error, String.format("OneVal(OnePage)の名前に重複があります %s", name));
+			//				}
+			//			}
 		}
 		//CtrlTabPageの場合は、array+ist<OnePage>の重複を確認する
 		if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
@@ -145,7 +146,9 @@ public class OneVal implements IDispose {
 	}
 
 	public void setListener(ICtrlEventListener listener) {
-		oneCtrl.setListener(listener);
+		for (OneVal oneVal : getList(null)) {
+			oneVal.getOneCtrl().setListener(listener);
+		}
 	}
 
 	/**

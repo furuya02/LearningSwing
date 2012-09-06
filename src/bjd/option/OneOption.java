@@ -2,8 +2,11 @@ package bjd.option;
 
 import javax.swing.JPanel;
 
+import bjd.ctrl.ICtrlEventListener;
+import bjd.ctrl.OneCtrl;
 
-public class OneOption {
+
+public class OneOption implements ICtrlEventListener {
 
 	private ListVal listVal = new ListVal();
 
@@ -13,6 +16,7 @@ public class OneOption {
 		int x = 0;
 		int y = 0;
 		listVal.createCtrl(mainPanel, x, y);
+		listVal.setListener(this);
 	}
 	//ダイアログ破棄時の処理
 	public void deleteDlg() {
@@ -32,5 +36,8 @@ public class OneOption {
 		}
 		//未実装
 		return null;
+	}
+	@Override
+	public void onChange(OneCtrl oneCtrl) {
 	}
 }

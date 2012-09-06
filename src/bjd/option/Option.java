@@ -10,6 +10,7 @@ import bjd.ctrl.CtrlFolder;
 import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.CtrlTextBox;
+import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 
 public final class Option extends OneOption {
@@ -35,8 +36,8 @@ public final class Option extends OneOption {
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		pageList.add(page1("page1", "ページ１"));
-		//pageList.add(page2("page2", "ページ２"));
-		//pageList.add(page3("page3", "ページ３"));
+		pageList.add(page2("page2", "ページ２"));
+		pageList.add(page3("page3", "ページ３"));
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
 		//ArrayList<OneVal> list = listVal.getList(null);
@@ -78,5 +79,56 @@ public final class Option extends OneOption {
 
 		return onePage;
 	}
+	
+	@Override
+	public void onChange(OneCtrl oneCtrl) {
+		//TODO Debug Print
+		System.out.println(String.format("Option.java OneCange() %s[%s]",oneCtrl.getName(),oneCtrl.getCtrlType()));
+	}
 
+	/*
+//コントロールの変化
+        override public void OnChange() {
+
+
+            var b = (bool)GetCtrl("useServer").GetValue();
+            GetCtrl("Basic").SetEnable(b);
+
+
+            GetCtrl("protocol").SetEnable(false);
+            GetCtrl("port").SetEnable(false);
+
+            b = (bool)GetCtrl("useCgi").GetValue();
+            GetCtrl("cgiCmd").SetEnable(b);
+            GetCtrl("cgiTimeout").SetEnable(b);
+            GetCtrl("cgiPath").SetEnable(b);
+
+            b = (bool)GetCtrl("useSsi").GetValue();
+            GetCtrl("ssiExt").SetEnable(b);
+            GetCtrl("useExec").SetEnable(b);
+
+            b = (bool)GetCtrl("useWebDav").GetValue();
+            GetCtrl("webDavPath").SetEnable(b);
+
+            //同一ポートで待ち受ける仮想サーバの同時接続数は、最初の定義をそのまま使用する
+            var port = (int)GetValue("port");
+            foreach (var o in Kernel.ListOption){
+                if (o.NameTag.IndexOf("Web-") != 0)
+                    continue;
+                if (port != (int) o.GetValue("port"))
+                    continue;
+                if (o == this)
+                    continue;
+                //このオプション以外の最初の定義を発見した場合
+                var multiple = (int)o.GetValue("multiple");
+                SetVal("multiple", multiple);
+                GetCtrl("multiple").SetEnable(false);
+                break;
+            }
+
+            b = (bool)GetCtrl("useAutoAcl").GetValue();
+            GetCtrl("autoAclLabel").SetEnable(b);
+            GetCtrl("autoAclGroup").SetEnable(b);
+
+        }	 * */
 }

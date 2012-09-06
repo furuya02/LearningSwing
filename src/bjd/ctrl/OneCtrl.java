@@ -18,13 +18,24 @@ public abstract class OneCtrl {
 	private int controlCounter = 0; // 生成したコントロールを全部はきしたかどうかを確認するためのカウンタ
 	private ArrayList<ICtrlEventListener> listenerList = new ArrayList<>();
 
+	private String name = "";
 	protected String help;
 	protected JPanel panel = null;
 	protected final int margin = 3;
 	protected final int defaultHeight = 22;
-	
+
 	public OneCtrl(String help) {
 		this.help = help;
+	}
+
+	//OneValのコンストラクタでnameの初期化に使用される
+	//OneValのコンストラクタ内以外で利用してはならない
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public Dimension getCtrlSize() {
@@ -90,7 +101,6 @@ public abstract class OneCtrl {
 	public static int getDlgHeight() {
 		return OptionDlg.height();
 	}
-
 
 	// ***********************************************************************
 	// コントロールの値の読み書き
