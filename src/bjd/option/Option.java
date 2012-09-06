@@ -20,9 +20,6 @@ public final class Option extends OneOption {
 
 		this.kernel = kernel;
 
-		//TODO 「サーバを使用する」にチェックしたとき、タブの表示・非表示を切り返す
-		//TODO ■DEBUG TabPageの中にDatが追加できない　TabPageをページごと整理して記述できるようにしてからで行する
-
 		//		ArrayList<Ip> listV4 = new ArrayList<>();
 		//		listV4.add(new Ip("INADDR_ANY"));
 		//		listV4.add(new Ip("192.168.0.1"));
@@ -39,13 +36,6 @@ public final class Option extends OneOption {
 		pageList.add(page2("page2", "ページ２"));
 		pageList.add(page3("page3", "ページ３"));
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
-
-		//ArrayList<OneVal> list = listVal.getList(null);
-		//for (OneVal oneVal : list) {
-		//	//TODO DEBUG
-		//	System.out.println(String.format("list-> %s", oneVal.getName()));
-		//}
-
 	}
 
 	private OnePage page1(String name, String title) {
@@ -81,67 +71,22 @@ public final class Option extends OneOption {
 
 		return onePage;
 	}
-	
+
 	@Override
 	public void onChange(OneCtrl oneCtrl) {
-		//TODO Debug Print
-		System.out.println(String.format("Option.java OnCange() %s[%s]",oneCtrl.getName(),oneCtrl.getCtrlType()));
-		
 
-        boolean b = (boolean)getCtrl("useServer").read();
-        getCtrl("tab").setEnable(b);
+		try {
+			boolean b = (boolean) getCtrl("useServer").read();
+			getCtrl("tab").setEnable(b);
+
+			b = (boolean) getCtrl("useDat").read();
+			getCtrl("dat").setEnable(b);
+
+			b = (boolean) getCtrl("useTextBox1").read();
+			getCtrl("textBox1").setEnable(b);
 		
-        b = (boolean)getCtrl("useDat").read();
-        getCtrl("dat").setEnable(b);
-		
-        b = (boolean)getCtrl("useTextBox1").read();
-        getCtrl("textBox1").setEnable(b);
-		
+		} catch (NullPointerException e) {
+			//コントロールの破棄後に、このイベントが発生した場合（この例外は無視する）
+		}
 	}
-
-	/*
-//コントロールの変化
-        override public void OnChange() {
-
-
-            var b = (bool)GetCtrl("useServer").GetValue();
-            GetCtrl("Basic").SetEnable(b);
-
-
-            GetCtrl("protocol").SetEnable(false);
-            GetCtrl("port").SetEnable(false);
-
-            b = (bool)GetCtrl("useCgi").GetValue();
-            GetCtrl("cgiCmd").SetEnable(b);
-            GetCtrl("cgiTimeout").SetEnable(b);
-            GetCtrl("cgiPath").SetEnable(b);
-
-            b = (bool)GetCtrl("useSsi").GetValue();
-            GetCtrl("ssiExt").SetEnable(b);
-            GetCtrl("useExec").SetEnable(b);
-
-            b = (bool)GetCtrl("useWebDav").GetValue();
-            GetCtrl("webDavPath").SetEnable(b);
-
-            //同一ポートで待ち受ける仮想サーバの同時接続数は、最初の定義をそのまま使用する
-            var port = (int)GetValue("port");
-            foreach (var o in Kernel.ListOption){
-                if (o.NameTag.IndexOf("Web-") != 0)
-                    continue;
-                if (port != (int) o.GetValue("port"))
-                    continue;
-                if (o == this)
-                    continue;
-                //このオプション以外の最初の定義を発見した場合
-                var multiple = (int)o.GetValue("multiple");
-                SetVal("multiple", multiple);
-                GetCtrl("multiple").SetEnable(false);
-                break;
-            }
-
-            b = (bool)GetCtrl("useAutoAcl").GetValue();
-            GetCtrl("autoAclLabel").SetEnable(b);
-            GetCtrl("autoAclGroup").SetEnable(b);
-
-        }	 * */
 }

@@ -56,7 +56,6 @@ public class CtrlHidden extends OneCtrl implements DocumentListener {
 	//***********************************************************************
 	// コントロールの値の読み書き
 	//***********************************************************************
-	// コントロールの値の読み込み
 	@SuppressWarnings("deprecation")
 	@Override
 	protected Object abstractRead() {

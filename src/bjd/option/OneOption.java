@@ -2,6 +2,7 @@ package bjd.option;
 
 import javax.swing.JPanel;
 
+import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.ICtrlEventListener;
 import bjd.ctrl.OneCtrl;
 
@@ -16,6 +17,9 @@ public abstract class OneOption implements ICtrlEventListener {
 		int y = 0;
 		listVal.createCtrl(mainPanel, x, y);
 		listVal.setListener(this);
+		
+		//コントロールの状態を初期化するために、ダミーのイベントを発生させる
+		onChange(new CtrlCheckBox("dmy"));
 	}
 
 	//ダイアログ破棄時の処理
@@ -46,7 +50,7 @@ public abstract class OneOption implements ICtrlEventListener {
 		if (oneVal != null) {
 			return oneVal.getOneCtrl();
 		}
-		return null;
+		throw new UnsupportedOperationException(String.format("OneOption.java getCtrl() 設計に問題があります( %sは存在しません )",name));
 	}
 
 }

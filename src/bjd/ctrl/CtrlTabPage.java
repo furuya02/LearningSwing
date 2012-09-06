@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class CtrlTabPage extends OneCtrl {
+public class CtrlTabPage extends OneCtrl implements ChangeListener {
 	private ArrayList<OnePage> pageList;
 	private JTabbedPane tabbedPane = null;
 	private ArrayList<JPanel> pagePanelList = null;
@@ -32,6 +34,10 @@ public class CtrlTabPage extends OneCtrl {
 
 		tabbedPane = (JTabbedPane) create(panel, new JTabbedPane(), left, top);
 		tabbedPane.setSize(getDlgWidth() - 22, getDlgHeight() - 80 - top);
+		
+		//ページ変更のイベントをトラップする
+		tabbedPane.addChangeListener(this);
+		
 
 		panel.add(tabbedPane);
 
@@ -109,6 +115,10 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	// OnChange関連
 	//***********************************************************************
+	@Override
+	public void stateChanged(ChangeEvent arg0) {
+		setOnChange();
+	}
 	//***********************************************************************
 	// CtrlDat関連
 	//***********************************************************************
