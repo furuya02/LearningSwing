@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -56,11 +57,11 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		this.height = height;
 		this.kernel = kernel;
 	}
-	
-    //OnePage(CtrlTabPage.pageList) CtrlGroup CtrlDatにのみ存在する
-    public ListVal getListVal() {
-        return listVal;
-    }
+
+	//OnePage(CtrlTabPage.pageList) CtrlGroup CtrlDatにのみ存在する
+	public ListVal getListVal() {
+		return listVal;
+	}
 
 	@Override
 	public CtrlType getCtrlType() {
@@ -107,6 +108,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		checkListBox = (CheckListBox) create(border, new CheckListBox(), left, top);
 		checkListBox.setSize(getDlgWidth() - 42, height - top - 15);
 		checkListBox.addListSelectionListener(this);
+		checkListBox.addActionListener(this);
 
 		//値の設定
 		abstractWrite(value);
@@ -132,10 +134,35 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		border = null;
 	}
 
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int selectedIndex = checkListBox.getSelectedIndex(); // 選択行
+
 		String cmd = e.getActionCommand();
+		String source = e.getSource().getClass().getName();
+
+		if (source.indexOf("JButton") != -1) {
+			actionButton(cmd); //ボタンのイベント
+		} else if (source.indexOf("CheckListBox") != -1) {
+			actionCheckListBox(cmd); //チェックリストボックスのイベント
+		}
+
+	}
+
+	//チェックリストボックスのイベント
+	void actionCheckListBox(String cmd) {
+		//TODO Debug Print
+		System.out.println(String.format("CheckListBox cmd=%s",cmd));
+		if (cmd.equals("cahngeSelectIndex")) {
+
+		} else {
+			this.setOnChange();
+		}
+	}
+
+	//ボタンのイベント
+	void actionButton(String cmd) {
+		int selectedIndex = checkListBox.getSelectedIndex(); // 選択行
 		if (cmd.equals(tagList[ADD])) {
 			//コントロールの内容をテキストに変更したもの
 			String s = controlToText();
@@ -180,7 +207,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 			if (file != null) {
 				//TODO 形式の違うファイルを読み込んだ時の、適切なメッセージと途中でキャンセルできるようにする
 				//try {
-					importDat(file);
+				importDat(file);
 				//} catch (Exception ex) {
 				//	Msg.show(MsgKind.Error, kernel.getJp() ? "ファイル形式が違います" : "File format is different");
 				//}
@@ -208,6 +235,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 			}
 		}
 	}
+
 
 	//リストボックスの選択
 	@Override

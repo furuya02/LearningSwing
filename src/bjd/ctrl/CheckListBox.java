@@ -3,8 +3,11 @@ package bjd.ctrl;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
@@ -17,6 +20,8 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 	private JList<JCheckBox> list;
 	private DefaultListModel<JCheckBox> defaultListModel;
 
+	private ArrayList<ActionListener> listenerList = new ArrayList<>();
+
 	public CheckListBox() {
 
 		defaultListModel = new DefaultListModel<JCheckBox>();
@@ -27,23 +32,28 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		MyCellRenderer renderer = new MyCellRenderer();
 		list.setCellRenderer(renderer);
 		list.addMouseListener(this);
+
 	}
 
 	//１行追加
 	public int add(String str) {
 		JCheckBox checkBox = new JCheckBox(str);
 		defaultListModel.addElement(checkBox);
+		setEvent("add"); //イベント発生
 		return getItemCount() - 1;
 	}
 
 	//１行削除
 	public void remove(int index) {
+		setEvent("remove"); //イベント発生
 		if (isRange(index)) {
 			defaultListModel.remove(index);
 		}
 	}
+
 	//全行削除
 	public void removeAll() {
+		setEvent("removeAll"); //イベント発生
 		defaultListModel.removeAllElements();
 	}
 
@@ -63,8 +73,16 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 	//　テキストの設定
 	public void setItemText(int index, String str) {
 		if (isRange(index)) {
+			setEvent("setItemText"); //イベント発生
 			defaultListModel.get(index).setText(str);
 			list.repaint(); //再描画
+		}
+	}
+
+	//イベント発生
+	private void setEvent(String cmd) {
+		for (ActionListener listener : listenerList) {
+			listener.actionPerformed(new ActionEvent(this, 0, cmd));
 		}
 	}
 
@@ -118,9 +136,12 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		return true;
 	}
 
+	public void addActionListener(ActionListener listener) {
+		listenerList.add(listener);
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
 		Point p = e.getPoint();
 		if (p.x > 20) {
 			return; //チェックボタンの上以外のイベントは無視する
@@ -128,6 +149,8 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		int index = list.locationToIndex(p);
 		JCheckBox checkBox = (JCheckBox) defaultListModel.getElementAt(index);
 		checkBox.setSelected(checkBox.isSelected() ? false : true);
+
+		setEvent("changeSelected");
 
 		//表示が遅れる場合があるので、ここで強制的に再描画する
 		list.repaint();
