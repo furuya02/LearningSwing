@@ -23,7 +23,8 @@ import bjd.util.Msg;
 import bjd.util.MsgKind;
 import bjd.util.Util;
 
-public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionListener, ICtrlEventListener {
+//public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionListener, ICtrlEventListener {
+public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListener {
 
 	private JPanel border = null;
 	private JButton[] buttonList = null;
@@ -84,7 +85,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		left += 8;
 		top += 12;
 		listVal.createCtrl(border, left, top);
-		listVal.setListener(this); //コントロールの変化を取得
+		//listVal.setListener(this); //コントロールの変化を取得
 
 		//オフセット移動
 		Dimension dimension = listVal.getSize();
@@ -107,7 +108,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 		//チェックリストボックス配置
 		checkListBox = (CheckListBox) create(border, new CheckListBox(), left, top);
 		checkListBox.setSize(getDlgWidth() - 42, height - top - 15);
-		checkListBox.addListSelectionListener(this);
+//		checkListBox.addListSelectionListener(this);
 		checkListBox.addActionListener(this);
 
 		//値の設定
@@ -151,10 +152,13 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 
 	//チェックリストボックスのイベント
 	void actionCheckListBox(String cmd) {
-		//TODO Debug Print
-		System.out.println(String.format("CheckListBox cmd=%s",cmd));
 		if (cmd.equals("cahngeSelectIndex")) {
-
+			int index = checkListBox.getSelectedIndex();
+			buttonsInitialise(); //ボタン状態の初期化
+			//チェックリストの内容をコントロールに転送する
+			if (index >= 0) {
+				textToControl(checkListBox.getItemText(index));
+			}
 		} else {
 			this.setOnChange();
 		}
@@ -233,23 +237,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 			for (OneVal v : listVal) { //コントロールの内容をクリア
 				v.getOneCtrl().clear();
 			}
-		}
-	}
-
-
-	//リストボックスの選択
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting()) { //複数回の突入制御
-			return;
-		}
-		int index = checkListBox.getSelectedIndex();
-
-		buttonsInitialise(); //ボタン状態の初期化
-
-		//チェックリストの内容をコントロールに転送する
-		if (index >= 0) {
-			textToControl(checkListBox.getItemText(index));
 		}
 	}
 
@@ -414,7 +401,9 @@ public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionLis
 	//***********************************************************************
 	protected void abstractSetEnable(boolean enabled) {
 		if (border != null) {
-			border.setEnabled(enabled);
+			//CtrlDatの場合は、disableで非表示にする
+			panel.setVisible(enabled);
+			//border.setEnabled(enabled);
 		}
 	}
 

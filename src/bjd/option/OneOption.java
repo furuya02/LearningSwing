@@ -5,8 +5,7 @@ import javax.swing.JPanel;
 import bjd.ctrl.ICtrlEventListener;
 import bjd.ctrl.OneCtrl;
 
-
-public class OneOption implements ICtrlEventListener {
+public abstract class OneOption implements ICtrlEventListener {
 
 	private ListVal listVal = new ListVal();
 
@@ -18,17 +17,21 @@ public class OneOption implements ICtrlEventListener {
 		listVal.createCtrl(mainPanel, x, y);
 		listVal.setListener(this);
 	}
+
 	//ダイアログ破棄時の処理
 	public void deleteDlg() {
 		listVal.deleteCtrl();
 	}
+
 	//ダイアログでOKボタンが押された時の処理 
 	public boolean onOk(boolean isComfirm) {
 		return listVal.readCtrl(isComfirm);
 	}
+
 	public void add(OneVal oneVal) {
 		listVal.add(oneVal);
 	}
+
 	public Object getValue(String name) {
 		//TODO DEBUG
 		if (name.equals("editBrowse")) {
@@ -37,7 +40,13 @@ public class OneOption implements ICtrlEventListener {
 		//未実装
 		return null;
 	}
-	@Override
-	public void onChange(OneCtrl oneCtrl) {
+
+	protected OneCtrl getCtrl(String name) {
+		OneVal oneVal = listVal.search(name);
+		if (oneVal != null) {
+			return oneVal.getOneCtrl();
+		}
+		return null;
 	}
+
 }

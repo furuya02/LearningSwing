@@ -14,9 +14,17 @@ import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class CheckListBox extends JScrollPane implements MouseListener {
+/**
+ * 
+ * CheckListBox
+ * クラス内でJListを保持する
+ * JListのマウスボタン及び選択等のイベントをクラス内で処理して、外部にはActionEventを発生させる
+ */
+
+public class CheckListBox extends JScrollPane implements MouseListener, ListSelectionListener {
 	private JList<JCheckBox> list;
 	private DefaultListModel<JCheckBox> defaultListModel;
 
@@ -30,11 +38,26 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		super.getViewport().setView(list);
 
 		MyCellRenderer renderer = new MyCellRenderer();
-		list.setCellRenderer(renderer);
+		list.setCellRenderer(renderer); // オリジナル描画
 		list.addMouseListener(this);
-
+		list.addListSelectionListener(this);
 	}
-
+	//************************************************************
+	//外部から使用するイベント処理
+	//************************************************************
+	//ActionListenerの追加
+	public void addActionListener(ActionListener listener) {
+		listenerList.add(listener);
+	}
+	//イベント発生
+	private void setEvent(String cmd) {
+		for (ActionListener listener : listenerList) {
+			listener.actionPerformed(new ActionEvent(this, 0, cmd));
+		}
+	}
+	//************************************************************
+	//コントロールの操作メソッド
+	//************************************************************
 	//１行追加
 	public int add(String str) {
 		JCheckBox checkBox = new JCheckBox(str);
@@ -79,13 +102,6 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		}
 	}
 
-	//イベント発生
-	private void setEvent(String cmd) {
-		for (ActionListener listener : listenerList) {
-			listener.actionPerformed(new ActionEvent(this, 0, cmd));
-		}
-	}
-
 	//　一致する行の取得
 	public int indexOf(String s) {
 		for (int i = 0; i < getItemCount(); i++) {
@@ -123,12 +139,7 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		}
 	}
 
-	//イベントリスナの設定
-	public void addListSelectionListener(ListSelectionListener listener) {
-		list.addListSelectionListener(listener);
-	}
-
-	// 範囲内かどうか
+	// 範囲内かどうかチェック
 	private boolean isRange(int index) {
 		if (index < 0 || defaultListModel.getSize() <= index) {
 			return false;
@@ -136,10 +147,9 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 		return true;
 	}
 
-	public void addActionListener(ActionListener listener) {
-		listenerList.add(listener);
-	}
-
+	//************************************************************
+	//MouseListenerのオーバーライド
+	//************************************************************
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point p = e.getPoint();
@@ -171,6 +181,19 @@ public class CheckListBox extends JScrollPane implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 	}
+
+	//************************************************************
+	//ListSelectionListenerのオーバーライド
+	//************************************************************
+	//リストボックスの選択
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (e.getValueIsAdjusting()) { //複数回の突入制御
+			return;
+		}
+		setEvent("cahngeSelectIndex");
+	}
+
 }
 
 class MyCellRenderer extends JCheckBox implements ListCellRenderer {

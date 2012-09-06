@@ -101,7 +101,9 @@ public class CtrlTabPage extends OneCtrl {
 	//***********************************************************************
 	@Override
 	protected void abstractSetEnable(boolean enabled) {
-		tabbedPane.setEnabled(enabled);
+		//タブページの場合は、disableで非表示とする
+		tabbedPane.setVisible(enabled);
+		//tabbedPane.setEnabled(enabled);
 	}
 
 	//***********************************************************************

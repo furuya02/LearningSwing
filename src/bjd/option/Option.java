@@ -51,6 +51,8 @@ public final class Option extends OneOption {
 	private OnePage page1(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
 
+		onePage.add(new OneVal("useDat", true, Crlf.NEXTLINE, new CtrlCheckBox("DatCtrlの有効無効")));
+
 		ListVal list = new ListVal();
 		list.add(new OneVal("combo", 0, Crlf.NEXTLINE, new CtrlComboBox("コンボボックス", new String[] { "DOWN", "PU", "FULL" }, 200)));
 		list.add(new OneVal("fileName2", "c:\\work", Crlf.NEXTLINE, new CtrlFolder("フォルダ", 30, kernel)));
@@ -65,9 +67,9 @@ public final class Option extends OneOption {
 	private OnePage page2(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
 
-		onePage.add(new OneVal("n1", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
+		onePage.add(new OneVal("useTextBox1", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック")));
 		onePage.add(new OneVal("n2", true, Crlf.NEXTLINE, new CtrlCheckBox("チェック2")));
-		onePage.add(new OneVal("n3", "123", Crlf.NEXTLINE, new CtrlTextBox("文字列入力", 20)));
+		onePage.add(new OneVal("textBox1", "123", Crlf.NEXTLINE, new CtrlTextBox("文字列入力", 20)));
 
 		return onePage;
 	}
@@ -83,7 +85,18 @@ public final class Option extends OneOption {
 	@Override
 	public void onChange(OneCtrl oneCtrl) {
 		//TODO Debug Print
-		System.out.println(String.format("Option.java OneCange() %s[%s]",oneCtrl.getName(),oneCtrl.getCtrlType()));
+		System.out.println(String.format("Option.java OnCange() %s[%s]",oneCtrl.getName(),oneCtrl.getCtrlType()));
+		
+
+        boolean b = (boolean)getCtrl("useServer").read();
+        getCtrl("tab").setEnable(b);
+		
+        b = (boolean)getCtrl("useDat").read();
+        getCtrl("dat").setEnable(b);
+		
+        b = (boolean)getCtrl("useTextBox1").read();
+        getCtrl("textBox1").setEnable(b);
+		
 	}
 
 	/*

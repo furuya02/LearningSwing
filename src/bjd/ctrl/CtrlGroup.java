@@ -86,7 +86,9 @@ public class CtrlGroup extends OneCtrl {
 	//***********************************************************************
 	protected void abstractSetEnable(boolean enabled) {
 		if (border != null) {
-			border.setEnabled(enabled);
+			//CtrlGroupの場合は、disableで非表示にする
+			panel.setVisible(enabled);
+			//border.setEnabled(enabled);
 		}
 	}
 
