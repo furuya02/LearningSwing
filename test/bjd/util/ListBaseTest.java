@@ -28,8 +28,9 @@ public class ListBaseTest {
 		
 	@Test
 	public void a001() {
-		System.out.println("a001 3要素追加してsize()を確認する");
-			
+		TestUtil.dispHeader("a001 3要素追加してsize()を確認する");
+		TestUtil.dispPrompt(this);
+		
 		TestClass ts = new TestClass();
 	
 		ts.add(new OneClass("1"));
@@ -41,7 +42,8 @@ public class ListBaseTest {
 
 	@Test
 	public void a002() {
-		System.out.println("a002 拡張forループで要素を取り出す");
+		TestUtil.dispHeader("a002 拡張forループで要素を取り出す");
+		TestUtil.dispPrompt(this);
 
 		TestClass ts = new TestClass();
 
@@ -58,7 +60,8 @@ public class ListBaseTest {
 	
 	@Test
 	public void a003() {
-		System.out.println("a003 3要素追加してremobve()の後、要素を確認する");
+		TestUtil.dispHeader("a003 3要素追加してremobve()の後、要素を確認する");
+		TestUtil.dispPrompt(this);
 
 		TestClass ts = new TestClass();
 
@@ -75,7 +78,8 @@ public class ListBaseTest {
 	
 	@Test
 	public void a004() {
-		System.out.println("a004 3要素追加してwhile()で回してみる");
+		TestUtil.dispHeader("a004 3要素追加してwhile()で回してみる");
+		TestUtil.dispPrompt(this);
 
 		TestClass ts = new TestClass();
 

@@ -2,81 +2,120 @@ package bjd.option;
 
 import java.util.ArrayList;
 
-import junit.framework.Assert;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
-
+import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlInt;
+import bjd.ctrl.CtrlTabPage;
+import bjd.ctrl.OnePage;
 import bjd.util.TestUtil;
 
 //@RunWith(Enclosed.class)
 public class ListValTest {
-    
-    @Test
-    public void A001() {
-        TestUtil.dispHeader("A001 複数のOneValをadd()で追加した後、getList（)で取得した値が正しいかをテストする");
 
-        ListVal listVal = new ListVal();
-        listVal.add(new OneVal("n1",1,Crlf.NEXTLINE, new CtrlInt("help",10)));
-        listVal.add(new OneVal("n2",1,Crlf.NEXTLINE, new CtrlInt("help",10)));
-        
-        ArrayList<OneVal> list = listVal.getList(null);
-        StringBuilder sb = new StringBuilder();
-        for(OneVal o : list){
-            sb.append(o.getName());
-            sb.append(",");
-        }
-        String expected = "n1,n2,";
+	@Test
+	public void a001() {
+		TestUtil.dispHeader("a001 getList（)で取得した値の確認（パターン１）");
+		TestUtil.dispPrompt(this);
 
-        System.out.printf("listVal.getList(null)=%s expected=%s\n",sb.toString(),expected);
-        assertThat(sb.toString(),is(expected));
-    }
+		//テスト用のListVal作成(パターン１)
+		ListVal listVal = createListVal1();
 
-    
+		//listValを名前覧にする
+		String actual = arrayToString(listVal.getList(null));
+		String expected = "n1,n2,n3,n4,n5,n6,n7,n8,";
+		System.out.printf("listVal.getList(null)=%s expected=%s\n", actual, expected);
+		assertThat(actual, is(expected));
+	}
 
-//	@RunWith(Theories.class)
-//	public static class A001 {
-//		@BeforeClass
-//		public static void before() {
-//			TestUtil.dispHeader("デフォルト値をtoReg()で取り出す");
-//		}
-//
-//		@DataPoints
-//		public static Fixture[] datas = {
-//				//コントロールの種類,デフォルト値,toRegの出力
-//				new Fixture(CtrlType.CHECKBOX, true, "true"), new Fixture(CtrlType.CHECKBOX, false, "false"), new Fixture(CtrlType.INT, 100, "100"),
-//		};
-//		static class Fixture {
-//			private CtrlType ctrlType;
-//			private Object actual;
-//			private String expected;
-//
-//			public Fixture(CtrlType ctrlType, Object actual, String expected) {
-//				this.ctrlType = ctrlType;
-//				this.actual = actual;
-//				this.expected = expected;
-//			}
-//		}
-//
-//		@Theory
-//		public void test(Fixture fx) {
-//
-//			TestUtil.dispPrompt(this);
-//			System.out.printf("(%s) default値=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
-//
-//			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
-//			boolean isDebug = false;
-//			assertThat(oneVal.toReg(isDebug), is(fx.expected));
-//		}
-//	}
-	
-	//TestUtil.dispHeader("TODO TEST add（）でOneValを追加して、getList()一覧で列挙できるかどうかのテスト（複数のパターンでTESTが必要）");
-	//TestUtil.dispHeader("TODO TEST add（）でOneValを追加して、searchで検索できるかどうかのテスト（複数のパターンでTESTが必要）");
-	
-	//fail("まだ実装されていません");
+	@Test
+	public void a002() {
+		TestUtil.dispHeader("a002 getList（)で取得した値の確認（パターン２）");
+		TestUtil.dispPrompt(this);
+
+		//テスト用のListVal作成(パターン２)
+		ListVal listVal = createListVal2();
+
+		//listValを名前覧にする
+		String actual = arrayToString(listVal.getList(null));
+		String expected = "n0,n1,n2,";
+		System.out.printf("listVal.getList(null)=%s expected=%s\n", actual, expected);
+		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void a003() {
+		TestUtil.dispHeader("a003 search（)で検索に成功するとオブジェクトが返る");
+		TestUtil.dispPrompt(this);
+		
+		//テスト用のListVal作成(パターン１)
+		ListVal listVal = createListVal1();
+		System.out.printf("listVal.search(n1)!=null \n");
+		assertNotNull(listVal.search("n1"));
+	}
+
+	@Test
+	public void a004() {
+		TestUtil.dispHeader("a004 search（)で検索に失敗するとnullが返る");
+		TestUtil.dispPrompt(this);
+
+		//テスト用のListVal作成(パターン１)
+		ListVal listVal = createListVal1();
+		System.out.printf("listVal.search(xxx)==null \n");
+		assertNull(listVal.search("xxx"));
+	}
+
+	//テスト用のListVal作成(パターン１)
+	private ListVal createListVal1() {
+
+		ListVal listVal = new ListVal();
+		listVal.add(new OneVal("n1", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		listVal.add(new OneVal("n2", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+
+		ListVal datList = new ListVal();
+		datList.add(new OneVal("n3", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		datList.add(new OneVal("n4", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		listVal.add(new OneVal("n5", 1, Crlf.NEXTLINE, new CtrlDat("help", datList, 10, null)));
+
+		datList = new ListVal();
+		datList.add(new OneVal("n6", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		datList.add(new OneVal("n7", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		listVal.add(new OneVal("n8", 1, Crlf.NEXTLINE, new CtrlDat("help", datList, 10, null)));
+
+		return listVal;
+	}
+
+	//テスト用のListVal作成(パターン２)
+	private ListVal createListVal2() {
+
+		ListVal listVal = new ListVal();
+
+		ArrayList<OnePage> pageList = new ArrayList<>();
+
+		OnePage onePage = new OnePage("page1", "ページ１");
+		onePage.add(new OneVal("n0", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		pageList.add(onePage);
+
+		onePage = new OnePage("page2", "ページ２");
+		onePage.add(new OneVal("n1", 1, Crlf.NEXTLINE, new CtrlInt("help", 10)));
+		pageList.add(onePage);
+
+		listVal.add(new OneVal("n2", null, Crlf.NEXTLINE, new CtrlTabPage("help", pageList)));
+		return listVal;
+	}
+
+	//listValを名前覧にする
+	private String arrayToString(ArrayList<OneVal> list) {
+		StringBuilder sb = new StringBuilder();
+		for (OneVal o : list) {
+			sb.append(o.getName());
+			sb.append(",");
+		}
+		return sb.toString();
+	}
+
 }
-

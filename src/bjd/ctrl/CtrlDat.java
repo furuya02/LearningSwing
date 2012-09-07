@@ -210,11 +210,10 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 			File file = Util.fileChooser(null);
 			if (file != null) {
 				//TODO 形式の違うファイルを読み込んだ時の、適切なメッセージと途中でキャンセルできるようにする
-				//try {
-				importDat(file);
-				//} catch (Exception ex) {
-				//	Msg.show(MsgKind.Error, kernel.getJp() ? "ファイル形式が違います" : "File format is different");
-				//}
+				if (file.exists()) {
+					ArrayList<String> lines = Util.textFileRead(file);
+					importDat(lines);
+				}
 			}
 		} else if (cmd.equals(tagList[EXPORT])) {
 			File file = Util.fileChooser(null);
@@ -226,7 +225,9 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 					}
 				}
 				if (isExecute) {
-					exportDat(file);
+					ArrayList<String> lines = exportDat();
+					Util.textFileSave(file,lines);
+					
 				}
 			}
 		} else if (cmd.equals(tagList[CLEAR])) {
@@ -293,12 +294,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 	// Import Export
 	//***********************************************************************
 	//インポート
-	private void importDat(File file) {
-		if (!file.exists()) {
-			return;
-		}
-		ArrayList<String> lines = Util.textFileRead(file);
-		//var lines = File.ReadAllLines(fileName, Encoding.GetEncoding(932));
+	private void importDat(ArrayList<String> lines) {
 		for (String s : lines) {
 			String str = s;
 			boolean isChecked = str.charAt(0) != '#';
@@ -337,7 +333,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 	}
 
 	//エクスポート
-	private void exportDat(File file) {
+	private ArrayList<String> exportDat() {
 
 		//チェックリストボックスの内容からDatオブジェクトを生成する
 		ArrayList<String> lines = new ArrayList<>();
@@ -345,8 +341,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 			String s = checkListBox.getItemText(i);
 			lines.add(checkListBox.getItemChecked(i) ? String.format(" \t%s", s) : String.format("#\t%s", s));
 		}
-		Util.textFileSave(file, lines);
-		//File.WriteAllLines(fileName, lines.ToArray(), Encoding.GetEncoding(932));
+		return lines;
 	}
 
 	//***********************************************************************

@@ -48,7 +48,6 @@ public final class Option extends OneOption {
 		list.add(new OneVal("fileName2", "c:\\work", Crlf.NEXTLINE, new CtrlFolder("フォルダ", 30, kernel)));
 		list.add(new OneVal("text", "user1", Crlf.NEXTLINE, new CtrlTextBox("テキスト入力", 30)));
 		list.add(new OneVal("hidden", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
-		list.add(new OneVal("hidden2", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
 		onePage.add(new OneVal("dat", null, Crlf.NEXTLINE, new CtrlDat("データ", list, 300, kernel)));
 
 		return onePage;

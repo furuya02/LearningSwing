@@ -1,7 +1,11 @@
 //package bjd.option;
 //
-//import static org.hamcrest.CoreMatchers.is;
+//import org.junit.Test;
 //import static org.junit.Assert.*;
+//import static org.hamcrest.CoreMatchers.is;
+//import static org.junit.Assert.assertNotNull;
+//import static org.junit.Assert.assertNull;
+//import static org.junit.Assert.assertThat;
 //
 //
 //@RunWith(Enclosed.class)
@@ -11,7 +15,7 @@
 //	public static class A001 {
 //		@BeforeClass
 //		public static void before() {
-//			TestUtil.dispHeader("デフォルト値をtoReg()で取り出す");
+//			TestUtil.dispHeader("デフォルト値をtoReg()で取り出す"); //TESTヘッダ
 //		}
 //
 //		@DataPoints
@@ -20,12 +24,10 @@
 //				new Fixture(CtrlType.CHECKBOX, true, "true"), new Fixture(CtrlType.CHECKBOX, false, "false"), new Fixture(CtrlType.INT, 100, "100"),
 //		};
 //		static class Fixture {
-//			private CtrlType ctrlType;
 //			private Object actual;
 //			private String expected;
 //
-//			public Fixture(CtrlType ctrlType, Object actual, String expected) {
-//				this.ctrlType = ctrlType;
+//			public Fixture(CObject actual, String expected) {
 //				this.actual = actual;
 //				this.expected = expected;
 //			}
@@ -34,7 +36,8 @@
 //		@Theory
 //		public void test(Fixture fx) {
 //
-//			TestUtil.dispPrompt(this);
+//			TestUtil.dispPrompt(this); //TESTプロンプト
+//
 //			System.out.printf("(%s) default値=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
 //
 //			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
