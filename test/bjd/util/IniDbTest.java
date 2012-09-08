@@ -4,8 +4,6 @@ import java.awt.Font;
 import java.io.File;
 import java.util.ArrayList;
 
-import junit.framework.Assert;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

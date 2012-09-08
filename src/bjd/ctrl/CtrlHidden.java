@@ -73,6 +73,7 @@ public final class CtrlHidden extends OneCtrl implements DocumentListener {
 	protected void abstractSetEnable(boolean enabled) {
 		if (passwordField != null) {
 			passwordField.setEditable(enabled);
+			label.setEnabled(enabled);
 		}
 	}
 

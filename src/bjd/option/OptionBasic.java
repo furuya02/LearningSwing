@@ -34,33 +34,14 @@ public class OptionBasic extends OneOption {
 	private OnePage page1(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
 
-		onePage.add(new OneVal("useExitDlg", false, Crlf.NEXTLINE,
-				new CtrlCheckBox(kernel.getJp() ? "終了確認のメッセージを表示する"
-						: "Display a message of end confirmation")));
-		onePage.add(new OneVal("useLastSize", true, Crlf.NEXTLINE,
-				new CtrlCheckBox(kernel.getJp() ? "前回起動時のウインドウサイズを記憶する"
-						: "Memorize size of a wind in last time start")));
-		onePage.add(new OneVal("isWindowOpen", true, Crlf.NEXTLINE,
-				new CtrlCheckBox(kernel.getJp() ? "起動時にウインドウを開く"
-						: "Open a window in start")));
-		onePage.add(new OneVal(
-				"useAdminPassword",
-				false,
-				Crlf.NEXTLINE,
-				new CtrlCheckBox(
-						kernel.getJp() ? "ウインドウ表示時に管理者パスワードを使用する"
-								: "At the time of window indication, a password is necessary")));
-		onePage.add(new OneVal("password", "", Crlf.NEXTLINE, new CtrlHidden(
-				kernel.getJp() ? "管理者パスワード" : "password", 200)));
-		onePage.add(new OneVal("serverName", "", Crlf.NEXTLINE,
-				new CtrlTextBox(kernel.getJp() ? "サーバ名" : "Server Name", 200)));
-		onePage.add(new OneVal("editBrowse", false, Crlf.NEXTLINE,
-				new CtrlCheckBox(kernel.getJp() ? "フォルダ・ファイル選択を編集にする"
-						: "can edit browse control")));
-		onePage.add(new OneVal("lang", 0, Crlf.NEXTLINE, new CtrlComboBox(
-				kernel.getJp() ? "言語" : "Language", new String[] { "Japanese",
-						"English" }, 80)));
-
+		onePage.add(new OneVal("useExitDlg", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "終了確認のメッセージを表示する" : "Display a message of end confirmation")));
+		onePage.add(new OneVal("useLastSize", true, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "前回起動時のウインドウサイズを記憶する" : "Memorize size of a wind in last time start")));
+		onePage.add(new OneVal("isWindowOpen", true, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "起動時にウインドウを開く" : "Open a window in start")));
+		onePage.add(new OneVal("useAdminPassword", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "ウインドウ表示時に管理者パスワードを使用する" : "At the time of window indication, a password is necessary")));
+		onePage.add(new OneVal("password", "", Crlf.NEXTLINE, new CtrlHidden(kernel.getJp() ? "管理者パスワード" : "password", 20)));
+		onePage.add(new OneVal("serverName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "サーバ名" : "Server Name", 20)));
+		onePage.add(new OneVal("editBrowse", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "フォルダ・ファイル選択を編集にする" : "can edit browse control")));
+		onePage.add(new OneVal("lang", 0, Crlf.NEXTLINE, new CtrlComboBox(kernel.getJp() ? "言語" : "Language", new String[] { "Japanese", "English" }, 80)));
 		return onePage;
 	}
 

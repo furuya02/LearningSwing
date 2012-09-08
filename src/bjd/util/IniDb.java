@@ -1,28 +1,9 @@
 package bjd.util;
 
-import java.awt.Font;
 import java.io.File;
 import java.util.ArrayList;
 
-import bjd.Kernel;
-import bjd.ctrl.CtrlAddress;
-import bjd.ctrl.CtrlBindAddr;
-import bjd.ctrl.CtrlCheckBox;
-import bjd.ctrl.CtrlComboBox;
-import bjd.ctrl.CtrlDat;
-import bjd.ctrl.CtrlFile;
-import bjd.ctrl.CtrlFolder;
-import bjd.ctrl.CtrlFont;
-import bjd.ctrl.CtrlHidden;
-import bjd.ctrl.CtrlInt;
-import bjd.ctrl.CtrlMemo;
-import bjd.ctrl.CtrlRadio;
-import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.CtrlType;
-import bjd.ctrl.OneCtrl;
-import bjd.net.Ip;
-import bjd.option.Crlf;
-import bjd.option.Dat;
 import bjd.option.ListVal;
 import bjd.option.OneVal;
 
