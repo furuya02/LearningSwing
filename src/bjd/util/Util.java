@@ -5,8 +5,12 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -77,5 +81,34 @@ public final class Util {
 			return false;
 		}
 		return true;
+	}
+	
+	public static void fileCopy(File src, File dest) {
+
+	    FileChannel rs = null;
+	    FileChannel ws = null;
+
+	    try {
+	        rs = new FileInputStream(src).getChannel();
+	        ws = new FileOutputStream(dest).getChannel();
+	        rs.transferTo(0, rs.size(), ws);
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+
+	    } finally {
+	        if (rs != null) {
+	            try {
+	                rs.close();
+	            } catch (IOException e) {
+	            }
+	        }
+	        if (ws != null) {
+	            try {
+	                ws.close();
+	            } catch (IOException e) {
+	            }
+	        }
+	    }
 	}
 }

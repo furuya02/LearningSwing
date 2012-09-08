@@ -11,10 +11,16 @@ public abstract class OneOption implements ICtrlEventListener {
 
 	private ListVal listVal = new ListVal();
 
-	Kernel kernel;
+	protected Kernel kernel;
+	private String path;
+	private String nameTag;
+	private boolean useAcl;
 
-	public OneOption(Kernel kernel) {
+	public OneOption(Kernel kernel, String path, String nameTag, boolean useAcl) {
 		this.kernel = kernel;
+		this.path = path;
+		this.nameTag = nameTag;
+		this.useAcl = useAcl;
 	}
 
 	// ダイアログ作成時の処理

@@ -89,7 +89,7 @@ public class OneValTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) default値=%s toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.expected);
 
-			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
+			OneVal oneVal = Assistance.createOneVal(fx.ctrlType, fx.actual);
 			boolean isDebug = false;
 			assertThat(oneVal.toReg(isDebug), is(fx.expected));
 		}
@@ -135,7 +135,7 @@ public class OneValTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) fromReg(\"%s\") toReg()=\"%s\"\n", fx.ctrlType, fx.actual, fx.actual);
 
-			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
+			OneVal oneVal = Assistance.createOneVal(fx.ctrlType, null);
 
 			boolean isDebug = false;
 			oneVal.fromReg(fx.actual);
@@ -203,7 +203,7 @@ public class OneValTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) fromReg(\"%s\") = %s\n", fx.ctrlType, fx.actual, fx.expected);
 
-			OneVal oneVal = Util.createOneVal(fx.ctrlType, null);
+			OneVal oneVal = Assistance.createOneVal(fx.ctrlType, null);
 
 			assertSame(oneVal.fromReg(fx.actual), fx.expected);
 		}
@@ -247,7 +247,7 @@ public class OneValTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("(%s) Default=\"%s\" toReg(%s) = %s\n", fx.ctrlType, fx.actual, fx.isDebug, fx.expected);
 
-			OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.actual);
+			OneVal oneVal = Assistance.createOneVal(fx.ctrlType, fx.actual);
 			//String s = oneVal.toReg(fx.isDebug);
 
 			assertThat(oneVal.toReg(fx.isDebug), is(fx.expected));
@@ -296,7 +296,7 @@ public class OneValTest {
 
 	        TestUtil.dispPrompt(this);
 
-	        OneVal oneVal = Util.createOneVal(fx.ctrlType, fx.value);
+	        OneVal oneVal = Assistance.createOneVal(fx.ctrlType, fx.value);
 			oneVal.createCtrl(null, 0, 0);
 			boolean b = oneVal.readCtrl(false); //isConfirm = false; 確認のみではなく、実際に読み込む
 	        
@@ -315,7 +315,7 @@ public class OneValTest {
 	/**
 	 * 共通的に利用されるメソッド
 	 */
-	private static class Util {
+	private static class Assistance {
 		/**
 		 * OneValの生成
 		 * @param val
