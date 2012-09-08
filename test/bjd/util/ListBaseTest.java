@@ -27,7 +27,7 @@ public class ListBaseTest {
 	}
 		
 	@Test
-	public void a001() {
+	public final void a001() {
 		TestUtil.dispHeader("a001 3要素追加してsize()を確認する");
 		TestUtil.dispPrompt(this);
 		
@@ -41,7 +41,7 @@ public class ListBaseTest {
 	}
 
 	@Test
-	public void a002() {
+	public final void a002() {
 		TestUtil.dispHeader("a002 拡張forループで要素を取り出す");
 		TestUtil.dispPrompt(this);
 
@@ -59,7 +59,7 @@ public class ListBaseTest {
 	}
 	
 	@Test
-	public void a003() {
+	public final void a003() {
 		TestUtil.dispHeader("a003 3要素追加してremobve()の後、要素を確認する");
 		TestUtil.dispPrompt(this);
 
@@ -77,7 +77,7 @@ public class ListBaseTest {
 	}
 	
 	@Test
-	public void a004() {
+	public final void a004() {
 		TestUtil.dispHeader("a004 3要素追加してwhile()で回してみる");
 		TestUtil.dispPrompt(this);
 

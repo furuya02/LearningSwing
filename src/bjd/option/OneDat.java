@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import bjd.util.IDispose;
 
-public class OneDat implements IDispose {
+public final class OneDat implements IDispose {
 
 	private boolean enable;
 	private ArrayList<String> strList = new ArrayList<>();

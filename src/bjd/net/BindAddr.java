@@ -1,6 +1,6 @@
 package bjd.net;
 
-public class BindAddr {
+public final class BindAddr {
     private Ip ipV4;
 	private Ip ipV6;
 	private BindStyle bindStyle;

@@ -63,7 +63,7 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 		Util.createButton(buttonPanel, "Cancel", "CANCEL", this, 75);
 	}
 
-	public boolean showDialog() {
+	public final boolean showDialog() {
 		setModal(true);
 		setVisible(true);
 		return isOk;
@@ -72,7 +72,7 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 	protected abstract boolean onOk();
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public final void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("OK")) {
 			isOk = true;
 			if (!onOk()) {
@@ -84,7 +84,7 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 	}
 
 	@Override
-	public void windowActivated(WindowEvent arg0) {
+	public final void windowActivated(WindowEvent arg0) {
 		// System.out.println("windowActivated");
 
 	}
@@ -96,32 +96,32 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 	}
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {
+	public final void windowClosing(WindowEvent arg0) {
 		// System.out.println("windowClosing");
 		// ×ボタンが押されたとき、ここしか通らないので、ここで破棄する
 		dispose();
 	}
 
 	@Override
-	public void windowDeactivated(WindowEvent arg0) {
+	public final void windowDeactivated(WindowEvent arg0) {
 		// System.out.println("windowDeactivated");
 
 	}
 
 	@Override
-	public void windowDeiconified(WindowEvent arg0) {
+	public final void windowDeiconified(WindowEvent arg0) {
 		// System.out.println("windowDeiconified");
 
 	}
 
 	@Override
-	public void windowIconified(WindowEvent arg0) {
+	public final void windowIconified(WindowEvent arg0) {
 		// System.out.println("windowIconified");
 
 	}
 
 	@Override
-	public void windowOpened(WindowEvent arg0) {
+	public final void windowOpened(WindowEvent arg0) {
 		// System.out.println("windowOpened");
 	}
 }

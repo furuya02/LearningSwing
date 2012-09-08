@@ -3,7 +3,7 @@ package bjd.ctrl;
 import bjd.option.ListVal;
 import bjd.option.OneVal;
 
-public class OnePage {
+public final class OnePage {
 	private String name;
 	private String title;
 	private ListVal listVal = new ListVal();

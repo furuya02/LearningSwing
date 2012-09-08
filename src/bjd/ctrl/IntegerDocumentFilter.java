@@ -6,7 +6,7 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 
 // 数値入力に制限する
-public class IntegerDocumentFilter extends DocumentFilter {
+public final class IntegerDocumentFilter extends DocumentFilter {
     private int digits;
 
     public IntegerDocumentFilter(int digits) {

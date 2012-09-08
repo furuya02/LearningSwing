@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import bjd.Kernel;
 import bjd.option.Dat;
@@ -24,7 +21,7 @@ import bjd.util.MsgKind;
 import bjd.util.Util;
 
 //public class CtrlDat extends OneCtrl implements ActionListener, ListSelectionListener, ICtrlEventListener {
-public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListener {
+public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListener {
 
 	private JPanel border = null;
 	private JButton[] buttonList = null;
@@ -108,7 +105,7 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 		//チェックリストボックス配置
 		checkListBox = (CheckListBox) create(border, new CheckListBox(), left, top);
 		checkListBox.setSize(getDlgWidth() - 42, height - top - 15);
-//		checkListBox.addListSelectionListener(this);
+		//		checkListBox.addListSelectionListener(this);
 		checkListBox.addActionListener(this);
 
 		//値の設定
@@ -134,7 +131,6 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 		remove(panel, checkListBox);
 		border = null;
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -226,8 +222,8 @@ public class CtrlDat extends OneCtrl implements ActionListener, ICtrlEventListen
 				}
 				if (isExecute) {
 					ArrayList<String> lines = exportDat();
-					Util.textFileSave(file,lines);
-					
+					Util.textFileSave(file, lines);
+
 				}
 			}
 		} else if (cmd.equals(tagList[CLEAR])) {

@@ -6,7 +6,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 
-public class CtrlInt extends OneCtrl implements DocumentListener {
+public final class CtrlInt extends OneCtrl implements DocumentListener {
 
 	private int digits;
 	private JLabel label = null;

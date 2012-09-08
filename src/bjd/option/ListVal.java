@@ -10,7 +10,7 @@ import bjd.util.ListBase;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 
-public class ListVal extends ListBase<OneVal> {
+public final class ListVal extends ListBase<OneVal> {
 
 	private Dimension dimension = null;
 

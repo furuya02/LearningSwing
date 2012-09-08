@@ -2,7 +2,7 @@ package bjd;
 
 import javax.swing.JFrame;
 
-public class AppFunc implements SelectMenuListener {
+public final class AppFunc implements SelectMenuListener {
 	private AppMenu appMenu;
 	private JFrame mainFrame;
 	private Kernel kernel;

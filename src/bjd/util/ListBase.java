@@ -16,41 +16,41 @@ public abstract class ListBase<T extends IDispose> implements Iterable<T>,
         index = 0;
     }
 
-    public void dispose() {
+    public final void dispose() {
         for (T o : ar) {
             o.dispose(); // 終了処理
         }
         ar.clear(); // 破棄
     }
 
-    public int size() {
+    public final int size() {
         return ar.size();
     }
 
-    public void remove(int index) {
+    public final void remove(int index) {
         ar.remove(index);
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public final Iterator<T> iterator() {
         index = 0;
     	return this;
     }
 
     @Override
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return index < ar.size();
     }
 
     @Override
-    public T next() {
+    public final T next() {
         T o = ar.get(index);
         index++;
         return o;
     }
 
     @Override
-    public void remove() {
+    public final void remove() {
     	throw new UnsupportedOperationException("ListBase.java remote()は未実装");
     }
 }

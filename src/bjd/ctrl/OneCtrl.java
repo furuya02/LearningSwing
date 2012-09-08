@@ -30,22 +30,22 @@ public abstract class OneCtrl {
 
 	//OneValのコンストラクタでnameの初期化に使用される
 	//OneValのコンストラクタ内以外で利用してはならない
-	public void setName(String name) {
+	public final void setName(String name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
-	public Dimension getCtrlSize() {
+	public final Dimension getCtrlSize() {
 		if (panel == null) {
 			return new Dimension(0, 0);
 		}
 		return new Dimension(panel.getWidth(), panel.getHeight());
 	}
 
-	public Object getHelp() {
+	public final Object getHelp() {
 		return help;
 	}
 
@@ -54,7 +54,7 @@ public abstract class OneCtrl {
 	// コントロールの生成
 	protected abstract void abstractCreate(Object value);
 
-	public void create(JPanel owner, int x, int y, Object value) {
+	public final void create(JPanel owner, int x, int y, Object value) {
 		this.owner = owner;
 
 		if (panel == null) {
@@ -75,7 +75,7 @@ public abstract class OneCtrl {
 	// コントロールの破棄
 	protected abstract void abstractDelete();
 
-	public void delete() {
+	public final void delete() {
 		abstractDelete();
 
 		if (owner != null) {
@@ -88,7 +88,7 @@ public abstract class OneCtrl {
 	}
 
 	// フィールドテキストに合わせてサイズを自動調整する
-	protected void setAutoSize(JComponent component) {
+	protected final void setAutoSize(JComponent component) {
 		Dimension dimension = component.getPreferredSize(); // 適切サイズを取得
 		dimension.width += 8; // 微調整
 		component.setSize(dimension);
@@ -109,13 +109,13 @@ public abstract class OneCtrl {
 	// TODO abstractRead() nullを返す際に、コントロールを赤色表示にする
 	protected abstract Object abstractRead();
 
-	public Object read() {
+	public final Object read() {
 		return abstractRead();
 	}
 
 	protected abstract void abstractWrite(Object value);
 
-	public void write(Object value) {
+	public final void write(Object value) {
 		abstractWrite(value);
 	}
 
@@ -124,7 +124,7 @@ public abstract class OneCtrl {
 	// ***********************************************************************
 	protected abstract void abstractSetEnable(boolean enabled);
 
-	public void setEnable(boolean enabled) {
+	public final void setEnable(boolean enabled) {
 		if (panel != null) {
 			abstractSetEnable(enabled);
 		}
@@ -133,7 +133,7 @@ public abstract class OneCtrl {
 	// ***********************************************************************
 	// コントロールの生成・破棄（共通関数）
 	// ***********************************************************************
-	protected JComponent create(JPanel owner, JComponent self, int x, int y) {
+	protected final JComponent create(JPanel owner, JComponent self, int x, int y) {
 		controlCounter++;
 		JComponent control = self;
 		control.setLocation(x, y);
@@ -155,7 +155,7 @@ public abstract class OneCtrl {
 		return control;
 	}
 
-	protected void remove(JComponent owner, JComponent self) {
+	protected final void remove(JComponent owner, JComponent self) {
 		if (self != null) {
 			controlCounter--;
 			if (owner != null) { // ownerがnullの場合は、非表示（デバッグモード）
@@ -168,17 +168,17 @@ public abstract class OneCtrl {
 	// ***********************************************************************
 	// イベントリスナー関連
 	// ***********************************************************************
-	public void setListener(ICtrlEventListener listener) {
+	public final void setListener(ICtrlEventListener listener) {
 		listenerList.add(listener);
 	}
 
-	public void removeListener() {
+	public final void removeListener() {
 		while (listenerList.size() != 0) {
 			listenerList.remove(0);
 		}
 	}
 
-	protected void setOnChange() {
+	protected final void setOnChange() {
 		for (ICtrlEventListener listener : listenerList) {
 			listener.onChange(this);
 		}
@@ -190,6 +190,7 @@ public abstract class OneCtrl {
 	// CtrlDatで入力が入っているかどうかでボタン
 	protected abstract boolean abstractIsComplete();
 
+	//CtrlDatでOverrideされている
 	public boolean isComplete() {
 		if (panel != null) {
 			return abstractIsComplete();
@@ -200,7 +201,7 @@ public abstract class OneCtrl {
 	// CtrlDatでリストボックスに追加するため使用される
 	protected abstract String abstractToText();
 
-	public String toText() {
+	public final String toText() {
 		if (panel != null) {
 			return abstractToText();
 		}
@@ -210,7 +211,7 @@ public abstract class OneCtrl {
 	// CtrlDatでリストボックスから値を戻す時、使用される
 	protected abstract void abstractFromText(String s);
 
-	public void fromText(String s) {
+	public final void fromText(String s) {
 		if (panel != null) {
 			abstractFromText(s);
 		}
@@ -219,7 +220,7 @@ public abstract class OneCtrl {
 	// CtrlDatでDelDelボタンを押したときに使用される
 	protected abstract void abstractClear();
 
-	public void clear() {
+	public final void clear() {
 		if (panel != null) {
 			abstractClear();
 		}

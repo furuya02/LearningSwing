@@ -2,15 +2,15 @@ package bjd.option;
 
 import bjd.Kernel;
 
-public class ListOption {
+public final class ListOption {
 
-	private Option option;
+	private OptionBasic option;
 	private Kernel kernel;
 
 	public ListOption(Kernel kernel) {
 		this.kernel = kernel;
 		
-		option = new Option(kernel);
+		option = new OptionBasic(kernel);
 		
 	}
 	

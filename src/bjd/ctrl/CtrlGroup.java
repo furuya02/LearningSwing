@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import bjd.option.ListVal;
 
-public class CtrlGroup extends OneCtrl {
+public final class CtrlGroup extends OneCtrl {
 
 	private JPanel border = null;
 	private ListVal listVal;

@@ -7,7 +7,7 @@ import javax.swing.event.DocumentListener;
 
 import bjd.util.Crypt;
 
-public class CtrlHidden extends OneCtrl implements DocumentListener {
+public final class CtrlHidden extends OneCtrl implements DocumentListener {
 
 	private int digits;
 	private JLabel label = null;
@@ -96,6 +96,7 @@ public class CtrlHidden extends OneCtrl implements DocumentListener {
 	//***********************************************************************
 	// CtrlDat関連
 	//***********************************************************************
+	@SuppressWarnings("deprecation")
 	@Override
 	protected boolean abstractIsComplete() {
 		if (passwordField.getText().equals("")) {
@@ -104,6 +105,7 @@ public class CtrlHidden extends OneCtrl implements DocumentListener {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected String abstractToText() {
 		return Crypt.encrypt(passwordField.getText());

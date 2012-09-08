@@ -15,10 +15,10 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 @RunWith(Enclosed.class)
-public class Base64Test {
+public final class Base64Test {
 
-	@RunWith(Theories.class)
-	public static class A001 {
+	@RunWith(Theories.class) 
+	public static final class A001 {
 
 		@BeforeClass
 		public static void before() {

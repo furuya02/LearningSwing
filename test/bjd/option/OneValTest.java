@@ -44,7 +44,7 @@ import bjd.util.TestUtil;
 public class OneValTest {
 
 	@RunWith(Theories.class)
-	public static class A001 {
+	public static final class A001 {
 
 		@BeforeClass
 		public static void before() {
@@ -96,7 +96,7 @@ public class OneValTest {
 	}
 
 	@RunWith(Theories.class)
-	public static class A002 {
+	public static final class A002 {
 
 		@BeforeClass
 		public static void before() {
@@ -144,7 +144,7 @@ public class OneValTest {
 	}
 
 	@RunWith(Theories.class)
-	public static class A003 {
+	public static final class A003 {
 
 		@BeforeClass
 		public static void before() {
@@ -210,7 +210,7 @@ public class OneValTest {
 	}
 
 	@RunWith(Theories.class)
-	public static class A004 {
+	public static final class A004 {
 
 		@BeforeClass
 		public static void before() {
@@ -255,7 +255,7 @@ public class OneValTest {
 	}
 	
 	@RunWith(Theories.class)
-	public static class A005 {
+	public static final class A005 {
 
 	    @BeforeClass
 	    public static void before() {

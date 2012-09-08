@@ -8,7 +8,7 @@ import javax.swing.text.AbstractDocument;
 
 import bjd.net.Ip;
 
-public class CtrlAddress extends OneCtrl implements DocumentListener {
+public final class CtrlAddress extends OneCtrl implements DocumentListener {
 
 	private JLabel label = null;
 	private JTextField[] textFieldList = null;

@@ -1,15 +1,11 @@
 package bjd.ctrl;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.hamcrest.CoreMatchers.is;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import javax.mail.internet.NewsAddress;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -22,12 +18,11 @@ import bjd.util.TestUtil;
 public class CtrlDatTest {
 
 	@Test
-	public void a001() {
-		
+	public final void a001() {
+
 		TestUtil.dispHeader("a001 importDat()及びexportDat()");
 		TestUtil.dispPrompt(this);
-		
-		
+
 		Kernel kernel = new Kernel();
 
 		ListVal list = new ListVal();
@@ -42,8 +37,7 @@ public class CtrlDatTest {
 		in.add("#	0	c:\\work	user1	c3a5e1369325e2ca");
 		in.add(" 	1	c:\\work	user2	b867684066caf9dc");
 		in.add(" 	2	c:\\work	user3	4911d0d49c8911ed");
-//		ctrlDat.importDat(in);
-
+		//		ctrlDat.importDat(in);
 
 		try {
 			//importDat及びexportDatはprivateメンバ
@@ -51,8 +45,8 @@ public class CtrlDatTest {
 			Method importDat = CtrlDat.class.getDeclaredMethod("importDat", ArrayList.class);
 			exportDat.setAccessible(true);
 			importDat.setAccessible(true);
-			
-			importDat.invoke(ctrlDat,in);
+
+			importDat.invoke(ctrlDat, in);
 			ArrayList<String> out = (ArrayList<String>) exportDat.invoke(ctrlDat);
 
 			for (int i = 0; i < in.size(); i++) {
@@ -60,45 +54,11 @@ public class CtrlDatTest {
 				System.out.println(String.format("export> %s", out.get(i)));
 				assertThat(in.get(i), is(out.get(i)));
 			}
-		
-		
+
 		} catch (Exception e) {
 			System.out.println(e);
 			fail(e.toString());
 		}
 
 	}
-
-//	@Test
-//	public void a001() {
-//		
-//		TestUtil.dispHeader("a001 importDat()及びexportDat()");
-//		TestUtil.dispPrompt(this);
-//		
-//		
-//		Kernel kernel = new Kernel();
-//
-//		ListVal list = new ListVal();
-//		list.add(new OneVal("combo", 0, Crlf.NEXTLINE, new CtrlComboBox("コンボボックス", new String[] { "DOWN", "PU", "FULL" }, 200)));
-//		list.add(new OneVal("fileName2", "c:\\work", Crlf.NEXTLINE, new CtrlFolder("フォルダ", 30, kernel)));
-//		list.add(new OneVal("text", "user1", Crlf.NEXTLINE, new CtrlTextBox("テキスト入力", 30)));
-//		list.add(new OneVal("hidden", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
-//		CtrlDat ctrlDat = new CtrlDat("help", list, 100, kernel);
-//		ctrlDat.create(null, 0, 0, null);
-//
-//		ArrayList<String> importDat = new ArrayList<>();
-//		importDat.add("#	0	c:\\work	user1	c3a5e1369325e2ca");
-//		importDat.add(" 	1	c:\\work	user2	b867684066caf9dc");
-//		importDat.add(" 	2	c:\\work	user3	4911d0d49c8911ed");
-//		ctrlDat.importDat(importDat);
-//
-//		ArrayList<String> exportDat = ctrlDat.exportDat();
-//		for (int i = 0; i < importDat.size(); i++) {
-//			System.out.println(String.format("import> %s", importDat.get(i)));
-//			System.out.println(String.format("export> %s", exportDat.get(i)));
-//			assertThat(importDat.get(i), is(exportDat.get(i)));
-//		}
-//
-//	}
-
 }

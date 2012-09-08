@@ -4,11 +4,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import bjd.ctrl.OneCtrl;
 import bjd.option.OneOption;
 
 @SuppressWarnings("serial")
-public class OptionDlg extends Dlg {
+public final class OptionDlg extends Dlg {
 
 	private OneOption oneOption;
 
@@ -39,13 +38,14 @@ public class OptionDlg extends Dlg {
 		 * buttonCancel.Text = (kernel.Jp) ? "キャンセル" : "Cancel";
 		 */
 	}
-	
+
 	//オプションダイアログのサイズ（定数）
-	public static int width(){
+	public static int width() {
 		return 600;
 	}
+
 	//オプションダイアログのサイズ（定数）
-	public static int height(){
+	public static int height() {
 		return 500;
 	}
 

@@ -5,7 +5,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class CtrlTextBox extends OneCtrl implements DocumentListener {
+public final class CtrlTextBox extends OneCtrl implements DocumentListener {
 
 	private int digits;
 	private JLabel label = null;
@@ -74,6 +74,7 @@ public class CtrlTextBox extends OneCtrl implements DocumentListener {
 	protected void abstractSetEnable(boolean enabled) {
 		if (textField != null) {
 			textField.setEditable(enabled);
+			label.setEnabled(enabled);
 		}
 	}
 

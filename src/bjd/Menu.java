@@ -9,7 +9,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-public class Menu {
+public final class Menu {
 	
 	private JMenuBar menuBar = null;
 	private Font font;

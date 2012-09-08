@@ -17,7 +17,7 @@ import bjd.util.TestUtil;
 @RunWith(Enclosed.class)
 public class DatTest {
 	@RunWith(Theories.class)
-	public static class A001 {
+	public static final class A001 {
 
 		@BeforeClass
 		public static void before() {
@@ -59,7 +59,7 @@ public class DatTest {
 	}
 	
 	@RunWith(Theories.class)
-	public static class A002 {
+	public static final class A002 {
 
 		@BeforeClass
 		public static void before() {

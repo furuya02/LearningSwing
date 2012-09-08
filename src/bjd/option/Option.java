@@ -14,11 +14,10 @@ import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 
 public final class Option extends OneOption {
-	private Kernel kernel;
 
 	public Option(Kernel kernel) {
 
-		this.kernel = kernel;
+		super(kernel);
 
 		//		ArrayList<Ip> listV4 = new ArrayList<>();
 		//		listV4.add(new Ip("INADDR_ANY"));
@@ -72,20 +71,14 @@ public final class Option extends OneOption {
 	}
 
 	@Override
-	public void onChange(OneCtrl oneCtrl) {
+	protected void abstractOnChange(OneCtrl oneCtrl) {
+		boolean b = (boolean) getCtrl("useServer").read();
+		getCtrl("tab").setEnable(b);
 
-		try {
-			boolean b = (boolean) getCtrl("useServer").read();
-			getCtrl("tab").setEnable(b);
+		b = (boolean) getCtrl("useDat").read();
+		getCtrl("dat").setEnable(b);
 
-			b = (boolean) getCtrl("useDat").read();
-			getCtrl("dat").setEnable(b);
-
-			b = (boolean) getCtrl("useTextBox1").read();
-			getCtrl("textBox1").setEnable(b);
-		
-		} catch (NullPointerException e) {
-			//コントロールの破棄後に、このイベントが発生した場合（この例外は無視する）
-		}
+		b = (boolean) getCtrl("useTextBox1").read();
+		getCtrl("textBox1").setEnable(b);
 	}
 }

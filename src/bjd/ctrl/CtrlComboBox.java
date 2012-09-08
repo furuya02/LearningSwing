@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-public class CtrlComboBox extends OneCtrl implements ActionListener {
+public final class CtrlComboBox extends OneCtrl implements ActionListener {
 
 	private String[] list = null;
 	private int width;

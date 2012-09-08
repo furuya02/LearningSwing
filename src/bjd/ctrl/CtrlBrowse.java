@@ -31,7 +31,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	}
 
 	@Override
-	protected void abstractCreate(Object value) {
+	protected final void abstractCreate(Object value) {
 		int left = margin;
 		int top = margin;
 
@@ -92,7 +92,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	}
 
 	@Override
-	protected void abstractDelete() {
+	protected final void abstractDelete() {
 		remove(panel, label);
 		remove(panel, textField);
 		remove(panel, button);
@@ -105,19 +105,19 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	// コントロールの値の読み書き
 	//***********************************************************************
 	@Override
-	protected Object abstractRead() {
+	protected final Object abstractRead() {
 		return textField.getText();
 	}
 
 	@Override
-	protected void abstractWrite(Object value) {
+	protected final void abstractWrite(Object value) {
 		textField.setText((String) value);
 	}
 
 	//***********************************************************************
 	// コントロールへの有効・無効
 	//***********************************************************************
-	protected void abstractSetEnable(boolean enabled) {
+	protected final void abstractSetEnable(boolean enabled) {
 		if (textField != null) {
 			textField.setEditable(enabled);
 		}
@@ -130,16 +130,16 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	// OnChange関連
 	//***********************************************************************
 	@Override
-	public void changedUpdate(DocumentEvent e) {
+	public final void changedUpdate(DocumentEvent e) {
 	}
 
 	@Override
-	public void insertUpdate(DocumentEvent e) {
+	public final void insertUpdate(DocumentEvent e) {
 		setOnChange();
 	}
 
 	@Override
-	public void removeUpdate(DocumentEvent e) {
+	public final void removeUpdate(DocumentEvent e) {
 		setOnChange();
 	}
 
@@ -147,7 +147,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	// CtrlDat関連
 	//***********************************************************************
 	@Override
-	protected boolean abstractIsComplete() {
+	protected final boolean abstractIsComplete() {
 		if (textField.getText().equals("")) {
 			return false;
 		}
@@ -155,17 +155,17 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	}
 
 	@Override
-	protected String abstractToText() {
+	protected final String abstractToText() {
 		return textField.getText();
 	}
 
 	@Override
-	protected void abstractFromText(String s) {
+	protected final void abstractFromText(String s) {
 		textField.setText(s);
 	}
 
 	@Override
-	protected void abstractClear() {
+	protected final void abstractClear() {
 		textField.setText("");
 	}
 

@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 
-public class CtrlCheckBox extends OneCtrl implements ActionListener {
+public final class CtrlCheckBox extends OneCtrl implements ActionListener {
 
 	private JCheckBox checkBox = null;
 

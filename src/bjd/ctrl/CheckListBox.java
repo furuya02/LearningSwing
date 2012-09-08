@@ -24,7 +24,7 @@ import javax.swing.event.ListSelectionListener;
  * JListのマウスボタン及び選択等のイベントをクラス内で処理して、外部にはActionEventを発生させる
  */
 
-public class CheckListBox extends JScrollPane implements MouseListener, ListSelectionListener {
+public final class CheckListBox extends JScrollPane implements MouseListener, ListSelectionListener {
 	private JList<JCheckBox> list;
 	private DefaultListModel<JCheckBox> defaultListModel;
 

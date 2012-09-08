@@ -6,7 +6,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class CtrlMemo extends OneCtrl implements DocumentListener {
+public final class CtrlMemo extends OneCtrl implements DocumentListener {
 	private int height;
 	private int width;
 	private JLabel label;

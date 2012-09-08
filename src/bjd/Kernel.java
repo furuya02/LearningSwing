@@ -2,7 +2,7 @@ package bjd;
 
 import bjd.option.ListOption;
 
-public class Kernel {
+public final class Kernel {
 	private RunMode runMode = RunMode.Normal;
 	private boolean jp = true;
 

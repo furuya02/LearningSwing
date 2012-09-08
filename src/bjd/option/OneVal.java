@@ -21,7 +21,7 @@ import bjd.util.IDispose;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 
-public class OneVal implements IDispose {
+public final class OneVal implements IDispose {
 
 	private String name;
 	private Object value;
@@ -156,7 +156,6 @@ public class OneVal implements IDispose {
 	 * 
 	 * @param isSecret
 	 *            デバッグ用の設定ファイル出力用（パスワード等を***で表現する）
-	 * @throws Exception
 	 */
 	public String toReg(boolean isSecret) {
 		switch (oneCtrl.getCtrlType()) {

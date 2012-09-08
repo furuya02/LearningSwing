@@ -3,7 +3,7 @@ package bjd.option;
 import bjd.ctrl.CtrlType;
 import bjd.util.ListBase;
 
-public class Dat extends ListBase<OneDat> {
+public final class Dat extends ListBase<OneDat> {
 	
 	//private ArrayList<CtrlType> ctrlTypeList;
 	private boolean[] isSecretList; //シークレット化が必要なカラム

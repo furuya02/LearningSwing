@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import say.swing.JFontChooser;
 import bjd.Kernel;
 
-public class CtrlFont extends OneCtrl implements ActionListener {
+public final class CtrlFont extends OneCtrl implements ActionListener {
 
 	private Kernel kernel;
 	private JLabel label;

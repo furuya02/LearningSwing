@@ -17,7 +17,7 @@ import bjd.util.TestUtil;
 public class OneDatTest {
 
 	@RunWith(Theories.class)
-	public static class A001 {
+	public static final class A001 {
 
 		@BeforeClass
 		public static void before() {
@@ -67,7 +67,8 @@ public class OneDatTest {
 		}
 	}
 	
-	@RunWith(Theories.class) public static class A002 {
+	@RunWith(Theories.class) 
+	public static final class A002 {
 		@BeforeClass public static void before() {
 			TestUtil.dispHeader("fromRegで初期化してtoReg()で出力する"); 
 		}
@@ -107,7 +108,8 @@ public class OneDatTest {
 		}
 	}
 
-	@RunWith(Theories.class) public static class A003 {
+	@RunWith(Theories.class)
+	public static final class A003 {
 		@BeforeClass public static void before() {
 			TestUtil.dispHeader("// fromRegに無効な入力があった時、falseが帰る"); 
 		}

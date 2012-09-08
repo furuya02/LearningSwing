@@ -7,7 +7,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class CtrlTabPage extends OneCtrl implements ChangeListener {
+public final class CtrlTabPage extends OneCtrl implements ChangeListener {
 	private ArrayList<OnePage> pageList;
 	private JTabbedPane tabbedPane = null;
 	private ArrayList<JPanel> pagePanelList = null;
@@ -45,8 +45,6 @@ public class CtrlTabPage extends OneCtrl implements ChangeListener {
 
 		pagePanelList = new ArrayList<>();
 
-		//DEBUG
-		int debug = 100;
 		for (OnePage onePage : pageList) {
 			JPanel p = new JPanel();
 			p.setLayout(null); // 絶対位置表示

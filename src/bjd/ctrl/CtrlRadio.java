@@ -12,7 +12,7 @@ import javax.swing.JRadioButton;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 
-public class CtrlRadio extends OneCtrl implements ActionListener {
+public final class CtrlRadio extends OneCtrl implements ActionListener {
 
 	private int width;
 	private int colMax;

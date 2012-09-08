@@ -3,7 +3,7 @@ package bjd.ctrl;
 import bjd.Kernel;
 
 
-public class CtrlFile extends CtrlBrowse {
+public final class CtrlFile extends CtrlBrowse {
 	
 	public CtrlFile(String help , int digits, Kernel kernel) {
 		super(help, digits, kernel);

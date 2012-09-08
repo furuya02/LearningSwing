@@ -13,7 +13,7 @@ import bjd.net.BindAddr;
 import bjd.net.BindStyle;
 import bjd.net.Ip;
 
-public class CtrlBindAddr extends OneCtrl implements ActionListener {
+public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 
 	private JLabel label = null;
 	private JRadioButton[] radioButtonList = new JRadioButton[3];

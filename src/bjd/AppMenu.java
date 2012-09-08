@@ -13,7 +13,7 @@ interface SelectMenuListener extends EventListener {
 	void selectMenu(String name);
 }
 
-public class AppMenu implements ActionListener {
+public final class AppMenu implements ActionListener {
 	private boolean jp = true;
 	private Menu menu;
 	//イベント

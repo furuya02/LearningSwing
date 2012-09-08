@@ -1,13 +1,14 @@
 package bjd.option;
 
-import java.util.ArrayList;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
+
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlInt;
 import bjd.ctrl.CtrlTabPage;
@@ -18,7 +19,7 @@ import bjd.util.TestUtil;
 public class ListValTest {
 
 	@Test
-	public void a001() {
+	public final void a001() {
 		TestUtil.dispHeader("a001 getList（)で取得した値の確認（パターン１）");
 		TestUtil.dispPrompt(this);
 
@@ -33,7 +34,7 @@ public class ListValTest {
 	}
 
 	@Test
-	public void a002() {
+	public final void a002() {
 		TestUtil.dispHeader("a002 getList（)で取得した値の確認（パターン２）");
 		TestUtil.dispPrompt(this);
 
@@ -48,7 +49,7 @@ public class ListValTest {
 	}
 
 	@Test
-	public void a003() {
+	public final void a003() {
 		TestUtil.dispHeader("a003 search（)で検索に成功するとオブジェクトが返る");
 		TestUtil.dispPrompt(this);
 		
@@ -59,7 +60,7 @@ public class ListValTest {
 	}
 
 	@Test
-	public void a004() {
+	public final void a004() {
 		TestUtil.dispHeader("a004 search（)で検索に失敗するとnullが返る");
 		TestUtil.dispPrompt(this);
 
