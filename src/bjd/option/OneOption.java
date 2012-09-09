@@ -8,6 +8,14 @@ import bjd.Kernel;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.ICtrlEventListener;
 import bjd.ctrl.OneCtrl;
+import bjd.ctrl.CtrlComboBox;
+import bjd.ctrl.CtrlInt;
+import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlGroup;
+import bjd.ctrl.CtrlBindAddr;
+import bjd.net.BindAddr;
+import bjd.net.ProtocolKind;
+
 import bjd.util.IniDb;
 
 public abstract class OneOption implements ICtrlEventListener {
@@ -64,21 +72,19 @@ public abstract class OneOption implements ICtrlEventListener {
 		listVal.add(oneVal);
 	}
 	
-	//OnePageの生成メソッドに変更する
-    private void appendServerOption(ListVal listVal, ProtocolKind protocolKind, int port, int timeout, int multiple) {
+	//OneValとしてサーバ基本設定を作成する
+    protected OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
     	
     	ListVal list = new ListVal();
-        list.add(new OneVal("protocolKind", protocolKind, Crlf.CONTONIE, new CtrlComboBox((Kernel.Jp) ? "プロトコル" : "Protocol", new List<string>{ "TCP", "UDP" })));
-
-        list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt((Kernel.Jp) ? "クライアントから見たポート" : "Port (from client side)", 5)));
-        list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.Nextline, new CtrlBindAddr((Kernel.Jp) ? "待ち受けるネットワーク" : "Bind Address", Kernel.LocalAddress.V4, Kernel.LocalAddress.V6)));
-        list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((kernel.getJp() ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address")));
+        list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(kernel.getJp() ? "プロトコル" : "Protocol", new String[]{ "TCP", "UDP" },80)));
+        list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "クライアントから見たポート" : "Port (from client side)", 5)));
+        list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.NEXTLINE, new CtrlBindAddr(kernel.getJp() ? "待ち受けるネットワーク" : "Bind Address", kernel.getLocalAddress().getV4(), kernel.getLocalAddress().getV6())));
+        list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((kernel.getJp() ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address"))));
         list.add(new OneVal("useDetailsLog", true, Crlf.CONTONIE, new CtrlCheckBox(kernel.getJp() ? "詳細ログを出力する" : "Use Details Log")));
         list.add(new OneVal("multiple", multiple, Crlf.CONTONIE, new CtrlInt(kernel.getJp() ? "同時接続数" : "A repetition thread", 5)));
         list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "タイムアウト(秒)" : "Timeout", 6)));
-        listVal.add(new OneVal("GroupServer", list, Crlf.NEXTLINE, new CtrlGroup(kernel.getJp() ? "サーバ基本設定" : "Server Basic Option")));
+        return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(kernel.getJp() ? "サーバ基本設定" : "Server Basic Option",list));
     }
-
 	
     //値の設定
 	public final void setValue(String name, Object value) {

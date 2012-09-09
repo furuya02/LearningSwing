@@ -3,6 +3,7 @@ package bjd.option;
 import java.util.ArrayList;
 
 import bjd.Kernel;
+import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlHidden;
@@ -10,6 +11,7 @@ import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
+import bjd.net.ProtocolKind;
 
 public class OptionBasic extends OneOption {
 
@@ -26,6 +28,7 @@ public class OptionBasic extends OneOption {
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
+		pageList.add(page2("Test", kernel.getJp() ? "テスト" : "Test"));
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage",
 				pageList)));
 
@@ -42,6 +45,12 @@ public class OptionBasic extends OneOption {
 		onePage.add(new OneVal("serverName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "サーバ名" : "Server Name", 20)));
 		onePage.add(new OneVal("editBrowse", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "フォルダ・ファイル選択を編集にする" : "can edit browse control")));
 		onePage.add(new OneVal("lang", 0, Crlf.NEXTLINE, new CtrlComboBox(kernel.getJp() ? "言語" : "Language", new String[] { "Japanese", "English" }, 80)));
+		return onePage;
+	}
+
+	private OnePage page2(String name, String title) {
+		OnePage onePage = new OnePage(name, title);
+		onePage.add(createServerOption(ProtocolKind.Tcp, 80, 30, 50)); //サーバ基本設定
 		return onePage;
 	}
 
