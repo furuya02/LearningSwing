@@ -22,7 +22,6 @@ public abstract class OneCtrl {
 	protected String help;
 	protected JPanel panel = null;
 	protected final int margin = 3;
-//	protected final int defaultHeight = 22;
 	protected final int defaultHeight = 20;
 
 	public OneCtrl(String help) {

@@ -28,36 +28,6 @@ public final class ListVal extends ListBase<OneVal> {
 		}
 		// 重複が無いので追加する
 		ar.add(oneVal);
-
-		//
-		// StringBuilder sb = new StringBuilder();
-		// for (OneVal o : list1) {
-		// sb.append(String.format(" %s", o.getName()));
-		// }
-		//
-		// // 追加オブジェクトが既に重複している場合
-		//
-		// // 既存オブジェクトの一覧
-		// ArrayList<OneVal> list2 = new ArrayList<>();
-		// for (OneVal o : ar) {
-		// list2 = o.getList(list2);
-		// }
-		// sb = new StringBuilder();
-		// for (OneVal o : list2) {
-		// sb.append(String.format(" %s", o.getName()));
-		// }
-		//
-		// for (OneVal o1 : list1) {
-		// for (OneVal o2 : list2) {
-		// if (o1.getName().equals(o2.getName())) {
-		// Msg.show(MsgKind.Error, String.format(
-		// "ListVal.add(%s) 名前が重複しているため追加できませんでした",
-		// o1.getName()));
-		// return;
-		// }
-		// }
-		// }
-
 	}
 
 	// 階層下のOneValを一覧する

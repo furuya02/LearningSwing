@@ -33,8 +33,10 @@ public final class CtrlFont extends OneCtrl implements ActionListener {
 		int top = margin;
 
 		// ラベルの作成(topの+3は、後のテキストボックスとの高さ調整)
-		label = (JLabel) create(panel, new JLabel(help), left, top + 3);
-		left += label.getWidth() + margin; // オフセット移動
+		if (help.length() != 0) {
+			label = (JLabel) create(panel, new JLabel(help), left, top + 3);
+			left += label.getWidth() + margin; // オフセット移動
+		}
 
 		// ボタンの配置(topの-2は、前のテキストボックスとの高さ調整)
 		String buttonText = kernel.getJp() ? "フォント" : "Font";

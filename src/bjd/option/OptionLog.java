@@ -43,7 +43,7 @@ public class OptionLog extends OneOption {
 		onePage.add(new OneVal("saveDays", 31, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "ログ保存日数(0を指定した場合、削除しない)" : "Save days(When You appointed 0, Don't eliminate)", 3)));
 		onePage.add(new OneVal("linesMax", 3000, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "表示する最大行数" : "The number of maximum line to display", 5)));
 		onePage.add(new OneVal("linesDelete", 1000, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "最大行数に達した際に削除する行数" : "The number of line to eliminate when I reached a maximum", 5)));
-		onePage.add(new OneVal("font", null, Crlf.NEXTLINE, new CtrlFont(kernel.getJp() ? "フォント" : "Font", kernel)));
+		onePage.add(new OneVal("font", null, Crlf.NEXTLINE, new CtrlFont("", kernel)));
 		return onePage;
 	}
 

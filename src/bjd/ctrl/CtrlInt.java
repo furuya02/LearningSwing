@@ -81,6 +81,7 @@ public final class CtrlInt extends OneCtrl implements DocumentListener {
 	protected void abstractSetEnable(boolean enabled) {
 		if (textField != null) {
 			textField.setEditable(enabled);
+			label.setEnabled(enabled);
 		}
 	}
 	//***********************************************************************
