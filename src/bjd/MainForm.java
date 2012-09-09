@@ -94,7 +94,7 @@ public final class MainForm implements WindowListener {
         mainForm.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
     }
 
-    //終了確認
+    //終了処理
     public void exit() {
     	
     	//プログラムの終了確認

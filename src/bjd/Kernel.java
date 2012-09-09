@@ -1,5 +1,8 @@
 package bjd;
 
+import java.io.File;
+
+import bjd.log.Logger;
 import bjd.net.LocalAddress;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
@@ -10,7 +13,7 @@ public final class Kernel implements IDispose {
 	private boolean jp = true;
 	private LocalAddress localAddress;
 	private ListOption listOption;
-
+    
 	public LocalAddress getLocalAddress() {
 		return localAddress;
 	}
@@ -72,5 +75,22 @@ public final class Kernel implements IDispose {
 //
 //        WindowSize.Dispose();//DisposeしないとReg.Dispose(保存)されない
 	}
+
+	public Logger createLogger(String string, boolean b, Object object) {
+		//TODO kernel.createLogger() 未実装
+		return null;
+	}
+
+	private String progDir() {
+		//TODO kernel.progDir() とりあえずカレントディレクトリを返しておく
+		//return Path.GetDirectoryName(Define.ExecutablePath());
+        return new File(".").getAbsoluteFile().getParent();
+	}
+
+	public String env(String str) {
+		//TODO Kernel.env() ここの正規表現は大丈夫か
+		return str.replaceAll("%ExecutablePath%", progDir());
+	}
+
 
 }
