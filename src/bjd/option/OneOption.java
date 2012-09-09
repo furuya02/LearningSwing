@@ -54,11 +54,11 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	}
 	
     //レジストリからの読み込み
-    protected void read() {
-        iniDb.read(nameTag,listVal);
+    protected final void read() {
+        iniDb.read(nameTag, listVal);
     }
 
-	protected OnePage pageAcl() {
+	protected final OnePage pageAcl() {
 		OnePage onePage = new OnePage("ACL", "ACL");
     	onePage.add(new OneVal("enableAcl", 0, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定したアドレスからのアクセスのみを" : "Access of ths user who appoint it", new String[] { kernel.getJp() ? "許可する" : "Allow", kernel.getJp() ? "禁止する" : "Deny" }, 550, 2)));
 
