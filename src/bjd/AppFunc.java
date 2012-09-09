@@ -1,15 +1,19 @@
 package bjd;
 
+import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 
 import bjd.option.OneOption;
 
 public final class AppFunc implements SelectMenuListener {
+	private MainForm mainForm;
 	private AppMenu appMenu;
 	private JFrame mainFrame;
 	private Kernel kernel;
 
-	public AppFunc(AppMenu appMenu, JFrame mainFrame, Kernel kernel) {
+	public AppFunc(MainForm mainForm,AppMenu appMenu, JFrame mainFrame, Kernel kernel) {
+		this.mainForm = mainForm;
 		this.mainFrame = mainFrame;
 		this.appMenu = appMenu;
 		this.kernel = kernel;
@@ -25,7 +29,7 @@ public final class AppFunc implements SelectMenuListener {
 	public void selectMenu(String name) {
 		switch (name) {
 			case "Exit":
-				System.exit(0);
+				mainForm.exit();
 				break;
 			case "Basic Option":
 				OptionDlg dlg = new OptionDlg(mainFrame, kernel.getListOption().get("Basic"));

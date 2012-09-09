@@ -2,8 +2,10 @@ package bjd;
 
 import bjd.net.LocalAddress;
 import bjd.option.ListOption;
+import bjd.option.OneOption;
+import bjd.util.IDispose;
 
-public final class Kernel {
+public final class Kernel implements IDispose {
 	private RunMode runMode = RunMode.Normal;
 	private boolean jp = true;
 	private LocalAddress localAddress;
@@ -30,6 +32,45 @@ public final class Kernel {
 
 		listOption = new ListOption(this);
 		listOption.initialize(); // dllからのリスト初期化
+	}
+
+	//オプションの値取得
+	public Object getOptionVal(String nameTag, String name) {
+		OneOption oneOption = listOption.get(nameTag);
+		if (oneOption != null) {
+			return oneOption.getValue(name);
+		}
+		throw new UnsupportedOperationException(String.format("Kernel.java getOptionVal() 設計に問題があります %s.%s",nameTag,name));
+	}
+
+	@Override
+	public void dispose() {
+//        if (RunMode != RunMode.Service && RunMode != RunMode.Remote) {
+//            //**********************************************
+//            // 一旦ファイルを削除して現在有効なものだけを書き戻す
+//            //**********************************************
+//            var iniDb = new IniDb(ProgDir(),"Option");
+//            iniDb.DeleteIni();
+			  listOption.save();
+//            //Ver5.5.1 設定ファイルの保存に成功した時は、bakファイルを削除する
+//            iniDb.DeleteBak();
+//
+            //**********************************************
+            // 破棄
+            //**********************************************
+//            ListServer.Dispose();//各サーバは停止される
+			  listOption.dispose();
+//			  ListTool.Dispose();
+//            MailBox = null;
+//        }
+//        if (RemoteClient != null)
+//            RemoteClient.Dispose();
+//
+//        View.Dispose();
+//        if (TraceDlg != null)
+//            TraceDlg.Dispose();
+//
+//        WindowSize.Dispose();//DisposeしないとReg.Dispose(保存)されない
 	}
 
 }

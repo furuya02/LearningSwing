@@ -1,0 +1,11 @@
+LIST=LognomalFileName=2
+LIST=LogsecureFileName=2
+FOLDER=LogsaveDirectory=
+BOOL=LoguseLog=true
+BOOL=LoguseLogClear=false
+INT=LogsaveDays=31
+INT=LoglinesMax=3000
+INT=LoglinesDelete=1000
+RADIO=LogEnableLimitString=1
+STRING=LogCharacter=
+BOOL=LogUseLimitString=false
