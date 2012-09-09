@@ -82,7 +82,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		left += 8;
 		top += 12;
 		listVal.createCtrl(border, left, top);
-		//listVal.setListener(this); //コントロールの変化を取得
+		listVal.setListener(this); //コントロール変化のイベントをこのクラスで受信してボタンの初期化に利用する
 
 		//オフセット移動
 		Dimension dimension = listVal.getSize();
@@ -273,7 +273,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	//ボタン状態の初期化
 	private void buttonsInitialise() {
 		//コントロールの入力が完了しているか
-		boolean isComplete = isComplete();
+		boolean isComplete = listVal.isComplete();
 		//チェックリストボックスのデータ件数
 		int count = checkListBox.getItemCount();
 		//チェックリストボックスの選択行
@@ -343,10 +343,10 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	//***********************************************************************
 	//コントロールの入力が完了しているか
 	//***********************************************************************
-	@Override
-	public boolean isComplete() {
-		return listVal.isComplete();
-	}
+	//@Override
+	//public boolean isComplete() {
+	//	return listVal.isComplete();
+	//}
 
 	//***********************************************************************
 	// コントロールの値の読み書き
@@ -407,7 +407,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	//***********************************************************************
 	@Override
 	protected boolean abstractIsComplete() {
-		throw new UnsupportedOperationException("CtrlDat.java abstractIsComlete()は使用禁止");
+		return true;
 	}
 
 	@Override

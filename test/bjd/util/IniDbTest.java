@@ -39,6 +39,7 @@ import bjd.option.OneVal;
 @RunWith(Enclosed.class)
 public class IniDbTest {
 
+	
 	@RunWith(Theories.class)
 	public static final class A001 {
 		@BeforeClass
@@ -121,7 +122,6 @@ public class IniDbTest {
 		};
 
 		static class Fixture {
-			private OneVal oneVal;
 			private CtrlType ctrlType;
 			private String value;
 			private String expected;
@@ -165,7 +165,7 @@ public class IniDbTest {
 			iniDb.deleteBak();
 		}
 	}
-
+	
 	/**
 	 * 共通的に利用されるメソッド
 	 */

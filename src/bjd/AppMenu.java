@@ -55,7 +55,13 @@ public final class AppMenu implements ActionListener {
 		//「ツール」
 		JMenu t = add("ツール", "Tool", 'T');
 		// オプション
-		add(t, "オプション", "Option", 'O', null);
+		//add(t, "オプション", "Option", 'O', null);
+
+		//「ツール」
+		JMenu o = add("オップション", "Option", 'O');
+		// オプション
+		add(o, "基本オプション", "Basic Option", 'O', null);
+		add(o, "ログ表示", "Log", 'L', null);
 
 	}
 

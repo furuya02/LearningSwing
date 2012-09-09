@@ -2,6 +2,8 @@ package bjd;
 
 import javax.swing.JFrame;
 
+import bjd.option.OneOption;
+
 public final class AppFunc implements SelectMenuListener {
 	private AppMenu appMenu;
 	private JFrame mainFrame;
@@ -25,9 +27,15 @@ public final class AppFunc implements SelectMenuListener {
 			case "Exit":
 				System.exit(0);
 				break;
-			case "Option":
+			case "Basic Option":
+				OptionDlg dlg = new OptionDlg(mainFrame, kernel.getListOption().get("Basic"));
+				if (dlg.showDialog()) {
 
-				OptionDlg dlg = new OptionDlg(mainFrame, kernel.getListOption().get("XXX"));
+				}
+
+				break;
+			case "Log":
+				dlg = new OptionDlg(mainFrame, kernel.getListOption().get("Log"));
 				if (dlg.showDialog()) {
 
 				}

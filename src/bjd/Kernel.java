@@ -29,6 +29,7 @@ public final class Kernel {
 		localAddress = new LocalAddress();
 
 		listOption = new ListOption(this);
+		listOption.initialize(); // dllからのリスト初期化
 	}
 
 }

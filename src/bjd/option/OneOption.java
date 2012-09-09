@@ -10,15 +10,15 @@ import bjd.ctrl.ICtrlEventListener;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlInt;
-import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlGroup;
 import bjd.ctrl.CtrlBindAddr;
 import bjd.net.BindAddr;
 import bjd.net.ProtocolKind;
 
+import bjd.util.IDispose;
 import bjd.util.IniDb;
 
-public abstract class OneOption implements ICtrlEventListener {
+public abstract class OneOption implements ICtrlEventListener, IDispose {
 
 	private ListVal listVal = new ListVal();
 
@@ -27,6 +27,10 @@ public abstract class OneOption implements ICtrlEventListener {
 	private String nameTag;
 	private boolean useAcl;
 	private IniDb iniDb;
+
+	public final String getNameTag() {
+		return nameTag;
+	}
 	
 	public final boolean getUseServer() {
 		OneVal oneVal = listVal.search("useServer");
@@ -73,18 +77,17 @@ public abstract class OneOption implements ICtrlEventListener {
 	}
 	
 	//OneValとしてサーバ基本設定を作成する
-    protected OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
-    	
-    	ListVal list = new ListVal();
-        list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(kernel.getJp() ? "プロトコル" : "Protocol", new String[]{ "TCP", "UDP" },80)));
-        list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "クライアントから見たポート" : "Port (from client side)", 5)));
-        list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.NEXTLINE, new CtrlBindAddr(kernel.getJp() ? "待ち受けるネットワーク" : "Bind Address", kernel.getLocalAddress().getV4(), kernel.getLocalAddress().getV6())));
-        list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((kernel.getJp() ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address"))));
-        list.add(new OneVal("useDetailsLog", true, Crlf.CONTONIE, new CtrlCheckBox(kernel.getJp() ? "詳細ログを出力する" : "Use Details Log")));
-        list.add(new OneVal("multiple", multiple, Crlf.CONTONIE, new CtrlInt(kernel.getJp() ? "同時接続数" : "A repetition thread", 5)));
-        list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "タイムアウト(秒)" : "Timeout", 6)));
-        return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(kernel.getJp() ? "サーバ基本設定" : "Server Basic Option",list));
-    }
+	protected final OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
+		ListVal list = new ListVal();
+		list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(kernel.getJp() ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
+		list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "クライアントから見たポート" : "Port (from client side)", 5)));
+		list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.NEXTLINE, new CtrlBindAddr(kernel.getJp() ? "待ち受けるネットワーク" : "Bind Address", kernel.getLocalAddress().getV4(), kernel.getLocalAddress().getV6())));
+		list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((kernel.getJp() ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address"))));
+		list.add(new OneVal("useDetailsLog", true, Crlf.CONTONIE, new CtrlCheckBox(kernel.getJp() ? "詳細ログを出力する" : "Use Details Log")));
+		list.add(new OneVal("multiple", multiple, Crlf.CONTONIE, new CtrlInt(kernel.getJp() ? "同時接続数" : "A repetition thread", 5)));
+		list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "タイムアウト(秒)" : "Timeout", 6)));
+		return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(kernel.getJp() ? "サーバ基本設定" : "Server Basic Option", list));
+	}
 	
     //値の設定
 	public final void setValue(String name, Object value) {
@@ -128,7 +131,7 @@ public abstract class OneOption implements ICtrlEventListener {
 	public final void onChange(OneCtrl oneCtrl) {
 		try {
             OneCtrl o = getCtrl("protocolKind");
-            if (o != null){
+            if (o != null) {
             	o.setEnable(false); // プロトコル 変更不可
             }
 			abstractOnChange(oneCtrl);
@@ -137,9 +140,17 @@ public abstract class OneOption implements ICtrlEventListener {
 		}
 	}
 	
+	@Override
+	public void dispose() {
+	}	
+	
 	//レジストリへ保存
 	public final void save() {
 		iniDb.save(nameTag, listVal);
 	}
+	
+//	public void read2() {
+//         //opDb.Read(NameTag, allList);//レジストリから取得
+//     }	
 
 }

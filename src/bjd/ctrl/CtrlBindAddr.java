@@ -53,7 +53,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 			buttonGroup.add(radioButtonList[i]);
 		}
 		radioButtonList[0].setSelected(true);
-		top += defaultHeight; // オフセット移動
+		top += defaultHeight + 2; // オフセット移動
 
 		//ComBox配置
 		String[] labelStr = new String[] { "IPv4", "IPv6" };
@@ -75,7 +75,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 			comboBoxList[i].setSize(w, comboBoxList[i].getHeight());
 			comboBoxList[i].addActionListener(this);
 
-			top += defaultHeight;
+			top += defaultHeight + 2;
 		}
 		// オフセット移動
 		left += labelList[1].getWidth() + comboBoxList[1].getWidth();
