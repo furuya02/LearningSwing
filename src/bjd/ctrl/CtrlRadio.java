@@ -48,7 +48,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 
 		int left = margin;
 		int top = margin;
-		int height = defaultHeight * rowMax + 20;
+		int height = defaultHeight * rowMax + 25;
 
 		// ラジオボタンを囲むボーダライン（groupPanel）の生成
 		groupPanel = (JPanel) create(panel, new JPanel(new GridLayout(0, 1)), left, top);

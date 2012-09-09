@@ -6,12 +6,17 @@ import javax.swing.JPanel;
 
 import bjd.Kernel;
 import bjd.ctrl.CtrlCheckBox;
+import bjd.ctrl.CtrlDat;
+import bjd.ctrl.CtrlHidden;
+import bjd.ctrl.CtrlRadio;
+import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.ICtrlEventListener;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlInt;
 import bjd.ctrl.CtrlGroup;
 import bjd.ctrl.CtrlBindAddr;
+import bjd.ctrl.OnePage;
 import bjd.net.BindAddr;
 import bjd.net.ProtocolKind;
 
@@ -25,7 +30,6 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	protected Kernel kernel;
 	private String path; //実態が格納されているモジュール(DLL)のフルパス
 	private String nameTag;
-	private boolean useAcl;
 	private IniDb iniDb;
 
 	public final String getNameTag() {
@@ -40,15 +44,31 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		return false;
     }
 
-	public OneOption(Kernel kernel, String path, String nameTag, boolean useAcl) {
+	public OneOption(Kernel kernel, String path, String nameTag) {
 		this.kernel = kernel;
 		this.path = path;
 		this.nameTag = nameTag;
-		this.useAcl = useAcl;
 
 		String progDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
 		iniDb = new IniDb(progDir, "Option");
 	}
+	
+    //レジストリからの読み込み
+    protected void read() {
+        iniDb.read(nameTag,listVal);
+    }
+
+	protected OnePage pageAcl() {
+		OnePage onePage = new OnePage("ACL", "ACL");
+    	onePage.add(new OneVal("enableAcl", 0, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定したアドレスからのアクセスのみを" : "Access of ths user who appoint it", new String[] { kernel.getJp() ? "許可する" : "Allow", kernel.getJp() ? "禁止する" : "Deny" }, 550, 2)));
+
+    	ListVal list = new ListVal();
+        list.add(new OneVal("aclName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "名前（表示名）" : "Name(Display)", 20)));
+        list.add(new OneVal("aclAddress", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "アドレス" : "Address", 20)));
+        onePage.add(new OneVal("acl", null, Crlf.NEXTLINE, new CtrlDat(kernel.getJp() ? "利用者（アドレス）の指定" : "Access Control List", list, 320, kernel)));
+		return onePage;
+	}
+    
 
 	// ダイアログ作成時の処理
 	public final void createDlg(JPanel mainPanel) {

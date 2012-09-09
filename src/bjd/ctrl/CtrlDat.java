@@ -74,7 +74,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		// ボーダライン（groupPanel）の生成
 		border = (JPanel) create(panel, new JPanel(new GridLayout()), left, top);
 		border.setBorder(BorderFactory.createTitledBorder(help));
-		border.setSize(getDlgWidth() - 22, height); // サイズは、コンストラクタで指定されている
+		border.setSize(getDlgWidth() - 32, height); // サイズは、コンストラクタで指定されている
 
 		//Datに含まれるコントロールを配置
 
@@ -104,7 +104,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 
 		//チェックリストボックス配置
 		checkListBox = (CheckListBox) create(border, new CheckListBox(), left, top);
-		checkListBox.setSize(getDlgWidth() - 42, height - top - 15);
+		checkListBox.setSize(getDlgWidth() - 52, height - top - 15);
 		//		checkListBox.addListSelectionListener(this);
 		checkListBox.addActionListener(this);
 

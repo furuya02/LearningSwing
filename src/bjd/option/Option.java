@@ -16,7 +16,7 @@ import bjd.ctrl.OnePage;
 public final class Option extends OneOption {
 
 	public Option(Kernel kernel) {
-		super(kernel, "c:\\tmp2", "testOption", true);
+		super(kernel, "c:\\tmp2", "testOption");
 
 		// ArrayList<Ip> listV4 = new ArrayList<>();
 		// listV4.add(new Ip("INADDR_ANY"));

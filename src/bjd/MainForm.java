@@ -123,8 +123,7 @@ public final class MainForm implements WindowListener {
     
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		//TODO Debug Print
-		System.out.println(String.format("mainForm.windowActivated()"));
+		//System.out.println(String.format("mainForm.windowActivated()"));
 	}
 
 	@Override
@@ -134,7 +133,6 @@ public final class MainForm implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		//TODO Debug Print
 		//System.out.println(String.format("mainForm.windowClosing()"));
 		exit(); //終了
 	}

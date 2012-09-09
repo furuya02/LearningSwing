@@ -15,7 +15,7 @@ import bjd.net.ProtocolKind;
 public class OptionBasic extends OneOption {
 
 	public OptionBasic(Kernel kernel, String path, String nameTag) {
-		super(kernel, path, nameTag, false);
+		super(kernel, path, nameTag);
 
 		// 基本オプションの場合、この時点でkernelのJapanは、まだ読み込まれていないので、強制的に初期化する
 		// var iniDb = new IniDb(kernel.ProgDir(), "Option");
@@ -28,8 +28,10 @@ public class OptionBasic extends OneOption {
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
 		pageList.add(page2("Test", kernel.getJp() ? "テスト" : "Test"));
-		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage",
-				pageList)));
+		pageList.add(pageAcl());
+		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
+
+		read(); //　レジストリからの読み込み
 
 	}
 

@@ -233,7 +233,7 @@ public final class IniDb {
 				for (String s : l) {
 					LineObject o = readLine(s);
 					if (o != null) {
-						if (o.getNameTag().equals(nameTag)) {
+						if (!o.getNameTag().equals(nameTag)) { // nameTagが違う場合、listに追加
 							lines.add(s);
 						}
 					}

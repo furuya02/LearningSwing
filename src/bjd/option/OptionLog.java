@@ -19,12 +19,15 @@ import bjd.ctrl.OnePage;
 public class OptionLog extends OneOption {
 
 	public OptionLog(Kernel kernel, String path, String nameTag) {
-		super(kernel, path, nameTag, false);
+		super(kernel, path, nameTag);
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
 		pageList.add(page2("Limit", kernel.getJp() ? "表示制限" : "Limit Display"));
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
+		
+		read(); //　レジストリからの読み込み
+
 	}
 
 	private OnePage page1(String name, String title) {

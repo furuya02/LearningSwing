@@ -31,7 +31,8 @@ public final class ListOption extends ListBase<OneOption> {
     
     //Kernel.Dispose()で、有効なオプションだけを出力するために使用する
     public void save() {
-        for (OneOption o : ar) {
+        //TODO ■DEBUG　オプションが一部しか保存されない 
+    	for (OneOption o : ar) {
              o.save();
         }
     }
