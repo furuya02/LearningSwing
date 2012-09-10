@@ -16,7 +16,7 @@ public abstract class ListBase<T extends IDispose> implements Iterable<T>,
         index = 0;
     }
 
-    public final void dispose() {
+    public void dispose() {
         for (T o : ar) {
             o.dispose(); // 終了処理
         }

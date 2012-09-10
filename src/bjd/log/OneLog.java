@@ -9,6 +9,9 @@ public final class OneLog {
     private String messageNo;
     private String message;
     private String detailInfomation;
+    public String getLogKind() {
+        return logKind;
+    }
 
     public OneLog(String dateStr, String logKind, String nameTag, String threadId, String remoteAddr, String messageNo, String message, String detailInfomation) {
         this.dateStr = dateStr;
