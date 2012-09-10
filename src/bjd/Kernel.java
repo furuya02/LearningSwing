@@ -73,7 +73,6 @@ public final class Kernel implements IDispose {
 //        Ver = new Ver();//バージョン管理
 //        Menu = new Menu(this, menuStrip);
         listOption = new ListOption(this);//オプション管理
-        listOption.initialize(); // dllからのリスト初期化
 //        ListTool = new ListTool();//ツール管理
         listServer = new ListServer();//サーバ管理
 //
@@ -85,7 +84,7 @@ public final class Kernel implements IDispose {
 //        if (RunMode != RunMode.Remote) {
 //            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
             localAddress = new LocalAddress();
-//            InitList();//各管理クラスの初期化
+            initList();//各管理クラスの初期化
 //            Menu.Initialize();//メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        
@@ -161,6 +160,42 @@ public final class Kernel implements IDispose {
 		//TODO kernel.createLogger() 未実装
 		return null;
 	}
+
+    //各管理リストの初期化
+    void initList() {
+
+        //************************************************************
+        // 破棄
+        //************************************************************
+        listOption.dispose();
+//        ListTool.Dispose();
+        listServer.dispose();
+//        MailBox = null;
+
+        //************************************************************
+        // 初期化
+        //************************************************************
+        listOption.initialize(); // dllからのリスト初期化
+        
+//        //オプションの読み直し
+//        if(LogFile!=null)
+//            LogFile.Dispose();
+//        LogFile = new LogFile(this);
+//        LogView.InitFont();
+//
+//        foreach (var o in ListOption) {
+//            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                
+//            if (o.NameTag == "SmtpServer" || o.NameTag == "Pop3Server") {
+//                if (o.UseServer) {
+//                    MailBox = new MailBox(this, ListOption.Get("MailBox"));
+//                    break;
+//                }
+//            }
+//        }
+//        ListTool.Initialize(this);
+//        ListServer.Initialize(this, ListOption);
+
+    }
 
 	private String progDir() {
 		//TODO kernel.progDir() とりあえずカレントディレクトリを返しておく

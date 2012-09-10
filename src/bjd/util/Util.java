@@ -83,6 +83,24 @@ public final class Util {
 		return true;
 	}
 	
+	// ディレクトリを指定した場合、内部のファイルもすべて削除する
+	public static void fileDelete(File file) {
+		if (!file.exists()) {
+			return;
+		}
+
+		if (file.isFile()) {
+			file.delete();
+		}
+
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				fileDelete(f); //再帰処理
+			}
+			file.delete();
+		}
+	}
+	
 	public static void fileCopy(File src, File dest) {
 
 	    FileChannel rs = null;

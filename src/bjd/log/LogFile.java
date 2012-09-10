@@ -129,7 +129,7 @@ public class LogFile implements IDispose{
             }
         }
 
-        if (secureLog != null && oneLog.getLogKind() == (LogKind.Secure).toString()) {//セキュリティログ
+        if (secureLog != null && oneLog.getLogKind().equals((LogKind.Secure).toString())) { //セキュリティログ
             synchronized (this) {
                 secureLog.Set(oneLog.toString());
             }
@@ -151,10 +151,10 @@ public class LogFile implements IDispose{
         String fileName = "";
         switch (nomalFileName) {
             case 0://bjd.yyyy.mm.dd.log
-                fileName = String.format("%s\\bjd.%4.0d.%2.0d.%2.0d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
+                fileName = String.format("%s\\bjd.%04d.%02d.%02d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
                 break;
             case 1://bjd.yyyy.mm.log
-                fileName = String.format("%s\\bjd.%4.0d.%2.0d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1));
+                fileName = String.format("%s\\bjd.%04d.%02d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1));
                 break;
             case 2://BlackJumboDog.Log
                 fileName = String.format("%s\\BlackJumboDog.Log", saveDirectory);
@@ -163,10 +163,10 @@ public class LogFile implements IDispose{
         nomalLog = new OneLogFile(fileName);
         switch (secureFileName) {
             case 0://secure.yyyy.mm.dd.log
-                fileName = String.format("%s\\secure.%4.0d.%2.0d.%2.0d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
+                fileName = String.format("%s\\secure.%04d.%02d.%02d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
                 break;
             case 1://secure.yyyy.mm.log
-                fileName = String.format("%s\\secure.%4.0d.%2.0d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1));
+                fileName = String.format("%s\\secure.%04d.%02d.log", saveDirectory, dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1));
                 break;
             case 2://secure.Log
                 fileName = String.format("%s\\secure.Log", saveDirectory);
@@ -210,128 +210,128 @@ public class LogFile implements IDispose{
         }
 
         // ログディレクトリの検索
-        var di = new DirectoryInfo(saveDirectory);
+        //var di = new DirectoryInfo(saveDirectory);
+        File file = new File(saveDirectory);  
 
-        FileSearch search = new FileSearch();
-        File[] files = search.listFiles("C:/filelist/", "*.java");
         
         
         //一定
-        var allLog = di.GetFiles("BlackJumboDog.Log").Union(di.GetFiles("secure.Log"));
-        foreach (var f in allLog) {
-            Tail(f.FullName, _saveDays);//saveDays日分以外を削除
-        }
+//        var allLog = di.GetFiles("BlackJumboDog.Log").Union(di.GetFiles("secure.Log"));
+//        foreach (var f in allLog) {
+//            Tail(f.FullName, _saveDays);//saveDays日分以外を削除
+//        }
         //日ごと
-        var dayLog = di.GetFiles("bjd.????.??.??.Log").Union(di.GetFiles("secure.????.??.??.Log"));
-        foreach (var f in dayLog) {
-            var tmp = f.Name.split(".");
-            if (tmp.Length == 5) {
-                try {
-                    int year = Convert.ToInt32(tmp[1]);
-                    int month = Convert.ToInt32(tmp[2]);
-                    int day = Convert.ToInt32(tmp[3]);
-
-                    DeleteLog(year, month, day, _saveDays, f.FullName);
-                } catch{
-
-                }
-            }
-        }
-        //月ごと
-        var monLog = di.GetFiles("bjd.????.??.Log").Union(di.GetFiles("secure.????.??.Log"));
-        foreach (var f in monLog) {
-            var tmp = f.Name.split(".");
-            if (tmp.Length == 4) {
-                try {
-                    var year = Convert.ToInt32(tmp[1]);
-                    var month = Convert.ToInt32(tmp[2]);
-                    const int day = 30;
-
-                    DeleteLog(year, month, day, _saveDays, f.FullName);
-                } catch {
-
-                }
-            }
-        }
+//        var dayLog = di.GetFiles("bjd.????.??.??.Log").Union(di.GetFiles("secure.????.??.??.Log"));
+//        foreach (var f in dayLog) {
+//            var tmp = f.Name.split(".");
+//            if (tmp.Length == 5) {
+//                try {
+//                    int year = Convert.ToInt32(tmp[1]);
+//                    int month = Convert.ToInt32(tmp[2]);
+//                    int day = Convert.ToInt32(tmp[3]);
+//
+//                    DeleteLog(year, month, day, _saveDays, f.FullName);
+//                } catch{
+//
+//                }
+//            }
+//        }
+//        //月ごと
+//        var monLog = di.GetFiles("bjd.????.??.Log").Union(di.GetFiles("secure.????.??.Log"));
+//        foreach (var f in monLog) {
+//            var tmp = f.Name.split(".");
+//            if (tmp.Length == 4) {
+//                try {
+//                    var year = Convert.ToInt32(tmp[1]);
+//                    var month = Convert.ToInt32(tmp[2]);
+//                    const int day = 30;
+//
+//                    DeleteLog(year, month, day, _saveDays, f.FullName);
+//                } catch {
+//
+//                }
+//            }
+//        }
     }
 
-    void deleteLog(int year, int month, int day, int saveDays, String fullName) {
-        //日付変換の例外を無視する
-        try {
-            var targetDt = new DateTime(year, month, day);
-            if (dt.Ticks > targetDt.AddDays(saveDays).Ticks) {
-                logger.set(LogKind.Detail, null, 9000032, fullName);
-                (new File(fullName)).delete();
-            }
-        } catch(Exception ex) {
-            logger.set(LogKind.Error, null, 9000045, String.format("year=%d mont=%d day=%d %s", year, month, day, fullName));
-            (new File(fullName)).delete();
-        }
-    }
-    private void tail(String fileName, int saveDays) {
+//    void deleteLog(int year, int month, int day, int saveDays, String fullName) {
+//        //日付変換の例外を無視する
+//        try {
+//            var targetDt = new DateTime(year, month, day);
+//            if (dt.Ticks > targetDt.AddDays(saveDays).Ticks) {
+//                logger.set(LogKind.Detail, null, 9000032, fullName);
+//                (new File(fullName)).delete();
+//            }
+//        } catch(Exception ex) {
+//            logger.set(LogKind.Error, null, 9000045, String.format("year=%d mont=%d day=%d %s", year, month, day, fullName));
+//            (new File(fullName)).delete();
+//        }
+//    }
 
-        now = Calendar.getInstance(); //現在時間で初期化される
-        //DateTime now = DateTime.Now;
-        ArrayList<String> lines = new ArrayList<>();
-        using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-            using (var sr = new StreamReader(fs, Encoding.GetEncoding(932))) {
-                var isNeed = false;
-                while (true) {
-                    string str = sr.ReadLine();
-                    if (str == null)
-                        break;
-                    if (isNeed) {
-                        lines.Add(str);
-                    } else {
-                        var tmp = str.Split('\t');
-                        if (tmp.Length > 1) {
-                            var targetDt = Convert.ToDateTime(tmp[0]);
-                            if (now.Ticks < targetDt.AddDays(saveDays).Ticks) {
-                                isNeed = true;
-                                lines.Add(str);
-                            }
-                        }
-                    }
-                }
-                sr.Close();
-            }
-            fs.Close();
-        }
-        using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite)) {
-            using (var sw = new StreamWriter(fs, Encoding.GetEncoding(932))) {
-                foreach (String str in lines) {
-                    sw.WriteLine(str);
-                }
-                sw.Flush();
-                sw.Close();
-            }
-            fs.Close();
-        }
-    }
+//    private void tail(String fileName, int saveDays) {
+//
+//        now = Calendar.getInstance(); //現在時間で初期化される
+//        //DateTime now = DateTime.Now;
+//        ArrayList<String> lines = new ArrayList<>();
+//        using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+//            using (var sr = new StreamReader(fs, Encoding.GetEncoding(932))) {
+//                var isNeed = false;
+//                while (true) {
+//                    string str = sr.ReadLine();
+//                    if (str == null)
+//                        break;
+//                    if (isNeed) {
+//                        lines.Add(str);
+//                    } else {
+//                        var tmp = str.Split('\t');
+//                        if (tmp.Length > 1) {
+//                            var targetDt = Convert.ToDateTime(tmp[0]);
+//                            if (now.Ticks < targetDt.AddDays(saveDays).Ticks) {
+//                                isNeed = true;
+//                                lines.Add(str);
+//                            }
+//                        }
+//                    }
+//                }
+//                sr.Close();
+//            }
+//            fs.Close();
+//        }
+//        using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite)) {
+//            using (var sw = new StreamWriter(fs, Encoding.GetEncoding(932))) {
+//                foreach (String str in lines) {
+//                    sw.WriteLine(str);
+//                }
+//                sw.Flush();
+//                sw.Close();
+//            }
+//            fs.Close();
+//        }
+//    }
 
     //ログファイル
     private class OneLogFile implements IDispose {
     	//TODO OneLogFile クラス内グローバル変数の名前変更
-        private FileStream fs;
-        private StreamWriter sw;
+//        private FileStream fs;
+//        private StreamWriter sw;
 
         public OneLogFile(String fileName) {
-            fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-            sw = new StreamWriter(fs, Encoding.GetEncoding(932));
+//            fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+//            sw = new StreamWriter(fs, Encoding.GetEncoding(932));
         }
         public void Dispose() {
-            sw.Flush();
-            sw.Close();
-            sw.Dispose();
-            sw = null;
-            fs.Close();
-            fs.Dispose();
-            fs = null;
+//            sw.Flush();
+//            sw.Close();
+//            sw.Dispose();
+//            sw = null;
+//            fs.Close();
+//            fs.Dispose();
+//            fs = null;
         }
         public void Set(String str) {
-            fs.Seek(0, SeekOrigin.End);
-            sw.WriteLine(str);
-            sw.Flush();
+//            fs.Seek(0, SeekOrigin.End);
+//            sw.WriteLine(str);
+//            sw.Flush();
         }
 		@Override
 		public void dispose() {
