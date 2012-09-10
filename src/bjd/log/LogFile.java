@@ -13,7 +13,9 @@ import bjd.option.Dat;
 import bjd.option.OneDat;
 import bjd.option.OneOption;
 import bjd.server.OneServer;
+import bjd.util.FileSearch;
 import bjd.util.IDispose;
+import bjd.util.Util;
 
 public class LogFile implements IDispose{
 	private Kernel kernel;
@@ -210,51 +212,46 @@ public class LogFile implements IDispose{
         }
 
         // ログディレクトリの検索
-        //var di = new DirectoryInfo(saveDirectory);
-        File file = new File(saveDirectory);  
-
-        
-        
+        FileSearch fs = new FileSearch(saveDirectory);  
         //一定
-//        var allLog = di.GetFiles("BlackJumboDog.Log").Union(di.GetFiles("secure.Log"));
-//        foreach (var f in allLog) {
-//            Tail(f.FullName, _saveDays);//saveDays日分以外を削除
-//        }
+        ArrayList<File> files = Util.merge(fs.listFiles("BlackJumboDog.Log"), fs.listFiles("secure.Log"));
+        for(File f : files){
+            tail(f.getParent(), saveDays);//saveDays日分以外を削除
+        }
         //日ごと
-//        var dayLog = di.GetFiles("bjd.????.??.??.Log").Union(di.GetFiles("secure.????.??.??.Log"));
-//        foreach (var f in dayLog) {
-//            var tmp = f.Name.split(".");
-//            if (tmp.Length == 5) {
-//                try {
-//                    int year = Convert.ToInt32(tmp[1]);
-//                    int month = Convert.ToInt32(tmp[2]);
-//                    int day = Convert.ToInt32(tmp[3]);
-//
-//                    DeleteLog(year, month, day, _saveDays, f.FullName);
-//                } catch{
-//
-//                }
-//            }
-//        }
-//        //月ごと
-//        var monLog = di.GetFiles("bjd.????.??.Log").Union(di.GetFiles("secure.????.??.Log"));
-//        foreach (var f in monLog) {
-//            var tmp = f.Name.split(".");
-//            if (tmp.Length == 4) {
-//                try {
-//                    var year = Convert.ToInt32(tmp[1]);
-//                    var month = Convert.ToInt32(tmp[2]);
-//                    const int day = 30;
-//
-//                    DeleteLog(year, month, day, _saveDays, f.FullName);
-//                } catch {
-//
-//                }
-//            }
-//        }
+        files = Util.merge(fs.listFiles("bjd.????.??.??.Log"), fs.listFiles("secure.????.??.??.Log"));
+        for(File f : files){
+            String [] tmp = f.getName().split(".");
+          if (tmp.length == 5) {
+              try {
+                  int year = Integer.valueOf(tmp[1]);
+                  int month = Integer.valueOf(tmp[2]);
+                  int day = Integer.valueOf(tmp[3]);
+
+                  deleteLog(year, month, day, saveDays, f.getPath());
+              } catch(Exception ex){
+                      
+              }
+          }
+        }        
+        //月ごと
+        files = Util.merge(fs.listFiles("bjd.????.??.Log"), fs.listFiles("secure.????.??.Log"));
+        for(File f : files){
+            String[] tmp = f.getName().split(".");
+            if (tmp.length == 4) {
+                try {
+                    int year = Integer.valueOf(tmp[1]);
+                  int month = Integer.valueOf(tmp[2]);
+                    int day = 30;
+                    deleteLog(year, month, day, saveDays, f.getPath());
+                } catch(Exception ex) {
+                
+                }
+            }
+        }
     }
 
-//    void deleteLog(int year, int month, int day, int saveDays, String fullName) {
+    private void deleteLog(int year, int month, int day, int saveDays, String fullName) {
 //        //日付変換の例外を無視する
 //        try {
 //            var targetDt = new DateTime(year, month, day);
@@ -266,9 +263,9 @@ public class LogFile implements IDispose{
 //            logger.set(LogKind.Error, null, 9000045, String.format("year=%d mont=%d day=%d %s", year, month, day, fullName));
 //            (new File(fullName)).delete();
 //        }
-//    }
+    }
 
-//    private void tail(String fileName, int saveDays) {
+    private void tail(String fileName, int saveDays) {
 //
 //        now = Calendar.getInstance(); //現在時間で初期化される
 //        //DateTime now = DateTime.Now;
@@ -307,7 +304,7 @@ public class LogFile implements IDispose{
 //            }
 //            fs.Close();
 //        }
-//    }
+    }
 
     //ログファイル
     private class OneLogFile implements IDispose {

@@ -31,6 +31,18 @@ public final class Util {
 		owner.add(btn);
 		return btn;
 	}
+	
+	//２つの配列の結合
+	public static <T> ArrayList<T> merge(T[] a,T[]b){
+	    ArrayList<T> ar = new ArrayList<>();
+	    for(T o : a){
+	        ar.add(o);
+	    }
+        for(T o : b){
+            ar.add(o);
+        }
+	    return ar;
+	}
 
 	private static File selectedFile = null; //前回選択したファイル
 	public static File fileChooser(File file) {
