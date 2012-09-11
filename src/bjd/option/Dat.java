@@ -5,12 +5,10 @@ import bjd.util.ListBase;
 
 public final class Dat extends ListBase<OneDat> {
 	
-	//private ArrayList<CtrlType> ctrlTypeList;
 	private boolean[] isSecretList; //シークレット化が必要なカラム
 	private int colMax;
 	
 	public Dat(CtrlType [] ctrlTypeList) {
-		//this.ctrlTypeList = ctrlTypeList;
 		//カラム数の初期化
 		colMax = ctrlTypeList.length;
 		//isSecretListの生成

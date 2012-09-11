@@ -77,9 +77,9 @@ public final class Kernel implements IDispose {
 //        WindowSize = new WindowSize(this);//ウインドウの外観を保存・復元(Viewより前に初期化する)
 //        Ver = new Ver();//バージョン管理
 //        Menu = new Menu(this, menuStrip);
-        listOption = new ListOption(this);//オプション管理
+        listOption = new ListOption(this); //オプション管理
 //        ListTool = new ListTool();//ツール管理
-        listServer = new ListServer();//サーバ管理
+        listServer = new ListServer(); //サーバ管理
 //
 //        //ログ関連インスタンスの生成
 //        LogView = new LogView(this, listViewLog);//ログビュー
@@ -89,7 +89,7 @@ public final class Kernel implements IDispose {
 //        if (RunMode != RunMode.Remote) {
 //            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
             localAddress = new LocalAddress();
-            initList();//各管理クラスの初期化
+            initList(); //各管理クラスの初期化
 //            Menu.Initialize();//メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        
@@ -136,7 +136,7 @@ public final class Kernel implements IDispose {
 	            //**********************************************
 	            // 破棄
 	            //**********************************************
-	            listServer.dispose();//各サーバは停止される
+	            listServer.dispose(); //各サーバは停止される
 	              listOption.dispose();
 //	            ListTool.Dispose();
 //	            MailBox = null;

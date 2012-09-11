@@ -29,7 +29,7 @@ public final class LogFile implements IDispose {
 	private LogView logView;
 
 	private boolean useLog;
-	
+
 	private OneLogFile nomalLog; //通常ログ
 	private OneLogFile secureLog; //セキュアログ
 
@@ -37,7 +37,7 @@ public final class LogFile implements IDispose {
 	private Calendar lastDelete = null; //new DateTime(0);
 	private Timer timer = null;
 
-	public LogFile(Logger logger, ConfigLog conf, LogView logView,RunMode runMode, OneServer remoteServer) {
+	public LogFile(Logger logger, ConfigLog conf, LogView logView, RunMode runMode, OneServer remoteServer) {
 		this.logger = logger;
 		this.conf = conf;
 		this.logView = logView;
@@ -56,7 +56,7 @@ public final class LogFile implements IDispose {
 
 		if (useLog) {
 			if (!(new File(conf.getSaveDirectory())).exists()) {
-				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s",conf.getSaveDirectory()));
+				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s", conf.getSaveDirectory()));
 				useLog = false;
 			}
 			logOpen();
