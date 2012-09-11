@@ -7,6 +7,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import bjd.util.Util;
+
 public final class CtrlTabPage extends OneCtrl implements ChangeListener {
 	private ArrayList<OnePage> pageList;
 	private JTabbedPane tabbedPane = null;
@@ -127,17 +129,18 @@ public final class CtrlTabPage extends OneCtrl implements ChangeListener {
 
 	@Override
 	protected String abstractToText() {
-		throw new UnsupportedOperationException("*CtrlTabPage.java abstractToText()は未実装");
+		Util.designProblem("未実装");
+		return null;
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		throw new UnsupportedOperationException("*CtrlTabPage.java abstractFromText()は未実装");
+		Util.designProblem("未実装");
 	}
 
 	@Override
 	protected void abstractClear() {
-		throw new UnsupportedOperationException("*CtrlTabPage.java abstractClear()は未実装");
+		Util.designProblem("未実装");
 	}
 
 }

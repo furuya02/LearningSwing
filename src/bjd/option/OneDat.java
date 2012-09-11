@@ -3,6 +3,7 @@ package bjd.option;
 import java.util.ArrayList;
 
 import bjd.util.IDispose;
+import bjd.util.Util;
 
 public final class OneDat implements IDispose {
 
@@ -28,6 +29,7 @@ public final class OneDat implements IDispose {
 		return strList;
 	}
 
+	@SuppressWarnings("unused")
 	private OneDat() {
 		// デフォルトコンストラクタの隠蔽
 	}
@@ -96,6 +98,7 @@ public final class OneDat implements IDispose {
 
 	@Override
 	public String toString() {
-		throw new UnsupportedOperationException(); // 誤って使用されないように例外（未実装）とする
+		Util.designProblem("誤って使用されないように例外（未実装）とする");
+		return "";
 	}
 }

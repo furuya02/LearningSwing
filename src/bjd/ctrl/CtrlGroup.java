@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import bjd.option.ListVal;
+import bjd.util.Util;
 
 public final class CtrlGroup extends OneCtrl {
 
@@ -106,12 +107,13 @@ public final class CtrlGroup extends OneCtrl {
 
 	@Override
 	protected String abstractToText() {
-		throw new UnsupportedOperationException("CtrlGroup.java abstractToText()は使用禁止");
-	}
+		Util.designProblem("使用禁止");
+		return null;
+}
 
 	@Override
 	protected void abstractFromText(String s) {
-		throw new UnsupportedOperationException("CtrlGroup.java abstractFromText()は使用禁止");
+		Util.designProblem("使用禁止");
 	}
 
 	@Override

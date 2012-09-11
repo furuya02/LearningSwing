@@ -41,7 +41,7 @@ public class OneLogFileTest {
         assertEquals(3, lines.size());
 
         TestUtil.dispPrompt(this); // TESTプロンプト
-        System.out.println(String.format("TEST length==3"));
+        System.out.println(String.format("lines.length==3"));
 
         TestUtil.dispPrompt(this); // TESTプロンプト
         System.out
@@ -65,7 +65,7 @@ public class OneLogFileTest {
         assertEquals(6, lines.size());
 
         TestUtil.dispPrompt(this); // TESTプロンプト
-        System.out.println(String.format("TEST length==6"));
+        System.out.println(String.format("lines.length==6"));
 
         (new File(fileName)).delete();
 

@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 
 import say.swing.JFontChooser;
 import bjd.Kernel;
+import bjd.util.Util;
 
 public final class CtrlFont extends OneCtrl implements ActionListener {
 
@@ -126,17 +127,18 @@ public final class CtrlFont extends OneCtrl implements ActionListener {
 
 	@Override
 	protected String abstractToText() {
-		throw new UnsupportedOperationException("CtrlFont.java abstractToText()は未実装");
+		Util.designProblem("未実装");
+		return null;
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		throw new UnsupportedOperationException("CtrlFont.java abstractFromText()は未実装");
+		Util.designProblem("未実装");
 	}
 
 	@Override
 	protected void abstractClear() {
-		throw new UnsupportedOperationException("CtrlFont.java abstractClear()は未実装");
+		Util.designProblem("未実装");
 	}
 
 }

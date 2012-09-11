@@ -2,13 +2,17 @@ package bjd;
 
 import java.io.File;
 
+import bjd.log.ConfigLog;
+import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.net.LocalAddress;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
 import bjd.server.ListServer;
+import bjd.server.OneServer;
 import bjd.util.IDispose;
+import bjd.util.Util;
 
 public final class Kernel implements IDispose {
 
@@ -18,6 +22,7 @@ public final class Kernel implements IDispose {
 	private ListOption listOption;
     private ListServer listServer;
 	private LogView logView;
+	private LogFile logFile = null;
     
     public LocalAddress getLocalAddress() {
 		return localAddress;
@@ -152,13 +157,14 @@ public final class Kernel implements IDispose {
 		if (oneOption != null) {
 			return oneOption.getValue(name);
 		}
-		throw new UnsupportedOperationException(String.format("Kernel.java getOptionVal() 設計に問題があります %s.%s",nameTag,name));
+		Util.designProblem(String.format("nameTag=%s name=%s", nameTag, name));
+		return null;
 	}
 
 
 	public Logger createLogger(String string, boolean b, Object object) {
-		//TODO kernel.createLogger() 未実装
-		return null;
+        // TODO 仮実装
+		return new Logger();
 	}
 
     //各管理リストの初期化
@@ -178,9 +184,14 @@ public final class Kernel implements IDispose {
         listOption.initialize(); // dllからのリスト初期化
         
 //        //オプションの読み直し
-//        if(LogFile!=null)
-//            LogFile.Dispose();
-//        LogFile = new LogFile(this);
+		if (logFile != null) {
+			logFile.dispose();
+		}
+		
+		Logger logger = createLogger("Log", true, null);
+		OneServer remoteServer = listServer.get("RemoteServer");
+		ConfigLog conf = new ConfigLog(listOption.get("Log"), this);
+		logFile = new LogFile(logger, conf, getLogView(), runMode, remoteServer);
 //        LogView.InitFont();
 //
 //        foreach (var o in ListOption) {

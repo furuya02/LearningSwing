@@ -41,7 +41,7 @@ public class OptionLog extends OneOption {
 			kernel.getJp() ? "月ごと ( secure.yyyy.mm.log )" : "monthly （secure.yyyy.mm.log）",
 			kernel.getJp() ? "一定 ( Secure.Log )" : "Uniformity (secure.Log)"	}, 200)));
 		onePage.add(new OneVal("saveDirectory", "", Crlf.NEXTLINE, new CtrlFolder(kernel.getJp() ? "ログの保存場所" : "Save place", 40, kernel)));
-		onePage.add(new OneVal("useLog", true, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "ログファイルを生成する" : "Generate a Log File")));
+		onePage.add(new OneVal("useLogFile", true, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "ログファイルを生成する" : "Generate a Log File")));
 		onePage.add(new OneVal("useLogClear", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "ログの削除を自動的に行う" : "Eliminate it regularly")));
 		onePage.add(new OneVal("saveDays", 31, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "ログ保存日数(0を指定した場合、削除しない)" : "Save days(When You appointed 0, Don't eliminate)", 3)));
 		onePage.add(new OneVal("linesMax", 3000, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "表示する最大行数" : "The number of maximum line to display", 5)));
@@ -52,7 +52,7 @@ public class OptionLog extends OneOption {
 
 	private OnePage page2(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
-		onePage.add(new OneVal("EnableLimitString", 1, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定文字列のみを" : "A case including character string",	new String[]{
+		onePage.add(new OneVal("isDisplay", 1, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定文字列のみを" : "A case including character string",	new String[]{
 			kernel.getJp() ? "表示する" : "Display",
 			kernel.getJp() ? "表示しない" : "Don't display" }, OptionDlg.width() - 40, 2)));
 		ListVal list = new ListVal();

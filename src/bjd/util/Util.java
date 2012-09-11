@@ -31,20 +31,25 @@ public final class Util {
 		owner.add(btn);
 		return btn;
 	}
-	
+
+	public static void designProblem(String msg) {
+		throw new UnsupportedOperationException("設計不良  " + msg);
+	}
+
 	//２つの配列の結合
-	public static <T> ArrayList<T> merge(T[] a,T[]b){
-	    ArrayList<T> ar = new ArrayList<>();
-	    for(T o : a){
-	        ar.add(o);
-	    }
-        for(T o : b){
-            ar.add(o);
-        }
-	    return ar;
+	public static <T> ArrayList<T> merge(T[] a, T[] b) {
+		ArrayList<T> ar = new ArrayList<>();
+		for (T o : a) {
+			ar.add(o);
+		}
+		for (T o : b) {
+			ar.add(o);
+		}
+		return ar;
 	}
 
 	private static File selectedFile = null; //前回選択したファイル
+
 	public static File fileChooser(File file) {
 		JFileChooser dlg = new JFileChooser();
 		//初期化
@@ -94,7 +99,7 @@ public final class Util {
 		}
 		return true;
 	}
-	
+
 	// ディレクトリを指定した場合、内部のファイルもすべて削除する
 	public static void fileDelete(File file) {
 		if (!file.exists()) {
@@ -112,33 +117,33 @@ public final class Util {
 			file.delete();
 		}
 	}
-	
+
 	public static void fileCopy(File src, File dest) {
 
-	    FileChannel rs = null;
-	    FileChannel ws = null;
+		FileChannel rs = null;
+		FileChannel ws = null;
 
-	    try {
-	        rs = new FileInputStream(src).getChannel();
-	        ws = new FileOutputStream(dest).getChannel();
-	        rs.transferTo(0, rs.size(), ws);
+		try {
+			rs = new FileInputStream(src).getChannel();
+			ws = new FileOutputStream(dest).getChannel();
+			rs.transferTo(0, rs.size(), ws);
 
-	    } catch (IOException e) {
-	        e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 
-	    } finally {
-	        if (rs != null) {
-	            try {
-	                rs.close();
-	            } catch (IOException e) {
-	            }
-	        }
-	        if (ws != null) {
-	            try {
-	                ws.close();
-	            } catch (IOException e) {
-	            }
-	        }
-	    }
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (IOException e) {
+				}
+			}
+			if (ws != null) {
+				try {
+					ws.close();
+				} catch (IOException e) {
+				}
+			}
+		}
 	}
 }

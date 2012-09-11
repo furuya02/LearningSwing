@@ -22,6 +22,7 @@ import bjd.net.ProtocolKind;
 
 import bjd.util.IDispose;
 import bjd.util.IniDb;
+import bjd.util.Util;
 
 public abstract class OneOption implements ICtrlEventListener, IDispose {
 
@@ -35,14 +36,14 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	public final String getNameTag() {
 		return nameTag;
 	}
-	
+
 	public final boolean getUseServer() {
 		OneVal oneVal = listVal.search("useServer");
 		if (oneVal != null) {
 			return (boolean) oneVal.getValue();
 		}
 		return false;
-    }
+	}
 
 	public OneOption(Kernel kernel, String path, String nameTag) {
 		this.kernel = kernel;
@@ -52,23 +53,22 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		String progDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
 		iniDb = new IniDb(progDir, "Option");
 	}
-	
-    //レジストリからの読み込み
-    protected final void read() {
-        iniDb.read(nameTag, listVal);
-    }
+
+	//レジストリからの読み込み
+	protected final void read() {
+		iniDb.read(nameTag, listVal);
+	}
 
 	protected final OnePage pageAcl() {
 		OnePage onePage = new OnePage("ACL", "ACL");
-    	onePage.add(new OneVal("enableAcl", 0, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定したアドレスからのアクセスのみを" : "Access of ths user who appoint it", new String[] { kernel.getJp() ? "許可する" : "Allow", kernel.getJp() ? "禁止する" : "Deny" }, 550, 2)));
+		onePage.add(new OneVal("enableAcl", 0, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定したアドレスからのアクセスのみを" : "Access of ths user who appoint it", new String[] { kernel.getJp() ? "許可する" : "Allow", kernel.getJp() ? "禁止する" : "Deny" }, 550, 2)));
 
-    	ListVal list = new ListVal();
-        list.add(new OneVal("aclName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "名前（表示名）" : "Name(Display)", 20)));
-        list.add(new OneVal("aclAddress", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "アドレス" : "Address", 20)));
-        onePage.add(new OneVal("acl", null, Crlf.NEXTLINE, new CtrlDat(kernel.getJp() ? "利用者（アドレス）の指定" : "Access Control List", list, 320, kernel)));
+		ListVal list = new ListVal();
+		list.add(new OneVal("aclName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "名前（表示名）" : "Name(Display)", 20)));
+		list.add(new OneVal("aclAddress", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "アドレス" : "Address", 20)));
+		onePage.add(new OneVal("acl", null, Crlf.NEXTLINE, new CtrlDat(kernel.getJp() ? "利用者（アドレス）の指定" : "Access Control List", list, 320, kernel)));
 		return onePage;
 	}
-    
 
 	// ダイアログ作成時の処理
 	public final void createDlg(JPanel mainPanel) {
@@ -95,7 +95,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	public final void add(OneVal oneVal) {
 		listVal.add(oneVal);
 	}
-	
+
 	//OneValとしてサーバ基本設定を作成する
 	protected final OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
 		ListVal list = new ListVal();
@@ -108,10 +108,10 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "タイムアウト(秒)" : "Timeout", 6)));
 		return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(kernel.getJp() ? "サーバ基本設定" : "Server Basic Option", list));
 	}
-	
-    //値の設定
+
+	//値の設定
 	public final void setValue(String name, Object value) {
-	OneVal oneVal = listVal.search(name);
+		OneVal oneVal = listVal.search(name);
 		if (oneVal != null) {
 			//コントロールの値を変更
 			oneVal.getOneCtrl().write(value);
@@ -119,7 +119,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 			save();
 			return;
 		}
-		throw new UnsupportedOperationException("OneOption.java setVal() 名前が見つかりません　" + name);
+		Util.designProblem(String.format("名前が見つかりません name=%s", name));
 	}
 
 	//値の取得
@@ -134,8 +134,9 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		if (oneVal != null) {
 			return oneVal.getValue();
 		}
-		throw new UnsupportedOperationException("OneOption.java getVal() 名前が見つかりません　" + name);
-	}	
+		Util.designProblem(String.format("名前が見つかりません name=%s", name));
+		return null;
+	}
 
 	protected final OneCtrl getCtrl(String name) {
 		OneVal oneVal = listVal.search(name);
@@ -150,27 +151,27 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	@Override
 	public final void onChange(OneCtrl oneCtrl) {
 		try {
-            OneCtrl o = getCtrl("protocolKind");
-            if (o != null) {
-            	o.setEnable(false); // プロトコル 変更不可
-            }
+			OneCtrl o = getCtrl("protocolKind");
+			if (o != null) {
+				o.setEnable(false); // プロトコル 変更不可
+			}
 			abstractOnChange(oneCtrl);
 		} catch (NullPointerException e) {
 			// コントロールの破棄後に、このイベントが発生した場合（この例外は無視する）
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
-	}	
-	
+	}
+
 	//レジストリへ保存
 	public final void save() {
 		iniDb.save(nameTag, listVal);
 	}
-	
-//	public void read2() {
-//         //opDb.Read(NameTag, allList);//レジストリから取得
-//     }	
+
+	//	public void read2() {
+	//         //opDb.Read(NameTag, allList);//レジストリから取得
+	//     }	
 
 }

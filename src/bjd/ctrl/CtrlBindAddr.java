@@ -12,6 +12,7 @@ import javax.swing.JRadioButton;
 import bjd.net.BindAddr;
 import bjd.net.BindStyle;
 import bjd.net.Ip;
+import bjd.util.Util;
 
 public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 
@@ -142,7 +143,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 				radioButtonList[2].setSelected(true);
 				break;
 			default:
-				throw new UnsupportedOperationException("CtrlBindAddr.java abstractWrite() 設計に問題があります");
+				Util.designProblem(String.format("bindAddr.getBindStyle()=%s", bindAddr.getBindStyle()));
 		}
 		for (int i = 0; i < 2; i++) {
 			ArrayList<Ip> list = (i == 0) ? listV4 : listV6;
@@ -219,12 +220,13 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 
 	@Override
 	protected String abstractToText() {
-		throw new UnsupportedOperationException("CtrlBindAddr.java abstractToText()は未実装");
+		Util.designProblem("未実装");
+		return null;
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		throw new UnsupportedOperationException("CtrlBindAddr.java abstractFromText()は未実装");
+		Util.designProblem("未実装");
 	}
 
 	@Override

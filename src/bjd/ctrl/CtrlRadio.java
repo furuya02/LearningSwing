@@ -11,6 +11,7 @@ import javax.swing.JRadioButton;
 
 import bjd.util.Msg;
 import bjd.util.MsgKind;
+import bjd.util.Util;
 
 public final class CtrlRadio extends OneCtrl implements ActionListener {
 
@@ -149,7 +150,8 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 			}
 
 		}
-		throw new UnsupportedOperationException("CtrlRadio.java abstractToText()");
+		Util.designProblem("radioButtunに選択がない");
+		return null;
 	}
 
 	@Override
@@ -158,7 +160,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 		if (0 < n && n <= radioButtonList.length) {
 			radioButtonList[n].setSelected(true);
 		} else {
-			throw new UnsupportedOperationException("CtrlRadio.java abstractFromText()");
+			Util.designProblem(String.format("n=%d radioButtonList.length=%d ", n, radioButtonList.length));
 		}
 	}
 
