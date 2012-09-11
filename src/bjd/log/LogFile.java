@@ -74,6 +74,7 @@ public class LogFile implements IDispose{
             nomalFileName = (int)option.getValue("nomalFileName");
             secureFileName = (int)option.getValue("secureFileName");
 
+            
             logOpen();
 
             //5分に１回のインターバルタイマ
