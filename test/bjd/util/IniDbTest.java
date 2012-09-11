@@ -80,7 +80,7 @@ public class IniDbTest {
 			TestUtil.dispPrompt(this); //TESTプロンプト
 
 			String fileName = "iniDbTestTmp"; //テンポラリファイル名
-			String progDir = new File(".").getAbsoluteFile().getParent();
+			String progDir = new File(".").getAbsoluteFile().getParent(); //カレントディレクトリ
 			String path = String.format("%s\\%s.ini", progDir, fileName);
 
 			IniDb iniDb = new IniDb(progDir, fileName);

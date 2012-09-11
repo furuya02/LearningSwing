@@ -1,6 +1,8 @@
 package bjd.log;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,14 +136,14 @@ public class LogFile implements IDispose{
 
         if (secureLog != null && oneLog.getLogKind().equals((LogKind.Secure).toString())) { //セキュリティログ
             synchronized (this) {
-                secureLog.Set(oneLog.toString());
+                secureLog.set(oneLog.toString());
             }
         }
         if (nomalLog != null) {//通常ログ
             //ルール適用除外　もしくは　表示対象になっている場合
             if (!logLimit.getUseLimitString() || enable) {
                 synchronized (this) {
-                    nomalLog.Set(oneLog.toString());
+                    nomalLog.set(oneLog.toString());
                 }
             }
         }
@@ -181,11 +183,11 @@ public class LogFile implements IDispose{
     private void logClose() {
         //オープン中のログファイルがある場合はクローズする
         if (nomalLog != null) {
-            nomalLog.Dispose();
+            nomalLog.dispose();
             nomalLog = null;
         }
         if (secureLog != null) {
-            secureLog.Dispose();
+            secureLog.dispose();
             secureLog = null;
         }
     }
@@ -204,11 +206,11 @@ public class LogFile implements IDispose{
         }
 
         if (nomalLog != null) {
-            nomalLog.Dispose();
+            nomalLog.dispose();
             nomalLog = null;
         }
         if (secureLog != null) {
-            secureLog.Dispose();
+            secureLog.dispose();
             secureLog = null;
         }
 
@@ -307,41 +309,9 @@ public class LogFile implements IDispose{
 //        }
     }
 
-    //ログファイル
-    private class OneLogFile implements IDispose {
-    	//TODO OneLogFile クラス内グローバル変数の名前変更
-//        private FileStream fs;
-//        private StreamWriter sw;
-
-        public OneLogFile(String fileName) {
-//            fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-//            sw = new StreamWriter(fs, Encoding.GetEncoding(932));
-        }
-        public void Dispose() {
-//            sw.Flush();
-//            sw.Close();
-//            sw.Dispose();
-//            sw = null;
-//            fs.Close();
-//            fs.Dispose();
-//            fs = null;
-        }
-        public void Set(String str) {
-//            fs.Seek(0, SeekOrigin.End);
-//            sw.WriteLine(str);
-//            sw.Flush();
-        }
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-			
-		}
-
-    }
     
     //ログの表示制限
     private class LogLimit {
-    	//TODO LogLimit クラス内グローバル変数の名前変更
         private boolean enabled;
         private ArrayList<String> ar = new ArrayList<String>();
 
