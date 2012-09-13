@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="java" deleted="false" description="「使用禁止」例外" enabled="true" name="prn">Util.designProblem("使用禁止");</template><template autoinsert="true" context="java" deleted="false" description="「設計不良」例外" enabled="true" name="prn">Util.designProblem(String.format("",));&#13;
 </template><template autoinsert="true" context="java" deleted="false" description="「未実装」例外" enabled="true" name="prn">Util.designProblem("未実装");</template><template autoinsert="true" context="java" deleted="false" description="デバッグ用println" enabled="true" name="prn">//TODO Debug Print&#13;
-System.out.println(String.format("",));</template></templates>
+System.out.println(String.format("",));</template><template autoinsert="true" context="java" deleted="false" description="try catch" enabled="true" name="try">try {&#13;
+	} catch (Exception ex) {&#13;
+		ex.printStackTrace(); &#13;
+	}</template></templates>

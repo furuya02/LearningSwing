@@ -12,7 +12,7 @@ public final class AppFunc implements SelectMenuListener {
 	private JFrame mainFrame;
 	private Kernel kernel;
 
-	public AppFunc(MainForm mainForm,AppMenu appMenu, JFrame mainFrame, Kernel kernel) {
+	public AppFunc(MainForm mainForm, AppMenu appMenu, JFrame mainFrame, Kernel kernel) {
 		this.mainForm = mainForm;
 		this.mainFrame = mainFrame;
 		this.appMenu = appMenu;

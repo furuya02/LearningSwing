@@ -72,7 +72,7 @@ public final class MainForm implements WindowListener {
 
         kernel = new Kernel();
 
-        appFunc = new AppFunc(this,appMenu, mainForm, kernel);
+		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
 
         // appFunc.dispose();
         // appMeu.dispase();

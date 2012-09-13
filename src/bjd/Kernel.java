@@ -191,7 +191,11 @@ public final class Kernel implements IDispose {
 		Logger logger = createLogger("Log", true, null);
 		OneServer remoteServer = listServer.get("RemoteServer");
 		ConfLog conf = new ConfLog(listOption.get("Log"), this);
-		logFile = new LogFile(logger, conf, getLogView(), runMode, remoteServer);
+		boolean useLog = true;
+		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
+			useLog = false;
+		}
+		logFile = new LogFile(logger, conf, getLogView(), useLog, remoteServer);
 //        LogView.InitFont();
 //
 //        foreach (var o in ListOption) {

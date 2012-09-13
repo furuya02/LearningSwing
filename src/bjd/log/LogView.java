@@ -6,7 +6,7 @@ import java.util.Timer;
 import bjd.Kernel;
 import bjd.util.IDispose;
 
-public class LogView implements IDispose{
+public class LogView implements IDispose {
 
     private Kernel kernel;
 //    private ListView listView;

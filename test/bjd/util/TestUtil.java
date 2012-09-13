@@ -15,5 +15,8 @@ public final class TestUtil {
 	public static void dispPrompt(Object o) {
 		System.out.printf("%s> ", o.getClass().getName());
 	}
+	public static void dispPrompt(Object o, String msg) {
+		System.out.printf("%s> %s\n", o.getClass().getName(), msg);
+	}
 }
 

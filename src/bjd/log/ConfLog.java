@@ -1,13 +1,15 @@
 package bjd.log;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import bjd.Kernel;
 import bjd.option.Dat;
+import bjd.option.OneConf;
 import bjd.option.OneDat;
 import bjd.option.OneOption;
 
-public final class ConfLog {
+public final class ConfLog  extends OneConf{
 
 	private LogLimit logLimit;
 	private boolean useLogFile; //「ログファイルを生成
@@ -18,13 +20,27 @@ public final class ConfLog {
 	private int secureFileName; //セキュアファイルの種類
 
 	public ConfLog(OneOption option, Kernel kernel) {
-		logLimit = new LogLimit(option);
-		useLogFile = (boolean) option.getValue("useLogFile");
-		saveDirectory = kernel.env((String) option.getValue("saveDirectory"));
-		useLogClear = (boolean) option.getValue("useLogClear");
-		saveDays = (int) option.getValue("saveDays");
-		nomalFileName = (int) option.getValue("nomalFileName");
-		secureFileName = (int) option.getValue("secureFileName");
+		if (option != null) {
+			logLimit = new LogLimit(option);
+			useLogFile = (boolean) option.getValue("useLogFile");
+			if (kernel != null) {
+				saveDirectory = kernel.env((String) option.getValue("saveDirectory"));
+			}
+			useLogClear = (boolean) option.getValue("useLogClear");
+			saveDays = (int) option.getValue("saveDays");
+			nomalFileName = (int) option.getValue("nomalFileName");
+			secureFileName = (int) option.getValue("secureFileName");
+		}
+	}
+	
+	@Override
+	protected Field abstractGetField(String tag) {
+		try {
+			return (ConfLog.class).getDeclaredField(tag);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
 
 	public boolean isUseLogFile() {
@@ -50,13 +66,14 @@ public final class ConfLog {
 	public int getSecureFileName() {
 		return secureFileName;
 	}
-	
+
 	//********************************************************
 	// LogLimitをカバーするメソッド
 	//********************************************************
 	public boolean isDisplay(String str) {
 		return logLimit.isDisplay(str);
 	}
+
 	public boolean getUseLimitString() {
 		return logLimit.getUseLimitString();
 	}
@@ -97,4 +114,6 @@ public final class ConfLog {
 			return !isDisplay;
 		}
 	}
+
+
 }

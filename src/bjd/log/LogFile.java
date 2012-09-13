@@ -1,9 +1,13 @@
 package bjd.log;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Timer;
@@ -23,35 +27,32 @@ import bjd.util.Util;
 public final class LogFile implements IDispose {
 
 	private Logger logger;
-	private RunMode runMode;
 	private OneServer remoteServer;
 	private ConfLog conf;
 	private LogView logView;
 
 	private boolean useLog;
 
-	private OneLogFile nomalLog; //通常ログ
-	private OneLogFile secureLog; //セキュアログ
+	private OneLogFile nomalLog; // 通常ログ
+	private OneLogFile secureLog; // セキュアログ
 
-	private Calendar dt = null; //インスタンス生成時に初期化し、日付が変化したかどうかの確認に使用する
-	private Calendar lastDelete = null; //new DateTime(0);
+	private Calendar dt = null; // インスタンス生成時に初期化し、日付が変化したかどうかの確認に使用する
+	private Calendar lastDelete = null; // new DateTime(0);
 	private Timer timer = null;
 
-	public LogFile(Logger logger, ConfLog conf, LogView logView, RunMode runMode, OneServer remoteServer) {
+	public LogFile(Logger logger, ConfLog conf, LogView logView, boolean useLog, OneServer remoteServer) {
 		this.logger = logger;
 		this.conf = conf;
 		this.logView = logView;
-		this.runMode = runMode;
 		this.remoteServer = remoteServer;
 
 		dt = Calendar.getInstance();
 		lastDelete = Calendar.getInstance();
 		lastDelete.setTime(new Date(0));
 
-		//サービス起動ではログ保存されない
-		useLog = conf.isUseLogFile();
-		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
-			useLog = false;
+		this.useLog = conf.isUseLogFile();
+		if (!useLog) { // サービス起動ではログ保存されない
+			this.useLog = useLog;
 		}
 
 		if (useLog) {
@@ -61,7 +62,7 @@ public final class LogFile implements IDispose {
 			}
 			logOpen();
 
-			//5分に１回のインターバルタイマ
+			// 5分に１回のインターバルタイマ
 			timer = new Timer();
 			timer.schedule(new MyTimer(), 0, 1000 * 60 * 5);
 		}
@@ -70,60 +71,62 @@ public final class LogFile implements IDispose {
 	public void dispose() {
 		if (useLog) {
 			logClose();
-			logDelete(); //過去ログの自動削除 
+			logDelete(); // 過去ログの自動削除
 		}
 	}
 
 	class MyTimer extends TimerTask {
 		@Override
 		public void run() {
-			if (runMode != RunMode.Normal && runMode != RunMode.Service) {
+			// if (runMode != RunMode.Normal && runMode != RunMode.Service) {
+			// return;
+			// }
+			if (!useLog) {
 				return;
 			}
 
 			Calendar now = Calendar.getInstance();
 
-			//日付が変わっている場合は、ファイルを初期化する
+			// 日付が変わっている場合は、ファイルを初期化する
 			if (lastDelete.getTime().getTime() != 0 && lastDelete.get(Calendar.DATE) == now.get(Calendar.DATE)) {
 				return;
 			}
 
 			synchronized (this) {
-				logClose(); //クローズ
-				logDelete(); //過去ログの自動削除
-				logOpen(); //オープン
+				logClose(); // クローズ
+				logDelete(); // 過去ログの自動削除
+				logOpen(); // オープン
 				lastDelete = now;
 			}
 		}
 	}
 
-	//ログファイルへの追加
+	// ログファイルへの追加
 	public void append(OneLog oneLog) {
 
-		//表示制限の確認
+		// 表示制限の確認
 		boolean isDisplay = conf.isDisplay(oneLog.toString());
 
 		if (isDisplay) {
-			//ログビューへの追加
-			logView.append(oneLog);
-
-			//リモートサーバへの追加
-			if (runMode != RunMode.Remote) {
-				if (remoteServer != null) {
-					remoteServer.append(oneLog);
-				}
+			// ログビューへの追加
+			if (logView != null) {
+				logView.append(oneLog);
+			}
+			// リモートサーバへの追加
+			if (remoteServer != null) {
+				remoteServer.append(oneLog);
 			}
 		}
 
-		//セキュリティログは、表示制限に関係なく書き込む
+		// セキュリティログは、表示制限に関係なく書き込む
 		if (secureLog != null && oneLog.isSecure()) {
 			synchronized (this) {
 				secureLog.set(oneLog.toString());
 			}
 		}
-		//通常ログの場合
+		// 通常ログの場合
 		if (nomalLog != null) {
-			//ルール適用除外　もしくは　表示対象になっている場合
+			// ルール適用除外　もしくは　表示対象になっている場合
 			if (!conf.getUseLimitString() || isDisplay) {
 				synchronized (this) {
 					nomalLog.set(oneLog.toString());
@@ -133,33 +136,33 @@ public final class LogFile implements IDispose {
 	}
 
 	void logOpen() {
-		//ログファイルオープン
-		//dt = DateTime.Now;
-		dt = Calendar.getInstance(); //現在時間で初期化される
-
+		// ログファイルオープン
+		dt = Calendar.getInstance(); // 現在時間で初期化される
 		String fileName = "";
+
 		switch (conf.getNomalFileName()) {
-			case 0://bjd.yyyy.mm.dd.log
+			case 0:// bjd.yyyy.mm.dd.log
 				fileName = String.format("%s\\bjd.%04d.%02d.%02d.log", conf.getSaveDirectory(), dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
 				break;
-			case 1://bjd.yyyy.mm.log
+			case 1:// bjd.yyyy.mm.log
 				fileName = String.format("%s\\bjd.%04d.%02d.log", conf.getSaveDirectory(), dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1));
 				break;
-			case 2://BlackJumboDog.Log
+			case 2:// BlackJumboDog.Log
 				fileName = String.format("%s\\BlackJumboDog.Log", conf.getSaveDirectory());
 				break;
 			default:
 				Util.designProblem(String.format("nomalFileName=%d", conf.getNomalFileName()));
 		}
 		nomalLog = new OneLogFile(fileName);
+		
 		switch (conf.getSecureFileName()) {
-			case 0://secure.yyyy.mm.dd.log
+			case 0:// secure.yyyy.mm.dd.log
 				fileName = String.format("%s\\secure.%04d.%02d.%02d.log", conf.getSaveDirectory(), dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
 				break;
-			case 1://secure.yyyy.mm.log
+			case 1:// secure.yyyy.mm.log
 				fileName = String.format("%s\\secure.%04d.%02d.log", conf.getSaveDirectory(), dt.get(Calendar.YEAR), (dt.get(Calendar.MONTH) + 1));
 				break;
-			case 2://secure.Log
+			case 2:// secure.Log
 				fileName = String.format("%s\\secure.Log", conf.getSaveDirectory());
 				break;
 			default:
@@ -169,7 +172,7 @@ public final class LogFile implements IDispose {
 	}
 
 	private void logClose() {
-		//オープン中のログファイルがある場合はクローズする
+		// オープン中のログファイルがある場合はクローズする
 		if (nomalLog != null) {
 			nomalLog.dispose();
 			nomalLog = null;
@@ -180,14 +183,14 @@ public final class LogFile implements IDispose {
 		}
 	}
 
-	//過去ログの自動削除 
+	// 過去ログの自動削除
 	private void logDelete() {
 
-		//自動ログ削除が無効な場合は、処理なし
+		// 自動ログ削除が無効な場合は、処理なし
 		if (!conf.isUseLogClear()) {
 			return;
 		}
-		//0を指定した場合、削除しない
+		// 0を指定した場合、削除しない
 		if (conf.getSaveDays() == 0) {
 			return;
 		}
@@ -207,12 +210,12 @@ public final class LogFile implements IDispose {
 
 		// ログディレクトリの検索
 		FileSearch fs = new FileSearch(conf.getSaveDirectory());
-		//一定
+		// 一定
 		ArrayList<File> files = Util.merge(fs.listFiles("BlackJumboDog.Log"), fs.listFiles("secure.Log"));
 		for (File f : files) {
-			tail(f.getParent(), conf.getSaveDays()); //saveDays日分以外を削除
+			tail(f.getParent(), conf.getSaveDays()); // saveDays日分以外を削除
 		}
-		//日ごと
+		// 日ごと
 		files = Util.merge(fs.listFiles("bjd.????.??.??.Log"), fs.listFiles("secure.????.??.??.Log"));
 		for (File f : files) {
 			String[] tmp = f.getName().split("\\.");
@@ -224,11 +227,11 @@ public final class LogFile implements IDispose {
 
 					deleteLog(year, month, day, conf.getSaveDays(), f.getPath());
 				} catch (Exception ex) {
-
+					ex.printStackTrace();
 				}
 			}
 		}
-		//月ごと
+		// 月ごと
 		files = Util.merge(fs.listFiles("bjd.????.??.Log"), fs.listFiles("secure.????.??.Log"));
 		for (File f : files) {
 			String[] tmp = f.getName().split("\\.");
@@ -239,65 +242,69 @@ public final class LogFile implements IDispose {
 					int day = 30;
 					deleteLog(year, month, day, conf.getSaveDays(), f.getPath());
 				} catch (Exception ex) {
-
+					ex.printStackTrace();
 				}
 			}
 		}
 	}
 
 	private void deleteLog(int year, int month, int day, int saveDays, String fullName) {
-		//日付変換の例外を無視する
-		//		try {
-		//			var targetDt = new DateTime(year, month, day);
-		//			if (dt.Ticks > targetDt.AddDays(saveDays).Ticks) {
-		//				logger.set(LogKind.Detail, null, 9000032, fullName);
-		//				(new File(fullName)).delete();
-		//			}
-		//		} catch (Exception ex) {
-		//			logger.set(LogKind.Error, null, 9000045, String.format("year=%d mont=%d day=%d %s", year, month, day, fullName));
-		//			(new File(fullName)).delete();
-		//		}
+		try {
+			// var targetDt = new DateTime(year, month, day);
+			Calendar targetDt = Calendar.getInstance(); //現在時間で初期化される
+			targetDt.set(year, month, day);
+			targetDt.add(Calendar.DAY_OF_MONTH, saveDays);
+
+			if (dt.getTimeInMillis() > targetDt.getTimeInMillis()) {
+				logger.set(LogKind.Detail, null, 9000032, fullName);
+				(new File(fullName)).delete();
+			}
+
+		} catch (Exception ex) {
+			logger.set(LogKind.Error, null, 9000045, String.format("year=%d mont=%d day=%d %s", year, month, day, fullName));
+			(new File(fullName)).delete();
+		}
 	}
 
 	private void tail(String fileName, int saveDays) {
-		//
-		//        now = Calendar.getInstance(); //現在時間で初期化される
-		//        //DateTime now = DateTime.Now;
-		//        ArrayList<String> lines = new ArrayList<>();
-		//        using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-		//            using (var sr = new StreamReader(fs, Encoding.GetEncoding(932))) {
-		//                var isNeed = false;
-		//                while (true) {
-		//                    string str = sr.ReadLine();
-		//                    if (str == null)
-		//                        break;
-		//                    if (isNeed) {
-		//                        lines.Add(str);
-		//                    } else {
-		//                        var tmp = str.Split('\t');
-		//                        if (tmp.Length > 1) {
-		//                            var targetDt = Convert.ToDateTime(tmp[0]);
-		//                            if (now.Ticks < targetDt.AddDays(saveDays).Ticks) {
-		//                                isNeed = true;
-		//                                lines.Add(str);
-		//                            }
-		//                        }
-		//                    }
-		//                }
-		//                sr.Close();
-		//            }
-		//            fs.Close();
-		//        }
-		//        using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite)) {
-		//            using (var sw = new StreamWriter(fs, Encoding.GetEncoding(932))) {
-		//                foreach (String str in lines) {
-		//                    sw.WriteLine(str);
-		//                }
-		//                sw.Flush();
-		//                sw.Close();
-		//            }
-		//            fs.Close();
-		//        }
+		// //DateTime now = DateTime.Now;
+		Calendar now = Calendar.getInstance(); //現在時間で初期化される
+		Calendar targetDt = Calendar.getInstance(); //現在時間で初期化される
+		DateFormat f = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+		File file = new File(fileName);
+		try {
+			ArrayList<String> lines = new ArrayList<>();
+			if (file.exists()) {
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				boolean isNeed = false;
+				while (true) {
+					String str = br.readLine();
+					if (str == null) {
+						break;
+					}
+					if (isNeed) {
+						lines.add(str);
+					} else {
+						String[] tmp = str.split("\t");
+						if (tmp.length > 1) {
+							//var targetDt = Convert.ToDateTime(tmp[0]);
+							Date d = (Date) f.parse(tmp[0]);
+							targetDt.setTime(d);
+							targetDt.add(Calendar.DAY_OF_MONTH, saveDays);
+							if (now.getTimeInMillis() < targetDt.getTimeInMillis()) {
+								isNeed = true;
+								lines.add(str);
+							}
+						}
+					}
+				}
+				br.close();
+			}
+			Util.textFileSave(file, lines);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

@@ -72,7 +72,7 @@ public class FileSearchTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			new Fixture("*", new String[] { "000.txt", "001.txt", "002.txt", "000.tgz", "001.tgz", "002.tgz","a","b","c" }),		
+			new Fixture("*", new String[] { "000.txt", "001.txt", "002.txt", "000.tgz", "001.tgz", "002.tgz", "a", "b", "c" }),		
 			new Fixture("*.*", new String[] { "000.txt", "001.txt", "002.txt", "000.tgz", "001.tgz", "002.tgz" }),		
 			new Fixture("*.txt", new String[] { "000.txt", "001.txt", "002.txt" }),		
 			new Fixture("??1.*", new String[] { "001.txt", "001.tgz" }),		
