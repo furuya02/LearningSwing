@@ -13,8 +13,8 @@ public final class ListServer extends ListBase<OneServer> implements IDispose {
 			}
 		}
 		//TODO DEBUG RemoteServerを検索されたら、とりあえずnullを返しておく
-		if(nameTag.equals("RemoteServer")){
-		    return null;
+        if (nameTag.equals("RemoteServer")) {
+            return null;
 		}
 		Util.designProblem(String.format("nameTag=%s", nameTag));
 		return null;

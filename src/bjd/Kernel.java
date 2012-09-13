@@ -2,7 +2,7 @@ package bjd;
 
 import java.io.File;
 
-import bjd.log.ConfigLog;
+import bjd.log.ConfLog;
 import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
@@ -190,7 +190,7 @@ public final class Kernel implements IDispose {
 		
 		Logger logger = createLogger("Log", true, null);
 		OneServer remoteServer = listServer.get("RemoteServer");
-		ConfigLog conf = new ConfigLog(listOption.get("Log"), this);
+		ConfLog conf = new ConfLog(listOption.get("Log"), this);
 		logFile = new LogFile(logger, conf, getLogView(), runMode, remoteServer);
 //        LogView.InitFont();
 //

@@ -7,7 +7,7 @@ import bjd.option.Dat;
 import bjd.option.OneDat;
 import bjd.option.OneOption;
 
-public final class ConfigLog {
+public final class ConfLog {
 
 	private LogLimit logLimit;
 	private boolean useLogFile; //「ログファイルを生成
@@ -17,7 +17,7 @@ public final class ConfigLog {
 	private int nomalFileName; //通常ファイルの種類
 	private int secureFileName; //セキュアファイルの種類
 
-	public ConfigLog(OneOption option, Kernel kernel) {
+	public ConfLog(OneOption option, Kernel kernel) {
 		logLimit = new LogLimit(option);
 		useLogFile = (boolean) option.getValue("useLogFile");
 		saveDirectory = kernel.env((String) option.getValue("saveDirectory"));

@@ -25,7 +25,7 @@ public final class LogFile implements IDispose {
 	private Logger logger;
 	private RunMode runMode;
 	private OneServer remoteServer;
-	private ConfigLog conf;
+	private ConfLog conf;
 	private LogView logView;
 
 	private boolean useLog;
@@ -37,7 +37,7 @@ public final class LogFile implements IDispose {
 	private Calendar lastDelete = null; //new DateTime(0);
 	private Timer timer = null;
 
-	public LogFile(Logger logger, ConfigLog conf, LogView logView, RunMode runMode, OneServer remoteServer) {
+	public LogFile(Logger logger, ConfLog conf, LogView logView, RunMode runMode, OneServer remoteServer) {
 		this.logger = logger;
 		this.conf = conf;
 		this.logView = logView;
