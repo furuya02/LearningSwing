@@ -69,10 +69,10 @@ public final class LogFile implements IDispose {
 	}
 
 	public void dispose() {
-		if (useLog) {
-			logClose();
-			logDelete(); // 過去ログの自動削除
-		}
+	    logClose();
+	    if(useLog){
+	        logDelete(); // 過去ログの自動削除
+	    }
 	}
 
 	class MyTimer extends TimerTask {
@@ -103,9 +103,10 @@ public final class LogFile implements IDispose {
 
 	// ログファイルへの追加
 	public void append(OneLog oneLog) {
-
+        
 		// 表示制限の確認
 		boolean isDisplay = conf.isDisplay(oneLog.toString());
+
 
 		if (isDisplay) {
 			// ログビューへの追加

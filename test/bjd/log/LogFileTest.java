@@ -90,12 +90,45 @@ public final class LogFileTest {
 			}
 			System.out.println();
 		}
+	}
 
+	@Test
+	public void a002() {
+
+	    TestUtil.dispHeader("a002 append(OneLog)して、それぞれのファイルに当該行数が追加されているかどうか");
+
+	    conf.setTestValue("nomalFileName", 2); // BlackJumboDog
+	    conf.setTestValue("secureFileName", 2); //Secure.Log
+        conf.setTestValue("useLogFile", true);
+
+	    LogFile logFile = new LogFile(null, conf, null, true, null);
+
+
+	    String s1 = "2012/06/21 11:30:24\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+        String s2 = "2012/06/21 11:30:24\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+        String s3 = "2012/06/21 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+        TestUtil.dispPrompt(this, String.format("append(%s)",s1));
+        TestUtil.dispPrompt(this, String.format("append(%s)",s2));
+        TestUtil.dispPrompt(this, String.format("append(%s)",s3));
+
+        logFile.append(new OneLog(s1));
+        logFile.append(new OneLog(s2));
+        logFile.append(new OneLog(s3));
+	    logFile.dispose();
+	    
+	    String fileName = "BlackJumboDog.Log";
+	    ArrayList<String> lines = Util.textFileRead(new File(String.format("%s\\%s",dir.getPath(),fileName)));
+        assertThat(lines.size(), is(3));
+        TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
+	    
+        fileName = "secure.Log";
+        lines = Util.textFileRead(new File(String.format("%s\\%s",dir.getPath(),fileName)));
+        assertThat(lines.size(), is(1));
+        TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
 	}
 
 	
 	//TODO ■LogFileTest deleteLog  未実装
 	//TODO ■LogFileTest tail 未実装
-	//TODO ■LogFileTest append(OneLOg)未実装
-	
+
 }

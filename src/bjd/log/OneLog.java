@@ -22,7 +22,7 @@ public final class OneLog {
 	}
 
 	public OneLog(String str) {
-		String[] tmp = str.split("'\t");
+		String[] tmp = str.split("\t");
 		if (tmp.length != 8) {
 			return;
 		}

@@ -71,11 +71,17 @@ public final class ConfLog  extends OneConf{
 	// LogLimitをカバーするメソッド
 	//********************************************************
 	public boolean isDisplay(String str) {
-		return logLimit.isDisplay(str);
+		if(logLimit!=null){
+		    return logLimit.isDisplay(str);
+		}
+		return true;
 	}
 
 	public boolean getUseLimitString() {
-		return logLimit.getUseLimitString();
+        if(logLimit!=null){
+            return logLimit.getUseLimitString();
+        }
+        return true;
 	}
 
 	/**
