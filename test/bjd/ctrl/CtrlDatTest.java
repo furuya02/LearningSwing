@@ -40,7 +40,7 @@ public class CtrlDatTest {
 		//		ctrlDat.importDat(in);
 
 		try {
-			//importDat及びexportDatはprivateメンバ
+			//リフレクション　importDat及びexportDatはprivateメンバ
 			Method exportDat = CtrlDat.class.getDeclaredMethod("exportDat");
 			Method importDat = CtrlDat.class.getDeclaredMethod("importDat", ArrayList.class);
 			exportDat.setAccessible(true);

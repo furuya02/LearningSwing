@@ -32,6 +32,7 @@ final class OneLogFile implements IDispose {
         try {
             fw.write(str);
             fw.write("\r\n");
+            fw.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
