@@ -59,15 +59,6 @@ public final class MainForm implements WindowListener {
 
         final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         appMenu = new AppMenu(mainForm);
-
-        JButton btnNewButton = new JButton("New button");
-        btnNewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                Msg.show(MsgKind.Error, "TEST");
-            }
-        });
-
-        mainForm.getContentPane().add(btnNewButton, BorderLayout.NORTH);
         mainForm.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         kernel = new Kernel();

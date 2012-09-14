@@ -3,6 +3,7 @@ package bjd;
 import java.io.File;
 
 import bjd.log.ConfLog;
+import bjd.log.ILogger;
 import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
@@ -24,7 +25,11 @@ public final class Kernel implements IDispose {
 	private LogView logView;
 	private LogFile logFile = null;
     
-    public LocalAddress getLocalAddress() {
+    public LogFile getLogFile() {
+		return logFile;
+	}
+
+	public LocalAddress getLocalAddress() {
 		return localAddress;
 	}
 	
@@ -162,9 +167,8 @@ public final class Kernel implements IDispose {
 	}
 
 
-	public Logger createLogger(String string, boolean b, Object object) {
-        // TODO 仮実装
-		return new Logger();
+	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
+		return new Logger(this, nameTag, useDetailsLog, logger);
 	}
 
     //各管理リストの初期化

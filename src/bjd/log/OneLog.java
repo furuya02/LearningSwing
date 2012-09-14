@@ -10,6 +10,43 @@ public final class OneLog {
 	private String message;
 	private String detailInfomation;
 
+	public String getDetailInfomation() {
+		return detailInfomation;
+	}
+
+	public String getLogKind() {
+		return logKind;
+	}
+
+	public String getNameTag() {
+		return nameTag;
+	}
+
+	public String getThreadId() {
+		return threadId;
+	}
+
+	public String getRemoteAddr() {
+		return remoteAddr;
+	}
+
+	public String getDateStr() {
+		return dateStr;
+	}
+
+	public void setDateStr(String dateStr) {
+		this.dateStr = dateStr;
+	}
+
+	public String getMessageNo() {
+		return messageNo;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+
 	public OneLog(String dateStr, String logKind, String nameTag, String threadId, String remoteAddr, String messageNo, String message, String detailInfomation) {
 		this.dateStr = dateStr;
 		this.logKind = logKind;
