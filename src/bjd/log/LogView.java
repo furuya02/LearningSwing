@@ -20,9 +20,9 @@ public final class LogView implements IDispose {
 	private ArrayList<OneLog> ar = new ArrayList<OneLog>();
 
 	public LogView(Kernel kernel, ListView listView) {
-		//if (listView == null) {
-		//	return;
-		//}
+		if (listView == null) {
+			return;
+		}
 
 		this.kernel = kernel;
 		this.listView = listView;
@@ -96,9 +96,9 @@ public final class LogView implements IDispose {
 
 	//選択されたログをクリップボードにコピーする
 	public void setClipboard() {
-		//		if (listView == null){
-		//			return;
-		//		}
+		if (listView == null) {
+			return;
+		}
 		//
 		//		StringBuilder sb = new StringBuilder();
 		//		var colMax = listView.Columns.Count;
@@ -120,28 +120,31 @@ public final class LogView implements IDispose {
 
 	//表示ログをクリア
 	public void clear() {
-		//		if (listView == null){
-		//			return;
-		//		}
-		//		listView.Items.Clear();
+		if (listView == null) {
+			return;
+		}
+		listView.itemClear();
 	}
 
 	//このメソッドはタイマースレッドからのみ使用される
 	void disp(ArrayList<OneLog> list) {
 		try {
 			for (OneLog oneLog : list) {
-				//				if (listView == null){
-				//					break;
-				//				}
-				//				//リストビューへの出力                    
-				//				ListViewItem item = listView.Items.Add(oneLog.getDateStr());
-				//				item.SubItems.Add(oneLog.getLogKind());
-				//				item.SubItems.Add(oneLog.getThreadId());
-				//				item.SubItems.Add(oneLog.getNameTag());
-				//				item.SubItems.Add(oneLog.getRemoteAddr());
-				//				item.SubItems.Add(oneLog.getMessageNo());
-				//				item.SubItems.Add(oneLog.getMessage());
-				//				item.SubItems.Add(oneLog.getDetailInfomation());
+				if (listView == null) {
+					break;
+				}
+				//リストビューへの出力       
+				String [] s = new String[8];
+				s[0] = oneLog.getDateStr();
+				s[1] = oneLog.getLogKind();
+				s[2] = oneLog.getThreadId();
+				s[3] = oneLog.getNameTag();
+				s[4] = oneLog.getRemoteAddr();
+				s[5] = oneLog.getMessageNo();
+				s[6] = oneLog.getMessage();
+				s[7] = oneLog.getDetailInfomation();
+				listView.itemAdd(s);
+				
 			}
 		} catch (Exception ex) {
 			StringBuilder sb = new StringBuilder();

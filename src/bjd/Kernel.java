@@ -2,6 +2,7 @@ package bjd;
 
 import java.io.File;
 
+import bjd.ctrl.ListView;
 import bjd.log.ConfLog;
 import bjd.log.ILogger;
 import bjd.log.LogFile;
@@ -24,6 +25,7 @@ public final class Kernel implements IDispose {
     private ListServer listServer;
 	private LogView logView;
 	private LogFile logFile = null;
+	private View view;
     
     public LogFile getLogFile() {
 		return logFile;
@@ -54,7 +56,7 @@ public final class Kernel implements IDispose {
     }
 
     //public Kernel(MainForm mainForm, ListView listViewLog, MenuStrip menuStrip,NotifyIcon notifyIcon) {
-	public Kernel() {
+	public Kernel(ListView listViewLog) {
 		
 //        MailBox = null;//実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
 //        TraceDlg = null;//トレース表示
@@ -88,8 +90,9 @@ public final class Kernel implements IDispose {
 //
 //        //ログ関連インスタンスの生成
 //        LogView = new LogView(this, listViewLog);//ログビュー
-//        View = new View(this, mainForm, listViewLog, notifyIcon);
-//
+        //view = new View(this, mainForm, listViewLog, notifyIcon);
+		view = new View(this, listViewLog);
+		//
 //        //リモートクライアントでは、以下のオブジェクトは接続されてから初期化される
 //        if (RunMode != RunMode.Remote) {
 //            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
@@ -149,7 +152,7 @@ public final class Kernel implements IDispose {
 //	        if (RemoteClient != null)
 //	            RemoteClient.Dispose();
 	//
-//	        View.Dispose();
+	              view.dispose();
 //	        if (TraceDlg != null)
 //	            TraceDlg.Dispose();
 	//

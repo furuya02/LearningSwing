@@ -1,25 +1,13 @@
 package bjd.log;
 
-import java.io.File;
-import java.lang.reflect.Method;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bjd.util.FileSearch;
@@ -29,10 +17,10 @@ import bjd.util.Util;
 public final class LogFileTest {
 	
 	//多重スレッドでテストが走ると、同一ファイルにアクセスしてしまうので、テストごとにテンポラリディレクトリを用意するようにする
-	private File before(String tmpDir){
+	private File before(String tmpDir) {
 		File dir; // 作業ディレクトリ
 		ConfLog conf = null;
-		String path = String.format("%s\\%s", new File(".").getAbsoluteFile().getParent(),tmpDir);
+		String path = String.format("%s\\%s", new File(".").getAbsoluteFile().getParent(), tmpDir);
 		dir = new File(path);
 		// 作業ディレクトリの生成
 		if (dir.exists()) {
@@ -42,7 +30,7 @@ public final class LogFileTest {
 		return dir;
 	}
 
-	private void after(File dir){
+	private void after(File dir) {
 		// 作業ディレクトリの破棄
 		Util.fileDelete(dir);
 	}
@@ -144,7 +132,7 @@ public final class LogFileTest {
 		conf.setTestValue("normalFileName", 2); // BlackJumboDog
 		conf.setTestValue("secureFileName", 2); // Secure.Log
 		conf.setTestValue("useLogFile", true);
-		conf.setTestValue("saveDays",30);
+		conf.setTestValue("saveDays", 30);
 
 		LogFile logFile = new LogFile(null, conf, null, true, null);
 

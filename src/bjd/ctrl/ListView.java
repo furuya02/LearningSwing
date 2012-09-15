@@ -3,6 +3,8 @@ package bjd.ctrl;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
 import bjd.util.IDispose;
 
 public final class ListView extends JScrollPane implements IDispose {
@@ -23,18 +25,38 @@ public final class ListView extends JScrollPane implements IDispose {
 		getViewport().add(table); // ScrollPaneにtebleをセットする
 	}
 
-	public void addColumn(String str) {
-		model.addColumn(str);
-	}
-
-	public void addRow(String[] str) {
-		model.addRow(str);
-	}
-
 	@Override
 	public void dispose() {
 		remove(table);
 		model = null;
 		table = null;
 	}
+	
+	public void addColumn(String str) {
+		model.addColumn(str);
+	}
+
+	public void itemAdd(String[] str) {
+		model.addRow(str);
+	}
+	
+	// 全行削除
+	public void itemClear() {
+		model.setRowCount(0);
+	}
+
+	//*******************************************************
+	//列幅の設定・取得
+	//*******************************************************
+	public void setColWidth(int index, int width) {
+		TableColumn col = table.getColumnModel().getColumn(index);
+		col.setPreferredWidth(width);
+	}
+
+	public int getColWidth(int index) {
+		TableColumn col = table.getColumnModel().getColumn(index);
+		return col.getWidth();
+	}
+
+
 }

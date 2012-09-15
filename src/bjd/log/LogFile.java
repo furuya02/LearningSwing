@@ -16,9 +16,6 @@ import bjd.util.FileSearch;
 import bjd.util.IDispose;
 import bjd.util.Util;
 
-//class Global {
-//    static Object lock = new Object();
-//}
 
 public final class LogFile implements IDispose {
 

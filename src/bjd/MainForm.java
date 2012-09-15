@@ -61,18 +61,35 @@ public final class MainForm implements WindowListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		appMenu = new AppMenu(mainForm);
-
-		kernel = new Kernel();
-		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
 
 		ListView listView = new ListView();
-		listView.addColumn("1ST");
-		listView.addColumn("2ST");
-		listView.addColumn("3ST");
+		listView.addColumn("日時");
+		listView.addColumn("種類");
+		listView.addColumn("スレッドID");
+		listView.addColumn("機能（サーバ）");
+		listView.addColumn("アドレス");
+		listView.addColumn("メッセージID");
+		listView.addColumn("説明");
+		listView.addColumn("詳細情報");
+		listView.setColWidth(0, 120);
+		listView.setColWidth(1, 60);
+		listView.setColWidth(2, 60);
+		listView.setColWidth(3, 80);
+		listView.setColWidth(4, 80);
+		listView.setColWidth(5, 70);
+		listView.setColWidth(6, 200);
+		listView.setColWidth(7, 300);
+        
 		for (int i = 0; i < 100; i++) {
-			listView.addRow(new String[] { "1234567890", "abcdefghikl", "c" });
+			listView.itemAdd(new String[] { "1234567890", "abcdefghikl", "c" });
 		}
+
+		
+		appMenu = new AppMenu(mainForm);
+
+		kernel = new Kernel(listView);
+		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
+
 		mainForm.add(listView);
 
 		StatusBar bar = new StatusBar();

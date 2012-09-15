@@ -17,7 +17,7 @@ RADIO=BasicenableAcl=0
 STRING=BasicaclName=
 STRING=BasicaclAddress=
 DAT=Basicacl=	xxx	192.168.0.1	xxx	127.0.0.1
-LIST=LognomalFileName=2
+LIST=LognormalFileName=2
 LIST=LogsecureFileName=2
 FOLDER=LogsaveDirectory=C:\tmp2
 BOOL=LoguseLogFile=true

@@ -9,7 +9,7 @@ import bjd.option.OneConf;
 import bjd.option.OneDat;
 import bjd.option.OneOption;
 
-public final class ConfLog  extends OneConf{
+public final class ConfLog extends OneConf {
 
 	private LogLimit logLimit;
 	private boolean useLogFile; //「ログファイルを生成
@@ -32,7 +32,7 @@ public final class ConfLog  extends OneConf{
 			secureFileName = (int) option.getValue("secureFileName");
 		}
 	}
-	
+
 	@Override
 	protected Field abstractGetField(String tag) {
 		try {
@@ -71,17 +71,17 @@ public final class ConfLog  extends OneConf{
 	// LogLimitをカバーするメソッド
 	//********************************************************
 	public boolean isDisplay(String str) {
-		if(logLimit!=null){
-		    return logLimit.isDisplay(str);
+		if (logLimit != null) {
+			return logLimit.isDisplay(str);
 		}
 		return true;
 	}
 
 	public boolean getUseLimitString() {
-        if(logLimit!=null){
-            return logLimit.getUseLimitString();
-        }
-        return true;
+		if (logLimit != null) {
+			return logLimit.getUseLimitString();
+		}
+		return true;
 	}
 
 	/**
@@ -120,6 +120,5 @@ public final class ConfLog  extends OneConf{
 			return !isDisplay;
 		}
 	}
-
 
 }

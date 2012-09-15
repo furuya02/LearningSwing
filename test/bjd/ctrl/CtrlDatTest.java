@@ -23,7 +23,7 @@ public class CtrlDatTest {
 		TestUtil.dispHeader("a001 importDat()及びexportDat()");
 		TestUtil.dispPrompt(this);
 
-		Kernel kernel = new Kernel();
+		Kernel kernel = new Kernel(null);
 
 		ListVal list = new ListVal();
 		list.add(new OneVal("combo", 0, Crlf.NEXTLINE, new CtrlComboBox("コンボボックス", new String[] { "DOWN", "PU", "FULL" }, 200)));
