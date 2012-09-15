@@ -48,6 +48,7 @@ public final class Ip {
 		scopeId = 0;
 	}
 
+	@SuppressWarnings("unused")
 	private Ip() {
 		// デフォルトコンストラクタの隠蔽
 	}

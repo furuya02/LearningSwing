@@ -89,7 +89,7 @@ public final class Kernel implements IDispose {
         listServer = new ListServer(); //サーバ管理
 //
 //        //ログ関連インスタンスの生成
-//        LogView = new LogView(this, listViewLog);//ログビュー
+        logView = new LogView(this,listViewLog); //ログビュー
         //view = new View(this, mainForm, listViewLog, notifyIcon);
 		view = new View(this, listViewLog);
 		//
@@ -158,6 +158,11 @@ public final class Kernel implements IDispose {
 	//
 //	        WindowSize.Dispose();//DisposeしないとReg.Dispose(保存)されない
 	    }
+	    
+	    
+	public void Test(){
+		view.getListView().displayLastLine();
+	}
 
 	//オプションの値取得
 	public Object getOptionVal(String nameTag, String name) {
@@ -202,8 +207,8 @@ public final class Kernel implements IDispose {
 		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
 			useLog = false;
 		}
-		logFile = new LogFile(logger, conf, getLogView(), useLog, remoteServer);
-//        LogView.InitFont();
+		logFile = new LogFile(logger, conf, logView, useLog, remoteServer);
+		logView.initFont();
 //
 //        foreach (var o in ListOption) {
 //            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                

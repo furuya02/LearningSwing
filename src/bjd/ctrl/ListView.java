@@ -1,5 +1,8 @@
 package bjd.ctrl;
 
+import java.awt.Font;
+import java.awt.Rectangle;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -10,12 +13,15 @@ import bjd.util.IDispose;
 public final class ListView extends JScrollPane implements IDispose {
 
 	private JTable table;
-	private DefaultTableModel model = new DefaultTableModel();
+	private DefaultTableModel model;
 
 	public ListView() {
 		//自動的にスクロールバーを表示
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		table = new JTable(model);
+		//table = new JTable(model);
+		model = new DefaultTableModel();
+		table = new JTable();
+		table.setModel(model); //Tableモデルの指定
 		table.setDefaultEditor(Object.class, null); //セルの編集禁止
 		table.setRowHeight(20); //行の高さ
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //横幅の自動調整をOFF
@@ -31,7 +37,22 @@ public final class ListView extends JScrollPane implements IDispose {
 		model = null;
 		table = null;
 	}
-	
+
+	//スクロールして最終行を表示する
+	public void displayLastLine() {
+		int i = table.convertRowIndexToView(model.getRowCount() - 1);
+		Rectangle r = table.getCellRect(i, 0, true);
+		table.scrollRectToVisible(r);
+	}
+
+	//フォントの設定
+	public void setFont(Font font) {
+		super.setFont(font);
+		if (table != null) {
+			table.setFont(font);
+		}
+	}
+
 	public void addColumn(String str) {
 		model.addColumn(str);
 	}
@@ -39,7 +60,12 @@ public final class ListView extends JScrollPane implements IDispose {
 	public void itemAdd(String[] str) {
 		model.addRow(str);
 	}
-	
+
+	//カラム数取得
+	public int getColumnCount() {
+		return model.getColumnCount();
+	}
+
 	// 全行削除
 	public void itemClear() {
 		model.setRowCount(0);
@@ -58,5 +84,42 @@ public final class ListView extends JScrollPane implements IDispose {
 		return col.getWidth();
 	}
 
+	//*******************************************************
+	//選択行の設定・取得
+	//*******************************************************
+	public int[] getSelectedRows() {
+		return table.getSelectedRows();
+	}
+
+	//*******************************************************
+	//値の設定・取得
+	//*******************************************************
+	public void setText(int row, int col, String text) {
+		model.setValueAt(text, row, col);
+	}
+
+	public String getText(int row, int col) {
+		return (String) model.getValueAt(row, col);
+	}
+
+	//*******************************************************
+	//カラムの設定・取得
+	//*******************************************************
+	public void setColumnText(int col, String text) {
+		int colMax = model.getColumnCount();
+		String[] columnNames = new String[colMax];
+		for (int i = 0; i < colMax; i++) {
+			if (col == i) {
+				columnNames[i] = text;
+			} else {
+				columnNames[i] = model.getColumnName(i);
+			}
+		}
+		model.setColumnIdentifiers(columnNames);
+	}
+
+	public String getColumnText(int col) {
+		return model.getColumnName(col);
+	}
 
 }

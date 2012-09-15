@@ -4,6 +4,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
+import bjd.ctrl.ListView;
 import bjd.option.OneOption;
 
 public final class AppFunc implements SelectMenuListener {
@@ -43,6 +44,10 @@ public final class AppFunc implements SelectMenuListener {
 				if (dlg.showDialog()) {
 
 				}
+
+				break;
+			case "Test":
+				kernel.Test();
 
 				break;
 			default:

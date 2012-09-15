@@ -5,6 +5,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 import bjd.Kernel;
 import bjd.ctrl.ListView;
@@ -45,7 +48,7 @@ public final class LogView implements IDispose {
 			}
 			timer.cancel(); //一時停止
 			synchronized (this) {
-				//				listView.BeginUpdate();
+				//TODO 適当な方法が分からないのでコメントアウト	listView.BeginUpdate();
 
 				//一回のイベントで処理する最大数は100行まで
 				ArrayList<OneLog> list = new ArrayList<>();
@@ -55,13 +58,12 @@ public final class LogView implements IDispose {
 				}
 				disp(list);
 
-				//				listView.EndUpdate();
+				//TODO 適当な方法が分からないのでコメントアウト	listView.EndUpdate();
 
 			}
-			//１行の高さを計算してスクロールする
-			//			listView.EnsureVisible(listView.Items[listView.Items.Count - 1].Index);
+			//最終行が見えるようにスクロールする
+			listView.displayLastLine();
 			timer.schedule(new MyTimer(), 0, 100); //再開
-
 		}
 
 	}
@@ -79,7 +81,7 @@ public final class LogView implements IDispose {
 		if (kernel != null) {
 			Font font = (Font) kernel.getListOption().get("Log").getValue("font");
 			if (font != null) {
-				//listView.Font = font;
+				listView.setFont(font);
 			}
 		}
 	}
@@ -99,23 +101,25 @@ public final class LogView implements IDispose {
 		if (listView == null) {
 			return;
 		}
-		//
-		//		StringBuilder sb = new StringBuilder();
-		//		var colMax = listView.Columns.Count;
-		//		for (int c = 0; c < colMax; c++) {
-		//			sb.append(listView.Columns[c].Text);
-		//			sb.append("\t");
-		//		}
-		//		sb.append("\r\n");
-		//		for (int i = 0; i < listView.SelectedItems.Count; i++) {
-		//			for (int c = 0; c < colMax; c++) {
-		//				sb.append(listView.SelectedItems[i].SubItems[c].Text);
-		//				sb.append("\t");
-		//
-		//			}
-		//			sb.append("\r\n");
-		//		}
-		//		Clipboard.SetText(sb.ToString());
+		StringBuilder sb = new StringBuilder();
+		int colMax = listView.getColumnCount();
+		for (int c = 0; c < colMax; c++) {
+			sb.append(listView.getColumnText(c));
+			sb.append("\t");
+		}
+		sb.append("\r\n");
+		int [] rows = listView.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {
+			for (int c = 0; c < colMax; c++) {
+				sb.append(listView.getText(rows[i], c));
+				sb.append("\t");
+			}
+			sb.append("\r\n");
+		}
+		//Clipboard.SetText(sb.toString());
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		StringSelection selection = new StringSelection(sb.toString());
+		clipboard.setContents(selection, null);
 	}
 
 	//表示ログをクリア
