@@ -16,7 +16,7 @@ public final class ConfLog  extends OneConf{
 	private String saveDirectory = ""; //ログ保存ディレクトリ
 	private boolean useLogClear; //自動ログ削除
 	private int saveDays; //ログ保存日数
-	private int nomalFileName; //通常ファイルの種類
+	private int normalFileName; //通常ファイルの種類
 	private int secureFileName; //セキュアファイルの種類
 
 	public ConfLog(OneOption option, Kernel kernel) {
@@ -28,7 +28,7 @@ public final class ConfLog  extends OneConf{
 			}
 			useLogClear = (boolean) option.getValue("useLogClear");
 			saveDays = (int) option.getValue("saveDays");
-			nomalFileName = (int) option.getValue("nomalFileName");
+			normalFileName = (int) option.getValue("normalFileName");
 			secureFileName = (int) option.getValue("secureFileName");
 		}
 	}
@@ -59,8 +59,8 @@ public final class ConfLog  extends OneConf{
 		return saveDays;
 	}
 
-	public int getNomalFileName() {
-		return nomalFileName;
+	public int getNormalFileName() {
+		return normalFileName;
 	}
 
 	public int getSecureFileName() {

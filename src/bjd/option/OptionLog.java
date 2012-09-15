@@ -32,7 +32,7 @@ public class OptionLog extends OneOption {
 
 	private OnePage page1(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
-		onePage.add(new OneVal("nomalFileName", 2, Crlf.NEXTLINE, new CtrlComboBox(kernel.getJp() ? "通常ログ ファイル名" : "Nomal Log", new String[]{
+		onePage.add(new OneVal("normalFileName", 2, Crlf.NEXTLINE, new CtrlComboBox(kernel.getJp() ? "通常ログ ファイル名" : "Nomal Log", new String[]{
 			kernel.getJp() ? "日ごと ( bjd.yyyy.mm.dd.log )" : "daily （bjd.yyyy.mm.dd.log）",
 			kernel.getJp() ? "月ごと ( bjd.yyyy.mm.log )" : "monthly （bjd.yyyy.mm.log）",
 			kernel.getJp() ? "一定 ( BlackJumboDog.Log )" : "Uniformity (BlackJumboDog.Log)"	}, 200)));

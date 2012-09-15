@@ -28,14 +28,6 @@ import bjd.util.Util;
 
 public final class LogFileTest {
 	
-	//File dir = before("a001");
-	//ConfLog conf = new ConfLog(null, null);
-	//conf.setTestValue("saveDirectory", dir.getPath());
-	//
-	//after(dir);
-
-	//TODO LogFileTest ■DEBUG　連続してテストを実行すると失敗する
-
 	//多重スレッドでテストが走ると、同一ファイルにアクセスしてしまうので、テストごとにテンポラリディレクトリを用意するようにする
 	private File before(String tmpDir){
 		File dir; // 作業ディレクトリ
@@ -66,7 +58,7 @@ public final class LogFileTest {
 		
 
 		for (int n = 0; n <= 2; n++) {
-			conf.setTestValue("nomalFileName", n);
+			conf.setTestValue("normalFileName", n);
 			conf.setTestValue("secureFileName", n);
 
 			LogFile logFile = new LogFile(null, conf, null, true, null);
@@ -106,7 +98,7 @@ public final class LogFileTest {
 		ConfLog conf = new ConfLog(null, null);
 		conf.setTestValue("saveDirectory", dir.getPath());
 
-		conf.setTestValue("nomalFileName", 2); // BlackJumboDog
+		conf.setTestValue("normalFileName", 2); // BlackJumboDog
 		conf.setTestValue("secureFileName", 2); // Secure.Log
 		conf.setTestValue("useLogFile", true);
 		//conf.setTestValue("saveDays",100);
@@ -149,7 +141,7 @@ public final class LogFileTest {
 		ConfLog conf = new ConfLog(null, null);
 		conf.setTestValue("saveDirectory", dir.getPath());
 
-		conf.setTestValue("nomalFileName", 2); // BlackJumboDog
+		conf.setTestValue("normalFileName", 2); // BlackJumboDog
 		conf.setTestValue("secureFileName", 2); // Secure.Log
 		conf.setTestValue("useLogFile", true);
 		conf.setTestValue("saveDays",30);
@@ -215,7 +207,8 @@ public final class LogFileTest {
 		after(dir);
 	}
 
+
 	// TODO ■LogFileTest deleteLog 未実装
-	// TODO ■LogFileTest tail 未実装
+
 
 }

@@ -29,7 +29,7 @@ public final class LogFile implements IDispose {
 
 	private boolean useLog;
 
-	private OneLogFile nomalLog; // 通常ログ
+	private OneLogFile normalLog; // 通常ログ
 	private OneLogFile secureLog; // セキュアログ
 
 	private Calendar dt = null; // インスタンス生成時に初期化し、日付が変化したかどうかの確認に使用する
@@ -56,12 +56,7 @@ public final class LogFile implements IDispose {
 
 		if (useLog) {
 			if (!(new File(conf.getSaveDirectory())).exists()) {
-				logger.set(
-						LogKind.Error,
-						null,
-						9000031,
-						String.format("saveDirectory=%s",
-								conf.getSaveDirectory()));
+				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s", conf.getSaveDirectory()));
 				useLog = false;
 			}
 			logOpen();
@@ -103,7 +98,6 @@ public final class LogFile implements IDispose {
 			}
 
 			synchronized (lock) {
-				//TODO ■ DEBUG で取り合えず無効化している
 				logClose(); // クローズ
 				logDelete(); // 過去ログの自動削除
 				logOpen(); // オープン
@@ -129,18 +123,16 @@ public final class LogFile implements IDispose {
 			}
 		}
 
-		// セキュリティログは、表示制限に関係なく書き込む
-		if (secureLog != null && oneLog.isSecure()) {
-			synchronized (lock) {
+		synchronized (lock) {
+			// セキュリティログは、表示制限に関係なく書き込む
+			if (secureLog != null && oneLog.isSecure()) {
 				secureLog.set(oneLog.toString());
 			}
-		}
-		// 通常ログの場合
-		if (nomalLog != null) {
-			// ルール適用除外　もしくは　表示対象になっている場合
-			if (!conf.getUseLimitString() || isDisplay) {
-				synchronized (lock) {
-					nomalLog.set(oneLog.toString());
+			// 通常ログの場合
+			if (normalLog != null) {
+				// ルール適用除外　もしくは　表示対象になっている場合
+				if (!conf.getUseLimitString() || isDisplay) {
+					normalLog.set(oneLog.toString());
 				}
 			}
 		}
@@ -151,7 +143,7 @@ public final class LogFile implements IDispose {
 		dt = Calendar.getInstance(); // 現在時間で初期化される
 		String fileName = "";
 
-		switch (conf.getNomalFileName()) {
+		switch (conf.getNormalFileName()) {
 			case 0:// bjd.yyyy.mm.dd.log
 				fileName = String.format("%s\\bjd.%04d.%02d.%02d.log",
 						conf.getSaveDirectory(), dt.get(Calendar.YEAR),
@@ -168,9 +160,9 @@ public final class LogFile implements IDispose {
 				break;
 			default:
 				Util.designProblem(String.format("nomalFileName=%d",
-						conf.getNomalFileName()));
+						conf.getNormalFileName()));
 		}
-		nomalLog = new OneLogFile(fileName);
+		normalLog = new OneLogFile(fileName);
 
 		switch (conf.getSecureFileName()) {
 			case 0:// secure.yyyy.mm.dd.log
@@ -196,9 +188,9 @@ public final class LogFile implements IDispose {
 
 	private void logClose() {
 		// オープン中のログファイルがある場合はクローズする
-		if (nomalLog != null) {
-			nomalLog.dispose();
-			nomalLog = null;
+		if (normalLog != null) {
+			normalLog.dispose();
+			normalLog = null;
 		}
 		if (secureLog != null) {
 			secureLog.dispose();
@@ -222,9 +214,9 @@ public final class LogFile implements IDispose {
 			return;
 		}
 
-		if (nomalLog != null) {
-			nomalLog.dispose();
-			nomalLog = null;
+		if (normalLog != null) {
+			normalLog.dispose();
+			normalLog = null;
 		}
 		if (secureLog != null) {
 			secureLog.dispose();
