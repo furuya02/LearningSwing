@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import java.awt.Font;
 
 import bjd.Kernel;
+import bjd.ctrl.ListView;
 import bjd.util.IDispose;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
@@ -14,17 +15,17 @@ import bjd.util.MsgKind;
 public final class LogView implements IDispose {
 
 	private Kernel kernel;
-	//    private ListView listView;
+	private ListView listView;
 	private Timer timer;
 	private ArrayList<OneLog> ar = new ArrayList<OneLog>();
 
-	//public LogView(Kernel kernel,ListView listView) {
-	public LogView(Kernel kernel) {
-		//        if (listView == null)
-		//            return;
+	public LogView(Kernel kernel, ListView listView) {
+		//if (listView == null) {
+		//	return;
+		//}
 
 		this.kernel = kernel;
-		//        listView = listView;
+		this.listView = listView;
 
 		//タイマー（表示）イベント処理
 		timer = new Timer();
@@ -36,12 +37,15 @@ public final class LogView implements IDispose {
 	//タイマー(表示)イベント
 	class MyTimer extends TimerTask {
 		public void run() {
+			if (listView == null) {
+				return;
+			}
 			if (ar.size() == 0) {
 				return;
 			}
 			timer.cancel(); //一時停止
 			synchronized (this) {
-//				listView.BeginUpdate();
+				//				listView.BeginUpdate();
 
 				//一回のイベントで処理する最大数は100行まで
 				ArrayList<OneLog> list = new ArrayList<>();
@@ -51,22 +55,23 @@ public final class LogView implements IDispose {
 				}
 				disp(list);
 
-//				listView.EndUpdate();
+				//				listView.EndUpdate();
 
 			}
 			//１行の高さを計算してスクロールする
-//			listView.EnsureVisible(listView.Items[listView.Items.Count - 1].Index);
+			//			listView.EnsureVisible(listView.Items[listView.Items.Count - 1].Index);
 			timer.schedule(new MyTimer(), 0, 100); //再開
-		
+
 		}
-		
+
 	}
-	
+
 	public void dispose() {
 		timer.cancel();
 		timer = null;
-		//        if (listView != null)
-		//            listView.Dispose();
+		if (listView != null) {
+			listView.dispose();
+		}
 
 	}
 
@@ -81,8 +86,9 @@ public final class LogView implements IDispose {
 
 	//ログビューへの表示(リモートからも使用される)
 	public void append(OneLog oneLog) {
-		//if (listView == null)
-		//    return;
+		if (listView == null) {
+			return;
+		}
 		synchronized (this) {
 			ar.add(oneLog);
 		}
@@ -90,58 +96,58 @@ public final class LogView implements IDispose {
 
 	//選択されたログをクリップボードにコピーする
 	public void setClipboard() {
-//		if (listView == null){
-//			return;
-//		}
-//
-//		StringBuilder sb = new StringBuilder();
-//		var colMax = listView.Columns.Count;
-//		for (int c = 0; c < colMax; c++) {
-//			sb.append(listView.Columns[c].Text);
-//			sb.append("\t");
-//		}
-//		sb.append("\r\n");
-//		for (int i = 0; i < listView.SelectedItems.Count; i++) {
-//			for (int c = 0; c < colMax; c++) {
-//				sb.append(listView.SelectedItems[i].SubItems[c].Text);
-//				sb.append("\t");
-//
-//			}
-//			sb.append("\r\n");
-//		}
-//		Clipboard.SetText(sb.ToString());
-	}
-	//表示ログをクリア
-	public void clear() {
-//		if (listView == null){
-//			return;
-//		}
-//		listView.Items.Clear();
+		//		if (listView == null){
+		//			return;
+		//		}
+		//
+		//		StringBuilder sb = new StringBuilder();
+		//		var colMax = listView.Columns.Count;
+		//		for (int c = 0; c < colMax; c++) {
+		//			sb.append(listView.Columns[c].Text);
+		//			sb.append("\t");
+		//		}
+		//		sb.append("\r\n");
+		//		for (int i = 0; i < listView.SelectedItems.Count; i++) {
+		//			for (int c = 0; c < colMax; c++) {
+		//				sb.append(listView.SelectedItems[i].SubItems[c].Text);
+		//				sb.append("\t");
+		//
+		//			}
+		//			sb.append("\r\n");
+		//		}
+		//		Clipboard.SetText(sb.ToString());
 	}
 
+	//表示ログをクリア
+	public void clear() {
+		//		if (listView == null){
+		//			return;
+		//		}
+		//		listView.Items.Clear();
+	}
 
 	//このメソッドはタイマースレッドからのみ使用される
 	void disp(ArrayList<OneLog> list) {
 		try {
 			for (OneLog oneLog : list) {
-				if (listView == null){
-					break;
-				}
-				//リストビューへの出力                    
-				ListViewItem item = listView.Items.Add(oneLog.getDateStr());
-				item.SubItems.Add(oneLog.getLogKind());
-				item.SubItems.Add(oneLog.getThreadId());
-				item.SubItems.Add(oneLog.getNameTag());
-				item.SubItems.Add(oneLog.getRemoteAddr());
-				item.SubItems.Add(oneLog.getMessageNo());
-				item.SubItems.Add(oneLog.getMessage());
-				item.SubItems.Add(oneLog.getDetailInfomation());
+				//				if (listView == null){
+				//					break;
+				//				}
+				//				//リストビューへの出力                    
+				//				ListViewItem item = listView.Items.Add(oneLog.getDateStr());
+				//				item.SubItems.Add(oneLog.getLogKind());
+				//				item.SubItems.Add(oneLog.getThreadId());
+				//				item.SubItems.Add(oneLog.getNameTag());
+				//				item.SubItems.Add(oneLog.getRemoteAddr());
+				//				item.SubItems.Add(oneLog.getMessageNo());
+				//				item.SubItems.Add(oneLog.getMessage());
+				//				item.SubItems.Add(oneLog.getDetailInfomation());
 			}
 		} catch (Exception ex) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(ex.getMessage() + "\r\n");
 			for (OneLog oneLog : list) {
-				sb.append(String.format("%d %s\r\n", oneLog.getMessageNo(), oneLog.getMessage()));
+				sb.append(String.format("%s %s\r\n", oneLog.getMessageNo(), oneLog.getMessage()));
 			}
 			Msg.show(MsgKind.Error, sb.toString());
 		}

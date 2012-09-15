@@ -10,9 +10,6 @@ public final class Logger {
 	private String nameTag;
 	private boolean useDetailsLog;
 	private ILogger logger;
-//
-//    [DllImport("kernel32.dll")]
-//    static extern int GetCurrentThreadId();
 
 	public Logger(Kernel kernel, String nameTag, boolean useDetailsLog, ILogger logger) {
 		this.kernel = kernel;
@@ -22,7 +19,6 @@ public final class Logger {
     }
 
 	public void set(LogKind logKind, SockObj sockObj, int messageNo, String detailInfomation) {
-		//TODO 仮実装
 		if (logKind == LogKind.Detail) {
 			if (!useDetailsLog) {
 				return;

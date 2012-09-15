@@ -27,42 +27,43 @@ import bjd.util.TestUtil;
 import bjd.util.Util;
 
 public final class LogFileTest {
+	
+	//File dir = before("a001");
+	//ConfLog conf = new ConfLog(null, null);
+	//conf.setTestValue("saveDirectory", dir.getPath());
+	//
+	//after(dir);
 
-	private static File dir; // 作業ディレクトリ
-	private static ConfLog conf = null;
+	//TODO LogFileTest ■DEBUG　連続してテストを実行すると失敗する
 
-	@BeforeClass
-	public static void beforeClass() {
-		String path = String.format("%s\\testDir", new File(".").getAbsoluteFile().getParent());
+	//多重スレッドでテストが走ると、同一ファイルにアクセスしてしまうので、テストごとにテンポラリディレクトリを用意するようにする
+	private File before(String tmpDir){
+		File dir; // 作業ディレクトリ
+		ConfLog conf = null;
+		String path = String.format("%s\\%s", new File(".").getAbsoluteFile().getParent(),tmpDir);
 		dir = new File(path);
-
-		conf = new ConfLog(null, null);
-		conf.setTestValue("saveDirectory", dir.getPath());
-	}
-
-	@Before
-	public void before() {
-
 		// 作業ディレクトリの生成
-		if (!dir.exists()) {
-			dir.mkdir();
+		if (dir.exists()) {
+			Util.fileDelete(dir);
 		}
+		dir.mkdir();
+		return dir;
 	}
 
-	@After
-	public void after() {
+	private void after(File dir){
 		// 作業ディレクトリの破棄
 		Util.fileDelete(dir);
-	}
-
-	@AfterClass
-	public static void doAfterClass() {
 	}
 
 	@Test
 	public void a001() {
 
 		TestUtil.dispHeader("a001 LogFileの生成時に、オプションで指定したログファイルが生成されているか");
+
+		File dir = before("a001");
+		ConfLog conf = new ConfLog(null, null);
+		conf.setTestValue("saveDirectory", dir.getPath());
+		
 
 		for (int n = 0; n <= 2; n++) {
 			conf.setTestValue("nomalFileName", n);
@@ -92,6 +93,8 @@ public final class LogFileTest {
 			}
 			System.out.println();
 		}
+		
+		after(dir);
 	}
 
 	@Test
@@ -99,15 +102,22 @@ public final class LogFileTest {
 
 		TestUtil.dispHeader("a002 append(OneLog)して、それぞれのファイルに当該行数が追加されているかどうか");
 
+		File dir = before("a002");
+		ConfLog conf = new ConfLog(null, null);
+		conf.setTestValue("saveDirectory", dir.getPath());
+
 		conf.setTestValue("nomalFileName", 2); // BlackJumboDog
 		conf.setTestValue("secureFileName", 2); // Secure.Log
 		conf.setTestValue("useLogFile", true);
+		//conf.setTestValue("saveDays",100);
+		//conf.setTestValue("useLogClear",false);
+		
 
 		LogFile logFile = new LogFile(null, conf, null, true, null);
 
-		String s1 = "2012/06/21 11:30:24\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s2 = "2012/06/21 11:30:24\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s3 = "2012/06/21 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s1 = "2012/06/01 00:00:00\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s2 = "2012/06/02 00:00:00\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s3 = "2012/06/03 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
 		TestUtil.dispPrompt(this, String.format("append(%s)", s1));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s2));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s3));
@@ -126,6 +136,8 @@ public final class LogFileTest {
 		lines = Util.textFileRead(new File(String.format("%s\\%s", dir.getPath(), fileName)));
 		assertThat(lines.size(), is(1));
 		TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
+
+		after(dir);
 	}
 
 	@Test
@@ -133,20 +145,25 @@ public final class LogFileTest {
 
 		TestUtil.dispHeader("a003 tail() 2012/09/01~7日分のログを準備して9/7(本日)からsaveDays=2でtailする");
 
+		File dir = before("a003");
+		ConfLog conf = new ConfLog(null, null);
+		conf.setTestValue("saveDirectory", dir.getPath());
+
 		conf.setTestValue("nomalFileName", 2); // BlackJumboDog
 		conf.setTestValue("secureFileName", 2); // Secure.Log
 		conf.setTestValue("useLogFile", true);
+		conf.setTestValue("saveDays",30);
 
 		LogFile logFile = new LogFile(null, conf, null, true, null);
 
 		//2012/09/01~7日分のログを準備
-		String s1 = "2012/09/01 11:30:24\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s2 = "2012/09/02 11:30:24\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s3 = "2012/09/03 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s4 = "2012/09/04 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s5 = "2012/09/05 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s6 = "2012/09/06 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s7 = "2012/09/07 11:30:24\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s1 = "2012/09/01 00:00:00\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s2 = "2012/09/02 00:00:00\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s3 = "2012/09/03 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s4 = "2012/09/04 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s5 = "2012/09/05 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s6 = "2012/09/06 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s7 = "2012/09/07 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
 		TestUtil.dispPrompt(this, String.format("append(%s)", s1));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s2));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s3));
@@ -186,7 +203,7 @@ public final class LogFileTest {
 		TestUtil.dispPrompt(this, String.format("tail(%s,%d) 保存日数=%d", fileName, saveDays, saveDays));
 
 		lines = Util.textFileRead(file);
-		assertThat(lines.size(), is(3));
+		assertThat(lines.size(), is(2));
 
 		for (String s : lines) {
 			TestUtil.dispPrompt(this, s);
@@ -195,6 +212,7 @@ public final class LogFileTest {
 
 		logFile.dispose();
 
+		after(dir);
 	}
 
 	// TODO ■LogFileTest deleteLog 未実装

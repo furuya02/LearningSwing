@@ -16,6 +16,10 @@ import bjd.util.FileSearch;
 import bjd.util.IDispose;
 import bjd.util.Util;
 
+//class Global {
+//    static Object lock = new Object();
+//}
+
 public final class LogFile implements IDispose {
 
 	private Logger logger;
@@ -31,6 +35,8 @@ public final class LogFile implements IDispose {
 	private Calendar dt = null; // インスタンス生成時に初期化し、日付が変化したかどうかの確認に使用する
 	private Calendar lastDelete = null; // new DateTime(0);
 	private Timer timer = null;
+	
+	private Object lock = new Object();
 
 	public LogFile(Logger logger, ConfLog conf, LogView logView,
 			boolean useLog, OneServer remoteServer) {
@@ -96,7 +102,8 @@ public final class LogFile implements IDispose {
 				return;
 			}
 
-			synchronized (this) {
+			synchronized (lock) {
+				//TODO ■ DEBUG で取り合えず無効化している
 				logClose(); // クローズ
 				logDelete(); // 過去ログの自動削除
 				logOpen(); // オープン
@@ -124,7 +131,7 @@ public final class LogFile implements IDispose {
 
 		// セキュリティログは、表示制限に関係なく書き込む
 		if (secureLog != null && oneLog.isSecure()) {
-			synchronized (this) {
+			synchronized (lock) {
 				secureLog.set(oneLog.toString());
 			}
 		}
@@ -132,7 +139,7 @@ public final class LogFile implements IDispose {
 		if (nomalLog != null) {
 			// ルール適用除外　もしくは　表示対象になっている場合
 			if (!conf.getUseLimitString() || isDisplay) {
-				synchronized (this) {
+				synchronized (lock) {
 					nomalLog.set(oneLog.toString());
 				}
 			}
