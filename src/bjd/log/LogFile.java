@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Date;
 
+import bjd.option.ConfLog;
 import bjd.server.OneServer;
 import bjd.util.FileSearch;
 import bjd.util.IDispose;

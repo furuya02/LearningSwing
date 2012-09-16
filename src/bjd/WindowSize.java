@@ -3,19 +3,19 @@ package bjd;
 import javax.swing.JFrame;
 
 import bjd.ctrl.ListView;
+import bjd.option.ConfBasic;
 import bjd.option.OneOption;
 import bjd.util.IDispose;
 
 public final class WindowSize implements IDispose {
 
-	//TODO WindowsSize kernelを廃止　ConfBasicで初期化
 	//Windowの外観を保存・復元する
-	private Kernel kernel;
+	private ConfBasic conf;
 	private Reg reg; //記録する仮想レジストリ
 
-	public WindowSize(Kernel kernel) {
-		this.kernel = kernel;
-		reg = new Reg(String.format("%s\\BJD.ini", kernel.getProgDir())); //ウインドサイズ等を記録する仮想レジストリ
+	public WindowSize(ConfBasic conf, String path) {
+		this.conf = conf; 
+		reg = new Reg(path); //ウインドサイズ等を記録する仮想レジストリ
 	}
 
 	@Override
@@ -29,12 +29,11 @@ public final class WindowSize implements IDispose {
 		if (frame == null) {
 			return;
 		}
-		OneOption op = kernel.getListOption().get("Basic");
-		if (op == null) {
+		if (conf == null) {
 			return; //リモート操作の時、ここでオプション取得に失敗する
 		}
 
-		boolean useLastSize = (boolean) op.getValue("useLastSize");
+		boolean useLastSize = conf.useLastSize();
 		if (!useLastSize) {
 			return;
 		}
@@ -73,17 +72,16 @@ public final class WindowSize implements IDispose {
 			return;
 		}
 
-		OneOption op = kernel.getListOption().get("Basic");
-		if (op == null) {
+		if (conf == null) {
 			return; //リモート操作の時、ここでオプション取得に失敗する
 		}
 
-		boolean useLastSize = (boolean) op.getValue("useLastSize");
+		boolean useLastSize = conf.useLastSize();
 		if (!useLastSize) {
 			return;
 		}
 		for (int i = 0; i < listView.getColumnCount(); i++) {
-			String key = String.format("%s_col-%3d", listView.getName(), i);
+			String key = String.format("%s_col-%03d", listView.getName(), i);
 			int width = reg.getInt(key);
 			if (width < 0) {
 				width = 100; //最低100を確保する
@@ -124,7 +122,7 @@ public final class WindowSize implements IDispose {
 			return;
 		}
 		for (int i = 0; i < listView.getColumnCount(); i++) {
-			String key = String.format("%s_col-%3d", listView.getName(), i);
+			String key = String.format("%s_col-%03d", listView.getName(), i);
 			reg.setInt(key, listView.getColWidth(i));
 		}
 	}

@@ -10,6 +10,7 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
+import bjd.option.ConfLog;
 import bjd.util.FileSearch;
 import bjd.util.TestUtil;
 import bjd.util.Util;
@@ -196,7 +197,7 @@ public final class LogFileTest {
 	}
 
 
-	// TODO ■LogFileTest deleteLog 未実装
+	// TODO LogFileTest deleteLog 未実装
 
 
 }

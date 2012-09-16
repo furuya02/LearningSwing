@@ -7,8 +7,8 @@ import java.io.File;
 
 import org.junit.Test;
 
-import bjd.log.ConfLog;
 import bjd.log.LogFile;
+import bjd.option.ConfLog;
 import bjd.util.FileSearch;
 import bjd.util.TestUtil;
 

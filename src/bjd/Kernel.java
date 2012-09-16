@@ -3,12 +3,13 @@ package bjd;
 import java.io.File;
 
 import bjd.ctrl.ListView;
-import bjd.log.ConfLog;
 import bjd.log.ILogger;
 import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.net.LocalAddress;
+import bjd.option.ConfBasic;
+import bjd.option.ConfLog;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
 import bjd.server.ListServer;
@@ -27,6 +28,7 @@ public final class Kernel implements IDispose {
 	private LogFile logFile = null;
 	private View view;
 	private Logger logger = null;
+	private WindowSize windowSize;
 	
     public LogFile getLogFile() {
 		return logFile;
@@ -82,12 +84,17 @@ public final class Kernel implements IDispose {
 //            }
 //        }
 //
-//        WindowSize = new WindowSize(this);//ウインドウの外観を保存・復元(Viewより前に初期化する)
+		
+		
 //        Ver = new Ver();//バージョン管理
 //        Menu = new Menu(this, menuStrip);
         listOption = new ListOption(this); //オプション管理
 //        ListTool = new ListTool();//ツール管理
         listServer = new ListServer(); //サーバ管理
+
+        ConfBasic confBasic = new ConfBasic(listOption.get("Basic"));
+        String path = String.format("%s\\BJD.ini", getProgDir());
+		windowSize = new WindowSize(confBasic, path); //ウインドウの外観を保存・復元(Viewより前に初期化する)
 //
 //        //ログ関連インスタンスの生成
         logView = new LogView(listViewLog); //ログビュー
@@ -157,7 +164,7 @@ public final class Kernel implements IDispose {
 //	        if (TraceDlg != null)
 //	            TraceDlg.Dispose();
 	//
-//	        WindowSize.Dispose();//DisposeしないとReg.Dispose(保存)されない
+	         windowSize.dispose(); //DisposeしないとReg.Dispose(保存)されない
 	    }
 	    
 	    

@@ -1,14 +1,10 @@
-package bjd.log;
+package bjd.option;
 
 import java.awt.Font;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import bjd.Kernel;
-import bjd.option.Dat;
-import bjd.option.OneConf;
-import bjd.option.OneDat;
-import bjd.option.OneOption;
 
 public final class ConfLog extends OneConf {
 

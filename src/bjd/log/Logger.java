@@ -25,7 +25,7 @@ public final class Logger {
 			}
 		}
 		
-		long threadId = Thread.currentThread().getId(); //TODO ■DEBUG GetCurrentThreadId();
+		long threadId = Thread.currentThread().getId(); //TODO DEBUG GetCurrentThreadId();
 		String message = kernel.getJp() ? "定義されていません" : "Message is not defined";
 		if (messageNo < 9000000) {
 			if (logger != null) {

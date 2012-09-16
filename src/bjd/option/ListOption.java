@@ -18,6 +18,10 @@ public final class ListOption extends ListBase<OneOption> {
 				return o;
 			}
 		}
+		//TODO DEBUGのためにとりあえずnullを返す
+		if (nameTag.equals("Basic")) {
+			return null;
+		}
 		Util.designProblem(String.format("nameTag=%s", nameTag));
 		return null;
 	}
