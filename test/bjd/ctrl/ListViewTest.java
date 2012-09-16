@@ -18,7 +18,7 @@ public final class ListViewTest {
 	public void a001() {
 
 		TestUtil.dispHeader("a001 カラムの生成とカラム数取得");
-		ListView listView = new ListView();
+		ListView listView = new ListView("listView");
 		listView.addColumn("Col1");
 		listView.addColumn("Col2");
 		listView.addColumn("Col3");
@@ -35,7 +35,7 @@ public final class ListViewTest {
 	public void a002() {
 
 		TestUtil.dispHeader("a002 行の追加と行数取得");
-		ListView listView = new ListView();
+		ListView listView = new ListView("listView");
 		listView.addColumn("Col1");
 
 		listView.itemAdd(new String[] { "1" });
@@ -54,7 +54,7 @@ public final class ListViewTest {
 	public void a003() {
 
 		TestUtil.dispHeader("a003 全行削除");
-		ListView listView = new ListView();
+		ListView listView = new ListView("listView");
 		listView.addColumn("Col1");
 
 		listView.itemAdd(new String[] { "1" });
@@ -76,7 +76,7 @@ public final class ListViewTest {
 	public void a004() {
 
 		TestUtil.dispHeader("a004 カラム幅の設定と取得");
-		ListView listView = new ListView();
+		ListView listView = new ListView("listView");
 		listView.addColumn("Col1");
 
 		listView.setColWidth(0, 100);
@@ -93,7 +93,7 @@ public final class ListViewTest {
 	public void a005() {
 
 		TestUtil.dispHeader("a005 値の設定と取得");
-		ListView listView = new ListView();
+		ListView listView = new ListView("listView");
 		listView.addColumn("Col1");
 
 		String expected = "1";
@@ -119,7 +119,7 @@ public final class ListViewTest {
 	public void a006() {
 
 		TestUtil.dispHeader("a006 カラムの値の設定と取得");
-		ListView listView = new ListView();
+		ListView listView = new ListView("listView");
 		String expected = "default";
 				
 		listView.addColumn(expected);

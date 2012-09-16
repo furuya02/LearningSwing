@@ -26,7 +26,8 @@ public final class Kernel implements IDispose {
 	private LogView logView;
 	private LogFile logFile = null;
 	private View view;
-    
+	private Logger logger = null;
+	
     public LogFile getLogFile() {
 		return logFile;
 	}
@@ -106,7 +107,7 @@ public final class Kernel implements IDispose {
 //        TraceDlg = new TraceDlg(this);//トレース表示
 //        DnsCache = new DnsCache();
 //
-//        _logger = CreateLogger("kernel", true, null);
+            logger = createLogger("kernel", true, null);
 //
 //        switch (RunMode){
 //            case RunMode.Remote:
@@ -208,8 +209,7 @@ public final class Kernel implements IDispose {
 			useLog = false;
 		}
 		logFile = new LogFile(logger, conf, logView, useLog, remoteServer);
-		//logView.initFont();
-		logView.setFont(conf.getFont());
+		logView.setFont(conf.getFont()); //logView.initFont();
 //
 //        foreach (var o in ListOption) {
 //            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                
@@ -225,7 +225,7 @@ public final class Kernel implements IDispose {
 
     }
 
-	private String progDir() {
+	public String getProgDir() {
 		//TODO kernel.progDir() とりあえずカレントディレクトリを返しておく
 		//return Path.GetDirectoryName(Define.ExecutablePath());
         return new File(".").getAbsoluteFile().getParent();
@@ -233,8 +233,7 @@ public final class Kernel implements IDispose {
 
 	public String env(String str) {
 		//TODO Kernel.env() ここの正規表現は大丈夫か
-		return str.replaceAll("%ExecutablePath%", progDir());
+		return str.replaceAll("%ExecutablePath%", getProgDir());
 	}
-
 
 }

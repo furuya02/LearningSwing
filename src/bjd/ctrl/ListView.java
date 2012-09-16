@@ -15,8 +15,9 @@ public final class ListView extends JScrollPane implements IDispose {
 
 	private JTable table;
 	private DefaultTableModel model;
+	private String name = "";
 
-	public ListView() {
+	public ListView(String name) {
 		//自動的にスクロールバーを表示
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		//table = new JTable(model);
@@ -30,6 +31,9 @@ public final class ListView extends JScrollPane implements IDispose {
 		table.getTableHeader().setReorderingAllowed(false); //カラムの入れ替えを禁止
 
 		getViewport().add(table); // ScrollPaneにtebleをセットする
+
+		this.name = name;
+
 	}
 
 	@Override
@@ -37,6 +41,11 @@ public final class ListView extends JScrollPane implements IDispose {
 		remove(table);
 		model = null;
 		table = null;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	//スクロールして最終行を表示する
@@ -72,7 +81,7 @@ public final class ListView extends JScrollPane implements IDispose {
 	public void itemClear() {
 		model.setRowCount(0);
 	}
-	
+
 	//*******************************************************
 	//列操作
 	//*******************************************************
@@ -80,7 +89,6 @@ public final class ListView extends JScrollPane implements IDispose {
 	public void addColumn(String str) {
 		model.addColumn(str);
 	}
-
 
 	//カラム数取得
 	public int getColumnCount() {
@@ -136,6 +144,5 @@ public final class ListView extends JScrollPane implements IDispose {
 	public String getText(int row, int col) {
 		return (String) model.getValueAt(row, col);
 	}
-
 
 }

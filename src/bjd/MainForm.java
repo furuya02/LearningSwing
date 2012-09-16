@@ -62,7 +62,7 @@ public final class MainForm implements WindowListener {
 			e.printStackTrace();
 		}
 
-		ListView listView = new ListView();
+		ListView listView = new ListView("listViewLog");
 		listView.addColumn("日時");
 		listView.addColumn("種類");
 		listView.addColumn("スレッドID");
