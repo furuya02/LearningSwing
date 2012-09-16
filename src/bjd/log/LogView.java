@@ -9,7 +9,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import bjd.Kernel;
 import bjd.ctrl.ListView;
 import bjd.util.IDispose;
 import bjd.util.Msg;

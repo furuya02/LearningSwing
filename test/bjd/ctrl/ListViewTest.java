@@ -1,15 +1,10 @@
 package bjd.ctrl;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-
-import java.io.File;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import bjd.log.LogFile;
-import bjd.option.ConfLog;
-import bjd.util.FileSearch;
 import bjd.util.TestUtil;
 
 public final class ListViewTest {

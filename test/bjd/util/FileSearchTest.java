@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.AfterClass;
@@ -15,13 +14,11 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import bjd.ctrl.CtrlType;
-
 @RunWith(Enclosed.class)
-public class FileSearchTest {
+public final class FileSearchTest {
 	@RunWith(Theories.class)
-	public static class A001 {
-		static File tmpDir;
+	public static final class A001 {
+		private static File tmpDir;
 
 		@BeforeClass
 		public static void before() {

@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 import bjd.ctrl.ListView;
 import bjd.option.ConfBasic;
-import bjd.option.OneOption;
 import bjd.util.IDispose;
 
 public final class WindowSize implements IDispose {
@@ -83,7 +82,7 @@ public final class WindowSize implements IDispose {
 		for (int i = 0; i < listView.getColumnCount(); i++) {
 			String key = String.format("%s_col-%03d", listView.getName(), i);
 			int width = reg.getInt(key);
-			if (width < 0) {
+			if (width <= 0) {
 				width = 100; //最低100を確保する
 			}
 			listView.setColWidth(i, width);

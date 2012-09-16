@@ -47,14 +47,14 @@ public final class LogFile implements IDispose {
 		lastDelete = Calendar.getInstance();
 		lastDelete.setTime(new Date(0));
 
-		this.useLog = conf.isUseLogFile();
+		this.useLog = conf.useLogFile();
 		if (!useLog) { // サービス起動ではログ保存されない
 			this.useLog = useLog;
 		}
 
 		if (useLog) {
-			if (!(new File(conf.getSaveDirectory())).exists()) {
-				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s", conf.getSaveDirectory()));
+			if (!(new File(conf.saveDirectory())).exists()) {
+				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s", conf.saveDirectory()));
 				useLog = false;
 			}
 			logOpen();
@@ -129,7 +129,7 @@ public final class LogFile implements IDispose {
 			// 通常ログの場合
 			if (normalLog != null) {
 				// ルール適用除外　もしくは　表示対象になっている場合
-				if (!conf.getUseLimitString() || isDisplay) {
+				if (!conf.useLimitString() || isDisplay) {
 					normalLog.set(oneLog.toString());
 				}
 			}
@@ -141,45 +141,45 @@ public final class LogFile implements IDispose {
 		dt = Calendar.getInstance(); // 現在時間で初期化される
 		String fileName = "";
 
-		switch (conf.getNormalFileName()) {
+		switch (conf.normalFileName()) {
 			case 0:// bjd.yyyy.mm.dd.log
 				fileName = String.format("%s\\bjd.%04d.%02d.%02d.log",
-						conf.getSaveDirectory(), dt.get(Calendar.YEAR),
+						conf.saveDirectory(), dt.get(Calendar.YEAR),
 						(dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
 				break;
 			case 1:// bjd.yyyy.mm.log
 				fileName = String.format("%s\\bjd.%04d.%02d.log",
-						conf.getSaveDirectory(), dt.get(Calendar.YEAR),
+						conf.saveDirectory(), dt.get(Calendar.YEAR),
 						(dt.get(Calendar.MONTH) + 1));
 				break;
 			case 2:// BlackJumboDog.Log
 				fileName = String.format("%s\\BlackJumboDog.Log",
-						conf.getSaveDirectory());
+						conf.saveDirectory());
 				break;
 			default:
 				Util.designProblem(String.format("nomalFileName=%d",
-						conf.getNormalFileName()));
+						conf.normalFileName()));
 		}
 		normalLog = new OneLogFile(fileName);
 
-		switch (conf.getSecureFileName()) {
+		switch (conf.secureFileName()) {
 			case 0:// secure.yyyy.mm.dd.log
 				fileName = String.format("%s\\secure.%04d.%02d.%02d.log",
-						conf.getSaveDirectory(), dt.get(Calendar.YEAR),
+						conf.saveDirectory(), dt.get(Calendar.YEAR),
 						(dt.get(Calendar.MONTH) + 1), dt.get(Calendar.DATE));
 				break;
 			case 1:// secure.yyyy.mm.log
 				fileName = String.format("%s\\secure.%04d.%02d.log",
-						conf.getSaveDirectory(), dt.get(Calendar.YEAR),
+						conf.saveDirectory(), dt.get(Calendar.YEAR),
 						(dt.get(Calendar.MONTH) + 1));
 				break;
 			case 2:// secure.Log
 				fileName = String.format("%s\\secure.Log",
-						conf.getSaveDirectory());
+						conf.saveDirectory());
 				break;
 			default:
 				Util.designProblem(String.format("secureFileName=%d",
-						conf.getSecureFileName()));
+						conf.secureFileName()));
 		}
 		secureLog = new OneLogFile(fileName);
 	}
@@ -200,15 +200,15 @@ public final class LogFile implements IDispose {
 	private void logDelete() {
 
 		// 自動ログ削除が無効な場合は、処理なし
-		if (!conf.isUseLogClear()) {
+		if (!conf.useLogClear()) {
 			return;
 		}
 		// 0を指定した場合、削除しない
-		if (conf.getSaveDays() == 0) {
+		if (conf.saveDays() == 0) {
 			return;
 		}
 
-		if (!(new File(conf.getSaveDirectory())).exists()) {
+		if (!(new File(conf.saveDirectory())).exists()) {
 			return;
 		}
 
@@ -222,12 +222,12 @@ public final class LogFile implements IDispose {
 		}
 
 		// ログディレクトリの検索
-		FileSearch fs = new FileSearch(conf.getSaveDirectory());
+		FileSearch fs = new FileSearch(conf.saveDirectory());
 		// 一定
 		ArrayList<File> files = Util.merge(fs.listFiles("BlackJumboDog.Log"),
 				fs.listFiles("secure.Log"));
 		for (File f : files) {
-			tail(f.getParent(), conf.getSaveDays(), Calendar.getInstance()); // saveDays日分以外を削除
+			tail(f.getParent(), conf.saveDays(), Calendar.getInstance()); // saveDays日分以外を削除
 		}
 		// 日ごと
 		files = Util.merge(fs.listFiles("bjd.????.??.??.Log"),
@@ -240,7 +240,7 @@ public final class LogFile implements IDispose {
 					int month = Integer.valueOf(tmp[2]);
 					int day = Integer.valueOf(tmp[3]);
 
-					deleteLog(year, month, day, conf.getSaveDays(), f.getPath());
+					deleteLog(year, month, day, conf.saveDays(), f.getPath());
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -256,7 +256,7 @@ public final class LogFile implements IDispose {
 					int year = Integer.valueOf(tmp[1]);
 					int month = Integer.valueOf(tmp[2]);
 					int day = 30;
-					deleteLog(year, month, day, conf.getSaveDays(), f.getPath());
+					deleteLog(year, month, day, conf.saveDays(), f.getPath());
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

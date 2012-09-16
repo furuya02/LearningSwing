@@ -1,11 +1,6 @@
 package bjd;
 
-import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
-
-import bjd.ctrl.ListView;
-import bjd.option.OneOption;
 
 public final class AppFunc implements SelectMenuListener {
 	private MainForm mainForm;

@@ -42,31 +42,31 @@ public final class ConfLog extends OneConf {
 		return null;
 	}
 
-	public boolean isUseLogFile() {
+	public boolean useLogFile() {
 		return useLogFile;
 	}
 
-	public String getSaveDirectory() {
+	public String saveDirectory() {
 		return saveDirectory;
 	}
 
-	public boolean isUseLogClear() {
+	public boolean useLogClear() {
 		return useLogClear;
 	}
 
-	public int getSaveDays() {
+	public int saveDays() {
 		return saveDays;
 	}
 
-	public int getNormalFileName() {
+	public int normalFileName() {
 		return normalFileName;
 	}
 
-	public int getSecureFileName() {
+	public int secureFileName() {
 		return secureFileName;
 	}
 
-	public Font getFont() {
+	public Font font() {
 		return font;
 	}
 	//********************************************************
@@ -79,9 +79,9 @@ public final class ConfLog extends OneConf {
 		return true;
 	}
 
-	public boolean getUseLimitString() {
+	public boolean useLimitString() {
 		if (logLimit != null) {
-			return logLimit.getUseLimitString();
+			return logLimit.useLimitString();
 		}
 		return true;
 	}
@@ -96,7 +96,7 @@ public final class ConfLog extends OneConf {
 		//表示制限ルールをログファイルに適用するかどうか
 		private boolean useLimitString;
 
-		public boolean getUseLimitString() {
+		public boolean useLimitString() {
 			return useLimitString;
 		}
 

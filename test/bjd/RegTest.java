@@ -1,16 +1,12 @@
 package bjd;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import bjd.log.LogFile;
-import bjd.option.ConfLog;
-import bjd.util.FileSearch;
 import bjd.util.TestUtil;
 
 public final class RegTest {
@@ -152,7 +148,7 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = null;
 		int val = 123;
-		reg.setInt(key,val);
+		reg.setInt(key, val);
 		TestUtil.dispPrompt(this, String.format("reg.setInt(%s,%d)", key, val));
 
 		int actual = reg.getInt(key);
@@ -175,7 +171,7 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = null;
 		String val = "123";
-		reg.setString(key,val);
+		reg.setString(key, val);
 		TestUtil.dispPrompt(this, String.format("reg.setString(%s,\"%s\")", key, val));
 
 		String actual = reg.getString(key);
@@ -198,7 +194,7 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = "key2";
 		String val = null;
-		reg.setString(key,val);
+		reg.setString(key, val);
 		TestUtil.dispPrompt(this, String.format("reg.setString(\"%s\",%s)", key, val));
 
 		String actual = reg.getString(key);
