@@ -57,8 +57,8 @@ public class OptionLog extends OneOption {
 			kernel.getJp() ? "表示しない" : "Don't display" }, OptionDlg.width() - 40, 2)));
 		ListVal list = new ListVal();
 		list.add(new OneVal("Character", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "文字列指定" : "Character", 50)));
-		onePage.add(new OneVal("LimitString", null, Crlf.NEXTLINE, new CtrlDat(kernel.getJp() ? "制限する文字列の指定" : "Limit Character", list, 250, kernel)));
-		onePage.add(new OneVal("UseLimitString", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "上記のルールをログファイルにも適用する" : "Apply this rule in Log")));
+		onePage.add(new OneVal("limitString", null, Crlf.NEXTLINE, new CtrlDat(kernel.getJp() ? "制限する文字列の指定" : "Limit Character", list, 250, kernel)));
+		onePage.add(new OneVal("useLimitString", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "上記のルールをログファイルにも適用する" : "Apply this rule in Log")));
 		return onePage;
 	}
 

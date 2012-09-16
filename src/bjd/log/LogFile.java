@@ -12,6 +12,8 @@ import java.util.TimerTask;
 import java.util.Date;
 
 import bjd.option.Conf;
+import bjd.option.Dat;
+import bjd.option.OneDat;
 import bjd.server.OneServer;
 import bjd.util.FileSearch;
 import bjd.util.IDispose;
@@ -107,9 +109,27 @@ public final class LogFile implements IDispose {
 	// ログファイルへの追加
 	public void append(OneLog oneLog) {
 
+		//TODO 表示制限の所が荒しいので、再設計してテストを作成する必要がある
 		// 表示制限の確認
-		boolean isDisplay = conf.isDisplay(oneLog.toString());
-
+		Dat limit = (Dat) conf.get("limitString");
+		boolean isHit = false;
+		if (limit != null) {
+			for (OneDat o : limit) {
+				if (o.isEnable()) { //有効なデータだけを対象にする
+					if (oneLog.toString().indexOf(o.getStrList().get(0)) != -1) {
+						isHit = true;
+						break;
+					}
+				}
+			}
+		}
+		boolean isDisplay = true;
+		if ((int) conf.get("isDisplay") == 0) {
+			isDisplay = isHit;
+		} else {
+			isDisplay = !isHit;
+		}
+		
 		if (isDisplay) {
 			// ログビューへの追加
 			if (logView != null) {
