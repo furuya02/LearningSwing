@@ -49,6 +49,10 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		}
 		return false;
 	}
+	
+    public abstract String getJpMenu();
+    public abstract String getEnMenu();	
+    public abstract char getMnemonic();	
 
 	public OneOption(Kernel kernel, String path, String nameTag) {
 		this.kernel = kernel;

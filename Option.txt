@@ -16,7 +16,7 @@ INT=BasictimeOut=30
 RADIO=BasicenableAcl=0
 STRING=BasicaclName=
 STRING=BasicaclAddress=
-DAT=Basicacl=	111	111
+DAT=Basicacl=	333	333	222	222
 LIST=LognormalFileName=2
 LIST=LogsecureFileName=2
 FOLDER=LogsaveDirectory=

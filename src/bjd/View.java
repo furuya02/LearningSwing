@@ -8,7 +8,6 @@ public final class View implements IDispose {
 	private Kernel kernel;
 	private MainForm mainForm;
 	private ListView listView;
-
 	//private NotifyIcon notifyIcon;
 
 	//TODO DEBUG用 　View.getListView()
@@ -70,13 +69,6 @@ public final class View implements IDispose {
 
 		//kernel.WindowSize.Save(mainForm);//ウインドウサイズの保存
 		//kernel.WindowSize.Save(listView);//カラム幅の保存
-	}
-
-	public void close() {
-		if (listView == null) {
-			return;
-		}
-		mainForm.exit();
 	}
 
 	//リストビューのカラー変更  

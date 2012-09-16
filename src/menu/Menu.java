@@ -10,8 +10,9 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import bjd.Kernel;
+import bjd.util.IDispose;
 
-public final class Menu implements ActionListener {
+public final class Menu implements ActionListener, IDispose {
 	private Kernel kernel;
 	private JMenuBar menuBar;
 	private Timer _timer;
@@ -64,7 +65,7 @@ public final class Menu implements ActionListener {
 
 		//「オプション」メニュー
 		m = addOneMenu(new OneMenu("Option", "オプション", "Option", 'O', null));
-		//AddListMenu(m, kernel.listOption.Menu());
+		addListMenu(m, kernel.getListOption().getListMenu());
 
 		//「ツール」メニュー
 		m = addOneMenu(new OneMenu("Tool", "ツール", "Tool", 'T', null));
@@ -212,7 +213,7 @@ public final class Menu implements ActionListener {
 		subMenu.add(new OneMenu("File_LogClear", "ログクリア", "Loglear", 'C', "F1")); 
 		subMenu.add(new OneMenu("File_LogCopy", "ログコピー", "LogCopy", 'L', "F2")); 
 		subMenu.add(new OneMenu("File_Trace", "トレース表示", "Trace", 'T', null));
-		subMenu.add(new OneMenu("-", "", "", 'X', null));
+		subMenu.add(new OneMenu()); // セパレータ
 		subMenu.add(new OneMenu("File_Exit", "終了", "Exit", 'X', null));
 		return subMenu;
 	}
@@ -236,4 +237,13 @@ public final class Menu implements ActionListener {
 		return subMenu;
 	}
 
+	@Override
+	public void dispose() {
+		while (menuBar.getMenuCount() > 0) {
+			JMenu m =  menuBar.getMenu(0);
+			m.removeAll();
+			menuBar.remove(m);
+		}
+		menuBar.invalidate();		
+	}
 }

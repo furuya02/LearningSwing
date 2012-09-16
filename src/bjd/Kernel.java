@@ -35,6 +35,7 @@ public final class Kernel implements IDispose {
 	private Logger logger = null;
 	private WindowSize windowSize;
 	private Menu menu; 
+	private MainForm mainForm;
 	
     public LogFile getLogFile() {
 		return logFile;
@@ -74,11 +75,11 @@ public final class Kernel implements IDispose {
 	}
 
 	public void init(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
-		
+		this.mainForm = mainForm;
 //        MailBox = null;//実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
 //        TraceDlg = null;//トレース表示
 //        Ver = null;//バージョン管理
-		menu = null; //メニュー管理クラス
+		this.menu = null; //メニュー管理クラス
 //        Wait = null;
 //        RemoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
 //        RemoteClient = null;//リモートクライアント
@@ -167,6 +168,10 @@ public final class Kernel implements IDispose {
 //	        if (TraceDlg != null)
 //	            TraceDlg.Dispose();
 	//
+	         if (menu != null) {
+	       	     menu.dispose();
+ 	         }
+ 	         
 	         windowSize.dispose(); //DisposeしないとReg.Dispose(保存)されない
 	    }
 	    
@@ -251,14 +256,14 @@ public final class Kernel implements IDispose {
     public void menuOnClick(String cmd) {
 
         if (cmd.indexOf("Option_") == 0) {
-//            OneOption oneOption = listOption.get(cmd.substring(7));
-//            if (oneOption != null) {
-//                var dlg = new OptionDlg(this, oneOption);
-//                if (DialogResult.OK == dlg.ShowDialog()) {
-//                    oneOption.Save();
-//                    Menu.EnqueueMenu("StartStop_Reload",true/*synchro*/);
-//                }
-//            }
+        	OneOption oneOption = listOption.get(cmd.substring(7));
+            if (oneOption != null) {
+            	OptionDlg dlg = new OptionDlg(mainForm.getFrame(), oneOption);
+            	if (dlg.showDialog()) {
+                    oneOption.save();
+                    //Menu.EnqueueMenu("StartStop_Reload",true/*synchro*/);
+            	}
+            }
         } else if (cmd.indexOf("Tool_") == 0) {
 //        	OneTool oneTool = listTool.Get(cmd.substring(5));
 //            if (oneTool == null)
@@ -311,7 +316,7 @@ public final class Kernel implements IDispose {
                     //TraceDlg.Open();
                     break;
                 case "File_Exit":
-                    view.close();
+                    mainForm.exit();
                     break;
                 case "Help_Version":
                     //var dlg = new VersionDlg(this);

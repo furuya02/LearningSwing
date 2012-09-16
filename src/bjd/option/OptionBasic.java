@@ -12,7 +12,22 @@ import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 import bjd.net.ProtocolKind;
 
-public class OptionBasic extends OneOption {
+public final class OptionBasic extends OneOption {
+	
+	@Override
+	public String getJpMenu() {
+		return "基本オプション";
+	}
+
+	@Override
+	public String getEnMenu() {
+		return "Basic Option";
+	}
+
+	@Override
+	public char getMnemonic() {
+		return 'O';
+	}
 
 	public OptionBasic(Kernel kernel, String path, String nameTag) {
 		super(kernel, path, nameTag);
@@ -60,5 +75,6 @@ public class OptionBasic extends OneOption {
 		boolean b = (boolean) getCtrl("useAdminPassword").read();
 		getCtrl("password").setEnable(b);
 	}
+
 
 }

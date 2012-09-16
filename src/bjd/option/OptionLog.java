@@ -16,8 +16,23 @@ import bjd.ctrl.CtrlDat;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 
-public class OptionLog extends OneOption {
+public final class OptionLog extends OneOption {
 
+	@Override
+	public String getJpMenu() {
+		return "ログ表示";
+	}
+
+	@Override
+	public String getEnMenu() {
+		return "Log";
+	}
+
+	@Override
+	public char getMnemonic() {
+		return 'L';
+	}
+    
 	public OptionLog(Kernel kernel, String path) {
 		super(kernel, path, "Log");
 

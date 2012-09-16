@@ -10,8 +10,6 @@ import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
-import menu.AppMenu;
-
 import bjd.ctrl.ListView;
 import bjd.ctrl.StatusBar;
 import bjd.util.Msg;
@@ -20,10 +18,13 @@ import java.awt.event.WindowEvent;
 
 public final class MainForm implements WindowListener {
 
-	private JFrame mainForm;
-	//private AppMenu appMenu;
-	private AppFunc appFunc;
+	private JFrame frame;
 	private Kernel kernel;
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
 
 	/**
 	 * Launch the application.
@@ -34,7 +35,7 @@ public final class MainForm implements WindowListener {
 			public void run() {
 				try {
 					MainForm window = new MainForm();
-					window.mainForm.setVisible(true);
+					window.frame.setVisible(true);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -81,17 +82,19 @@ public final class MainForm implements WindowListener {
 			listView.itemAdd(new String[] { "1234567890", "abcdefghikl", "c" });
 		}
 
-		
-		//appMenu = new AppMenu(mainForm);
 		JMenuBar menuBar = new JMenuBar();
-		mainForm.setJMenuBar(menuBar);
-		kernel = new Kernel(this, listView, menuBar);
-//		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
-
-		mainForm.getContentPane().add(listView);
-
 		StatusBar bar = new StatusBar();
-		mainForm.getContentPane().add(bar, BorderLayout.PAGE_END);
+
+		frame.setJMenuBar(menuBar);
+		frame.getContentPane().add(listView);
+		frame.getContentPane().add(bar, BorderLayout.PAGE_END);
+
+		kernel = new Kernel(this, listView, menuBar);
+
+//		frame.getContentPane().add(listView);
+
+//		StatusBar bar = new StatusBar();
+//		frame.getContentPane().add(bar, BorderLayout.PAGE_END);
 
 		// appFunc.dispose();
 		// appMeu.dispase();
@@ -101,16 +104,16 @@ public final class MainForm implements WindowListener {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		mainForm = new JFrame();
-		mainForm.setTitle("\u30BF\u30A4\u30C8\u30EB");
+		frame = new JFrame();
+		frame.setTitle("\u30BF\u30A4\u30C8\u30EB");
 		// mainForm.setFont(new Font("メイリオ", Font.PLAIN, 12));
-		mainForm.setBounds(100, 100, 746, 368);
-		mainForm.addWindowListener(this);
+		frame.setBounds(100, 100, 746, 368);
+		frame.addWindowListener(this);
 
 		//×を押したときにWindowClosingを発生さた後、ウインドウを閉じる
 		//mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//×を押したときにWindowClosingを発生させる（終了はしない）
-		mainForm.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 	}
 
 	//終了処理

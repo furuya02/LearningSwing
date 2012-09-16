@@ -7,16 +7,16 @@ public final class OneMenu implements IDispose {
 	private String enTitle;
 	private String name;
 	private char mnemonic;
-	private ListMenu subMenu;
+	private ListMenu subMenu = null;
 	private String strAccelerator;
 
 	public char getMnemonic() {
 		return mnemonic;
 	}
 
-	public ListMenu getSubMenu() {
-		return subMenu;
-	}
+	//public ListMenu getSubMenu() {
+	//	return subMenu;
+	//}
 
 	public void setSubMenu(ListMenu subMenu) {
 		this.subMenu = subMenu;
@@ -37,7 +37,16 @@ public final class OneMenu implements IDispose {
 	public String getStrAccelerator() {
 		return strAccelerator;
 	}
-
+	
+	//セパレータ用
+	public OneMenu() {
+		this.name = "-";
+		this.jpTitle = "";
+		this.enTitle = "";
+		this.mnemonic = 'Z';
+		this.subMenu = null;
+		this.strAccelerator = "";
+	}
 	public OneMenu(String name, String jpTitle, String enTitle, char mnemonic, String strAccelerator) {
 		this.name = name;
 		this.jpTitle = jpTitle;
