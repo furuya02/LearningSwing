@@ -89,7 +89,7 @@ public final class Kernel implements IDispose {
         listServer = new ListServer(); //サーバ管理
 //
 //        //ログ関連インスタンスの生成
-        logView = new LogView(this,listViewLog); //ログビュー
+        logView = new LogView(listViewLog); //ログビュー
         //view = new View(this, mainForm, listViewLog, notifyIcon);
 		view = new View(this, listViewLog);
 		//

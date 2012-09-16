@@ -17,17 +17,15 @@ import bjd.util.MsgKind;
 
 public final class LogView implements IDispose {
 
-	private Kernel kernel;
 	private ListView listView;
 	private Timer timer;
 	private ArrayList<OneLog> ar = new ArrayList<OneLog>();
 
-	public LogView(Kernel kernel, ListView listView) {
+	public LogView(ListView listView) {
 		if (listView == null) {
 			return;
 		}
 
-		this.kernel = kernel;
 		this.listView = listView;
 
 		//タイマー（表示）イベント処理
