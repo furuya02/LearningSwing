@@ -79,7 +79,9 @@ public final class LogView implements IDispose {
 
 	public void setFont(Font font) {
 		//TODO kernel経由で呼び出されるのであれば　kernel.viewから呼んだ方がいいのでは？
-		listView.setFont(font);
+		if (listView != null) {
+			listView.setFont(font);
+		}
 	}
 
 	//ログビューへの表示(リモートからも使用される)
