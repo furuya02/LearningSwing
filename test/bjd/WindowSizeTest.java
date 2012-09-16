@@ -22,7 +22,7 @@ public final class WindowSizeTest {
 	}
 
 	private WindowSize createWindowSize(File file) {
-		Conf conf = new Conf(new OptionBasic(new Kernel(null), "", "Basic"));
+		Conf conf = new Conf(new OptionBasic(new Kernel(), "", "Basic"));
 		conf.set("useLastSize", true);
 		return new WindowSize(conf, file.getPath());
 	}
@@ -197,5 +197,4 @@ public final class WindowSizeTest {
 		file.delete(); //後始末
 
 	}
-	//TODO ■NEXT　Frameの保存と再現
 }

@@ -6,7 +6,7 @@ import bjd.util.IDispose;
 
 public final class View implements IDispose {
 	private Kernel kernel;
-	//private MainForm mainForm;
+	private MainForm mainForm;
 	private ListView listView;
 
 	//private NotifyIcon notifyIcon;
@@ -17,9 +17,9 @@ public final class View implements IDispose {
 	}
 
 	//    public View(Kernel kernel, MainForm mainForm, ListView listView, NotifyIcon notifyIcon) {
-	public View(Kernel kernel, ListView listView) {
+	public View(Kernel kernel, MainForm mainForm, ListView listView) {
 		this.kernel = kernel;
-		//this.mainForm = mainForm;
+		this.mainForm = mainForm;
 		this.listView = listView;
 		//this.notifyIcon = notifyIcon;
 
@@ -76,7 +76,7 @@ public final class View implements IDispose {
 		if (listView == null) {
 			return;
 		}
-		//mainForm.Close();
+		mainForm.exit();
 	}
 
 	//リストビューのカラー変更  

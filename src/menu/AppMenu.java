@@ -1,4 +1,4 @@
-package bjd;
+package menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,11 +8,7 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-
-interface SelectMenuListener extends EventListener {
-	void selectMenu(String name);
-}
-
+//TODO 最終的に破棄
 public final class AppMenu implements ActionListener {
 	private boolean jp = true;
 	private MenuBase menuBase;
@@ -29,14 +25,14 @@ public final class AppMenu implements ActionListener {
 	}
 
 	//イベント追加
-	void addListener(SelectMenuListener l) {
+	public void addListener(SelectMenuListener l) {
 		if (!listenerList.contains(l)) {
 			listenerList.add(l);
 		}
 	}
 
 	//イベント削除
-	void removeListener(SelectMenuListener l) {
+	public void removeListener(SelectMenuListener l) {
 		listenerList.remove(l);
 	}
 

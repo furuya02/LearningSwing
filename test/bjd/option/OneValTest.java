@@ -322,7 +322,7 @@ public class OneValTest {
 		 *            デフォルト値(nullを設定した場合、適切な値を自動でセットする)
 		 */
 		public static OneVal createOneVal(CtrlType ctrlType, Object val) {
-			Kernel kernel = new Kernel(null);
+			Kernel kernel = new Kernel();
 			final String help = "help";
 			OneCtrl oneCtrl = null;
 			switch (ctrlType) {

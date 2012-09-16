@@ -2,6 +2,10 @@ package bjd;
 
 import javax.swing.JFrame;
 
+import menu.AppMenu;
+import menu.SelectMenuListener;
+//TODO 最終的に破棄
+
 public final class AppFunc implements SelectMenuListener {
 	private MainForm mainForm;
 	private AppMenu appMenu;

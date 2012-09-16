@@ -1,7 +1,12 @@
 package bjd;
 
 import java.awt.Font;
+import java.awt.MenuBar;
 import java.io.File;
+
+import javax.swing.JMenuBar;
+
+import menu.Menu;
 
 import bjd.ctrl.ListView;
 import bjd.log.ILogger;
@@ -29,6 +34,7 @@ public final class Kernel implements IDispose {
 	private View view;
 	private Logger logger = null;
 	private WindowSize windowSize;
+	private Menu menu; 
 	
     public LogFile getLogFile() {
 		return logFile;
@@ -58,13 +64,21 @@ public final class Kernel implements IDispose {
         return logView;
     }
 
-    //public Kernel(MainForm mainForm, ListView listViewLog, MenuStrip menuStrip,NotifyIcon notifyIcon) {
-	public Kernel(ListView listViewLog) {
+	//テスト用コンストラクタ
+	public Kernel() {
+		init(null, null, null);
+	}
+
+	public Kernel(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
+		init(mainForm, listViewLog, menuBar);
+	}
+
+	public void init(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
 		
 //        MailBox = null;//実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
 //        TraceDlg = null;//トレース表示
 //        Ver = null;//バージョン管理
-//        Menu = null;//メニュー管理クラス
+		menu = null; //メニュー管理クラス
 //        Wait = null;
 //        RemoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
 //        RemoteClient = null;//リモートクライアント
@@ -87,7 +101,7 @@ public final class Kernel implements IDispose {
 		
 		
 //        Ver = new Ver();//バージョン管理
-//        Menu = new Menu(this, menuStrip);
+		menu = new Menu(this, menuBar);
         listOption = new ListOption(this); //オプション管理
 //        ListTool = new ListTool();//ツール管理
         listServer = new ListServer(); //サーバ管理
@@ -98,14 +112,14 @@ public final class Kernel implements IDispose {
 //        //ログ関連インスタンスの生成
         logView = new LogView(listViewLog); //ログビュー
         //view = new View(this, mainForm, listViewLog, notifyIcon);
-		view = new View(this, listViewLog);
+		view = new View(this, mainForm, listViewLog);
 		//
 //        //リモートクライアントでは、以下のオブジェクトは接続されてから初期化される
 //        if (RunMode != RunMode.Remote) {
 //            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
             localAddress = new LocalAddress();
             initList(); //各管理クラスの初期化
-//            Menu.Initialize();//メニュー構築（内部テーブルの初期化）
+            menu.initialize(); //メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        }
 //        Wait = new Wait();
@@ -231,5 +245,93 @@ public final class Kernel implements IDispose {
 		//TODO Kernel.env() ここの正規表現は大丈夫か
 		return str.replaceAll("%ExecutablePath%", getProgDir());
 	}
+	
+    //メニュー選択時の処理
+    //RemoteClientの場合は、このファンクションはフックされない
+    public void menuOnClick(String cmd) {
+
+        if (cmd.indexOf("Option_") == 0) {
+//            OneOption oneOption = listOption.get(cmd.substring(7));
+//            if (oneOption != null) {
+//                var dlg = new OptionDlg(this, oneOption);
+//                if (DialogResult.OK == dlg.ShowDialog()) {
+//                    oneOption.Save();
+//                    Menu.EnqueueMenu("StartStop_Reload",true/*synchro*/);
+//                }
+//            }
+        } else if (cmd.indexOf("Tool_") == 0) {
+//        	OneTool oneTool = listTool.Get(cmd.substring(5));
+//            if (oneTool == null)
+//                return;
+//            OneServer oneServer = ListServer.Get(cmd.substring(5));
+//            //BJD.EXE以外の場合、サーバオブジェクトへのポインタが必要になる
+//            if(oneTool.NameTag != "BJD" && oneServer==null)
+//                return;
+//            ToolDlg dlg = oneTool.CreateDlg(oneServer);
+//            dlg.ShowDialog();
+        } else if (cmd.indexOf("StartStop_") == 0) {
+            switch (cmd) {
+                case "StartStop_Start":
+                    //Start();
+                    break;
+                case "StartStop_Stop":
+                    //Stop();
+                    break;
+                case "StartStop_Restart":
+                    //Stop();
+                    //Thread.Sleep(100);
+                    //Start();
+                    break;
+                case "StartStop_Reload":
+                    //Stop();
+                    initList();
+                    view.setLang();
+                    menu.initialize();
+                    //Start();
+                    break;
+                case "StartStop_Service":
+                    //SetupService(); //サービスの設定
+                    break;
+                default:
+                	Util.designProblem(String.format("cmd=%s", cmd));
+                	break;
+					
+            }
+            view.setColor(); //ウインドのカラー初期化
+            //menu.setEnable(); //状態に応じた有効・無効
+        } else {
+            switch (cmd) {
+                case "File_LogClear":
+                    logView.clear();
+                    break;
+                case "File_LogCopy":
+                    logView.setClipboard();
+                    break;
+                case "File_Trace":
+                    //TraceDlg.Open();
+                    break;
+                case "File_Exit":
+                    view.close();
+                    break;
+                case "Help_Version":
+                    //var dlg = new VersionDlg(this);
+                    //dlg.ShowDialog();
+                    break;
+                case "Help_Homepage":
+                    //Process.Start(Define.WebHome());
+                    break;
+                case "Help_Document":
+                    //Process.Start(Define.WebDocument());
+                    break;
+                case "Help_Support":
+                    //Process.Start(Define.WebSupport());
+                    break;
+                default:
+                	Util.designProblem(String.format("cmd=%s", cmd));
+                	break;
+            }
+        }
+    }
+	
 
 }

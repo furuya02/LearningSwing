@@ -44,7 +44,7 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a001 LogFileの生成時に、オプションで指定したログファイルが生成されているか");
 
 		File dir = before("a001");
-		Conf conf = new Conf(new OptionLog(new Kernel(null), ""));
+		Conf conf = new Conf(new OptionLog(new Kernel(), ""));
 		conf.set("saveDirectory", dir.getPath());
 		
 
@@ -86,7 +86,7 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a002 append(OneLog)して、それぞれのファイルに当該行数が追加されているかどうか");
 
 		File dir = before("a002");
-		Conf conf = new Conf(new OptionLog(new Kernel(null), ""));
+		Conf conf = new Conf(new OptionLog(new Kernel(), ""));
 		conf.set("saveDirectory", dir.getPath());
 
 		conf.set("normalFileName", 2); // BlackJumboDog
@@ -129,7 +129,7 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a003 tail() 2012/09/01~7日分のログを準備して9/7(本日)からsaveDays=2でtailする");
 
 		File dir = before("a003");
-		Conf conf = new Conf(new OptionLog(new Kernel(null),""));
+		Conf conf = new Conf(new OptionLog(new Kernel(), ""));
 		conf.set("saveDirectory", dir.getPath());
 
 		conf.set("normalFileName", 2); // BlackJumboDog

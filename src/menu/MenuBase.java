@@ -1,4 +1,4 @@
-package bjd;
+package menu;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;

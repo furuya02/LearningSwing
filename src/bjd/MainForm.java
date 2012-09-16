@@ -2,11 +2,15 @@ package bjd;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.MenuBar;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+
+import menu.AppMenu;
 
 import bjd.ctrl.ListView;
 import bjd.ctrl.StatusBar;
@@ -17,7 +21,7 @@ import java.awt.event.WindowEvent;
 public final class MainForm implements WindowListener {
 
 	private JFrame mainForm;
-	private AppMenu appMenu;
+	//private AppMenu appMenu;
 	private AppFunc appFunc;
 	private Kernel kernel;
 
@@ -78,10 +82,11 @@ public final class MainForm implements WindowListener {
 		}
 
 		
-		appMenu = new AppMenu(mainForm);
-
-		kernel = new Kernel(listView);
-		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
+		//appMenu = new AppMenu(mainForm);
+		JMenuBar menuBar = new JMenuBar();
+		mainForm.setJMenuBar(menuBar);
+		kernel = new Kernel(this, listView, menuBar);
+//		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
 
 		mainForm.getContentPane().add(listView);
 
