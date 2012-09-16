@@ -9,12 +9,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-public final class Menu {
+public final class MenuBase {
 	
 	private JMenuBar menuBar = null;
 	private Font font;
 	private ActionListener actionListener;
-	public Menu(JFrame frame, ActionListener actionListener) {
+	public MenuBase(JFrame frame, ActionListener actionListener) {
 		font = frame.getFont();
 		this.actionListener = actionListener;
 		menuBar = new JMenuBar();

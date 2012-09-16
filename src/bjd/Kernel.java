@@ -19,7 +19,7 @@ import bjd.util.Util;
 
 public final class Kernel implements IDispose {
 
-    private RunMode runMode = RunMode.Normal;
+    private RunMode runMode;
 	private boolean jp = true;
 	private LocalAddress localAddress;
 	private ListOption listOption;
@@ -69,9 +69,9 @@ public final class Kernel implements IDispose {
 //        RemoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
 //        RemoteClient = null;//リモートクライアント
 //
-//        //動作モードの初期化
-//        RunMode = RunMode.Normal;//通常起動
-//        if (mainForm == null) {
+        //動作モードの初期化
+		runMode = RunMode.Normal; //通常起動
+//		if (mainForm == null) {
 //            RunMode = RunMode.Service;//サービス起動
 //        } else {
 //            if (Environment.GetCommandLineArgs().Length > 1) {
@@ -83,7 +83,7 @@ public final class Kernel implements IDispose {
 //                    RunMode = RunMode.NormalRegist;//サービス登録完了状態
 //            }
 //        }
-//
+
 		
 		
 //        Ver = new Ver();//バージョン管理
@@ -107,7 +107,6 @@ public final class Kernel implements IDispose {
             initList(); //各管理クラスの初期化
 //            Menu.Initialize();//メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
-//        
 //        }
 //        Wait = new Wait();
 //        TraceDlg = new TraceDlg(this);//トレース表示
@@ -124,16 +123,7 @@ public final class Kernel implements IDispose {
 //                Menu.EnqueueMenu("StartStop_Start",true);//synchro
 //                break;
 //        }
-//
-//        //Ver5.2.4 過去のバージョンのファイルを削除する
-//        var list = new List<String> { "example.cer", "example.key", "libeay32.dll", "ssleay32.dll" };
-//        foreach (var l in list) {
-//            var f = string.Format("{0}\\{1}", ProgDir(), l);
-//            if (File.Exists(f)) {
-//                File.Delete(f);
-//            }
-//        }
-		
+	
 	}
 	
 	    @Override

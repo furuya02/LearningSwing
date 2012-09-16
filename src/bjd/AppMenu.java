@@ -15,17 +15,17 @@ interface SelectMenuListener extends EventListener {
 
 public final class AppMenu implements ActionListener {
 	private boolean jp = true;
-	private Menu menu;
+	private MenuBase menuBase;
 	//イベント
 	private Vector<SelectMenuListener> listenerList = new Vector<SelectMenuListener>();
 
 	public AppMenu(JFrame frame) {
-		menu = new Menu(frame, this);
+		menuBase = new MenuBase(frame, this);
 		init(jp);
 	}
 
 	public void dispose() {
-		menu.dispose();
+		menuBase.dispose();
 	}
 
 	//イベント追加
@@ -71,7 +71,7 @@ public final class AppMenu implements ActionListener {
 		if (jp) {
 			title = String.format("%s(%c)", jpStr, mnemonic);
 		}
-		return menu.add(title, mnemonic);
+		return menuBase.add(title, mnemonic);
 	}
 
 	// JMenuItemの追加
@@ -81,7 +81,7 @@ public final class AppMenu implements ActionListener {
 			title = String.format("%s(%c)", jpStr, mnemonic);
 		}
 		//name=enStr
-		menu.add(owner, title, enStr, mnemonic, strAccelerator);
+		menuBase.add(owner, title, enStr, mnemonic, strAccelerator);
 	}
 
 	@Override
