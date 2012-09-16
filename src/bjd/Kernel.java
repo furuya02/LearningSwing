@@ -1,5 +1,6 @@
 package bjd;
 
+import java.awt.Font;
 import java.io.File;
 
 import bjd.ctrl.ListView;
@@ -9,7 +10,6 @@ import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.net.LocalAddress;
 import bjd.option.Conf;
-import bjd.option.ConfLog;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
 import bjd.server.ListServer;
@@ -209,14 +209,14 @@ public final class Kernel implements IDispose {
 		
 		Logger logger = createLogger("Log", true, null);
 		OneServer remoteServer = listServer.get("RemoteServer");
-		ConfLog conf = new ConfLog(listOption.get("Log"), this);
+		Conf conf = new Conf(listOption.get("Log"));
 		boolean useLog = true;
 		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
 			useLog = false;
 		}
 		logFile = new LogFile(logger, conf, logView, useLog, remoteServer);
-		logView.setFont(conf.font()); //logView.initFont();
-//
+		logView.setFont((Font) conf.get("font")); //logView.initFont();
+		//
 //        foreach (var o in ListOption) {
 //            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                
 //            if (o.NameTag == "SmtpServer" || o.NameTag == "Pop3Server") {

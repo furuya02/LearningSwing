@@ -10,7 +10,8 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import bjd.option.ConfLog;
+import bjd.option.Conf;
+import bjd.option.OptionLog;
 import bjd.util.FileSearch;
 import bjd.util.TestUtil;
 import bjd.util.Util;
@@ -20,7 +21,7 @@ public final class LogFileTest {
 	//多重スレッドでテストが走ると、同一ファイルにアクセスしてしまうので、テストごとにテンポラリディレクトリを用意するようにする
 	private File before(String tmpDir) {
 		File dir; // 作業ディレクトリ
-		ConfLog conf = null;
+		Conf conf = null;
 		String path = String.format("%s\\%s", new File(".").getAbsoluteFile().getParent(), tmpDir);
 		dir = new File(path);
 		// 作業ディレクトリの生成
@@ -42,13 +43,13 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a001 LogFileの生成時に、オプションで指定したログファイルが生成されているか");
 
 		File dir = before("a001");
-		ConfLog conf = new ConfLog(null, null);
-		conf.setTestValue("saveDirectory", dir.getPath());
+		Conf conf = new Conf(new OptionLog(null, ""));
+		conf.set("saveDirectory", dir.getPath());
 		
 
 		for (int n = 0; n <= 2; n++) {
-			conf.setTestValue("normalFileName", n);
-			conf.setTestValue("secureFileName", n);
+			conf.set("normalFileName", n);
+			conf.set("secureFileName", n);
 
 			LogFile logFile = new LogFile(null, conf, null, true, null);
 
@@ -84,12 +85,12 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a002 append(OneLog)して、それぞれのファイルに当該行数が追加されているかどうか");
 
 		File dir = before("a002");
-		ConfLog conf = new ConfLog(null, null);
-		conf.setTestValue("saveDirectory", dir.getPath());
+		Conf conf = new Conf(new OptionLog(null, ""));
+		conf.set("saveDirectory", dir.getPath());
 
-		conf.setTestValue("normalFileName", 2); // BlackJumboDog
-		conf.setTestValue("secureFileName", 2); // Secure.Log
-		conf.setTestValue("useLogFile", true);
+		conf.set("normalFileName", 2); // BlackJumboDog
+		conf.set("secureFileName", 2); // Secure.Log
+		conf.set("useLogFile", true);
 		//conf.setTestValue("saveDays",100);
 		//conf.setTestValue("useLogClear",false);
 		
@@ -127,13 +128,13 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a003 tail() 2012/09/01~7日分のログを準備して9/7(本日)からsaveDays=2でtailする");
 
 		File dir = before("a003");
-		ConfLog conf = new ConfLog(null, null);
-		conf.setTestValue("saveDirectory", dir.getPath());
+		Conf conf = new Conf(new OptionLog(null, ""));
+		conf.set("saveDirectory", dir.getPath());
 
-		conf.setTestValue("normalFileName", 2); // BlackJumboDog
-		conf.setTestValue("secureFileName", 2); // Secure.Log
-		conf.setTestValue("useLogFile", true);
-		conf.setTestValue("saveDays", 30);
+		conf.set("normalFileName", 2); // BlackJumboDog
+		conf.set("secureFileName", 2); // Secure.Log
+		conf.set("useLogFile", true);
+		conf.set("saveDays", 30);
 
 		LogFile logFile = new LogFile(null, conf, null, true, null);
 

@@ -61,7 +61,7 @@ public final class ListOption extends ListBase<OneOption> {
 		//固定的にBasicとLogを生成する
 		String executePath = ""; // Application.ExecutablePath
 		add(new OptionBasic(kernel, executePath, "Basic")); //「基本」オプション
-		add(new OptionLog(kernel, executePath, "Log")); //「ログ」オプション
+		add(new OptionLog(kernel, executePath)); //「ログ」オプション
 
 		/*
 		//DLLを検索し、各オプションを生成する

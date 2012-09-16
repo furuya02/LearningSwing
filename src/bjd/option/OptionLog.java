@@ -18,8 +18,8 @@ import bjd.ctrl.OnePage;
 
 public class OptionLog extends OneOption {
 
-	public OptionLog(Kernel kernel, String path, String nameTag) {
-		super(kernel, path, nameTag);
+	public OptionLog(Kernel kernel, String path) {
+		super(kernel, path, "Log");
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
