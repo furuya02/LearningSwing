@@ -27,11 +27,14 @@ import bjd.util.Util;
 public abstract class OneOption implements ICtrlEventListener, IDispose {
 
 	private ListVal listVal = new ListVal();
-
 	protected Kernel kernel;
 	private String path; //実態が格納されているモジュール(DLL)のフルパス
 	private String nameTag;
 	private IniDb iniDb;
+
+	public final ListVal getListVal() {
+		return listVal;
+	}
 
 	public final String getNameTag() {
 		return nameTag;
