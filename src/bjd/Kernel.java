@@ -8,7 +8,7 @@ import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.net.LocalAddress;
-import bjd.option.ConfBasic;
+import bjd.option.Conf;
 import bjd.option.ConfLog;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
@@ -92,9 +92,8 @@ public final class Kernel implements IDispose {
 //        ListTool = new ListTool();//ツール管理
         listServer = new ListServer(); //サーバ管理
 
-        ConfBasic confBasic = new ConfBasic(listOption.get("Basic"));
         String path = String.format("%s\\BJD.ini", getProgDir());
-		windowSize = new WindowSize(confBasic, path); //ウインドウの外観を保存・復元(Viewより前に初期化する)
+		windowSize = new WindowSize(new Conf(listOption.get("Basic")), path); //ウインドウの外観を保存・復元(Viewより前に初期化する)
 //
 //        //ログ関連インスタンスの生成
         logView = new LogView(listViewLog); //ログビュー

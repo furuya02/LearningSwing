@@ -3,16 +3,16 @@ package bjd;
 import javax.swing.JFrame;
 
 import bjd.ctrl.ListView;
-import bjd.option.ConfBasic;
+import bjd.option.Conf;
 import bjd.util.IDispose;
 
 public final class WindowSize implements IDispose {
 
 	//Windowの外観を保存・復元する
-	private ConfBasic conf;
+	private Conf conf;
 	private Reg reg; //記録する仮想レジストリ
 
-	public WindowSize(ConfBasic conf, String path) {
+	public WindowSize(Conf conf, String path) {
 		this.conf = conf; 
 		reg = new Reg(path); //ウインドサイズ等を記録する仮想レジストリ
 	}
@@ -32,7 +32,7 @@ public final class WindowSize implements IDispose {
 			return; //リモート操作の時、ここでオプション取得に失敗する
 		}
 
-		boolean useLastSize = conf.useLastSize();
+		boolean useLastSize = (boolean) conf.get("useLastSize");
 		if (!useLastSize) {
 			return;
 		}
@@ -75,7 +75,7 @@ public final class WindowSize implements IDispose {
 			return; //リモート操作の時、ここでオプション取得に失敗する
 		}
 
-		boolean useLastSize = conf.useLastSize();
+		boolean useLastSize = (boolean) conf.get("useLastSize");
 		if (!useLastSize) {
 			return;
 		}

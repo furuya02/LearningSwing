@@ -10,7 +10,8 @@ import javax.swing.JFrame;
 import org.junit.Test;
 
 import bjd.ctrl.ListView;
-import bjd.option.ConfBasic;
+import bjd.option.Conf;
+import bjd.option.OptionBasic;
 import bjd.util.TestUtil;
 
 public final class WindowSizeTest {
@@ -21,8 +22,8 @@ public final class WindowSizeTest {
 	}
 
 	private WindowSize createWindowSize(File file) {
-		ConfBasic conf = new ConfBasic(null);
-		conf.setTestValue("useLastSize", true);
+		Conf conf = new Conf(new OptionBasic(new Kernel(null), "", "Basic"));
+		conf.set("useLastSize", true);
 		return new WindowSize(conf, file.getPath());
 	}
 

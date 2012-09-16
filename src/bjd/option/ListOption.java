@@ -20,7 +20,7 @@ public final class ListOption extends ListBase<OneOption> {
 		}
 		//TODO DEBUGのためにとりあえずnullを返す
 		if (nameTag.equals("Basic")) {
-			return null;
+			return new OptionBasic(kernel, "", "Basic");
 		}
 		Util.designProblem(String.format("nameTag=%s", nameTag));
 		return null;
