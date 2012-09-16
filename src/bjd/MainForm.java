@@ -79,6 +79,7 @@ public final class MainForm implements WindowListener {
 		listView.setColWidth(5, 70);
 		listView.setColWidth(6, 200);
 		listView.setColWidth(7, 300);
+		
         
 		for (int i = 0; i < 100; i++) {
 			listView.itemAdd(new String[] { "1234567890", "abcdefghikl", "c" });
@@ -90,10 +91,10 @@ public final class MainForm implements WindowListener {
 		kernel = new Kernel(listView);
 		appFunc = new AppFunc(this, appMenu, mainForm, kernel);
 
-		mainForm.add(listView);
+		mainForm.getContentPane().add(listView);
 
 		StatusBar bar = new StatusBar();
-		mainForm.add(bar, BorderLayout.PAGE_END);
+		mainForm.getContentPane().add(bar, BorderLayout.PAGE_END);
 
 		// appFunc.dispose();
 		// appMeu.dispase();
@@ -106,7 +107,7 @@ public final class MainForm implements WindowListener {
 		mainForm = new JFrame();
 		mainForm.setTitle("\u30BF\u30A4\u30C8\u30EB");
 		// mainForm.setFont(new Font("メイリオ", Font.PLAIN, 12));
-		mainForm.setBounds(100, 100, 450, 300);
+		mainForm.setBounds(100, 100, 746, 368);
 		mainForm.addWindowListener(this);
 
 		//×を押したときにWindowClosingを発生さた後、ウインドウを閉じる

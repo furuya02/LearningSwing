@@ -208,7 +208,8 @@ public final class Kernel implements IDispose {
 			useLog = false;
 		}
 		logFile = new LogFile(logger, conf, logView, useLog, remoteServer);
-		logView.initFont();
+		//logView.initFont();
+		logView.setFont(conf.getFont());
 //
 //        foreach (var o in ListOption) {
 //            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                

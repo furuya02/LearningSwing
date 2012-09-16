@@ -10,6 +10,7 @@ import javax.swing.table.TableColumn;
 
 import bjd.util.IDispose;
 
+@SuppressWarnings("serial")
 public final class ListView extends JScrollPane implements IDispose {
 
 	private JTable table;
@@ -50,25 +51,59 @@ public final class ListView extends JScrollPane implements IDispose {
 		super.setFont(font);
 		if (table != null) {
 			table.setFont(font);
+			//table.invalidate();
 		}
 	}
 
+	//*******************************************************
+	//行操作
+	//*******************************************************
+	//行追加
+	public void itemAdd(String[] str) {
+		model.addRow(str);
+	}
+
+	//カラム数取得
+	public int getRowCount() {
+		return model.getRowCount();
+	}
+
+	// 全行削除
+	public void itemClear() {
+		model.setRowCount(0);
+	}
+	
+	//*******************************************************
+	//列操作
+	//*******************************************************
+	//カラム追加
 	public void addColumn(String str) {
 		model.addColumn(str);
 	}
 
-	public void itemAdd(String[] str) {
-		model.addRow(str);
-	}
 
 	//カラム数取得
 	public int getColumnCount() {
 		return model.getColumnCount();
 	}
 
-	// 全行削除
-	public void itemClear() {
-		model.setRowCount(0);
+	//カラムの設定
+	public void setColumnText(int col, String text) {
+		int colMax = model.getColumnCount();
+		String[] columnNames = new String[colMax];
+		for (int i = 0; i < colMax; i++) {
+			if (col == i) {
+				columnNames[i] = text;
+			} else {
+				columnNames[i] = model.getColumnName(i);
+			}
+		}
+		model.setColumnIdentifiers(columnNames);
+	}
+
+	//カラムの取得
+	public String getColumnText(int col) {
+		return model.getColumnName(col);
 	}
 
 	//*******************************************************
@@ -81,7 +116,7 @@ public final class ListView extends JScrollPane implements IDispose {
 
 	public int getColWidth(int index) {
 		TableColumn col = table.getColumnModel().getColumn(index);
-		return col.getWidth();
+		return col.getPreferredWidth();
 	}
 
 	//*******************************************************
@@ -102,24 +137,5 @@ public final class ListView extends JScrollPane implements IDispose {
 		return (String) model.getValueAt(row, col);
 	}
 
-	//*******************************************************
-	//カラムの設定・取得
-	//*******************************************************
-	public void setColumnText(int col, String text) {
-		int colMax = model.getColumnCount();
-		String[] columnNames = new String[colMax];
-		for (int i = 0; i < colMax; i++) {
-			if (col == i) {
-				columnNames[i] = text;
-			} else {
-				columnNames[i] = model.getColumnName(i);
-			}
-		}
-		model.setColumnIdentifiers(columnNames);
-	}
-
-	public String getColumnText(int col) {
-		return model.getColumnName(col);
-	}
 
 }

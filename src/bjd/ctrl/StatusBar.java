@@ -1,14 +1,13 @@
 package bjd.ctrl;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.SystemColor;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public final class StatusBar extends JPanel {
 
 	public StatusBar() {

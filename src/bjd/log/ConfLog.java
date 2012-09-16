@@ -1,5 +1,6 @@
 package bjd.log;
 
+import java.awt.Font;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public final class ConfLog extends OneConf {
 	private int saveDays; //ログ保存日数
 	private int normalFileName; //通常ファイルの種類
 	private int secureFileName; //セキュアファイルの種類
+	private Font font; 
 
 	public ConfLog(OneOption option, Kernel kernel) {
 		if (option != null) {
@@ -30,6 +32,7 @@ public final class ConfLog extends OneConf {
 			saveDays = (int) option.getValue("saveDays");
 			normalFileName = (int) option.getValue("normalFileName");
 			secureFileName = (int) option.getValue("secureFileName");
+			font = (Font) option.getValue("font");
 		}
 	}
 
@@ -67,6 +70,9 @@ public final class ConfLog extends OneConf {
 		return secureFileName;
 	}
 
+	public Font getFont() {
+		return font;
+	}
 	//********************************************************
 	// LogLimitをカバーするメソッド
 	//********************************************************
