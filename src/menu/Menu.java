@@ -15,21 +15,20 @@ import bjd.util.IDispose;
 public final class Menu implements ActionListener, IDispose {
 	private Kernel kernel;
 	private JMenuBar menuBar;
-	private Timer _timer;
-//	private Queue<ToolStripMenuItem> _queue = new Queue<ToolStripMenuItem>();
-//	private Dictionary<OneMenu, ToolStripMenuItem> _ar = new Dictionary<OneMenu, ToolStripMenuItem>();
-
-	//【メニュー選択時のイベント】
-//	public delegate void MenuClickHandler(ToolStripMenuItem menu);//デリゲート
-//	public event MenuClickHandler OnClick;//イベント
 
 	public Menu(Kernel kernel, JMenuBar menuBar) {
 		this.kernel = kernel;
 		this.menuBar = menuBar;
-//
-//		_timer = new System.Timers.Timer{Interval = 100};
-//		_timer.Elapsed+=TimerElapsed;
-//		_timer.Enabled = true;
+	}
+
+	@Override
+	public void dispose() {
+		while (menuBar.getMenuCount() > 0) {
+			JMenu m =  menuBar.getMenu(0);
+			m.removeAll();
+			menuBar.remove(m);
+		}
+		menuBar.invalidate();		
 	}
 
 	//メニュー構築（内部テーブルの初期化）
@@ -40,7 +39,6 @@ public final class Menu implements ActionListener, IDispose {
 
 		//全削除
 		menuBar.removeAll();
-		//_ar.Clear();
 
 		ListMenu subMenu = new ListMenu();
 		subMenu.add(new OneMenu("File_Exit", "終了", "Exit", 'X', null));
@@ -49,6 +47,7 @@ public final class Menu implements ActionListener, IDispose {
 		JMenu m = addOneMenu(new OneMenu("File", "ファイル", "File", 'F', null));
 		addListMenu(m, subMenu);
 	}
+	
 	//メニュー構築（内部テーブルの初期化）
 	public void initialize() {
 		if (menuBar == null) {
@@ -57,7 +56,6 @@ public final class Menu implements ActionListener, IDispose {
 
 		//全削除
 		menuBar.removeAll();
-		//_ar.Clear();
 
 		//「ファイル」メニュー
 		JMenu m = addOneMenu(new OneMenu("File", "ファイル", "File", 'F', null));
@@ -69,7 +67,7 @@ public final class Menu implements ActionListener, IDispose {
 
 		//「ツール」メニュー
 		m = addOneMenu(new OneMenu("Tool", "ツール", "Tool", 'T', null));
-		//AddListMenu(m, kernel.listTool.Menu());
+		//addListMenu(m, kernel.getListTool()getListMenu());
 
 		//「起動/停止」メニュー
 		m = addOneMenu(new OneMenu("StartStop", "起動/停止", "Start/Stop", 'S', null));
@@ -83,18 +81,17 @@ public final class Menu implements ActionListener, IDispose {
 		setEnable(); //状況に応じた有効無効
 	}
 
-	//メニュー選択のイベントを発生させる
-	//synchro=false 非同期で動作する
-	public void enqueueMenu(String name, boolean synchro) {
-//		var item = new ToolStripMenuItem{Name = name};
-//		if (synchro) {
-//			if (OnClick != null) {
-//				OnClick(item);
-//			}
-//		} else {
-//			_queue.Enqueue(item);//キューに格納する
-//		}
-	}
+//	//メニュー選択のイベントを発生させる
+//	public void enqueueMenu(String name, boolean synchro) {
+////		var item = new ToolStripMenuItem{Name = name};
+////		if (synchro) {
+////			if (OnClick != null) {
+////				OnClick(item);
+////			}
+////		} else {
+////			_queue.Enqueue(item);//キューに格納する
+////		}
+//	}
 	//タイマー起動でキューに入っているメニューイベントを実行する
 //	void timerElapsed(Object sender, System.Timers.ElapsedEventArgs e) {
 //		if(_queue.Count>0){
@@ -128,7 +125,6 @@ public final class Menu implements ActionListener, IDispose {
 			//String strAccelerator = keyStroke.toString();
 			menuItem.setAccelerator(KeyStroke.getKeyStroke(oneMenu.getStrAccelerator()));
         }
-		//menuItem.setFont(font);
 		menuItem.addActionListener(this);
 		menuItem.setName(oneMenu.getTitle(kernel.getJp()));
 
@@ -141,7 +137,6 @@ public final class Menu implements ActionListener, IDispose {
 	}
 	
 	JMenu addOneMenu(OneMenu oneMenu) {
-		
 		JMenu menu = new JMenu(oneMenu.getTitle(kernel.getJp()));
 		menu.setMnemonic(oneMenu.getMnemonic());
 		menuBar.add(menu);
@@ -152,8 +147,6 @@ public final class Menu implements ActionListener, IDispose {
 	//メニュー選択時のイベント処理
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//TODO Debug print
-		System.out.println(String.format("%s", e.getActionCommand()));
 		kernel.menuOnClick(e.getActionCommand());
 	}
 
@@ -163,6 +156,7 @@ public final class Menu implements ActionListener, IDispose {
 //			o.Value.Text = kernel.Jp?o.Key.JpTitle:o.Key.EnTitle;
 //		}
 	}
+	
 	//状況に応じた有効/無効
 	public void setEnable() {
 //		if (kernel.RunMode == RunMode.NormalRegist) {//サービス登録されている場合
@@ -237,13 +231,4 @@ public final class Menu implements ActionListener, IDispose {
 		return subMenu;
 	}
 
-	@Override
-	public void dispose() {
-		while (menuBar.getMenuCount() > 0) {
-			JMenu m =  menuBar.getMenu(0);
-			m.removeAll();
-			menuBar.remove(m);
-		}
-		menuBar.invalidate();		
-	}
 }
