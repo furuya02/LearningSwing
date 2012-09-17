@@ -109,7 +109,7 @@ public final class LogFile implements IDispose {
 	// ログファイルへの追加
 	public void append(OneLog oneLog) {
 
-		//TODO 表示制限の所が荒しいので、再設計してテストを作成する必要がある
+		//TODO 表示制限の所が怪しいので、再設計してテストを作成する必要がある
 		// 表示制限の確認
 		Dat limit = (Dat) conf.get("limitString");
 		boolean isHit = false;

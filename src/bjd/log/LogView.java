@@ -19,6 +19,7 @@ public final class LogView implements IDispose {
 	private ListView listView;
 	private Timer timer;
 	private ArrayList<OneLog> ar = new ArrayList<OneLog>();
+	private Object lock = new Object();
 
 	public LogView(ListView listView) {
 		if (listView == null) {
@@ -44,7 +45,7 @@ public final class LogView implements IDispose {
 				return;
 			}
 			timer.cancel(); //一時停止
-			synchronized (this) {
+			synchronized (lock) {
 				//TODO 適当な方法が分からないのでコメントアウト	listView.BeginUpdate();
 
 				//一回のイベントで処理する最大数は100行まで
@@ -86,7 +87,7 @@ public final class LogView implements IDispose {
 		if (listView == null) {
 			return;
 		}
-		synchronized (this) {
+		synchronized (lock) {
 			ar.add(oneLog);
 		}
 	}
