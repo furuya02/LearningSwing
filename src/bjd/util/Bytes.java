@@ -14,32 +14,29 @@ public final class Bytes {
 	//*********************************************************
 	//複数のオブジェクトを並べて、byte[]に変換する
 	//null指定可能 / Stringは、Encoding.ASCCでバイト化される
-	public static byte[] create(Object[] list) {
+	public static byte[] create(Object ... list) {
 		int len = 0;
 		for (Object o : list) {
 			if (o == null) {
 				continue;
 			}
 			switch (o.getClass().getName()) {
-				case "Byte[]":
+				case "[B":
 					len += ((byte[]) o).length;
 					break;
-				case "String":
+				case "java.lang.String":
 					len += ((String) o).length();
 					break;
-				case "Int32":
-				case "UInt32":
+				case "java.lang.Integer":
 					len += 4;
 					break;
-				case "Int16":
-				case "UInt16":
+				case "java.lang.Short":
 					len += 2;
 					break;
-				case "Int64":
-				case "UInt64":
+				case "java.lang.Long":
 					len += 8;
 					break;
-				case "Byte":
+				case "java.lang.Byte":
 					len += 1;
 					break;
 				default:
@@ -57,43 +54,30 @@ public final class Bytes {
 			}
 
 			switch (o.getClass().getName()) {
-				case "Byte[]":
+				case "[B":
 					System.arraycopy(((byte[]) o), 0, data, offset, ((byte[]) o).length);
 					//Buffer.BlockCopy(((byte[]) o), 0, data, offset, ((byte[]) o).Length);
 					offset += ((byte[]) o).length;
 					break;
-				case "String":
+				case "java.lang.String":
 					System.arraycopy(((String) o).getBytes(), 0, data, offset, ((String) o).length());
 					//Buffer.BlockCopy(Encoding.ASCII.GetBytes((string) o), 0, data, offset, ((string) o).Length);
 					offset += ((String) o).length();
 					break;
-				case "Int32":
-					System.arraycopy(((int) o).getBytes(), 0, data, offset,4);
-					//Buffer.BlockCopy(BitConverter.GetBytes((Int32) o), 0, data, offset, 4);
-					offset += 4;
+				case "java.lang.Integer":
+//					System.arraycopy(((int) o).getBytes(), 0, data, offset,4);
+//					//Buffer.BlockCopy(BitConverter.GetBytes((Int32) o), 0, data, offset, 4);
+//					offset += 4;
 					break;
-				case "UInt32":
-					System.arraycopy(((int) o).getBytes(), 0, data, offset,4);
-					//Buffer.BlockCopy(BitConverter.GetBytes((UInt32) o), 0, data, offset, 4);
-					offset += 4;
+				case "java.lang.Short":
+//					Buffer.BlockCopy(BitConverter.GetBytes((Int16) o), 0, data, offset, 2);
+//					offset += 2;
 					break;
-				case "Int16":
-					Buffer.BlockCopy(BitConverter.GetBytes((Int16) o), 0, data, offset, 2);
-					offset += 2;
+				case "java.lang.Long":
+//					Buffer.BlockCopy(BitConverter.GetBytes((Int64) o), 0, data, offset, 8);
+//					offset += 8;
 					break;
-				case "UInt16":
-					Buffer.BlockCopy(BitConverter.GetBytes((UInt16) o), 0, data, offset, 2);
-					offset += 2;
-					break;
-				case "Int64":
-					Buffer.BlockCopy(BitConverter.GetBytes((Int64) o), 0, data, offset, 8);
-					offset += 8;
-					break;
-				case "UInt64":
-					Buffer.BlockCopy(BitConverter.GetBytes((UInt64) o), 0, data, offset, 8);
-					offset += 8;
-					break;
-				case "Byte":
+				case "java.lang.Byte":
 					data[offset] = (byte) o;
 					offset += 1;
 					break;
