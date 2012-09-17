@@ -78,7 +78,7 @@ public final class OptionLog extends OneOption {
 	}
 
 	@Override
-	protected final void abstractOnChange(OneCtrl oneCtrl) {
+	protected void abstractOnChange(OneCtrl oneCtrl) {
         boolean b = (boolean) getCtrl("useLogClear").read();
         getCtrl("saveDays").setEnable(b);
 	}

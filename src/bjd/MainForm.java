@@ -2,7 +2,6 @@ package bjd;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.MenuBar;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
@@ -10,8 +9,12 @@ import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import wait.IWaitDlg;
+import wait.WaitDlg;
+
 import bjd.ctrl.ListView;
 import bjd.ctrl.StatusBar;
+import bjd.option.Conf;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 import java.awt.event.WindowEvent;
@@ -131,16 +134,32 @@ public final class MainForm implements WindowListener {
 		//        _kernel.Dispose();
 
 		//終了確認
-		boolean useExitDlg = (boolean) kernel.getOptionVal("Basic", "useExitDlg");
+		Conf conf = kernel.createConf("Basic");
+		boolean useExitDlg = (boolean) conf.get("useExitDlg");
 		if (useExitDlg) {
 			if (0 != Msg.show(MsgKind.Question, kernel.getJp() ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
 				return; //キャンセル
 			}
 		}
-
 		kernel.dispose();
-
 		System.exit(0);
+	}
+
+	public void test() {
+		final WaitDlg waitDlg = new WaitDlg(frame, "暫くお待ちください", 500);
+		waitDlg.start(new IWaitDlg() {
+			public boolean loop(int i) {
+				String msg = String.format("i=%d", i);
+				System.out.println(msg);
+				waitDlg.setLabel(msg);
+				try {
+					Thread.sleep(3);
+				} catch (InterruptedException ie) {
+					System.out.println(String.format("Interrupted"));
+				}
+				return true;
+			}
+		});
 	}
 
 	@Override

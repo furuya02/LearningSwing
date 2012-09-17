@@ -1,7 +1,7 @@
 package bjd;
 
 import bjd.ctrl.ListView;
-import bjd.option.OneOption;
+import bjd.option.Conf;
 import bjd.util.IDispose;
 
 public final class View implements IDispose {
@@ -43,15 +43,15 @@ public final class View implements IDispose {
 			//    notifyIcon.Visible = false;
 
 			if (kernel.getRunMode() != RunMode.Remote) {
-				OneOption option = kernel.getListOption().get("Basic");
-				if (option != null) {
-					boolean useLastSize = (boolean) option.getValue("useLastSize");
+				Conf conf = kernel.createConf("Basic");
+				if (conf != null) {
+					boolean useLastSize = (boolean) conf.get("useLastSize");
 					if (useLastSize) {
 						//						_kernel.WindowSize.Read(_listView);//カラム幅の復元
 						//						_kernel.WindowSize.Read(_mainForm);//終了時のウインドウサイズの復元
 					}
 					//「起動時にウインドウを開く」が指定されていない場合は、アイコン化する
-					if (!(boolean) option.getValue("isWindowOpen")) {
+					if (!(boolean) conf.get("isWindowOpen")) {
 						setVisible(false); //非表示
 					}
 				}

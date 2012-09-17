@@ -71,7 +71,7 @@ public final class OptionBasic extends OneOption {
 	}
 
 	@Override
-	protected final void abstractOnChange(OneCtrl oneCtrl) {
+	protected void abstractOnChange(OneCtrl oneCtrl) {
 		boolean b = (boolean) getCtrl("useAdminPassword").read();
 		getCtrl("password").setEnable(b);
 	}

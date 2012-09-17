@@ -13,7 +13,7 @@ import javax.swing.event.DocumentListener;
 
 import bjd.Kernel;
 import bjd.RunMode;
-import bjd.option.OneOption;
+import bjd.option.Conf;
 
 //CtrlFile及びCtrlFolderの親クラス
 public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
@@ -42,8 +42,8 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		// テキストボックスの配置
 		textField = (JTextField) create(panel, new JTextField(digits), left, top);
 		textField.getDocument().addDocumentListener(this);
-		OneOption op = kernel.getListOption().get("Basic");
-		boolean editBrowse = (boolean) op.getValue("editBrowse");
+		Conf conf = kernel.createConf("Basic");
+		boolean editBrowse = (boolean) conf.get("editBrowse");
 		if (!editBrowse) {
 			textField.setEditable(false); // 読み取り専用
 			textField.setFocusable(false);

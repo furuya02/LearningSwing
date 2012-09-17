@@ -1,11 +1,8 @@
 package bjd;
 
 import java.awt.Font;
-import java.awt.MenuBar;
 import java.io.File;
-
 import javax.swing.JMenuBar;
-
 import menu.Menu;
 
 import bjd.ctrl.ListView;
@@ -37,7 +34,8 @@ public final class Kernel implements IDispose {
 	private Menu menu; 
 	private MainForm mainForm;
 	
-    public LogFile getLogFile() {
+
+	public LogFile getLogFile() {
 		return logFile;
 	}
 
@@ -80,7 +78,6 @@ public final class Kernel implements IDispose {
 //        TraceDlg = null;//トレース表示
 //        Ver = null;//バージョン管理
 		this.menu = null; //メニュー管理クラス
-//        Wait = null;
 //        RemoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
 //        RemoteClient = null;//リモートクライアント
 //
@@ -123,7 +120,6 @@ public final class Kernel implements IDispose {
             menu.initialize(); //メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        }
-//        Wait = new Wait();
 //        TraceDlg = new TraceDlg(this);//トレース表示
 //        DnsCache = new DnsCache();
 //
@@ -174,22 +170,24 @@ public final class Kernel implements IDispose {
  	         
 	         windowSize.dispose(); //DisposeしないとReg.Dispose(保存)されない
 	    }
-	    
-	    
-	public void Test() {
-		view.getListView().displayLastLine();
-	}
 
 	//オプションの値取得
-	public Object getOptionVal(String nameTag, String name) {
+//	public Object getOptionVal(String nameTag, String name) {
+//		OneOption oneOption = listOption.get(nameTag);
+//		if (oneOption != null) {
+//			return oneOption.getValue(name);
+//		}
+//		Util.designProblem(String.format("nameTag=%s name=%s", nameTag, name));
+//		return null;
+//	}
+
+	public Conf createConf(String nameTag) {
 		OneOption oneOption = listOption.get(nameTag);
 		if (oneOption != null) {
-			return oneOption.getValue(name);
+			return new Conf(oneOption);
 		}
-		Util.designProblem(String.format("nameTag=%s name=%s", nameTag, name));
 		return null;
 	}
-
 
 	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
 		return new Logger(this, nameTag, useDetailsLog, logger);
@@ -319,8 +317,8 @@ public final class Kernel implements IDispose {
                     mainForm.exit();
                     break;
                 case "Help_Version":
-                    //var dlg = new VersionDlg(this);
-                    //dlg.ShowDialog();
+               	
+                	mainForm.test();
                     break;
                 case "Help_Homepage":
                     //Process.Start(Define.WebHome());
@@ -336,7 +334,6 @@ public final class Kernel implements IDispose {
                 	break;
             }
         }
-    }
-	
-
+       
+    }    
 }

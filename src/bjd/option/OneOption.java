@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import bjd.Kernel;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlDat;
-import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlRadio;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.ICtrlEventListener;
