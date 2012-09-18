@@ -44,55 +44,38 @@ public final class Bytes {
 					return new byte[0];
 			}
 		}
-		byte[] data = new byte[len];
-		int offset = 0;
+		ByteBuffer data = ByteBuffer.allocate(len);
+		data.order(ByteOrder.LITTLE_ENDIAN);
 
 		for (Object o : list) {
-
 			if (o == null) {
 				continue;
 			}
-
 			switch (o.getClass().getName()) {
 				case "[B":
-					System.arraycopy(((byte[]) o), 0, data, offset, ((byte[]) o).length);
-					//Buffer.BlockCopy(((byte[]) o), 0, data, offset, ((byte[]) o).Length);
-					offset += ((byte[]) o).length;
+					data.put(((byte[]) o));
 					break;
 				case "java.lang.String":
-					System.arraycopy(((String) o).getBytes(), 0, data, offset, ((String) o).length());
-					//Buffer.BlockCopy(Encoding.ASCII.GetBytes((string) o), 0, data, offset, ((string) o).Length);
-					offset += ((String) o).length();
+					data.put(((String) o).getBytes());
 					break;
 				case "java.lang.Integer":
-//					System.arraycopy(((int) o).getBytes(), 0, data, offset,4);
-//					//Buffer.BlockCopy(BitConverter.GetBytes((Int32) o), 0, data, offset, 4);
-//					offset += 4;
+					data.putInt((int) o);
 					break;
 				case "java.lang.Short":
-//					Buffer.BlockCopy(BitConverter.GetBytes((Int16) o), 0, data, offset, 2);
-//					offset += 2;
+					data.putShort((short) o);
 					break;
 				case "java.lang.Long":
-//					Buffer.BlockCopy(BitConverter.GetBytes((Int64) o), 0, data, offset, 8);
-//					offset += 8;
+					data.putLong((long) o);
 					break;
 				case "java.lang.Byte":
-					data[offset] = (byte) o;
-					offset += 1;
+					data.put((byte) o);
 					break;
 				default:
 					Util.designProblem(o.getClass().getName());
 					return new byte[0];
 			}
 		}
-		return data;
-	}
-
-	public static byte[] GetBytes(int value){
-	    ByteBuffer buffer = ByteBuffer.allocate(4).order(ByteOrder.nativeOrder());
-	    buffer.putInt(value);
-	    return buffer.array();
+		return data.array();
 	}
 
 	//*********************************************************
@@ -103,7 +86,7 @@ public final class Bytes {
 	public static int indexOf(byte[] buffer, int off, byte[] target) {
 		for (int i = off; i + target.length < buffer.length; i++) {
 			boolean any = false;
-			for (int t = 0; t < target.length; t++){
+			for (int t = 0; t < target.length; t++) {
 				if (buffer[i + t] != target[t]) {
 					any = true;
 					break;

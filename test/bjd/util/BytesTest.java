@@ -1,80 +1,115 @@
 package bjd.util;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 
+@RunWith(Enclosed.class)
 public class BytesTest {
 
-	@Test
-	public void test() {
-		int max = 100;
-		byte [] dmy = new byte[max];
-		for (byte i = 0; i < max; i++) {
-	        dmy[i] = i;
-	    }
-		//Create(params object[] list)
-		byte b = 1;
-		short a1 = 2;
-		int a2 = 3;
-		long a3 = 4;
-		String s = "123";
-		//byte [] data = Bytes.create(dmy, b, a1, a2, a3, s, dmy);
-		byte [] data = Bytes.create(dmy, b, a1, a2, a3, s, dmy);
+	//*****************************************************
+	//各テストクラスで共通に使用される元データの作成クラス
+	//*****************************************************
+	@Ignore  //テストから除外
+	public static final class Data {
+		public static byte [] generate() {
+			int max = 100;
+			byte [] dmy = new byte[max];
+			for (byte i = 0; i < max; i++) {
+				dmy[i] = i;
+			}
+			byte b = 1;
+			short a1 = 2;
+			int a2 = 3;
+			long a3 = 4;
+			String s = "123";
+			return Bytes.create(dmy, b, a1, a2, a3, s, dmy);
+		}
+	}
+	
+	
+	@RunWith(Theories.class)
+	public static final class A001 {
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("Bytes.create(....) offset番目のデータの確認"); //TESTヘッダ
+		}
+		@DataPoints
+		public static Fixture[] datas = {
+			new Fixture(100, (byte) 1),		
+			new Fixture(100 + 1, (byte) 2), 
+			new Fixture(100 + 1 + 2, (byte) 3), 
+			new Fixture(100 + 1 + 2 + 4, (byte) 4), 
+			new Fixture(100 + 1 + 2 + 4 + 8 + 0, (byte) '1'),
+			new Fixture(100 + 1 + 2 + 4 + 8 + 1, (byte) '2'), 
+			new Fixture(100 + 1 + 2 + 4 + 8 + 2, (byte) '3'), 
+			new Fixture(100 + 1 + 2 + 4 + 8 + 3, (byte) 0),
+		};
+		static class Fixture {
+			private int offset;
+			private byte expected;
 
+			public Fixture(int offset, byte expected) {
+				this.offset = offset;
+				this.expected = expected;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this); //TESTプロンプト
+			
+			System.out.printf("data[%d] = %d\n", fx.offset, fx.expected);
+			byte [] data = Data.generate();
+			assertThat(data[fx.offset], is(fx.expected));
+		}
+	}
+
+	@RunWith(Theories.class)
+	public static final class A002 {
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("Bytes.search() 指定したoffset以降で、「\"123\"」が出現する位置を検索する"); //TESTヘッダ
+		}
+
+		@DataPoints
+		public static Fixture[] datas = {
+			new Fixture(0, 49),	//１つ目dmyの中に存在する
+			new Fixture(50, 100 + 1 + 2 + 4 + 8), 
+			new Fixture(100, 100 + 1 + 2 + 4 + 8), 
+			new Fixture(150, 167), //2つ目dmyの中に存在する
+			new Fixture(200, -1), //存在しない
+		};
+		static class Fixture {
+			private int offset;
+			private int expected;
+
+			public Fixture(int offset, int expected) {
+				this.offset = offset;
+				this.expected = expected;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this); //TESTプロンプト
+			
+			System.out.printf("data.indexOf(%d,\"123\") = %d\n", fx.offset, fx.expected);
+			byte [] data = Data.generate();
+			byte [] src = ("123").getBytes();
+
+			int actual = Bytes.indexOf(data, fx.offset, src);
+			assertThat(actual, is(fx.expected));
+		}
 	}
 }
 
-//
-//byte[] _data;
-//
-//[SetUp]
-//public void SetUp() {
-//
-//    //Create()
-//    const int max = 100;
-//    var dmy = new byte[max];
-//    foreach (byte i in Enumerable.Range(0, 100)) {
-//        dmy[i] = i;
-//    }
-//
-//    //Create(params object[] list)
-//    byte b = 1;
-//    Int16 a1 = 2;
-//    Int32 a2 = 3;
-//    Int64 a3 = 4;
-//    string s = "123";
-//
-//    _data = Bytes.Create(dmy, b, a1, a2, a3, s, dmy);
-//
-//}
-//
-//[TearDown]
-//public void TearDown(){
-//
-//}
-//
-//[TestCase(100, (byte)1)]
-//[TestCase(100 + 1 , (byte)2)]
-//[TestCase(100 + 1 + 2, (byte)3)]
-//[TestCase(100 + 1 + 2 + 4, (byte)4)]
-//[TestCase(100 + 1 + 2 + 4 + 8 + 0, (byte)'1')]
-//[TestCase(100 + 1 + 2 + 4 + 8 + 1, (byte)'2')]
-//[TestCase(100 + 1 + 2 + 4 + 8 + 2, (byte)'3')]
-//[TestCase(100 + 1 + 2 + 4 + 8 + 3, (byte)0)]
-//public void BytesTest(int index,byte val) {
-//    Assert.AreEqual(_data[index],val);
-//}
-//
-//[TestCase(0, 49)]//１つ目dmyの中に存在する
-//[TestCase(50, 100 + 1 + 2 + 4 + 8)]
-//[TestCase(100, 100 + 1 + 2 + 4 + 8)]
-//[TestCase(150,167)] //２つ目dmyの中に存在する
-//[TestCase(200,-1)] //存在しない
-//public void SearchTest(int offset, int index) {
-//    var src = Encoding.ASCII.GetBytes("123");
-//    var n = Bytes.IndexOf(_data, offset, src);
-//    Assert.AreEqual(index, n);
-//}
-//}
-//}
