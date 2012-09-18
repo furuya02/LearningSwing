@@ -1,4 +1,4 @@
-package menu;
+package bjd.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -8,13 +8,16 @@ import java.nio.ByteBuffer;
 public final class Ip {
 
 	private boolean status = false;
-
 	private InetKind inetKind;
 	private boolean any;
 	private byte[] ipV4;
 	private byte[] ipV6;
 	private int scopeId;
 
+	public boolean getStatus() {
+		return status;
+	}
+	
 	public int getScopeId() {
 		return scopeId;
 	}

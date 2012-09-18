@@ -1,4 +1,4 @@
-package wait;
+package bjd.wait;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;

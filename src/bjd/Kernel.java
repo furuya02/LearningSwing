@@ -3,13 +3,13 @@ package bjd;
 import java.awt.Font;
 import java.io.File;
 import javax.swing.JMenuBar;
-import menu.Menu;
 
 import bjd.ctrl.ListView;
 import bjd.log.ILogger;
 import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
+import bjd.menu.Menu;
 import bjd.net.LocalAddress;
 import bjd.option.Conf;
 import bjd.option.ListOption;

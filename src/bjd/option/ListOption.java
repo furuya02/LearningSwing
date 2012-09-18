@@ -1,8 +1,8 @@
 package bjd.option;
 
-import menu.ListMenu;
-import menu.OneMenu;
 import bjd.Kernel;
+import bjd.menu.ListMenu;
+import bjd.menu.OneMenu;
 import bjd.util.ListBase;
 import bjd.util.Util;
 

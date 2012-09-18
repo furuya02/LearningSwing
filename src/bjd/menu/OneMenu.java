@@ -1,4 +1,4 @@
-package menu;
+package bjd.menu;
 
 import bjd.util.IDispose;
 

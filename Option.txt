@@ -27,5 +27,4 @@ INT=LoglinesMax=3000
 INT=LoglinesDelete=1000
 RADIO=LogisDisplay=1
 STRING=LogCharacter=
-DAT=LoglimitString=
 BOOL=LoguseLimitString=false
