@@ -22,7 +22,7 @@ public final class LogFileTest {
 	//多重スレッドでテストが走ると、同一ファイルにアクセスしてしまうので、テストごとにテンポラリディレクトリを用意するようにする
 	private File before(String tmpDir) {
 		File dir; // 作業ディレクトリ
-		Conf conf = null;
+		//Conf conf = null;
 		String path = String.format("%s\\%s", new File(".").getAbsoluteFile().getParent(), tmpDir);
 		dir = new File(path);
 		// 作業ディレクトリの生成

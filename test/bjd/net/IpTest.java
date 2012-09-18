@@ -418,6 +418,7 @@ public class IpTest {
 			System.out.printf("new Ip(%s) => throw IllegalArgumentException\n", fx.ipStr);
 			
 			try {
+				@SuppressWarnings("unused")
 				Ip p1 = new Ip(fx.ipStr);
 				Assert.fail("この行が実行されたらエラー");
 			} catch (IllegalArgumentException ex) {

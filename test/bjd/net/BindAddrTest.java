@@ -148,6 +148,7 @@ public class BindAddrTest {
 			System.out.printf("new BindAddr(%s) =>  throw IllegalArgumentException\n", fx.actual);
 			
 			try {
+				@SuppressWarnings("unused")
 				BindAddr bindAddr = new BindAddr(fx.actual);
 				Assert.fail("この行が実行されたらエラー");
 			} catch (IllegalArgumentException ex) {

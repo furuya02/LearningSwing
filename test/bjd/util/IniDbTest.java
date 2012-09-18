@@ -62,7 +62,7 @@ public class IniDbTest {
 		};
 
 		static class Fixture {
-			private OneVal oneVal;
+			//private OneVal oneVal;
 			private CtrlType ctrlType;
 			private Object value;
 			private String expected;

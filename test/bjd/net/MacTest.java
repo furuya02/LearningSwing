@@ -1,16 +1,8 @@
 package bjd.net;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
@@ -23,7 +15,7 @@ import bjd.util.TestUtil;
 @RunWith(Enclosed.class)
 public class MacTest {
 	@RunWith(Theories.class)
-	public static class A001 {
+	public static final class A001 {
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("Mac(macStr)で初期化して、ｔｏＳｔｒｉｎｇ（）で確かめる"); //TESTヘッダ
@@ -49,13 +41,13 @@ public class MacTest {
 			TestUtil.dispPrompt(this); //TESTプロンプト
 			String actual = (new Mac(fx.macStr)).toString().toUpperCase();
 			
-			System.out.printf("mac=new Mac(%s) => mac.toString()==%s\n", fx.macStr,actual);
+			System.out.printf("mac=new Mac(%s) => mac.toString()==%s\n", fx.macStr, actual);
 			assertThat(actual, is(fx.macStr.toUpperCase()));
 		}
 	}
 	
 	@RunWith(Theories.class)
-	public static class A002 {
+	public static final class A002 {
 		@BeforeClass
 		public static void before() {
 			TestUtil.dispHeader("equal()のテスト \"12-34-56-78-9A-BC\"と比較する"); //TESTヘッダ

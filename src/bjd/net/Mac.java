@@ -6,7 +6,7 @@ public final class Mac {
 
 	public Mac(String macStr) {
 		for (int i = 0; i < 6; i++) {
-			String str = macStr.substring(i * 3, i*3+2);
+			String str = macStr.substring(i * 3, i * 3 + 2);
 			m[i] = (byte) Integer.parseInt(str, 0x10);  
 			//m[i] = Byte.parseByte(str, 16);
 		}
