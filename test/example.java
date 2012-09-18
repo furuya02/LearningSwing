@@ -20,7 +20,6 @@
 //
 //@RunWith(Enclosed.class)
 //public class ListValTest {
-
 //	@RunWith(Theories.class)
 //	public static class A001 {
 //		@BeforeClass
