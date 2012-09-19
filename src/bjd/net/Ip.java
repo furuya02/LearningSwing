@@ -164,19 +164,11 @@ public final class Ip {
 	public Ip(int ip) {
 		init(InetKind.V4); // デフォルト値での初期化
 
-		byte[] tmp = ByteBuffer.allocate(4).putInt(ip).array();
-
-		for (int i = 0; i < 4; i++) {
-			ipV4[i] = tmp[3 - i];
-		}
+		ipV4 = ByteBuffer.allocate(4).putInt(ip).array();
 		if (isAllZero(ipV4)) {
 			any = true;
 		}
 		status = true; // 初期化成功
-
-		ByteBuffer bb = ByteBuffer.wrap(tmp);
-		bb.array();
-
 	}
 
 	// ホストバイトオーダのデータで初期化する
@@ -185,11 +177,11 @@ public final class Ip {
 		init(InetKind.V6); // デフォルト値での初期化
 		byte[] b = ByteBuffer.allocate(8).putLong(h).array();
 		for (int i = 0; i < 8; i++) {
-			ipV6[7 - i] = b[i];
+			ipV6[i] = b[i];
 		}
 		b = ByteBuffer.allocate(8).putLong(l).array();
 		for (int i = 0; i < 8; i++) {
-			ipV6[15 - i] = b[i];
+			ipV6[i + 8] = b[i];
 		}
 		status = true; // 初期化成功
 	}
@@ -295,15 +287,16 @@ public final class Ip {
 		return ipV6;
 	}
 
-	// ホストバイトオーダ
+	// ホストバイトオーダ　この値を比較に使用する場合は、longへのキャストが必要 (getAddrV4()&0xFFFFFFFFL)
 	public int getAddrV4() {
 		if (inetKind == InetKind.V4) {
-			byte[] tmp = new byte[4];
-			tmp[3] = ipV4[0];
-			tmp[2] = ipV4[1];
-			tmp[1] = ipV4[2];
-			tmp[0] = ipV4[3];
-			return ByteBuffer.wrap(tmp).getInt();
+			ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+			byteBuffer.put(ipV4[0]);
+			byteBuffer.put(ipV4[1]);
+			byteBuffer.put(ipV4[2]);
+			byteBuffer.put(ipV4[3]);
+			byteBuffer.rewind();
+			return byteBuffer.getInt();
 		}
 		return 0;
 	}
@@ -311,16 +304,12 @@ public final class Ip {
 	// ホストバイトオーダ
 	public long getAddrV6H() {
 		if (inetKind == InetKind.V6) {
-			byte[] tmp = new byte[8];
-			tmp[7] = ipV6[0];
-			tmp[6] = ipV6[1];
-			tmp[5] = ipV6[2];
-			tmp[4] = ipV6[3];
-			tmp[3] = ipV6[4];
-			tmp[2] = ipV6[5];
-			tmp[1] = ipV6[6];
-			tmp[0] = ipV6[7];
-			return ByteBuffer.wrap(tmp).getLong();
+			ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+			for (int i = 0; i < 8; i++) {
+				byteBuffer.put(ipV6[i]);
+			}
+			byteBuffer.rewind();
+			return byteBuffer.getLong();
 		}
 		return 0;
 	}
@@ -328,16 +317,12 @@ public final class Ip {
 	// ホストバイトオーダ
 	public long getAddrV6L() {
 		if (inetKind == InetKind.V6) {
-			byte[] tmp = new byte[8];
-			tmp[7] = ipV6[8];
-			tmp[6] = ipV6[9];
-			tmp[5] = ipV6[10];
-			tmp[4] = ipV6[11];
-			tmp[3] = ipV6[12];
-			tmp[2] = ipV6[13];
-			tmp[1] = ipV6[14];
-			tmp[0] = ipV6[15];
-			return ByteBuffer.wrap(tmp).getLong();
+			ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+			for (int i = 0; i < 8; i++) {
+				byteBuffer.put(ipV6[i + 8]);
+			}
+			byteBuffer.rewind();
+			return byteBuffer.getLong();
 		}
 		return 0;
 	}

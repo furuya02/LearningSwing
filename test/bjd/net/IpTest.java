@@ -427,4 +427,81 @@ public class IpTest {
 			Assert.fail("この行が実行されたらエラー");
 		}
 	}
+	
+	@RunWith(Theories.class)
+	public static final class A009 {
+		
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("getAddrV4()の検証");
+		}
+		
+		@DataPoints
+		public static Fixture[] datas = {
+			//コンストラクタに与える文字列
+			new Fixture("192.168.0.1", 0xc0a80001),
+		};
+		static class Fixture {
+			private String ipStr;
+			private int addr;
+
+			public Fixture(String ipStr, int addr) {
+				this.ipStr = ipStr;
+				this.addr = addr;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this);
+
+			System.out.printf("ip = new Ip(%s) => ip.getAddrV4()=%x\n", fx.ipStr, fx.addr);
+
+			Ip ip = new Ip(fx.ipStr);
+			int x1 = ip.getAddrV4();
+			Assert.assertEquals(x1, fx.addr);
+		}
+	}
+
+	@RunWith(Theories.class)
+	public static final class A010 {
+		
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("getAddrV6H() getAddrV6L()の検証");
+		}
+		
+		@DataPoints
+		public static Fixture[] datas = {
+			//コンストラクタに与える文字列
+			new Fixture("1234:56::1234:5678:90ab", 0x1234005600000000L, 0x00001234567890abL),
+		};
+		static class Fixture {
+			private String ipStr;
+			private long h;
+			private long l;
+
+			public Fixture(String ipStr, long h, long l) {
+				this.ipStr = ipStr;
+				this.h = h;
+				this.l = l;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+
+			TestUtil.dispPrompt(this);
+
+			System.out.printf("ip = new Ip(%s) => ip.getAddrV6H()=%x ip.getAddrV6L()=%x\n", fx.ipStr, fx.h, fx.l);
+
+			Ip ip = new Ip(fx.ipStr);
+			long h = ip.getAddrV6H();
+			Assert.assertEquals(h, fx.h);
+			long l = ip.getAddrV6L();
+			Assert.assertEquals(l, fx.l);
+		}
+	}
+
 }

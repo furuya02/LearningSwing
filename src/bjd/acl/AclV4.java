@@ -18,12 +18,23 @@ public final class AclV4 extends Acl {
 	//****************************************************************
 	@Override
 	public boolean isHit(Ip ip) {
-		if (ip.getAddrV4() < start.getAddrV4()) {
+		
+		long longIp = ip.getAddrV4() & 0xFFFFFFFFL;
+		long longStart = start.getAddrV4() & 0xFFFFFFFFL;
+		
+		if (longIp < longStart) {
 			return false;
 		}
-		if (end.getAddrV4() < ip.getAddrV4()) {
+		long longEnd = end.getAddrV4() & 0xFFFFFFFFL;
+		if (longEnd < longIp) {
 			return false;
 		}
+//		if (ip.getAddrV4() < start.getAddrV4()) {
+//			return false;
+//		}
+//		if (end.getAddrV4() < ip.getAddrV4()) {
+//			return false;
+//		}
 		return true;
 	}
 
@@ -42,12 +53,12 @@ public final class AclV4 extends Acl {
 		//「*」表現を正規化する
 		String[] tmp = ipStr.split("\\.");
 		if (tmp.length == 4) {
-			if (tmp[1] == "*" && tmp[2] == "*" && tmp[3] == "*") { //192.*.*.*
-				ipStr = String.format("{0}.0.0.0/8", tmp[0]);
-			} else if (tmp[2] == "*" && tmp[3] == "*") { //192.168.*.*
-				ipStr = String.format("{0}.{1}.0.0/16", tmp[0], tmp[1]);
-			} else if (tmp[3] == "*") { //192.168.0.*
-				ipStr = String.format("{0}.{1}.{2}.0/24", tmp[0], tmp[1], tmp[2]);
+			if (tmp[1].equals("*") && tmp[2].equals("*") && tmp[3].equals("*")) { //192.*.*.*
+				ipStr = String.format("%s.0.0.0/8", tmp[0]);
+			} else if (tmp[2].equals("*") && tmp[3].equals("*")) { //192.168.*.*
+				ipStr = String.format("%s.%s.0.0/16", tmp[0], tmp[1]);
+			} else if (tmp[3].equals("*")) { //192.168.0.*
+				ipStr = String.format("%s.%s.%s.0/24", tmp[0], tmp[1], tmp[2]);
 			}
 		}
 
@@ -66,20 +77,24 @@ public final class AclV4 extends Acl {
 			if (tmp.length == 4) { //192.168.0.100
 				end = new Ip(strTo);
 			} else if (tmp.length == 1) { //100
-				try {
+				//try {
 					int n = Integer.valueOf(strTo);
 					//if(n < 0 || 255 < n)
 					//    return;//初期化失敗
-					strTo = String.format("%d.%d.%d.%d", start.getIpV4()[0], start.getIpV4()[1], start.getIpV4()[2], n);
+					strTo = String.format("%d.%d.%d.%d", start.getIpV4()[0] & 0xFF, start.getIpV4()[1] & 0xFF, start.getIpV4()[2] & 0xFF, n);
 					end = new Ip(strTo);
-				} catch (Exception ex) {
-					return; //初期化失敗
-				}
+					if (!end.getStatus()) {
+						return; //初期化失敗
+					}
+				//} catch (Exception ex) {
+				//	return; //初期化失敗
+				//}
 			} else {
 				return; //初期化失敗
 			}
 
 			//開始アドレスが終了アドレスより大きい場合、入れ替える
+			//if ((start.getAddrV4() & 0xFFFFFFFFL) > (end.getAddrV4() & 0xFFFFFFFFL)) {
 			if (start.getAddrV4() > end.getAddrV4()) {
 				Ip ip = start;
 				start = end;
@@ -119,6 +134,7 @@ public final class AclV4 extends Acl {
 			if (!ip.getStatus()) {
 				return; //初期化失敗
 			}
+			
 			start = new Ip(ip.getAddrV4() & mask);
 			end = new Ip(ip.getAddrV4() | xor);
 		} else {

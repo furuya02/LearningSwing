@@ -3,7 +3,7 @@ package bjd.acl;
 import bjd.net.Ip;
 
 public abstract class Acl {
-    protected boolean status;// { get; protected set; }
+    protected boolean status; // { get; protected set; }
     protected String name; // { get; protected set; }
     protected Ip start; //  { get; protected set; }
     protected Ip end; // { get; protected set; }
