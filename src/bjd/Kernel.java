@@ -33,7 +33,17 @@ public final class Kernel implements IDispose {
 	private WindowSize windowSize;
 	private Menu menu; 
 	private MainForm mainForm;
-	
+	private OneServer remoteServer=null;	
+	private TraceDlg traceDlg;
+    
+
+	public TraceDlg getTraceDlg() {
+		return traceDlg;
+	}
+
+	public OneServer getRemoteServer() {
+		return remoteServer;
+	}
 
 	public LogFile getLogFile() {
 		return logFile;
@@ -75,10 +85,10 @@ public final class Kernel implements IDispose {
 	public void init(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
 		this.mainForm = mainForm;
 //        MailBox = null;//実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
-//        TraceDlg = null;//トレース表示
+        traceDlg = null;//トレース表示
 //        Ver = null;//バージョン管理
 		this.menu = null; //メニュー管理クラス
-//        RemoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
+        remoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
 //        RemoteClient = null;//リモートクライアント
 //
         //動作モードの初期化
@@ -120,7 +130,7 @@ public final class Kernel implements IDispose {
             menu.initialize(); //メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        }
-//        TraceDlg = new TraceDlg(this);//トレース表示
+        traceDlg = new TraceDlg(this,mainForm.getFrame());//トレース表示
 //        DnsCache = new DnsCache();
 //
             logger = createLogger("kernel", true, null);
@@ -161,9 +171,9 @@ public final class Kernel implements IDispose {
 //	            RemoteClient.Dispose();
 	//
 	              view.dispose();
-//	        if (TraceDlg != null)
-//	            TraceDlg.Dispose();
-	//
+	        if (traceDlg != null){
+//	            traceDlg.Dispose();
+	        }
 	         if (menu != null) {
 	       	     menu.dispose();
  	         }
@@ -215,7 +225,7 @@ public final class Kernel implements IDispose {
 		}
 		
 		Logger logger = createLogger("Log", true, null);
-		OneServer remoteServer = listServer.get("RemoteServer");
+		remoteServer = listServer.get("RemoteServer");
 		Conf conf = new Conf(listOption.get("Log"));
 		boolean useLog = true;
 		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
@@ -311,7 +321,7 @@ public final class Kernel implements IDispose {
                     logView.setClipboard();
                     break;
                 case "File_Trace":
-                    //TraceDlg.Open();
+                    traceDlg.Open();
                     break;
                 case "File_Exit":
                     mainForm.exit();
