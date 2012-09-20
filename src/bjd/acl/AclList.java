@@ -1,6 +1,7 @@
 package bjd.acl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import bjd.log.LogKind;
 import bjd.log.Logger;
@@ -10,7 +11,7 @@ import bjd.option.Dat;
 import bjd.option.OneDat;
 
 public class AclList {
-	private static final String OneDat = null;
+	//private static final String OneDat = null;
 	private ArrayList<Acl> arV4 = new ArrayList<>();
 	private ArrayList<Acl> arV6 = new ArrayList<>();
 
@@ -25,30 +26,30 @@ public class AclList {
 				String name = o.getStrList().get(0);
 				String ipStr= o.getStrList().get(1);
 
-				if (ipStr == "*") {//全部
+				if (ipStr.equals("*")) {//全部
 					Acl acl = new AclV4(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, null, 9000034, String.format("Name:{0} Address{1}", name, ipStr));
+						logger.set(LogKind.Error, null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV4.add(acl);
 					}
 					acl = new AclV6(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, null, 9000034, String.format("Name:{0} Address{1}", name, ipStr));
+						logger.set(LogKind.Error, null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV6.add(acl);
 					}
 				} else if (ipStr.indexOf('.') != -1) {//IPv4ルール
 					Acl acl = new AclV4(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, null, 9000034, String.format("Name:{0} Address{1}", name, ipStr));
+						logger.set(LogKind.Error, null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV4.add(acl);
 					}
 				} else {//IPv6ルール
 					Acl acl = new AclV6(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, null, 9000034, String.format("Name:{0} Address{1}", name, ipStr));
+						logger.set(LogKind.Error, null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV6.add(acl);
 					}
@@ -58,20 +59,26 @@ public class AclList {
 	}
 	//リストへの追加
 	public boolean Append(Ip ip) {
-		if(!enable)
+		if(!enable){
 			return false;
-
+		}
 		if (ip.getInetKind() == InetKind.V4) {
-			if (arV4.Any(p => p.IsHit(ip))){
-				return false;
+			for(Acl a : arV4){
+				if(a.isHit(ip)){
+					return false;
+				}
 			}
-			Acl acl = new AclV4(String.format("AutoDeny-{0}", DateTime.Now), ip.toString());
+			Calendar c = Calendar.getInstance();
+			Acl acl = new AclV4(String.format("AutoDeny-%s",c.toString()), ip.toString());
 			arV4.add(acl);
 		} else {
-			if (arV6.Any(p => p.IsHit(ip))){
-				return false;
+			for(Acl a : arV6){
+				if(a.isHit(ip)){
+					return false;
+				}
 			}
-			Acl acl = new AclV6(String.format("AutoDeny-{0}", DateTime.Now), ip.toString());
+			Calendar c = Calendar.getInstance();
+			Acl acl = new AclV6(String.format("AutoDeny-%s", c.toString()), ip.toString());
 			arV6.add(acl);
 		}
 		return true;
@@ -81,7 +88,7 @@ public class AclList {
 
 		//ユーザリストの照合
 		Acl acl = null;
-		if (ip.InetKind == InetKind.V4) {
+		if (ip.getInetKind() == InetKind.V4) {
 			for (Acl p : arV4) {
 				if (p.isHit(ip)) {
 					acl = p;
@@ -98,11 +105,11 @@ public class AclList {
 		}
 
 		if (!enable && acl==null) {
-			logger.set(LogKind.Secure,null,9000017,String.format("address:{0}",ip));//このアドレスからのリクエストは許可されていません
+			logger.set(LogKind.Secure,null,9000017,String.format("address:%s",ip.toString()));//このアドレスからのリクエストは許可されていません
 			return false;
 		}
 		if (enable && acl!=null) {
-			logger.set(LogKind.Secure,null,9000018,String.format("user:{0} address:{1}",acl.getName(),ip));//この利用者のアクセスは許可されていません
+			logger.set(LogKind.Secure,null,9000018,String.format("user:%s address:%s",acl.getName(),ip.toString()));//この利用者のアクセスは許可されていません
 			return false;
 		}
 		return true;

@@ -1,97 +1,88 @@
 package bjd.acl;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
-import org.junit.Test;
+import org.junit.BeforeClass;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 
+import bjd.Kernel;
+import bjd.ctrl.CtrlType;
+import bjd.log.Logger;
+import bjd.net.Ip;
+import bjd.option.Dat;
+import bjd.util.TestUtil;
+
+
+@RunWith(Enclosed.class)
 public class AclListTest {
+	@RunWith(Theories.class)
+	public static final class A001 {
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("「許可する・許可しない」の動作確認"); //TESTヘッダ
+		}
 
-	@Test
-	public void test() {
-		fail("まだ実装されていません");
-	}
+		@DataPoints
+		public static Fixture[] datas = {
+				//コントロールの種類,デフォルト値,toRegの出力
+				new Fixture("192.168.0.1","192.168.0.1", true),
+				new Fixture("192.168.0.0/24","192.168.0.1", true),
+				new Fixture("192.168.1.0/24","192.168.0.1", false),
+				new Fixture("192.168.0.0-192.168.0.100","192.168.0.1", true),
+				new Fixture("192.168.0.2-192.168.0.100","192.168.0.1", false),
+				new Fixture("192.168.0.0-192.168.2.100","192.168.0.1", true),
+				new Fixture("192.168.0.1-5","192.168.0.1", true),
+				new Fixture("192.168.0.2-5","192.168.0.1", false),
+				new Fixture("192.168.0.*","192.168.0.1", true),
+				new Fixture("192.168.1.*","192.168.0.1", false),
+				new Fixture("192.168.*.*","192.168.0.1", true),
+				new Fixture("192.*.*.*","192.168.0.1", true),
+				new Fixture("*.*.*.*","192.168.0.1", true),
+				new Fixture("*","192.168.0.1", true),
+				new Fixture("172.*.*.*","192.168.0.1", false),
+		};
+		static class Fixture {
+			private String aclStr;
+			private String ip;
+			private boolean expended;
 
-}
-/*
- * using NUnit.Framework;
-using Bjd;
+			public Fixture(String aclStr, String ip, boolean expended) {
+				this.aclStr = aclStr;
+				this.ip = ip;
+				this.expended = expended;
+			}
+		}
 
+		@Theory
+		public void test(Fixture fx) {
 
+			TestUtil.dispPrompt(this); //TESTプロンプト
+			
+			Logger logger = new Logger(new Kernel(),"TEST",true,null);
 
-namespace BjdTest {
-    public class AclListTest {
+            Ip ip = new Ip(fx.ip);
+            Dat dat = new Dat(new CtrlType[]{CtrlType.TEXTBOX,CtrlType.ADDRESSV4});
+            dat.add(true, String.format("NAME\t%s", fx.aclStr));
 
-        Logger _logger;
-
-        [SetUp]
-        public void SetUp() {
-            var kernel = new Kernel(null, null, null, null);
-            _logger = new Logger(kernel, "TEST", false, null);
-
-        }
-
-        [TearDown]
-        public void TearDown() {
-
-        }
-
-        [TestCase(1, true)]//enableNum=1 のみを禁止する
-        [TestCase(0, false)]//enableNum=0 のみを許可する
-        public void AclList1Test(int enableNum, bool check) {
-            var ip = new Ip("192.168.0.1");
-            var dat = new Dat();
-            var o = new AclList(dat, enableNum, _logger);//enableNum=1 のみを禁止する
-            Assert.AreEqual(o.Check(ip), check);
-        }
-
-        //192.168.0.1が範囲に含まれるかどうかのチェック
-        [TestCase("192.168.0.1", true)]
-        [TestCase("192.168.0.0/24", true)]
-        [TestCase("192.168.1.0/24", false)]
-        [TestCase("192.168.0.0-192.168.0.100", true)]
-        [TestCase("192.168.0.2-192.168.0.100", false)]
-        [TestCase("192.168.0.0-192.168.2.100", true)]
-        [TestCase("192.168.0.1-5", true)]
-        [TestCase("192.168.0.2-5", false)]
-        [TestCase("192.168.0.*", true)]
-        [TestCase("192.168.1.*", false)]
-        [TestCase("192.168.*.*", true)]
-        [TestCase("192.*.*.*", true)]
-        [TestCase("*.*.*.*", true)]
-        [TestCase("*", true)]
-        [TestCase("172.*.*.*", false)]
-        public void CheckTest(string aclStr, bool isRange) {
-            var ip = new Ip("192.168.0.1");
-            var dat = new Dat();
-            dat.Add(true, string.Format("NAME\t{0}", aclStr));
-
-            var enableNum = 0;//enableNum=0 のみを許可する
-            var o = new AclList(dat, enableNum, _logger);
-            Assert.AreEqual(o.Check(ip), isRange);
+            int enableNum = 0;//enableNum=0 のみを許可する
+            AclList o = new AclList(dat, enableNum,logger);
+            Assert.assertEquals(o.Check(ip), fx.expended);
 
             enableNum = 1;//enableNum=1 のみを禁止する
-            o = new AclList(dat, enableNum, _logger);
-            Assert.AreEqual(o.Check(ip), !isRange);
+            o = new AclList(dat, enableNum, logger);
+            Assert.assertEquals(o.Check(ip), !(fx.expended));
 
-        }
+			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expended);
+            
+			
 
-
-        [Test]
-        public void AclList2Test() {
-            var ip = new Ip("192.168.0.1");
-
-            //追加なし
-            var dat = new Dat();
-            var o = new AclList(dat, 0, _logger);//enableNum=0 のみを許可する
-            Assert.AreEqual(o.Append(ip), false);//追加は失敗する
-            Assert.AreEqual(o.Check(ip), false);
-
-            o = new AclList(dat, 1, _logger);//enableNum=1 のみを禁止する
-            Assert.AreEqual(o.Append(ip), true);//追加は成功する
-            Assert.AreEqual(o.Check(ip), false);
-
-        }
-    }
+		}
+	}
 }
 
- * */
