@@ -88,10 +88,10 @@ public class AclV6Test {
 			AclV6 aclV6 = new AclV6("test", fx.aclStr);
 			System.out.printf("new AclV6(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expended);
 			
-			Ip a = aclV6.getStart();
-			Ip b = aclV6.getEnd();
-			Ip c = new Ip(fx.ipStr);
-			aclV6.isHit(c);
+			//Ip a = aclV6.getStart();
+			//Ip b = aclV6.getEnd();
+			//Ip c = new Ip(fx.ipStr);
+			aclV6.isHit(new Ip(fx.ipStr));
 			
 			assertThat(aclV6.isHit(new Ip(fx.ipStr)), is(fx.expended));
 		}

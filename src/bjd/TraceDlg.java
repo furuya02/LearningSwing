@@ -1,18 +1,18 @@
 package bjd;
 
-import java.awt.Dialog.ModalityType;
-
 import javax.swing.JFrame;
 
 import bjd.util.IDispose;
 
-public class TraceDlg extends Dlg implements IDispose{
+@SuppressWarnings("serial")
+public final class TraceDlg extends Dlg implements IDispose {
 
 	private static int width = 300;
 	private static int height = 300;
 	private Kernel kernel;
-	public TraceDlg(Kernel kernel,JFrame frame) {
-		super(frame, width,height);
+
+	public TraceDlg(Kernel kernel, JFrame frame) {
+		super(frame, width, height);
 		this.kernel = kernel;
 	}
 
@@ -22,7 +22,7 @@ public class TraceDlg extends Dlg implements IDispose{
 		
 	}
 
-	public void Open() {
+	public void open() {
 		// TODO 自動生成されたメソッド・スタブ
 		
 	}

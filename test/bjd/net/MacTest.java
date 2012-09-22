@@ -78,11 +78,7 @@ public class MacTest {
             
 			Mac mac = new Mac("12-34-56-78-9A-BC");
 			
-			Mac dmy = null;
-			if (fx.macStr != null) {
-				dmy = new Mac(fx.macStr);
-			}
-            
+			Mac dmy = (fx.macStr != null) ? new Mac(fx.macStr) : null;
             boolean actual = mac.equals(dmy);
 			
 			System.out.printf("mac=new Mac(\"%s\") => mac.equals(%s)==%s\n", mac.toString(), fx.macStr, actual);

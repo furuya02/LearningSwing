@@ -130,8 +130,8 @@ public final class Kernel implements IDispose {
             menu.initialize(); //メニュー構築（内部テーブルの初期化）
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        }
-        traceDlg = new TraceDlg(this,mainForm.getFrame());//トレース表示
-//        DnsCache = new DnsCache();
+		traceDlg = new TraceDlg(this, (mainForm != null) ? mainForm.getFrame() : null); //トレース表示
+		//        DnsCache = new DnsCache();
 //
             logger = createLogger("kernel", true, null);
 //
@@ -171,7 +171,7 @@ public final class Kernel implements IDispose {
 //	            RemoteClient.Dispose();
 	//
 	              view.dispose();
-	        if (traceDlg != null){
+	        if (traceDlg != null) {
 //	            traceDlg.Dispose();
 	        }
 	         if (menu != null) {
@@ -321,7 +321,7 @@ public final class Kernel implements IDispose {
                     logView.setClipboard();
                     break;
                 case "File_Trace":
-                    traceDlg.Open();
+                    traceDlg.open();
                     break;
                 case "File_Exit":
                     mainForm.exit();

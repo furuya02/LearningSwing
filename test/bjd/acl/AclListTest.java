@@ -1,7 +1,5 @@
 package bjd.acl;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
@@ -31,21 +29,21 @@ public class AclListTest {
 		@DataPoints
 		public static Fixture[] datas = {
 				//コントロールの種類,デフォルト値,toRegの出力
-				new Fixture("192.168.0.1","192.168.0.1", true),
-				new Fixture("192.168.0.0/24","192.168.0.1", true),
-				new Fixture("192.168.1.0/24","192.168.0.1", false),
-				new Fixture("192.168.0.0-192.168.0.100","192.168.0.1", true),
-				new Fixture("192.168.0.2-192.168.0.100","192.168.0.1", false),
-				new Fixture("192.168.0.0-192.168.2.100","192.168.0.1", true),
-				new Fixture("192.168.0.1-5","192.168.0.1", true),
-				new Fixture("192.168.0.2-5","192.168.0.1", false),
-				new Fixture("192.168.0.*","192.168.0.1", true),
-				new Fixture("192.168.1.*","192.168.0.1", false),
-				new Fixture("192.168.*.*","192.168.0.1", true),
-				new Fixture("192.*.*.*","192.168.0.1", true),
-				new Fixture("*.*.*.*","192.168.0.1", true),
-				new Fixture("*","192.168.0.1", true),
-				new Fixture("172.*.*.*","192.168.0.1", false),
+				new Fixture("192.168.0.1", "192.168.0.1", true),
+				new Fixture("192.168.0.0/24", "192.168.0.1", true),
+				new Fixture("192.168.1.0/24", "192.168.0.1", false),
+				new Fixture("192.168.0.0-192.168.0.100", "192.168.0.1", true),
+				new Fixture("192.168.0.2-192.168.0.100", "192.168.0.1", false),
+				new Fixture("192.168.0.0-192.168.2.100", "192.168.0.1", true),
+				new Fixture("192.168.0.1-5", "192.168.0.1", true),
+				new Fixture("192.168.0.2-5", "192.168.0.1", false),
+				new Fixture("192.168.0.*", "192.168.0.1", true),
+				new Fixture("192.168.1.*", "192.168.0.1", false),
+				new Fixture("192.168.*.*", "192.168.0.1", true),
+				new Fixture("192.*.*.*", "192.168.0.1", true),
+				new Fixture("*.*.*.*", "192.168.0.1", true),
+				new Fixture("*", "192.168.0.1", true),
+				new Fixture("172.*.*.*", "192.168.0.1", false),
 		};
 		static class Fixture {
 			private String aclStr;
@@ -64,23 +62,21 @@ public class AclListTest {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
 			
-			Logger logger = new Logger(new Kernel(),"TEST",true,null);
+			Logger logger = new Logger(new Kernel(), "TEST", true, null);
 
-            Ip ip = new Ip(fx.ip);
-            Dat dat = new Dat(new CtrlType[]{CtrlType.TEXTBOX,CtrlType.ADDRESSV4});
-            dat.add(true, String.format("NAME\t%s", fx.aclStr));
+			Ip ip = new Ip(fx.ip);
+			Dat dat = new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.ADDRESSV4 });
+			dat.add(true, String.format("NAME\t%s", fx.aclStr));
 
-            int enableNum = 0;//enableNum=0 のみを許可する
-            AclList o = new AclList(dat, enableNum,logger);
-            Assert.assertEquals(o.Check(ip), fx.expended);
+			int enableNum = 0; //enableNum=0 のみを許可する
+			AclList o = new AclList(dat, enableNum, logger);
+			Assert.assertEquals(o.check(ip), fx.expended);
 
-            enableNum = 1;//enableNum=1 のみを禁止する
-            o = new AclList(dat, enableNum, logger);
-            Assert.assertEquals(o.Check(ip), !(fx.expended));
+			enableNum = 1; //enableNum=1 のみを禁止する
+			o = new AclList(dat, enableNum, logger);
+			Assert.assertEquals(o.check(ip), !(fx.expended));
 
-			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expended);
-            
-			
+			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expended);			
 
 		}
 	}
