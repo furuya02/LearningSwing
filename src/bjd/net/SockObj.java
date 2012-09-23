@@ -12,7 +12,12 @@ import bjd.log.Logger;
 //Socketその他を保持するクラス(１つの接続を表現している)
 public abstract class SockObj {
 
-	
+	public String getRemoteHost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
 	//public Socket Socket;
 	protected Logger Logger;
 	protected Kernel Kernel;
@@ -157,6 +162,7 @@ public abstract class SockObj {
 			}
 		}
 	}
+	*/
 }
 
 

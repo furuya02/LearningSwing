@@ -55,10 +55,10 @@ public final class MainForm implements WindowListener {
 		initialize();
 
 		try {
-			// UIManager.put("Button.font", new Font("SansSerif", Font.PLAIN,
-			// 20));
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

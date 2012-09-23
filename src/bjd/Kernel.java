@@ -36,6 +36,9 @@ public final class Kernel implements IDispose {
 	private OneServer remoteServer=null;	
 	private TraceDlg traceDlg;
     
+	public View getView() {
+		return view;
+	}
 
 	public TraceDlg getTraceDlg() {
 		return traceDlg;

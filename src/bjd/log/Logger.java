@@ -29,7 +29,7 @@ public final class Logger {
 		String message = kernel.getJp() ? "定義されていません" : "Message is not defined";
 		if (messageNo < 9000000) {
 			if (logger != null) {
-				logger.getMsg(messageNo); //デリゲートを使用した継承によるメッセージ取得
+				message = logger.getMsg(messageNo); //デリゲートを使用した継承によるメッセージ取得
 			} else { //(9000000以上)共通番号の場合の処理
 				switch (messageNo) {
 					case 9000000: message = kernel.getJp() ? "サーバ開始" : "Server started it"; break;
@@ -92,6 +92,7 @@ public final class Logger {
 					case 9000057: message = kernel.getJp() ? "【例外】" : "[Exception]"; break;
 					case 9000058: message = kernel.getJp() ? "メールの送信に失敗しました" : "Failed in the transmission of a message of an email"; break;
 					case 9000059: message = kernel.getJp() ? "メールの保存に失敗しました" : "Failed in a save of an email"; break;
+					case 9000060: message = kernel.getJp() ? "【例外】" : "[Exception]"; break;
 					default:
 						break;
 				}
@@ -116,8 +117,9 @@ public final class Logger {
        
     }
 
-	public void exception(Exception ex, SockObj sockObj, int messageNo) {
-        set(LogKind.Error, sockObj, messageNo, ex.getMessage());
+	public void exception(Exception ex) {
+		int messageNo = 9000060;
+        set(LogKind.Error, null, messageNo, ex.getMessage());
         //TODO Logger 例外メッセージが投かんされた時のスタックトレース　未実装
 //        string[] tmp = ex.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 //        for (String s : tmp) {
