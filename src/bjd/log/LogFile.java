@@ -36,7 +36,7 @@ public final class LogFile implements IDispose {
 	private Calendar lastDelete = null; // new DateTime(0);
 	private Timer timer = null;
 	
-	private Object lock = new Object();
+	private Object lock = new Object(); //排他制御用オブジェクト
 
 	public LogFile(Logger logger, Conf conf, LogView logView,
 			boolean useLog, OneServer remoteServer) {

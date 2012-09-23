@@ -2,6 +2,7 @@ package bjd;
 
 import javax.swing.JFrame;
 
+import bjd.net.Ip;
 import bjd.util.IDispose;
 
 @SuppressWarnings("serial")
@@ -31,6 +32,11 @@ public final class TraceDlg extends Dlg implements IDispose {
 	protected boolean onOk() {
 		// TODO 自動生成されたメソッド・スタブ
 		return false;
+	}
+
+	public void addTrace(TraceKind traceKind, String str, Ip ip) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

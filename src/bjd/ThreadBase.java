@@ -13,7 +13,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	protected Kernel kernel;
 
 	private Logger logger;
-	private String nameTag;
+	protected String nameTag;
 
 	//コンストラクタ
 	protected ThreadBase(Kernel kernel, String nameTag) {
@@ -22,7 +22,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		logger = kernel.createLogger(nameTag, true, this);
 	}
 
-	public final String getNameTag() {
+	public String getNameTag() {
 		return nameTag;
 	}
 

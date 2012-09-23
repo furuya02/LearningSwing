@@ -10,6 +10,7 @@ import bjd.log.LogFile;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.menu.Menu;
+import bjd.net.DnsCache;
 import bjd.net.LocalAddress;
 import bjd.option.Conf;
 import bjd.option.ListOption;
@@ -35,6 +36,7 @@ public final class Kernel implements IDispose {
 	private MainForm mainForm;
 	private OneServer remoteServer=null;	
 	private TraceDlg traceDlg;
+	private DnsCache dnsCache;
     
 	public View getView() {
 		return view;
@@ -134,7 +136,7 @@ public final class Kernel implements IDispose {
 //            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
 //        }
 		traceDlg = new TraceDlg(this, (mainForm != null) ? mainForm.getFrame() : null); //トレース表示
-		//        DnsCache = new DnsCache();
+		dnsCache = new DnsCache();
 //
             logger = createLogger("kernel", true, null);
 //
@@ -348,5 +350,10 @@ public final class Kernel implements IDispose {
             }
         }
        
-    }    
+    }
+
+	public DnsCache getDnsCache() {
+		return dnsCache;
+	}
+
 }
