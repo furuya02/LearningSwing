@@ -175,10 +175,10 @@ public class InetTest {
 		};
 		static class Fixture {
 			private String str;
-			private String expended;
-			public Fixture(String str, String expended) {
+			private String expected;
+			public Fixture(String str, String expected) {
 				this.str = str;
-				this.expended = expended;
+				this.expected = expected;
 			}
 		}
 
@@ -187,8 +187,8 @@ public class InetTest {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
 			
-			System.out.printf("Inet.trimCrlf(\"%s\") =%s\n", TestUtil.toString(fx.str), fx.expended);
-			assertThat(Inet.trimCrlf(fx.str), is(fx.expended));
+			System.out.printf("Inet.trimCrlf(\"%s\") =%s\n", TestUtil.toString(fx.str), fx.expected);
+			assertThat(Inet.trimCrlf(fx.str), is(fx.expected));
 		}
 	}
 
@@ -209,10 +209,10 @@ public class InetTest {
 		};
 		static class Fixture {
 			private byte[] buf;
-			private byte[] expended;
-			public Fixture(byte[] buf, byte[] expended) {
+			private byte[] expected;
+			public Fixture(byte[] buf, byte[] expected ) {
 				this.buf = buf;
-				this.expended = expended;
+				this.expected = expected;
 			}
 		}
 
@@ -220,8 +220,8 @@ public class InetTest {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			System.out.printf("Inet.trimCrlf(%s) = %s\n", TestUtil.toString(fx.buf), TestUtil.toString(fx.expended));
-			assertThat(Inet.trimCrlf(fx.buf), is(fx.expended));
+			System.out.printf("Inet.trimCrlf(%s) = %s\n", TestUtil.toString(fx.buf), TestUtil.toString(fx.expected));
+			assertThat(Inet.trimCrlf(fx.buf), is(fx.expected));
 		}
 	}
 	@RunWith(Theories.class)
@@ -239,19 +239,19 @@ public class InetTest {
 		};
 		static class Fixture {
 			private String str;
-			private String expended;
+			private String expected;
 
-			public Fixture(String str, String expended) {
+			public Fixture(String str, String expected) {
 				this.str = str;
-				this.expended = expended;
+				this.expected = expected;
 			}
 		}
 		@Theory
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			System.out.printf("Inet.Sanitize(\"%s\") = \"%s\"\n", fx.str, fx.expended);
-			assertThat(Inet.sanitize(fx.str), is(fx.expended));
+			System.out.printf("Inet.Sanitize(\"%s\") = \"%s\"\n", fx.str, fx.expected);
+			assertThat(Inet.sanitize(fx.str), is(fx.expected));
 		}
 
 	}
@@ -274,18 +274,18 @@ public class InetTest {
 		};
 		static class Fixture {
 			private String str;
-			private String expended;
+			private String expected;
 
-			public Fixture(String str, String expended) {
+			public Fixture(String str, String expected) {
 				this.str = str;
-				this.expended = expended;
+				this.expected = expected;
 			}
 		}
 		@Theory
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			System.out.printf("Inet.Md5Str(\"%s\") = \"%s\"\n", fx.str, fx.expended);
-			assertThat(Inet.md5Str(fx.str), is(fx.expended));
+			System.out.printf("Inet.Md5Str(\"%s\") = \"%s\"\n", fx.str, fx.expected);
+			assertThat(Inet.md5Str(fx.str), is(fx.expected));
 		}
 
 	}

@@ -48,12 +48,12 @@ public class AclListTest {
 		static class Fixture {
 			private String aclStr;
 			private String ip;
-			private boolean expended;
+			private boolean expected;
 
-			public Fixture(String aclStr, String ip, boolean expended) {
+			public Fixture(String aclStr, String ip, boolean expected) {
 				this.aclStr = aclStr;
 				this.ip = ip;
-				this.expended = expended;
+				this.expected = expected;
 			}
 		}
 
@@ -70,13 +70,13 @@ public class AclListTest {
 
 			int enableNum = 0; //enableNum=0 のみを許可する
 			AclList o = new AclList(dat, enableNum, logger);
-			Assert.assertEquals(o.check(ip), fx.expended);
+			Assert.assertEquals(o.check(ip), fx.expected);
 
 			enableNum = 1; //enableNum=1 のみを禁止する
 			o = new AclList(dat, enableNum, logger);
-			Assert.assertEquals(o.check(ip), !(fx.expended));
+			Assert.assertEquals(o.check(ip), !(fx.expected));
 
-			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expended);			
+			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expected);			
 
 		}
 	}

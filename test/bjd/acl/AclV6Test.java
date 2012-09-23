@@ -73,12 +73,12 @@ public class AclV6Test {
 		static class Fixture {
 			private String aclStr;
 			private String ipStr;
-			private boolean expended;
+			private boolean expected;
 
-			public Fixture(String aclStr, String ipStr, boolean expended) {
+			public Fixture(String aclStr, String ipStr, boolean expected) {
 				this.aclStr = aclStr;
 				this.ipStr = ipStr;
-				this.expended = expended;
+				this.expected = expected;
 			}
 		}
 
@@ -86,14 +86,14 @@ public class AclV6Test {
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
 			AclV6 aclV6 = new AclV6("test", fx.aclStr);
-			System.out.printf("new AclV6(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expended);
+			System.out.printf("new AclV6(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expected);
 			
 			//Ip a = aclV6.getStart();
 			//Ip b = aclV6.getEnd();
 			//Ip c = new Ip(fx.ipStr);
 			aclV6.isHit(new Ip(fx.ipStr));
 			
-			assertThat(aclV6.isHit(new Ip(fx.ipStr)), is(fx.expended));
+			assertThat(aclV6.isHit(new Ip(fx.ipStr)), is(fx.expected));
 		}
 	}
 
