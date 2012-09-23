@@ -1,6 +1,8 @@
 package bjd.server;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
@@ -11,6 +13,7 @@ import bjd.log.Logger;
 import bjd.log.OneLog;
 import bjd.net.Ip;
 import bjd.net.OneBind;
+import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
 import bjd.net.SockObj;
 import bjd.net.SocketObjState;
@@ -265,58 +268,90 @@ public abstract class OneServer extends ThreadBase implements IDispose{
 		}
 		childCount--; //多重度のカウンタ
 	}
-
-	public boolean WaitLine(TcpObj tcpObj, ref String cmdStr, ref String paramStr){
-		var dt = DateTime.Now.AddSeconds(Timeout);
-		cmdStr = "";
-		var str = "";
-		while (Life){
-			if (!RecvCmd(tcpObj, ref str, ref cmdStr, ref paramStr)){
-				return false;
+	//TODO パラメータ及び戻り値を変更
+	//public boolean WaitLine(TcpObj tcpObj, ref String cmdStr, ref String paramStr){
+    public Cmd WaitLine(TcpObj tcpObj){
+		//var dt = DateTime.Now.AddSeconds(Timeout);
+		Calendar c = Calendar.getInstance(); 
+		c.add(Calendar.SECOND,Timeout);
+		
+		while (life){
+			Cmd cmd = recvCmd(tcpObj);
+		    if (cmd==null){
+				return null;
 			}
-			if (cmdStr != ""){
-				return true;
+			if (!(cmd.getCmdStr().equals(""))){
+				return cmd;
 			}
-
-			Thread.Sleep(100);
-			if (dt < DateTime.Now){
-				return false;
+			//if (dt < DateTime.Now){
+			if(c.compareTo(Calendar.getInstance())<0){
+				return null;
 			}
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 		}
-		return false;
+		return null;
 	}
 
-	protected boolean RecvCmd(TcpObj tcpObj, ref String str, ref String cmdStr, ref String paramStr){
-		if (tcpObj.State != SocketObjState.Connect) //切断されている
-			return false;
-		var recvbuf = tcpObj.LineRecv(Timeout, OperateCrlf.Yes, ref Life);
+	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
+	protected Cmd recvCmd(TcpObj tcpObj){
+		if (tcpObj.getState() != SocketObjState.Connect) //切断されている
+			return null;
+		byte [] recvbuf = tcpObj.LineRecv(Timeout, OperateCrlf.Yes, ref Life);
 		if (recvbuf == null){
-			return false; //切断された
+			return null; //切断された
 		}
-		str = Encoding.GetEncoding("shift-jis").GetString(recvbuf);
+		String str = new String(recvbuf,Charset.forName("Shift-JIS"));
 		if (str == ""){
-			return true;
+			return null;
 		}
-
-		//Logger.Set(LogKind.Detail,tcpObj,9000016,str);//"command Received."
-
 		//受信行をコマンドとパラメータに分解する（コマンドとパラメータは１つ以上のスペースで区切られている）
-		cmdStr = null;
-		paramStr = null;
-		for (var i = 0; i < str.Length; i++){
-			if (str[i] == ' '){
+		String cmdStr = null;
+		String paramStr = null;
+		for (int i = 0; i < str.length(); i++){
+			if (str.charAt(i) == ' '){
 				if (cmdStr == null)
-					cmdStr = str.SubString(0, i);
+					cmdStr = str.substring(0, i);
 			}
-			if (cmdStr == null || str[i] == ' ')
+			if (cmdStr == null || str.charAt(i) == ' '){
 				continue;
-			paramStr = str.subString(i);
+			}
+			paramStr = str.substring(i);
 			break;
 		}
-		if (cmdStr == null) //パラメータ区切りが見つからなかった場合
+		if (cmdStr == null){ //パラメータ区切りが見つからなかった場合
 			cmdStr = str; //全部コマンド
-		return true;
+		}
+		return new Cmd(str,cmdStr,paramStr);
+	}
+	//受信したコマンドを表現するクラス
+	class Cmd{
+	    private String str;
+	    private String cmdStr;
+	    private String paramStr;
+
+	    public String getStr() {
+	        return str;
+	    }
+
+	    public String getCmdStr() {
+	        return cmdStr;
+	    }
+
+	    public String getParamStr() {
+	        return paramStr;
+	    }
+	    
+        public Cmd(String str,String cmdStr,String paramStr){
+            this.str = str;
+            this.cmdStr = cmdStr;
+            this.paramStr = paramStr;
+        }
 	}
 }
+
 
 
