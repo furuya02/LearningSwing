@@ -17,7 +17,6 @@ import bjd.log.Logger;
 import bjd.util.Inet;
 import bjd.util.MLang;
 
-
 //Socketその他を保持するクラス(１つの接続を表現している)
 public abstract class SockObj {
 
@@ -25,20 +24,18 @@ public abstract class SockObj {
 	protected Logger logger;
 	protected Kernel kernel;
 	protected SocketObjState state = SocketObjState.Idle;
-	private String remoteHost = "";
-	private Ip remoteAddr; //{ get; set; }
 	protected InetSocketAddress localEndPoint; //{ get; set; }
 	protected InetSocketAddress remoteEndPoint; // { get; set; }
 	protected InetKind inetKind; //{get;private set;}
-	//クローン
-	//UDPサーバオブジェクトからコピーされた場合は、clone=trueとなり、closeは無視される
-	protected boolean clone;
+	protected boolean clone; //クローン UDPサーバオブジェクトからコピーされた場合は、clone=trueとなり、closeは無視される
+	private String remoteHost = "";
+	private Ip remoteAddr;
 
-	public InetSocketAddress getLocalEndPoint() {
+	public final InetSocketAddress getLocalEndPoint() {
 		return localEndPoint;
 	}
 
-	public InetSocketAddress getRemoteEndPoint() {
+	public final InetSocketAddress getRemoteEndPoint() {
 		return remoteEndPoint;
 	}
 
@@ -53,11 +50,10 @@ public abstract class SockObj {
 		return state;
 	}
 
-
 	public final void setSendTimeout() {
 		//socket.SendTimeout = 1000 * value;
 	}
-	
+
 	//****************************************************************
 	//コンストラクタ
 	//****************************************************************
@@ -65,7 +61,6 @@ public abstract class SockObj {
 		this.kernel = kernel;
 		this.logger = logger;
 		this.inetKind = inetKind;
-
 
 		//RemoteHostName = "";//接続先のホスト名
 		remoteHost = ""; //接続先のホスト名
@@ -94,7 +89,6 @@ public abstract class SockObj {
 		}
 	}
 
-
 	//【ソケットクローズ】 (オーバーライド可能)
 	public void close() {
 		if (clone) { //クローンの場合は破棄しない
@@ -119,7 +113,7 @@ public abstract class SockObj {
 
 	//バイナリデータであることが判明している場合は、noEncodeをtrueに設定する
 	//これによりテキスト判断ロジックを省略できる
-	protected final void trace(TraceKind traceKind, byte [] buf, boolean noEncode) {
+	protected final void trace(TraceKind traceKind, byte[] buf, boolean noEncode) {
 
 		if (buf == null || buf.length == 0) {
 			return;
@@ -145,7 +139,7 @@ public abstract class SockObj {
 			}
 			if (charset != null) {
 				//int codePage = encoding.CodePage;
-				switch(charset.name()) {
+				switch (charset.name()) {
 					case "ISO-2022-JP":
 					case "US-ASCII":
 					case "UTF-8":
@@ -166,8 +160,7 @@ public abstract class SockObj {
 				ar.add(new String(Inet.trimCrlf(line), charset));
 			}
 		} else {
-			ar.add(noEncode	? String.format("binary %d byte", buf.length)
-							: String.format("Binary %d byte", buf.length));
+			ar.add(noEncode ? String.format("binary %d byte", buf.length) : String.format("Binary %d byte", buf.length));
 		}
 		for (String str : ar) {
 			Ip ip = new Ip(remoteEndPoint.getAddress().getHostAddress());
