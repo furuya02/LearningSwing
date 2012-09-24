@@ -40,14 +40,14 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	public void dispose() {
 	}
 
-	public final String getMsg(int messageNo) {
+	public String getMsg(int messageNo) {
 		switch (messageNo) {
 			case 1:
 				return (kernel.getJp()) ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
 			default:
 				break;
 		}
-		return "unknown";
+		return "";
 	}
 
 	//【スレッド開始前処理】//return falseでスレッド起動をやめる

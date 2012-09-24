@@ -17,47 +17,13 @@ import bjd.log.Logger;
 import bjd.util.Inet;
 import bjd.util.MLang;
 
-public abstract class SockObj {
-
-    private Socket socket = null;
-    private SocketObjState state = SocketObjState.Idle;
-    private boolean clone = false;
-    
-    public final SocketObjState getState() {
-        if (state == SocketObjState.Connect && !socket.isConnected()) {
-            state = SocketObjState.Disconnect;
-        }
-        return state;
-    }
-    
-    
-    //【ソケットクローズ】 (オーバーライド可能)
-    public final void close() {
-        if (clone) { //クローンの場合は破棄しない
-            return;
-        }
-        state = SocketObjState.Disconnect;
-        if (socket!=null) {
-            try {
-                socket.shutdownInput();
-                socket.shutdownOutput();
-                socket.close();
-            } catch (Exception ex) {
-                //シャットダウンのエラーは無視するs
-                ex.printStackTrace();
-            }
-            socket = null;
-        }
-    }
-}
-
 //Socketその他を保持するクラス(１つの接続を表現している)
-/*
 public abstract class SockObj {
 
-
+	public Socket socket;
 	protected Logger logger;
 	protected Kernel kernel;
+	protected SocketObjState state = SocketObjState.Idle;
 	protected InetSocketAddress localEndPoint; //{ get; set; }
 	protected InetSocketAddress remoteEndPoint; // { get; set; }
 	protected InetKind inetKind; //{get;private set;}
@@ -208,4 +174,3 @@ public abstract class SockObj {
 		}
 	}
 }
-*/

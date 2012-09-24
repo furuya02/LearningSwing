@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import bjd.Kernel;
 import bjd.net.SockObj;
+import bjd.net.SocketBase;
 
 public final class Logger {
 	private Kernel kernel;
@@ -18,7 +19,7 @@ public final class Logger {
 		this.logger = logger;
     }
 
-	public void set(LogKind logKind, SockObj sockObj, int messageNo, String detailInfomation) {
+	public void set(LogKind logKind, SocketBase socketBase, int messageNo, String detailInfomation) {
 		if (logKind == LogKind.Detail) {
 			if (!useDetailsLog) {
 				return;
@@ -107,7 +108,7 @@ public final class Logger {
     			c.get(Calendar.MINUTE),
     			c.get(Calendar.SECOND));
 		String messageNoStr = String.format("%7d", messageNo);
-        String remoteAddrStr = (sockObj == null) ? "-" : sockObj.getRemoteHost();
+        String remoteAddrStr = (socketBase == null) ? "-" : socketBase.getRemoteHost();
 		OneLog oneLog = new OneLog(dateStr, logKind.toString(), nameTag, String.valueOf(threadId), remoteAddrStr, messageNoStr, message, detailInfomation);
 
 		//ログファイルへの追加

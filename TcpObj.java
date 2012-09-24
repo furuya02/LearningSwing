@@ -1,8 +1,6 @@
 package bjd.net;
 
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
@@ -12,54 +10,6 @@ import bjd.log.Logger;
 import bjd.util.Bytes;
 
 public class TcpObj extends SockObj {
-
-    //【コンストラクタ（サーバ用）】bind/listen
-    public TcpObj(Logger logger,Ip bindIp, int port, int listenMax) {
-//        //super(kernel, logger, bindIp.getInetKind());
-//        //SSL通信を使用する場合は、このオブジェクトがセットされる
-//        //通常の場合は、null
-//        //this.ssl = ssl;
-//        //if (ssl != null && !ssl.getStatus()) { //SSLの初期化に失敗している
-//        //    state = SocketObjState.Error;
-//        //    logger.set(LogKind.Error, null, 9000028, "");
-//        //    return;
-//        //}
-//        ServerSocket serverSocket = new ServerSocket(port,blocking,bindIp.getInetAddress());
-//        try {
-//            //socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-//            socket = new Socket((ip.InetKind == InetKind.V4) ? AddressFamily.InterNetwork : AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
-//        } catch (Exception ex) {
-//            state = SocketObjState.Error;
-//            logger.set(LogKind.Error, null, 9000035,"");//Socket生成でエラーが発生しました。[TCP]
-//            logger.exception(ex);
-//            return;
-//        }
-//
-//        try {
-//            socket.bind(new InetSocketAddress(ip.getInetAddress(), port));
-//        } catch (Exception ex) {
-//            state = SocketObjState.Error;
-//            logger.set(LogKind.Error, null, 9000009, "");//Socket.Bind()でエラーが発生しました。[TCP]
-//            logger.exception(ex);
-//            return;
-//        }
-//        try {
-//            socket.Listen(listenMax);
-//        } catch (Exception ex) {
-//            state = SocketObjState.Error;
-//            logger.set(LogKind.Error, null, 9000010,"");//Socket.Listen()でエラーが発生しました。[TCP]
-//            logger.exception(ex);
-//            return;
-//        }
-//        localEndPoint = (InetSocketAddress) socket.getLocalSocketAddress();
-        //準備完了
-        //StartServerを実行すると待ち受け状態になる
-    }
-
-}
-/*
-public class TcpObj extends SockObj {
-
 	//受信用バッファ（接続完了後に[BeginReceive()の中で]確保される）
 	protected TcpQueue tcpQueue;
 	private byte[] tcpBuffer;//１行処理のためのテンポラリバッファ
@@ -130,6 +80,47 @@ public class TcpObj extends SockObj {
 		}
 	}
 
+	//【コンストラクタ（サーバ用）】bind/listen
+	public TcpObj(Kernel kernel, Logger logger, Ip ip, int port, int listenMax, Ssl ssl){
+		super(kernel, logger, ip.getInetKind());
+		//SSL通信を使用する場合は、このオブジェクトがセットされる
+		//通常の場合は、null
+		this.ssl = ssl;
+		if (ssl != null && !ssl.getStatus()) { //SSLの初期化に失敗している
+			state = SocketObjState.Error;
+			logger.set(LogKind.Error, null, 9000028, "");
+			return;
+		}
+		try {
+			//socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			socket = new Socket((ip.InetKind == InetKind.V4) ? AddressFamily.InterNetwork : AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+		} catch (Exception ex) {
+			state = SocketObjState.Error;
+			logger.set(LogKind.Error, null, 9000035,"");//Socket生成でエラーが発生しました。[TCP]
+			logger.exception(ex);
+			return;
+		}
+
+		try {
+			socket.bind(new InetSocketAddress(ip.getInetAddress(), port));
+		} catch (Exception ex) {
+			state = SocketObjState.Error;
+			logger.set(LogKind.Error, null, 9000009, "");//Socket.Bind()でエラーが発生しました。[TCP]
+			logger.exception(ex);
+			return;
+		}
+		try {
+			socket.Listen(listenMax);
+		} catch (Exception ex) {
+			state = SocketObjState.Error;
+			logger.set(LogKind.Error, null, 9000010,"");//Socket.Listen()でエラーが発生しました。[TCP]
+			logger.exception(ex);
+			return;
+		}
+		localEndPoint = (InetSocketAddress) socket.getLocalSocketAddress();
+		//準備完了
+		//StartServerを実行すると待ち受け状態になる
+	}
 
 	//サーバでAcceptしたsocketから初期化される、子ソケット
 	public TcpObj(Kernel kernel, Logger logger, InetKind inetKind, Socket socket, Ssl ssl){
@@ -418,7 +409,7 @@ public class TcpObj extends SockObj {
 	}
 
 	////【バイナリ送信】
-	public boolean SendBinaryFile(String fileName, ThreadBase threadBase) {
+	public boolean SendBinaryFile(String fileName, /*ThreadBase threadBase これいるのか*/) {
 		//トレース表示
 		var sb = new StringBuilder();
 		sb.Append(string.format("SendBinaryFile(%s) ", fileName));
@@ -559,4 +550,3 @@ public class TcpObj extends SockObj {
 		super.close();
 	}
 }
-*/

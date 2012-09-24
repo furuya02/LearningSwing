@@ -11,12 +11,6 @@ import bjd.log.Logger;
 import bjd.util.Bytes;
 
 public final class UdpObj extends SockObj {
-
-}
-
-/*
-public final class UdpObj extends SockObj {
-
 	private byte[] udpBuffer;
 	private final int udpBufferSize = 65515;
 
@@ -154,4 +148,3 @@ public final class UdpObj extends SockObj {
 		return true;
 	}
 }
-*/
