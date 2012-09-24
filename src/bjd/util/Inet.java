@@ -131,14 +131,14 @@ public final class Inet {
 	}
 
 	//クライアントソケットを作成して相手先に接続する
-	//        static public TcpObj Connect(ref boolean life, Kernel kernel, Logger logger, Ip ip, Int32 port, Ssl ssl) {
+	//        static public TcpObj Connect(ThreadBase threadBase, Kernel kernel, Logger logger, Ip ip, Int32 port, Ssl ssl) {
 	//            //float fff = 0;
 	//
 	//            //TcpObj tcpObj = new TcpObj(kernel, logger, ip, port, fff, ssl);
 	//            var tcpObj = new TcpObj(kernel, logger, ip, port, ssl);
 	//
 	//            Thread.Sleep(0);
-	//            while (life) {
+	//            while (threadBase.isLife()) {
 	//                if (tcpObj.State == SocketObjState.Connect) {
 	//                    return tcpObj;
 	//                }

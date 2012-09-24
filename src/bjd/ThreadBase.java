@@ -29,6 +29,12 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	public final boolean isRunnig() {
 		return runnig;
 	}
+	
+	//時間を要するループがある場合、ループ条件で値がtrueであることを確認する
+	//falseになったら直ちにループを中断する
+	public final boolean isLife() {
+	    return life;
+	}
 
 	@Override
 	public void dispose() {

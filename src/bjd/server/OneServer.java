@@ -300,7 +300,7 @@ public abstract class OneServer extends ThreadBase implements IDispose{
 	protected Cmd recvCmd(TcpObj tcpObj){
 		if (tcpObj.getState() != SocketObjState.Connect) //切断されている
 			return null;
-		byte [] recvbuf = tcpObj.LineRecv(Timeout, OperateCrlf.Yes, ref Life);
+		byte [] recvbuf = tcpObj.LineRecv(Timeout, OperateCrlf.Yes, this);
 		if (recvbuf == null){
 			return null; //切断された
 		}

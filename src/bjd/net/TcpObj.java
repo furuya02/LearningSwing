@@ -3,6 +3,7 @@ package bjd.net;
 import java.net.InetSocketAddress;
 
 import bjd.Kernel;
+import bjd.ThreadBase;
 import bjd.TraceKind;
 import bjd.log.LogKind;
 import bjd.log.Logger;
@@ -319,19 +320,19 @@ public class TcpObj extends SockObj {
 
 	// 【１行受信】
 	//切断されている場合、nullが返される
-	public String AsciiRecv(int timeout, OperateCrlf operateCrlf, ref boolean life) {
-		var buf = LineRecv(timeout, operateCrlf, ref life);
+	public String AsciiRecv(int timeout, OperateCrlf operateCrlf,ThreadBase threadBase) {
+		var buf = LineRecv(timeout, operateCrlf, threadBase);
 		return buf == null ? null : Encoding.ASCII.GetString(buf);
 	}
 
 	// 【１行受信】
 	//切断されている場合、nullが返される
-	public byte[] LineRecv(int timeout, OperateCrlf operateCrlf, ref boolean life) {
+	public byte[] LineRecv(int timeout, OperateCrlf operateCrlf, ThreadBase threadBase) {
 		Socket.ReceiveTimeout = timeout * 1000;
 
 		var breakTime = DateTime.Now.AddSeconds(timeout);
 
-		while (life) {
+		while (threadBase.isLife()) {
 			//Ver5.1.6
 			if (tcpQueue.Length == 0)
 				Thread.Sleep(100);
@@ -408,7 +409,7 @@ public class TcpObj extends SockObj {
 	}
 
 	////【バイナリ送信】
-	public boolean SendBinaryFile(String fileName, ref boolean life) {
+	public boolean SendBinaryFile(String fileName, /*ThreadBase threadBase これいるのか*/) {
 		//トレース表示
 		var sb = new StringBuilder();
 		sb.Append(string.format("SendBinaryFile(%s) ", fileName));
