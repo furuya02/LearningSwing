@@ -14,6 +14,7 @@ import bjd.net.SockObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OptionSample;
+import bjd.util.Debug;
 
 public class OneServerTest {
 
@@ -25,19 +26,19 @@ public class OneServerTest {
 		@Override
 		protected void onStopServer() {
 			//TODO Debug Print
-			System.out.println(String.format("onStopServer()"));
+            System.out.println(String.format("MyServer.onStopServer() ID=%d",Thread.currentThread().getId()));
 		}
 
 		@Override
 		protected boolean onStartServer() {
 			//TODO Debug Print
-			System.out.println(String.format("onStartServer()"));
+	        System.out.println(String.format("MyServer.onStartServer() ID=%d",Thread.currentThread().getId()));
 			return true;
 		}
 
 		@Override
 		protected void onSubThread(SockObj sockObj) {
-			System.out.println(String.format("onSubThread()"));
+            System.out.println(String.format("MyServer.onSubThread() ID=%d",Thread.currentThread().getId()));
 		}
 		@Override
 		public String getMsg(int messageNo) {
@@ -64,7 +65,17 @@ public class OneServerTest {
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 		
-		myServer.dispose();
+		while(true){
+            Debug.print("OneServerTest.test() loop..");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+		}
+		
+		//myServer.dispose();
 	}
 
 }

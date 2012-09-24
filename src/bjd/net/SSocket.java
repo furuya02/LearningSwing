@@ -34,11 +34,12 @@ public final class SSocket extends SocketBase {
     }
     
     public void bind() {
+        System.out.println(String.format("SSocket.bind() start ID=%d",Thread.currentThread().getId()));
         try {
             serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), multiple);
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
             //TODO debug
-            System.out.println(String.format("NonBlockingChannelEchoServerが起動しました(port=%d)", serverChannel.socket().getLocalPort()));
+            System.out.println(String.format("NonBlockingChannelEchoServerが起動しました(port=%d) ID=%d", serverChannel.socket().getLocalPort(),Thread.currentThread().getId()));
             while (selector.select() > 0) {
                 for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
                     SelectionKey key = (SelectionKey) it.next();
@@ -55,6 +56,7 @@ public final class SSocket extends SocketBase {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        System.out.println(String.format("SSocket.bind() end ID=%d",Thread.currentThread().getId()));
     }
     
 //    private void doAccept(ServerSocketChannel serverChannel) {
@@ -100,6 +102,7 @@ public final class SSocket extends SocketBase {
  
     
     public void close() {
+        System.out.println(String.format("SSocket.close() start"));
         if (serverChannel != null && serverChannel.isOpen()) {
             try {
                 System.out.println("NonBlockingChannelEchoServerを停止します。");
@@ -109,6 +112,7 @@ public final class SSocket extends SocketBase {
                 ex.printStackTrace(); //エラーは無視する
             }
         }        
+        System.out.println(String.format("SSocket.close() end"));
     }
 
 }

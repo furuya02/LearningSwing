@@ -64,8 +64,10 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 
 	@Override
 	public void dispose() {
+        System.out.println(String.format("OneServer.dispose() start ID=%d",Thread.currentThread().getId()));
 		sSocket.close();
 		super.dispose();
+        System.out.println(String.format("OneServer.dispose() end ID=%d",Thread.currentThread().getId()));
 	}
 
 	//RemoteServerでのみ使用される
@@ -136,11 +138,11 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	@Override
 	protected void onLoopThread() {
 
+        System.out.println(String.format("OneServer.onLoopThread() start ID=%d",Thread.currentThread().getId()));
+
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
 		logger.set(LogKind.Normal, null, 9000000, bindStr);
-		//TODO Debug Print
-		System.out.println(String.format("bindStr=%s",bindStr));
 		//Dosを受けた場合、multiple数まで連続アクセスまでは記憶してしまう
 		//Dosが終わった後も、その分だけ復帰に時間を要する
 
@@ -176,10 +178,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 				//callBack関数の中で、子オブジェクトを作成し、作成完了すると排他制御が解除される
 				busy = true;
 				//sSocket.bind(CallBackFunc);
-				//TODO Debug Print
-				System.out.println(String.format("statr bind()"));
 				sSocket.bind();
-				System.out.println(String.format("end bind()"));
 
 				//チャイルドスレッドオブジェクトの整理
 				//		        synchronized (lock) {
@@ -206,6 +205,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 			//ここで、opBase.nameTagを確認すれば、何のサーバプロセスが動作中かどうかが分かる
 		}
 		logger.set(LogKind.Normal, null, 9000001, bindStr);
+        System.out.println(String.format("OneServer.onLoopThread() end ID=%d",Thread.currentThread().getId()));
 	}
 
 	@Override
