@@ -144,34 +144,33 @@ public abstract class OneServer extends ThreadBase implements IDispose{
 		: new UdpObj(kernel, logger, oneBind.getAddr(), port, multiple);
 
 				if (sockObj.getState() == SocketObjState.Error){
-					Thread.sleep(1000); //このウエイトが無いと応答不能になる
-					goto close;
-				}
-				busy = false; //排他制御
-				while (life){
-					while (busy){
-						if (!life){
-							break;
-						}
-						Thread.sleep(10);
-					}
-					//callBack関数の中で、子オブジェクトを作成し、作成完了すると排他制御が解除される
-					busy = true;
-					sockObj.StartServer(CallBackFunc);
+				    Thread.sleep(1000); //このウエイトが無いと応答不能になる
+				}else{
+				    busy = false; //排他制御
+				    while (life){
+				        while (busy){
+				            if (!life){
+				                break;
+				            }
+				            Thread.sleep(10);
+				        }
+				        //callBack関数の中で、子オブジェクトを作成し、作成完了すると排他制御が解除される
+				        busy = true;
+				        sockObj.StartServer(CallBackFunc);
 
-					//チャイルドスレッドオブジェクトの整理
-					synchronized (lock) {
-						for (int i = childThreads.size() - 1; i >= 0; i--){
-							if (childThreads.get(i).isAlive()){
-								continue;
-							}
-							//childThreads.get(i) = null;
-							childThreads.remove(i);
-						}
-					}
+				        //チャイルドスレッドオブジェクトの整理
+				        synchronized (lock) {
+				            for (int i = childThreads.size() - 1; i >= 0; i--){
+				                if (childThreads.get(i).isAlive()){
+				                    continue;
+				                }
+				                //childThreads.get(i) = null;
+				                childThreads.remove(i);
+				            }
+				        }
+				    }
 				}
-				close:
-					sockObj.close();
+				sockObj.close();
 
 				while (childCount != 0){
 					Thread.sleep(100);
