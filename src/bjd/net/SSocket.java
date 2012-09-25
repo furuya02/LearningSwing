@@ -10,6 +10,9 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import bjd.ThreadBase;
+import bjd.util.Debug;
+
 //サーバソケット
 public final class SSocket extends SocketBase {
 //    private static final int BUF_SIZE = 3000;
@@ -33,30 +36,39 @@ public final class SSocket extends SocketBase {
         }
     }
     
-    public void bind() {
-        System.out.println(String.format("SSocket.bind() start ID=%d",Thread.currentThread().getId()));
+    public void bind(ThreadBase threadBase) {
+        Debug.print(this,"bind() start");
+
         try {
             serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), multiple);
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
             //TODO debug
-            System.out.println(String.format("NonBlockingChannelEchoServerが起動しました(port=%d) ID=%d", serverChannel.socket().getLocalPort(),Thread.currentThread().getId()));
-            while (selector.select() > 0) {
-                for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
-                    SelectionKey key = (SelectionKey) it.next();
-                    it.remove();
-                    if (key.isAcceptable()) {
-                    	iSocket.accept(new ASocket(serverChannel.accept(), iSocket));
-                        //doAccept((ServerSocketChannel) key.channel());
-                    //} else if (key.isReadable()) {
-                    //    doRead((SocketChannel) key.channel());
-                    }
+            Debug.print(this,String.format("NonBlockingChannelEchoServerが起動しました(port=%d)",serverChannel.socket().getLocalPort()));
+            
+            while(threadBase.isLife()){
+            	int n = selector.select(1); 
+                if(n==0){
+                	//Debug.print(this,"n==0");
+                	continue;
+                }else if(n<0){
+                	break;
                 }
-            }  
-			System.out.println(String.format("end while(selector.select()>0)"));
+                for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
+                	SelectionKey key = (SelectionKey) it.next();
+                	it.remove();
+                	if (key.isAcceptable()) {
+                		iSocket.accept(new ASocket(serverChannel.accept(), iSocket));
+                		//doAccept((ServerSocketChannel) key.channel());
+                		//} else if (key.isReadable()) {
+                		//    doRead((SocketChannel) key.channel());
+                	}
+                }
+            }
+            Debug.print(this,"end while(selector.select()>0)");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println(String.format("SSocket.bind() end ID=%d",Thread.currentThread().getId()));
+        Debug.print(this,"bind() end");
     }
     
 //    private void doAccept(ServerSocketChannel serverChannel) {
@@ -89,7 +101,7 @@ public final class SSocket extends SocketBase {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            System.out.println(remoteAddress + ":[切断しました]");
+        	Debug.print(this,String.format("切断しました : %s",remoteAddress));
             try {
                 channel.close();
             } catch (IOException ex) {
@@ -102,17 +114,17 @@ public final class SSocket extends SocketBase {
  
     
     public void close() {
-        System.out.println(String.format("SSocket.close() start"));
+        Debug.print(this,"SSocket.close() start");
         if (serverChannel != null && serverChannel.isOpen()) {
             try {
-                System.out.println("NonBlockingChannelEchoServerを停止します。");
+                Debug.print(this,"NonBlockingChannelEchoServerを停止します");
                 selector.wakeup();
                 serverChannel.close();
             } catch (IOException ex) {
                 ex.printStackTrace(); //エラーは無視する
             }
         }        
-        System.out.println(String.format("SSocket.close() end"));
+        Debug.print(this,"SSocket.close() end");
     }
 
 }

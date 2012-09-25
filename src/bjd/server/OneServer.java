@@ -27,6 +27,7 @@ import bjd.net.TcpObj;
 import bjd.net.UdpObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
+import bjd.util.Debug;
 import bjd.util.IDispose;
 
 //各サーバオブジェクトの基底クラス
@@ -64,10 +65,10 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 
 	@Override
 	public void dispose() {
-        System.out.println(String.format("OneServer.dispose() start ID=%d",Thread.currentThread().getId()));
+        Debug.print(this,"dispose() start");
 		sSocket.close();
 		super.dispose();
-        System.out.println(String.format("OneServer.dispose() end ID=%d",Thread.currentThread().getId()));
+        Debug.print(this,"dispose() end");
 	}
 
 	//RemoteServerでのみ使用される
@@ -127,6 +128,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	}
 
 	//サーバ開始処理
+	
 	//サーバが正常に起動できる場合(isInitSuccess==true)のみスレッド開始できる
 	protected abstract boolean onStartServer(); //サーバ開始処理
 
@@ -138,7 +140,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	@Override
 	protected void onLoopThread() {
 
-        System.out.println(String.format("OneServer.onLoopThread() start ID=%d",Thread.currentThread().getId()));
+        Debug.print(this,"onLoopThread() start");
 
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
@@ -178,7 +180,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 				//callBack関数の中で、子オブジェクトを作成し、作成完了すると排他制御が解除される
 				busy = true;
 				//sSocket.bind(CallBackFunc);
-				sSocket.bind();
+				sSocket.bind(this);
 
 				//チャイルドスレッドオブジェクトの整理
 				//		        synchronized (lock) {
@@ -205,7 +207,8 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 			//ここで、opBase.nameTagを確認すれば、何のサーバプロセスが動作中かどうかが分かる
 		}
 		logger.set(LogKind.Normal, null, 9000001, bindStr);
-        System.out.println(String.format("OneServer.onLoopThread() end ID=%d",Thread.currentThread().getId()));
+
+		Debug.print(this,"onLoopThread() end");
 	}
 
 	@Override
