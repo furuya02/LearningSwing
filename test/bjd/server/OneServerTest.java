@@ -46,7 +46,6 @@ public class OneServerTest {
 			}
 			return "";
 		}
-		
 	}
 	
 	@Test

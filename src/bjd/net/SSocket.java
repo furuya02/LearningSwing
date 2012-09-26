@@ -21,6 +21,7 @@ public final class SSocket extends SocketBase {
     private Ip bindIp;
     private int port;
     private int multiple;
+    private boolean isBusy = true;
    
     public SSocket(Ip bindIp, int port, int multiple, ISocket iSocket) {
     	super(iSocket);
@@ -36,10 +37,22 @@ public final class SSocket extends SocketBase {
         }
     }
     
+    //必要な処理が完了したら、このメソッドでbusyフラグをクリアする
+    public void clearBusy(){
+    	Debug.print(this,"clearBusy()");
+    	isBusy = false;
+    }
+    public void setBusy(){
+    	Debug.print(this,"setBusy()");
+    	isBusy = true;
+    }
+    
     //このメソッドが呼ばれると、延々と接続を待ち受ける
     //接続が有った場合は、ISocket(OneServer)のaccept()を呼び出す
     public void bind(ThreadBase threadBase) {
         Debug.print(this,"bind() start");
+        
+        clearBusy();
 
         try {
             serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), multiple);
@@ -47,9 +60,10 @@ public final class SSocket extends SocketBase {
             //TODO debug
             Debug.print(this,String.format("NonBlockingChannelEchoServerが起動しました(port=%d)",serverChannel.socket().getLocalPort()));
             
-            iSocket.setAcceptActive(false);
-            
             while(threadBase.isLife()){
+            	if(isBusy){
+            		continue; //iThread.accept()でclearBusy()が呼ばれるまで、次のselectを処理しない
+            	}
             	int n = selector.select(1); 
                 if(n==0){
                 	//Debug.print(this,"n==0");
@@ -58,18 +72,14 @@ public final class SSocket extends SocketBase {
                 	break;
                 }
                 
-                //iSocket.accept()の処理が終了してから次の処理を許可する
-                if(iSocket.isAcceptActive()){
-                	continue;
-                }
+                setBusy(); //次にこのフラグがクリアされるのは、iThread.accept()側でclearBusy()を呼んだとき
                 
                 for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
                 	SelectionKey key = (SelectionKey) it.next();
                 	it.remove();
                 	if (key.isAcceptable()) {
-                		iSocket.setAcceptActive(true);
                 		//OneServer.accept()を呼び出す
-                		iSocket.accept(serverChannel.accept());
+                		iSocket.accept(serverChannel.accept(),this);
                 	}
                 }
             }

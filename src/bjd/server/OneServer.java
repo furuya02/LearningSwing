@@ -44,14 +44,9 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	protected Ssl ssl;
 	protected Logger logger;
 
-	public boolean isAcceptActive() {
-		return acceptActive;
-	}
-
 	protected Conf conf;
 
-	private boolean acceptActive=false; //accept()の再入防止のためのフラグ
-	
+
 	//public abstract String getMsg(int messageNo);
 
 	protected int Timeout;
@@ -170,24 +165,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 				e.printStackTrace();
 			} //このウエイトが無いと応答不能になる
 		} else {
-			busy = false; //排他制御
-			while (life) {
-				while (busy) {
-					if (!life) {
-						break;
-					}
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				//callBack関数の中で、子オブジェクトを作成し、作成完了すると排他制御が解除される
-				busy = true;
-				//sSocket.bind(CallBackFunc);
-				sSocket.bind(this);
-
+			sSocket.bind(this); // この中でループとなる
 				//チャイルドスレッドオブジェクトの整理
 				//		        synchronized (lock) {
 				//		            for (int i = childThreads.size() - 1; i >= 0; i--){
@@ -198,7 +176,6 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 				//		                childThreads.remove(i);
 				//		            }
 				//		        }
-			}
 		}
 		sSocket.close();
 
@@ -218,14 +195,14 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	}
 
 	@Override
-	public void accept(SocketChannel accept) {
+	public void accept(SocketChannel accept,SSocket sSocket) {
 		
 		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
 		Debug.print(this,"accept() start");
 		ASocket aSocket = new ASocket(accept, this);
 
-		これはスレッドが生成できた時点のほうがいいのか？
-		acceptActive = false; //ASocketを生成できた時点で、accept()への再入を許可する
+		//これはスレッドが生成できた時点のほうがいいのか？
+		sSocket.clearBusy();//ASocketを生成できた時点で、accept()への再入を許可する
 		
 		
 		
