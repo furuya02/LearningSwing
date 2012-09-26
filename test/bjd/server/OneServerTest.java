@@ -38,6 +38,7 @@ public class OneServerTest {
 		protected void onSubThread(SockObj sockObj) {
             Debug.print(this,"onSubThread()");
 		}
+		
 		@Override
 		public String getMsg(int messageNo) {
 			String s = super.getMsg(messageNo);
