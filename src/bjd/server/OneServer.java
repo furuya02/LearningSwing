@@ -1,6 +1,7 @@
 package bjd.server;
 
 import java.net.ServerSocket;
+import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,10 +43,15 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	protected AclList aclList;
 	protected Ssl ssl;
 	protected Logger logger;
+
+	public boolean isAcceptActive() {
+		return acceptActive;
+	}
+
 	protected Conf conf;
 
-	private boolean busy; //排他制御
-
+	private boolean acceptActive=false; //accept()の再入防止のためのフラグ
+	
 	//public abstract String getMsg(int messageNo);
 
 	protected int Timeout;
@@ -212,7 +218,19 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	}
 
 	@Override
-	public void accept(ASocket aSocket) {
+	public void accept(SocketChannel accept) {
+		
+		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
+		Debug.print(this,"accept() start");
+		ASocket aSocket = new ASocket(accept, this);
+
+		これはスレッドが生成できた時点のほうがいいのか？
+		acceptActive = false; //ASocketを生成できた時点で、accept()への再入を許可する
+		
+		
+		
+		//aSocket.close();
+		Debug.print(this,"accept() end");
 		//if(aSocket.)
 	}
 

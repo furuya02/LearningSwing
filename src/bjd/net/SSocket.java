@@ -36,6 +36,8 @@ public final class SSocket extends SocketBase {
         }
     }
     
+    //このメソッドが呼ばれると、延々と接続を待ち受ける
+    //接続が有った場合は、ISocket(OneServer)のaccept()を呼び出す
     public void bind(ThreadBase threadBase) {
         Debug.print(this,"bind() start");
 
@@ -45,6 +47,8 @@ public final class SSocket extends SocketBase {
             //TODO debug
             Debug.print(this,String.format("NonBlockingChannelEchoServerが起動しました(port=%d)",serverChannel.socket().getLocalPort()));
             
+            iSocket.setAcceptActive(false);
+            
             while(threadBase.isLife()){
             	int n = selector.select(1); 
                 if(n==0){
@@ -53,14 +57,19 @@ public final class SSocket extends SocketBase {
                 }else if(n<0){
                 	break;
                 }
+                
+                //iSocket.accept()の処理が終了してから次の処理を許可する
+                if(iSocket.isAcceptActive()){
+                	continue;
+                }
+                
                 for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
                 	SelectionKey key = (SelectionKey) it.next();
                 	it.remove();
                 	if (key.isAcceptable()) {
-                		iSocket.accept(new ASocket(serverChannel.accept(), iSocket));
-                		//doAccept((ServerSocketChannel) key.channel());
-                		//} else if (key.isReadable()) {
-                		//    doRead((SocketChannel) key.channel());
+                		iSocket.setAcceptActive(true);
+                		//OneServer.accept()を呼び出す
+                		iSocket.accept(serverChannel.accept());
                 	}
                 }
             }

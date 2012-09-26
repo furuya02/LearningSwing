@@ -1,6 +1,8 @@
 package bjd.net;
 
-public interface ISocket {
-	public void accept(ASocket aSocket);
+import java.nio.channels.SocketChannel;
 
+public interface ISocket {
+	public void accept(SocketChannel accept);
+	public boolean isAcceptActive();
 }
