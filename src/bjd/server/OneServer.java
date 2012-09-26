@@ -13,16 +13,15 @@ import bjd.acl.AclList;
 import bjd.log.LogKind;
 import bjd.log.Logger;
 import bjd.log.OneLog;
-import bjd.net.ASocket;
 import bjd.net.ISocket;
 import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
-import bjd.net.SSocket;
+import bjd.net.SockAccept;
+import bjd.net.SockServer;
 import bjd.net.SockObj;
-import bjd.net.SocketObjState;
-import bjd.net.SocketStatus;
+import bjd.net.SockState;
 import bjd.net.Ssl;
 import bjd.net.TcpObj;
 import bjd.net.UdpObj;
@@ -37,7 +36,7 @@ import bjd.util.IDispose;
 //****************************************************************
 public abstract class OneServer extends ThreadBase implements ISocket, IDispose {
 
-	private SSocket sSocket = null;
+	private SockServer sockServer = null;
 
 	protected OneBind oneBind;
 	protected AclList aclList;
@@ -67,7 +66,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	@Override
 	public void dispose() {
         Debug.print(this,"dispose() start");
-		sSocket.close();
+		sockServer.close();
 		super.dispose();
         Debug.print(this,"dispose() end");
 	}
@@ -151,58 +150,57 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 
 		if (oneBind.getProtocol() == ProtocolKind.Tcp) {
 			//sockObj = new TcpObj(kernel, logger, oneBind.getAddr(), port, multiple, ssl);
-			sSocket = new SSocket(oneBind.getAddr(), port, multiple, this);
+			sockServer = new SockServer(oneBind.getAddr(), port, multiple, this);
 		} else {
 			//sockObj = new UdpObj(kernel, logger, oneBind.getAddr(), port, multiple);
 			//sockObj = new UdpObj();
 		}
-		if (sSocket.getSocketStatus() == SocketStatus.ERROR) {
-			logger.set(LogKind.Error, null, 9000035, sSocket.getLastEror()); //Socket生成でエラーが発生しました。[TCP]
+		if (sockServer.getSockState() == SockState.Error) {
+			logger.set(LogKind.Error, null, 9000035, sockServer.getLastEror()); //Socket生成でエラーが発生しました。[TCP]
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} //このウエイトが無いと応答不能になる
-		} else {
-			sSocket.bind(this); // この中でループとなる
-				//チャイルドスレッドオブジェクトの整理
-				//		        synchronized (lock) {
-				//		            for (int i = childThreads.size() - 1; i >= 0; i--){
-				//		                if (childThreads.get(i).isAlive()){
-				//		                    continue;
-				//		                }
-				//		                //childThreads.get(i) = null;
-				//		                childThreads.remove(i);
-				//		            }
-				//		        }
 		}
-		sSocket.close();
+		sockServer.bind(); // この中でループとなる(停止は、selector.close()する)
+		//bindは、最後にclose()内のSelector.close()で例外終了するので、これ以降の処理は、その際に実行される
+		
+		//チャイルドスレッドオブジェクトの整理
+		//		        synchronized (lock) {
+		//		            for (int i = childThreads.size() - 1; i >= 0; i--){
+		//		                if (childThreads.get(i).isAlive()){
+		//		                    continue;
+		//		                }
+		//		                //childThreads.get(i) = null;
+		//		                childThreads.remove(i);
+		//		            }
+		//		        }
 
-		while (childCount != 0) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//サーバ停止でハングアップして、中断をかけた時ここにくる場合、動作中の子プロセスが終了していない
-			//ここで、opBase.nameTagを確認すれば、何のサーバプロセスが動作中かどうかが分かる
-		}
-		logger.set(LogKind.Normal, null, 9000001, bindStr);
-
-		Debug.print(this,"onLoopThread() end");
+//		while (childCount != 0) {
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			//サーバ停止でハングアップして、中断をかけた時ここにくる場合、動作中の子プロセスが終了していない
+//			//ここで、opBase.nameTagを確認すれば、何のサーバプロセスが動作中かどうかが分かる
+//		}
+//		logger.set(LogKind.Normal, null, 9000001, bindStr);
+		Debug.print(this,"■onLoopThread() end");
 	}
 
 	@Override
-	public void accept(SocketChannel accept,SSocket sSocket) {
+	public void accept(SocketChannel accept,SockServer sockServer) {
 		
 		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
 		Debug.print(this,"accept() start");
-		ASocket aSocket = new ASocket(accept, this);
+		SockAccept sockAccept = new SockAccept(accept, this);
 
 		//これはスレッドが生成できた時点のほうがいいのか？
-		sSocket.clearBusy();//ASocketを生成できた時点で、accept()への再入を許可する
+		sockServer.clearBusy();//ASocketを生成できた時点で、accept()への再入を許可する
 		
 		
 		

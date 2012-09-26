@@ -20,12 +20,12 @@ import bjd.util.MLang;
 public abstract class SockObj {
 
     private Socket socket = null;
-    private SocketObjState state = SocketObjState.Idle;
+    private SockState state = SockState.Idle;
     private boolean clone = false;
     
-    public final SocketObjState getState() {
-        if (state == SocketObjState.Connect && !socket.isConnected()) {
-            state = SocketObjState.Disconnect;
+    public final SockState getState() {
+        if (state == SockState.Connect && !socket.isConnected()) {
+            state = SockState.Disconnect;
         }
         return state;
     }
@@ -36,7 +36,7 @@ public abstract class SockObj {
         if (clone) { //クローンの場合は破棄しない
             return;
         }
-        state = SocketObjState.Disconnect;
+        state = SockState.Disconnect;
         if (socket!=null) {
             try {
                 socket.shutdownInput();

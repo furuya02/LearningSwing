@@ -62,7 +62,7 @@ public class OneServerTest {
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 		
-		while(true){
+		for(int i=0;i<3;i++){
 			Debug.print(this,"test() loop..");
             try {
                 Thread.sleep(3000);
@@ -72,7 +72,7 @@ public class OneServerTest {
             }
 		}
 		
-		//myServer.dispose();
+		myServer.dispose();
 	}
 
 }

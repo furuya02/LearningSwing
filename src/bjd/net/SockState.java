@@ -1,6 +1,6 @@
 package bjd.net;
 
-public enum SocketObjState {
+public enum SockState {
 	//TODO 移植完了後　リファクタリングで大文字に変更
 	Idle, //初期
 	Connect, //接続
