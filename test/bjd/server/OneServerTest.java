@@ -74,8 +74,8 @@ public class OneServerTest {
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 		
-		for(int i=0;i<5;i++){
-			Debug.print(this,String.format("test() loop.. Count()=%d",myServer.Count()));
+		for(int i=0;i<1;i++){
+			Debug.print(this,String.format("test() loop.. Count()=%d",myServer.count()));
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

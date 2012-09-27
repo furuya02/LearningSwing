@@ -48,13 +48,12 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 
 	//public abstract String getMsg(int messageNo);
 
-	protected int Timeout;
+	protected int timeout;
 
 	//子スレッド管理
 	private Object lock = new Object(); //排他制御用オブジェクト
 
 	private ArrayList<Thread> childThreads = new ArrayList<Thread>();
-	private int childCount; //多重度のカウンタ
 	private int multiple; //同時接続数
 
 	private String nameTag;
@@ -63,15 +62,13 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		return nameTag;
 	}
 
-	public int Count(){
+	public int count(){
 		//チャイルドスレッドオブジェクトの整理
 		for (int i = childThreads.size() - 1; i >= 0; i--){
-			if (childThreads.get(i).isAlive()){
-				continue;
+			if (!childThreads.get(i).isAlive()){
+				childThreads.remove(i);
+				Debug.print(this,String.format("childThreads.remove(%d)",i));
 			}
-			//childThreads.get(i) = null;
-			childThreads.remove(i);
-			Debug.print(this,String.format("childThreads.remove(%d)",i));
 		}
 		return childThreads.size(); 
 	}
@@ -82,8 +79,8 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 
 		Debug.print(this,"dispose() start");
 		
-		while(Count()>0){ // 全部の子スレッドが終了するのを待つ
-			Debug.print(this,"Count()>0");
+		while(count()>0){ // 全部の子スレッドが終了するのを待つ
+			Debug.print(this,"count()>0");
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -110,7 +107,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		if (!isRunnig()) {
 			stat = (kernel.getJp()) ? "- 停止 " : "- Initialization failure ";
 		}
-		return String.format("%s\t%-20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(), (int) conf.get("port"), childCount, multiple);
+		return String.format("%s\t%-20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(), (int) conf.get("port"), count(), multiple);
 	}
 
 	//リモート操作(データの取得)
@@ -136,7 +133,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		Timeout = (int) conf.get("timeOut");
+		timeout = (int) conf.get("timeOut");
 	}
 
 	//サーバ停止処理
@@ -189,30 +186,7 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		}
 		sockServer.bind(); // この中でループとなる(停止は、selector.close()する)
 		//bindは、最後にclose()内のSelector.close()で例外終了するので、これ以降の処理は、その際に実行される
-		
-		//チャイルドスレッドオブジェクトの整理
-		//		        synchronized (lock) {
-		//		            for (int i = childThreads.size() - 1; i >= 0; i--){
-		//		                if (childThreads.get(i).isAlive()){
-		//		                    continue;
-		//		                }
-		//		                //childThreads.get(i) = null;
-		//		                childThreads.remove(i);
-		//		            }
-		//		        }
-
-//		while (childCount != 0) {
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			//サーバ停止でハングアップして、中断をかけた時ここにくる場合、動作中の子プロセスが終了していない
-//			//ここで、opBase.nameTagを確認すれば、何のサーバプロセスが動作中かどうかが分かる
-//		}
-//		logger.set(LogKind.Normal, null, 9000001, bindStr);
-		Debug.print(this,"■onLoopThread() end");
+		Debug.print(this,"onLoopThread() end");
 	}
 
 	protected abstract void onSubThread(SockAccept sockAccept);
@@ -222,45 +196,40 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		
 		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
 		Debug.print(this,"accept() start");
-
-//		if (childCount >= multiple){
-//		logger.set(LogKind.Secure, sockObj, 9000004,String.format("count:%d/multiple:%d", childCount, multiple));
-//		//同時接続数を超えたのでリクエストをキャンセルします
-//		sockObj.close(); //2009.06.04
-//	}
-
-//		if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
+		if (count() >= multiple){
+			//同時接続数を超えたのでリクエストをキャンセルします
+			logger.set(LogKind.Secure, null, 9000004,String.format("count:%d/multiple:%d", count(), multiple));
+		}else{
+			//子ソケット作成
+			final SockAccept sockAccept = new SockAccept(accept,this);
+			
+//			if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
 //			logger.set(LogKind.Secure, null, 9000016, String.format("address:%s", _denyAddress));
 //			//このアドレスからのリクエストは許可されていません
 //			Thread.sleep(100);
 //			sockObj.close();
 //		}
 
-		synchronized (lock) {
-			Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					subThread(accept);
-				}
-			}) ;
-			t.start() ;
-			childThreads.add(t);
+			synchronized (lock) {
+				Thread t = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						subThread(sockAccept);
+					}
+				});
+				t.start();
+				childThreads.add(t);
+			}
+		
 		}
-		
-		//これはスレッドが生成できた時点のほうがいいのか？
 		sockServer.clearBusy();//ASocketを生成できた時点で、accept()への再入を許可する
-
-		
-		//aSocket.close();
 		Debug.print(this,"accept() end");
-		//if(aSocket.)
 	}
 	
-	private void subThread(SocketChannel accept){
+	private void subThread(SockAccept sockAccept){
 		Debug.print(this, "subThread() start");
-		SockAccept sockAccept = new SockAccept(accept,this);
 		onSubThread(sockAccept);
-		sockAccept.close();
+		sockAccept.close(); //子スレッドは、ここでクローズされる
 		Debug.print(this, "subThread() end");
 	}
 	
