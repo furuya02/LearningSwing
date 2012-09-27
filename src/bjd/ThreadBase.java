@@ -10,7 +10,7 @@ import bjd.util.IDispose;
 public abstract class ThreadBase implements IDispose, ILogger {
 	private MyThread myThread = null;
 	private boolean runnig = false;
-	protected boolean life;
+	private boolean life;
 	protected Kernel kernel;
 
 	private Logger logger;
@@ -39,6 +39,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 
 	@Override
 	public void dispose() {
+		life = false;
 	}
 
 	public String getMsg(int messageNo) {

@@ -67,7 +67,7 @@ public final class SockServer extends SockBase {
 
         while(true){
           	if(isBusy){
-          		Debug.print(this,"isBusy==true");
+          		Debug.print(this,"◆isBusy==true");
            		continue; //iThread.accept()でclearBusy()が呼ばれるまで、次のselectを処理しない
           	}
            	try {
@@ -89,14 +89,11 @@ public final class SockServer extends SockBase {
 				return;
 			}
 
-           	Debug.print(this,"■setBusy()");
             setBusy(); //次にこのフラグがクリアされるのは、iThread.accept()側でclearBusy()を呼んだとき
             for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
             	SelectionKey key = (SelectionKey) it.next();
             	it.remove();
-                Debug.print(this,"■XXXX");
             	if (key.isAcceptable()) {
-            		//OneServer.accept()を呼び出す
             		try {
 						iSocket.accept(serverChannel.accept(),this);
 					} catch (IOException ex) {

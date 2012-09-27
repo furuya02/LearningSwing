@@ -63,11 +63,34 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		return nameTag;
 	}
 
+	public int Count(){
+		//チャイルドスレッドオブジェクトの整理
+		for (int i = childThreads.size() - 1; i >= 0; i--){
+			if (childThreads.get(i).isAlive()){
+				continue;
+			}
+			//childThreads.get(i) = null;
+			childThreads.remove(i);
+			Debug.print(this,String.format("childThreads.remove(%d)",i));
+		}
+		return childThreads.size(); 
+	}
+	
 	@Override
 	public void dispose() {
-        Debug.print(this,"dispose() start");
-		sockServer.close();
-		super.dispose();
+		super.dispose(); // life=false; これによって、接続中の子スレッドは、全部ループを抜け、終了に向かう
+
+		Debug.print(this,"dispose() start");
+		
+		while(Count()>0){ // 全部の子スレッドが終了するのを待つ
+			Debug.print(this,"Count()>0");
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		sockServer.close(); //サーバスレッドを停止する　bind()が終了する
         Debug.print(this,"dispose() end");
 	}
 
@@ -192,54 +215,56 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		Debug.print(this,"■onLoopThread() end");
 	}
 
+	protected abstract void onSubThread(SockAccept sockAccept);
+
 	@Override
-	public void accept(SocketChannel accept,SockServer sockServer) {
+	public void accept(final SocketChannel accept,SockServer sockServer) {
 		
 		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
 		Debug.print(this,"accept() start");
-		SockAccept sockAccept = new SockAccept(accept, this);
 
+//		if (childCount >= multiple){
+//		logger.set(LogKind.Secure, sockObj, 9000004,String.format("count:%d/multiple:%d", childCount, multiple));
+//		//同時接続数を超えたのでリクエストをキャンセルします
+//		sockObj.close(); //2009.06.04
+//	}
+
+//		if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
+//			logger.set(LogKind.Secure, null, 9000016, String.format("address:%s", _denyAddress));
+//			//このアドレスからのリクエストは許可されていません
+//			Thread.sleep(100);
+//			sockObj.close();
+//		}
+
+		synchronized (lock) {
+			Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					subThread(accept);
+				}
+			}) ;
+			t.start() ;
+			childThreads.add(t);
+		}
+		
 		//これはスレッドが生成できた時点のほうがいいのか？
 		sockServer.clearBusy();//ASocketを生成できた時点で、accept()への再入を許可する
-		
-		
+
 		
 		//aSocket.close();
 		Debug.print(this,"accept() end");
 		//if(aSocket.)
 	}
-
-	//	public void CallBackFunc(IAsyncResult ar){
-	//		SockObj sockObj = ((SockObj) (ar.AsyncState)).CreateChildObj(ar);
-	//		busy = false; //排他制御解除
-	//		if (sockObj != null){
-	//			if (childCount >= multiple){
-	//				logger.set(LogKind.Secure, sockObj, 9000004,String.format("count:%d/multiple:%d", childCount, multiple));
-	//				//同時接続数を超えたのでリクエストをキャンセルします
-	//				sockObj.close(); //2009.06.04
-	//			}
-	//			else{
-	//				//Ver5.3.5
-	//				if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
-	//					logger.set(LogKind.Secure, null, 9000016, String.format("address:%s", _denyAddress));
-	//					//このアドレスからのリクエストは許可されていません
-	//					Thread.sleep(100);
-	//					sockObj.close();
-	//				}
-	//				else{
-	//
-	//					synchronized (lock) {
-	//						Thread t = new Thread(SubThread){IsBackground = true};
-	//						t.start(sockObj);
-	//						childThreads.add(t);
-	//					}
-	//				}
-	//			}
-	//		}
-	//
-	//	}
-
-	protected abstract void onSubThread(SockObj sockObj);
+	
+	private void subThread(SocketChannel accept){
+		Debug.print(this, "subThread() start");
+		SockAccept sockAccept = new SockAccept(accept,this);
+		onSubThread(sockAccept);
+		sockAccept.close();
+		Debug.print(this, "subThread() end");
+	}
+	
+	
 
 	private String _denyAddress = ""; //Ver5.3.5 DoS対処
 

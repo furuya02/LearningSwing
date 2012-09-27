@@ -23,7 +23,7 @@ public class ThreadBaseTest {
 
 		@Override
 		protected void onLoopThread() {
-			while (life) {
+			while (isLife()) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {

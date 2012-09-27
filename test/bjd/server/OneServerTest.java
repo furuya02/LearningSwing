@@ -10,6 +10,7 @@ import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
+import bjd.net.SockAccept;
 import bjd.net.SockObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
@@ -22,7 +23,7 @@ public class OneServerTest {
 		public MyServer(Conf conf, OneBind oneBind) {
 			super(new Kernel(),"TEST-SERVER", conf, oneBind);
 		}
-
+		
 		@Override
 		protected void onStopServer() {
             Debug.print(this,"onStopServer()");
@@ -34,10 +35,6 @@ public class OneServerTest {
 			return true;
 		}
 
-		@Override
-		protected void onSubThread(SockObj sockObj) {
-            Debug.print(this,"onSubThread()");
-		}
 		
 		@Override
 		public String getMsg(int messageNo) {
@@ -46,6 +43,20 @@ public class OneServerTest {
 				return s;
 			}
 			return "";
+		}
+
+		@Override
+		protected void onSubThread(SockAccept sockAccept) {
+			Debug.print(this, "onSubThread() start");
+            for(int i=0;i<20 && isLife();i++){
+    			Debug.print(this, "接続中....");
+            	try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            }
+			Debug.print(this, "onSubThread() end");
 		}
 	}
 	
@@ -63,8 +74,8 @@ public class OneServerTest {
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 		
-		for(int i=0;i<3;i++){
-			Debug.print(this,"test() loop..");
+		for(int i=0;i<5;i++){
+			Debug.print(this,String.format("test() loop.. Count()=%d",myServer.Count()));
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
