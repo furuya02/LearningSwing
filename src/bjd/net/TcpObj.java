@@ -1,20 +1,12 @@
 package bjd.net;
 
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-
-import bjd.Kernel;
 import bjd.ThreadBase;
-import bjd.TraceKind;
-import bjd.log.LogKind;
 import bjd.log.Logger;
-import bjd.util.Bytes;
 
 public class TcpObj extends SockObj {
 
     //【コンストラクタ（サーバ用）】bind/listen
-    public TcpObj(Logger logger,Ip bindIp, int port, int listenMax) {
+	public TcpObj(Logger logger, Ip bindIp, int port, int listenMax) {
 //        //super(kernel, logger, bindIp.getInetKind());
 //        //SSL通信を使用する場合は、このオブジェクトがセットされる
 //        //通常の場合は、null
@@ -55,6 +47,11 @@ public class TcpObj extends SockObj {
         //準備完了
         //StartServerを実行すると待ち受け状態になる
     }
+
+	public final byte[] lineRecv(int timeout, OperateCrlf yes, ThreadBase threadBase) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
 /*

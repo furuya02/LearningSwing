@@ -1,7 +1,7 @@
 package bjd.server;
 
-import static org.junit.Assert.*;
-
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -11,27 +11,26 @@ import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.net.SockAccept;
-import bjd.net.SockObj;
+import bjd.net.SockState;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OptionSample;
 import bjd.util.Debug;
+import bjd.util.TestUtil;
 
-public class OneServerTest {
+public final class OneServerTest {
 
 	class MyServer extends OneServer {
 		public MyServer(Conf conf, OneBind oneBind) {
-			super(new Kernel(),"TEST-SERVER", conf, oneBind);
+			super(new Kernel(), "TEST-SERVER", conf, oneBind);
 		}
 		
 		@Override
 		protected void onStopServer() {
-            Debug.print(this,"onStopServer()");
 		}
 
 		@Override
 		protected boolean onStartServer() {
-            Debug.print(this,"onStartServer()");
 			return true;
 		}
 
@@ -48,24 +47,29 @@ public class OneServerTest {
 		@Override
 		protected void onSubThread(SockAccept sockAccept) {
 			Debug.print(this, "onSubThread() start");
-            for(int i=0;i<20 && isLife();i++){
-    			Debug.print(this, "接続中....");
-            	try {
+			for (int i = 3; i >= 0 && isLife(); i--) {
+				if (sockAccept.getSockState() != SockState.Connect) {
+					Debug.print(this, String.format("接続中...sockAccept.getSockState!=Connect"));
+					break;
+				}
+
+				Debug.print(this, String.format("接続中...あと%d回待機", i));
+				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-            }
+			}
 			Debug.print(this, "onSubThread() end");
 		}
 	}
 	
 	@Test
-	public void test() {
+	public void a001() {
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
-		conf.set("port", 8881);
+		conf.set("port", 8888);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));
 		conf.set("enableAcl", 1);
@@ -73,9 +77,8 @@ public class OneServerTest {
 		
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
-		
-		for(int i=0;i<1;i++){
-			Debug.print(this,String.format("test() loop.. Count()=%d",myServer.count()));
+		for (int i = 10; i >= 0; i--) {
+			Debug.print(this, String.format("test() loop..あと%d回 isRunning()=%s Count()=%d", i, myServer.isRunnig(), myServer.count()));
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -83,8 +86,68 @@ public class OneServerTest {
                 e.printStackTrace();
             }
 		}
-		
 		myServer.dispose();
 	}
 
+	@Test
+	public final void a002() {
+
+		TestUtil.dispHeader("a002 start() stop()　の繰り返し(負荷テスト)"); //TESTヘッダ
+
+		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+		Conf conf = new Conf(optionSample);
+		conf.set("port", 8888);
+		conf.set("multiple", 10);
+		conf.set("acl", new Dat(new CtrlType[0]));
+		conf.set("enableAcl", 1);
+		conf.set("timeOut", 3);
+		MyServer myServer = new MyServer(conf, oneBind);
+
+		for (int i = 0; i < 20; i++) {
+			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
+			myServer.start();
+			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			assertThat(myServer.isRunnig(), is(true));
+
+			myServer.stop();
+			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			assertThat(myServer.isRunnig(), is(false));
+		}
+
+		myServer.dispose();
+		TestUtil.dispPrompt(this, "myThread.dispose()");
+	}
+
+	@Test
+	public final void a003() {
+
+		TestUtil.dispHeader("a003 new start() stop()　dispose の繰り返し(負荷テスト)"); //TESTヘッダ
+
+		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+		Conf conf = new Conf(optionSample);
+		conf.set("port", 80);
+		conf.set("multiple", 10);
+		conf.set("acl", new Dat(new CtrlType[0]));
+		conf.set("enableAcl", 1);
+		conf.set("timeOut", 3);
+
+		for (int i = 0; i < 20; i++) {
+			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
+			MyServer myServer = new MyServer(conf, oneBind);
+
+			myServer.start();
+			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			assertThat(myServer.isRunnig(), is(true));
+
+			myServer.stop();
+			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			assertThat(myServer.isRunnig(), is(false));
+
+			myServer.dispose();
+		}
+
+		TestUtil.dispPrompt(this, "myThread.dispose()");
+	}
 }

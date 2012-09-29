@@ -3,11 +3,7 @@ package bjd.option;
 import java.util.ArrayList;
 
 import bjd.Kernel;
-import bjd.ctrl.CtrlCheckBox;
-import bjd.ctrl.CtrlComboBox;
-import bjd.ctrl.CtrlHidden;
 import bjd.ctrl.CtrlTabPage;
-import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 import bjd.net.ProtocolKind;

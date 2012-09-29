@@ -1,21 +1,6 @@
 package bjd.net;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-
-import bjd.Kernel;
-import bjd.RunMode;
-import bjd.TraceKind;
-import bjd.log.LogKind;
-import bjd.log.Logger;
-import bjd.util.Inet;
-import bjd.util.MLang;
 
 public abstract class SockObj {
 
@@ -37,7 +22,7 @@ public abstract class SockObj {
             return;
         }
         state = SockState.Disconnect;
-        if (socket!=null) {
+		if (socket != null) {
             try {
                 socket.shutdownInput();
                 socket.shutdownOutput();

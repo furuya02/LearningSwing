@@ -1,15 +1,5 @@
 package bjd.net;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
-
-import bjd.Kernel;
-import bjd.log.LogKind;
-import bjd.log.Logger;
-import bjd.util.Bytes;
-
 public final class UdpObj extends SockObj {
 
 }

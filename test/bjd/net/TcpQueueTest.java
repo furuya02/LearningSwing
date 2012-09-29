@@ -1,26 +1,14 @@
 package bjd.net;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
-import org.junit.Test;
-
 import bjd.util.TestUtil;
 
-public class TcpQueueTest {
+public final class TcpQueueTest {
 
 	@Test
 	public void a001() {
@@ -114,12 +102,12 @@ public class TcpQueueTest {
 	@Test
 	public void a003() {
 		TestUtil.dispHeader("a003 TcpQueue　行取得");
-		int max = 1048560;
+		//int max = 1048560;
 
 		TestUtil.dispPrompt(this, "tcpQueue = new TcpQueue()");
 		TcpQueue tcpQueu = new TcpQueue();
 
-		byte[] lines = new byte[] { 0x61, 0x0d, 0x0a, 0x62, 0x0d, 0x0a ,0x63};
+		byte[] lines = new byte[] { 0x61, 0x0d, 0x0a, 0x62, 0x0d, 0x0a , 0x63};
 		tcpQueu.enqueue(lines, lines.length);
 		TestUtil.dispPrompt(this, "tcpQueue.enqueu(1/r/n2/r/n3) 2行と改行なしの1行で初期化");
 

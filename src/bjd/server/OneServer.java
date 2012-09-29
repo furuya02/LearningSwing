@@ -1,6 +1,5 @@
 package bjd.server;
 
-import java.net.ServerSocket;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -20,11 +19,9 @@ import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
 import bjd.net.SockAccept;
 import bjd.net.SockServer;
-import bjd.net.SockObj;
 import bjd.net.SockState;
 import bjd.net.Ssl;
 import bjd.net.TcpObj;
-import bjd.net.UdpObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.util.Debug;
@@ -42,53 +39,82 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	protected AclList aclList;
 	protected Ssl ssl;
 	protected Logger logger;
-
 	protected Conf conf;
 
+	protected int timeout;
+	private String nameTag;
+	private String _denyAddress = ""; //Ver5.3.5 DoS対処
 
 	//public abstract String getMsg(int messageNo);
 
-	protected int timeout;
-
 	//子スレッド管理
 	private Object lock = new Object(); //排他制御用オブジェクト
-
 	private ArrayList<Thread> childThreads = new ArrayList<Thread>();
 	private int multiple; //同時接続数
 
-	private String nameTag;
-
-	public String getNameTag() {
+	public final String getNameTag() {
 		return nameTag;
 	}
 
-	public int count(){
+	public final SockState getSockState() {
+		return sockServer.getSockState();
+	}
+
+	public final int count() {
 		//チャイルドスレッドオブジェクトの整理
-		for (int i = childThreads.size() - 1; i >= 0; i--){
-			if (!childThreads.get(i).isAlive()){
+		for (int i = childThreads.size() - 1; i >= 0; i--) {
+			if (!childThreads.get(i).isAlive()) {
 				childThreads.remove(i);
-				Debug.print(this,String.format("childThreads.remove(%d)",i));
+				Debug.print(this, String.format("childThreads.remove(%d)", i));
 			}
 		}
-		return childThreads.size(); 
+		return childThreads.size();
 	}
-	
-	@Override
-	public void dispose() {
-		super.dispose(); // life=false; これによって、接続中の子スレッドは、全部ループを抜け、終了に向かう
 
-		Debug.print(this,"dispose() start");
-		
-		while(count()>0){ // 全部の子スレッドが終了するのを待つ
-			Debug.print(this,"count()>0");
+	@Override
+	public final void start() {
+		super.start();
+		//sockStateがBind若しくはエラーとなるまで待機する
+		while (sockServer == null || sockServer.getSockState() == SockState.Idle) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public final void stop() {
+		sockServer.close();
+		super.stop();
+
+		// 全部の子スレッドが終了するのを待つ
+		while (count() > 0) {
+			Debug.print(this, "count()>0");
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		sockServer.close(); //サーバスレッドを停止する　bind()が終了する
-        Debug.print(this,"dispose() end");
+	}
+
+	@Override
+	public final void dispose() {
+		// super.dispose()は、ThreadBaseでstop()が呼ばれるだけなので必要ない
+		stop();
+		//		Debug.print(this,"dispose() start");
+		//		
+		//		while(count()>0){ // 全部の子スレッドが終了するのを待つ
+		//			Debug.print(this,"count()>0");
+		//			try {
+		//				Thread.sleep(500);
+		//			} catch (InterruptedException e) {
+		//				e.printStackTrace();
+		//			}
+		//		}
+		//		Debug.print(this,"dispose() end");
 	}
 
 	//RemoteServerでのみ使用される
@@ -102,21 +128,22 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 
 	//ステータス表示用
 	@Override
-	public String toString() {
+	public final String toString() {
 		String stat = (kernel.getJp()) ? "+ サービス中 " : "+ In execution ";
 		if (!isRunnig()) {
 			stat = (kernel.getJp()) ? "- 停止 " : "- Initialization failure ";
 		}
-		return String.format("%s\t%-20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(), (int) conf.get("port"), count(), multiple);
+		return String.format("%s\t%-20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(),
+				(int) conf.get("port"), count(), multiple);
 	}
 
 	//リモート操作(データの取得)
-	public String Cmd(String cmdStr) {
+	public final String cmd(String cmdStr) {
 		return "";
 	}
 
 	//コンストラクタ
-	protected OneServer(Kernel kernel, String nameTag,  Conf conf, OneBind oneBind) {
+	protected OneServer(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
 		super(kernel, nameTag);
 		this.conf = conf;
 
@@ -136,31 +163,37 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 		timeout = (int) conf.get("timeOut");
 	}
 
+	//**************************************************************
+	// サーバ開始処理
+	//サーバが正常に起動できる場合(isInitSuccess==true)のみスレッド開始できる
+	//**************************************************************
+	protected abstract boolean onStartServer(); //サーバ開始処理
+
+	@Override
+	protected final boolean onStartThread() {
+		return onStartServer(); //子クラスのスレッド開始処理
+	}
+
+	//**************************************************************
 	//サーバ停止処理
+	//**************************************************************
 	protected abstract void onStopServer(); //サーバ停止処理
 
 	@Override
-	protected void onStopThread() {
+	protected final void onStopThread() {
 		onStopServer(); //子クラスのスレッド停止処理
 		if (ssl != null) {
 			ssl.dispose();
 		}
+		sockServer.close();
 	}
 
-	//サーバ開始処理
-	
-	//サーバが正常に起動できる場合(isInitSuccess==true)のみスレッド開始できる
-	protected abstract boolean onStartServer(); //サーバ開始処理
-
+	//**************************************************************
+	//サーバループ
+	//**************************************************************
 	@Override
-	protected boolean onStartThread() {
-		return onStartServer(); //子クラスのスレッド開始処理
-	}
-
-	@Override
-	protected void onLoopThread() {
-
-        Debug.print(this,"onLoopThread() start");
+	protected final void onRunThread() {
+		Debug.print(this, "onRunThread() start");
 
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
@@ -184,31 +217,39 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 				e.printStackTrace();
 			} //このウエイトが無いと応答不能になる
 		}
-		sockServer.bind(); // この中でループとなる(停止は、selector.close()する)
-		//bindは、最後にclose()内のSelector.close()で例外終了するので、これ以降の処理は、その際に実行される
-		Debug.print(this,"onLoopThread() end");
+		if (!sockServer.bind(this)) { // この中でループとなる(停止は、selector.close()する)
+			Debug.print(this, String.format("【bind ERROR】 %s", sockServer.getLastEror()));
+		}
+		//もし、bindでエラーが発生したら、stop()で停止されるまで、下のループで待機となる
+		while (isLife()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		Debug.print(this, "onRunThread() end");
 	}
 
-	protected abstract void onSubThread(SockAccept sockAccept);
-
 	@Override
-	public void accept(final SocketChannel accept,SockServer sockServer) {
-		
+	public final void accept(final SocketChannel accept, SockServer sockServer) {
+
 		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
-		Debug.print(this,"accept() start");
-		if (count() >= multiple){
+		Debug.print(this, "accept() start");
+		if (count() >= multiple) {
 			//同時接続数を超えたのでリクエストをキャンセルします
-			logger.set(LogKind.Secure, null, 9000004,String.format("count:%d/multiple:%d", count(), multiple));
-		}else{
+			logger.set(LogKind.Secure, null, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
+		} else {
 			//子ソケット作成
-			final SockAccept sockAccept = new SockAccept(accept,this);
-			
-//			if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
-//			logger.set(LogKind.Secure, null, 9000016, String.format("address:%s", _denyAddress));
-//			//このアドレスからのリクエストは許可されていません
-//			Thread.sleep(100);
-//			sockObj.close();
-//		}
+			final SockAccept sockAccept = new SockAccept(accept, this);
+
+			//			if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
+			//			logger.set(LogKind.Secure, null, 9000016, String.format("address:%s", _denyAddress));
+			//			//このアドレスからのリクエストは許可されていません
+			//			Thread.sleep(100);
+			//			sockObj.close();
+			//		}
 
 			synchronized (lock) {
 				Thread t = new Thread(new Runnable() {
@@ -220,22 +261,23 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 				t.start();
 				childThreads.add(t);
 			}
-		
+
 		}
-		sockServer.clearBusy();//ASocketを生成できた時点で、accept()への再入を許可する
-		Debug.print(this,"accept() end");
+		sockServer.clearBusy(); //ASocketを生成できた時点で、accept()への再入を許可する
+		Debug.print(this, "accept() end");
 	}
-	
-	private void subThread(SockAccept sockAccept){
+
+	//**************************************************************
+	//子スレッドループ
+	//**************************************************************
+	protected abstract void onSubThread(SockAccept sockAccept);
+
+	private void subThread(SockAccept sockAccept) {
 		Debug.print(this, "subThread() start");
 		onSubThread(sockAccept);
 		sockAccept.close(); //子スレッドは、ここでクローズされる
 		Debug.print(this, "subThread() end");
 	}
-	
-	
-
-	private String _denyAddress = ""; //Ver5.3.5 DoS対処
 
 	//１リクエストに対する子スレッドとして起動される
 	//	public void SubThread(Object o){
@@ -291,85 +333,86 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	//		childCount--; //多重度のカウンタ
 	//	}
 
-	/*
-	public Cmd WaitLine(TcpObj tcpObj){
-		Calendar c = Calendar.getInstance(); 
-		c.add(Calendar.SECOND,Timeout);
-		
-		while (life){
+	public final Cmd waitLine(TcpObj tcpObj) {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.SECOND, timeout);
+
+		while (isLife()) {
 			Cmd cmd = recvCmd(tcpObj);
-		    if (cmd==null){
+			if (cmd == null) {
 				return null;
 			}
-			if (!(cmd.getCmdStr().equals(""))){
+			if (!(cmd.getCmdStr().equals(""))) {
 				return cmd;
 			}
-			if(c.compareTo(Calendar.getInstance())<0){
+			if (c.compareTo(Calendar.getInstance()) < 0) {
 				return null;
 			}
-	        try {
-	            Thread.sleep(100);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 
 	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
-	protected Cmd recvCmd(TcpObj tcpObj){
-		if (tcpObj.getState() != SocketObjState.Connect) //切断されている
+	protected final Cmd recvCmd(TcpObj tcpObj) {
+		if (tcpObj.getState() != SockState.Connect) { //切断されている
 			return null;
-		byte [] recvbuf = tcpObj.LineRecv(Timeout, OperateCrlf.Yes, this);
-		if (recvbuf == null){
+		}
+		byte[] recvbuf = tcpObj.lineRecv(timeout, OperateCrlf.Yes, this);
+		if (recvbuf == null) {
 			return null; //切断された
 		}
-		String str = new String(recvbuf,Charset.forName("Shift-JIS"));
-		if (str == ""){
+		String str = new String(recvbuf, Charset.forName("Shift-JIS"));
+		if (str.equals("")) {
 			return null;
 		}
 		//受信行をコマンドとパラメータに分解する（コマンドとパラメータは１つ以上のスペースで区切られている）
 		String cmdStr = null;
 		String paramStr = null;
-		for (int i = 0; i < str.length(); i++){
-			if (str.charAt(i) == ' '){
-				if (cmdStr == null)
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == ' ') {
+				if (cmdStr == null) {
 					cmdStr = str.substring(0, i);
+				}
 			}
-			if (cmdStr == null || str.charAt(i) == ' '){
+			if (cmdStr == null || str.charAt(i) == ' ') {
 				continue;
 			}
 			paramStr = str.substring(i);
 			break;
 		}
-		if (cmdStr == null){ //パラメータ区切りが見つからなかった場合
+		if (cmdStr == null) { //パラメータ区切りが見つからなかった場合
 			cmdStr = str; //全部コマンド
 		}
-		return new Cmd(str,cmdStr,paramStr);
+		return new Cmd(str, cmdStr, paramStr);
 	}
+
 	//受信したコマンドを表現するクラス
-	class Cmd{
-	    private String str;
-	    private String cmdStr;
-	    private String paramStr;
+	class Cmd {
+		private String str;
+		private String cmdStr;
+		private String paramStr;
 
-	    public String getStr() {
-	        return str;
-	    }
+		public String getStr() {
+			return str;
+		}
 
-	    public String getCmdStr() {
-	        return cmdStr;
-	    }
+		public String getCmdStr() {
+			return cmdStr;
+		}
 
-	    public String getParamStr() {
-	        return paramStr;
-	    }
-	    
-	    public Cmd(String str,String cmdStr,String paramStr){
-	        this.str = str;
-	        this.cmdStr = cmdStr;
-	        this.paramStr = paramStr;
-	    }
+		public String getParamStr() {
+			return paramStr;
+		}
+
+		public Cmd(String str, String cmdStr, String paramStr) {
+			this.str = str;
+			this.cmdStr = cmdStr;
+			this.paramStr = paramStr;
+		}
 	}
-	*/
 }

@@ -6,7 +6,7 @@ public abstract class SockBase {
 
 	protected ISocket iSocket;
 	protected String lastError = "";
-    protected SockState sockState = SockState.Disconnect;
+    protected SockState sockState;
     protected Selector selector = null;
     
 
@@ -25,6 +25,7 @@ public abstract class SockBase {
     
     public SockBase(ISocket iSocket) {
     	this.iSocket = iSocket;
+    	 sockState = SockState.Idle;
 
     	try {
             selector = Selector.open();

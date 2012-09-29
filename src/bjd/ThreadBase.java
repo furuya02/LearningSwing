@@ -30,16 +30,16 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	public final boolean isRunnig() {
 		return runnig;
 	}
-	
+
 	//時間を要するループがある場合、ループ条件で値がtrueであることを確認する
 	//falseになったら直ちにループを中断する
 	public final boolean isLife() {
-	    return life;
+		return life;
 	}
 
 	@Override
 	public void dispose() {
-		life = false;
+		stop();
 	}
 
 	public String getMsg(int messageNo) {
@@ -55,7 +55,9 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	//【スレッド開始前処理】//return falseでスレッド起動をやめる
 	protected abstract boolean onStartThread();
 
-	public final void start() {
+	//Override可能
+	public void start() {
+		Debug.print(this, "start() start");
 		if (isRunnig()) {
 			return;
 		}
@@ -73,21 +75,15 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	//【スレッドループ】
-	protected abstract void onLoopThread();
-
-	private void loop() {
-		Debug.print(this,"loop() start");
-		onLoopThread();
-		Debug.print(this,"loop() end");
+		Debug.print(this, "start() end");
 	}
 
 	//【スレッド終了処理】
 	protected abstract void onStopThread();
+	//Override可能
+	public void stop() {
+		Debug.print(this, "stop() start");
 
-	public final void stop() {
 		if (isRunnig()) { //起動されている場合
 			life = false; //スイッチを切るとLoop内の無限ループからbreakする
 			while (isRunnig()) { //stop()を抜けた時点でisRunnigがfalseになるように、処理が終了するまで待つ
@@ -100,23 +96,28 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		}
 		onStopThread();
 		myThread = null;
+
+		Debug.print(this, "stop() end");
 	}
+
+	//【スレッドループ】
+	//onRenThreadの中で、必要な初期化処理が終わった時点で、runningのフラグを立てる
+	//また、終了時には、同フラグを倒す
+	protected abstract void onRunThread();
 
 	class MyThread extends Thread {
 		@Override
 		public void run() {
 			runnig = true;
-			Debug.print(this,"run() start");
 			try {
-				loop();
+				onRunThread();
 			} catch (Exception ex) {
 				logger.set(LogKind.Error, null, 1, ex.getMessage());
 				logger.exception(ex);
 			}
 			//life = true;//Stop()でスレッドを停止する時、life=falseでループから離脱させ、このlife=trueで処理終了を認知する
+			//			kernel.getView().setColor();
 			runnig = false;
-			Debug.print(this,"run() end");
-			kernel.getView().setColor();
 		}
 	}
 }
