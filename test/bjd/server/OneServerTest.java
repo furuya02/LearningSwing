@@ -116,7 +116,6 @@ public final class OneServerTest {
 		}
 
 		myServer.dispose();
-		TestUtil.dispPrompt(this, "myThread.dispose()");
 	}
 
 	@Test
@@ -147,7 +146,5 @@ public final class OneServerTest {
 
 			myServer.dispose();
 		}
-
-		TestUtil.dispPrompt(this, "myThread.dispose()");
 	}
 }

@@ -94,13 +94,12 @@ public class ThreadBaseTest {
 		}
 
 		myThread.dispose();
-		TestUtil.dispPrompt(this, "myThread.dispose()");
 	}
 
 	@Test
 	public final void test3() {
 
-		TestUtil.dispHeader("start() stop()　してisRunnig()の状態を確認する(負荷テスト)"); //TESTヘッダ
+		TestUtil.dispHeader("new start() stop()　dispose してisRunnig()の状態を確認する(負荷テスト)"); //TESTヘッダ
 
 		for (int i = 0; i < 20; i++) {
 			Debug.print(this, String.format("[i=%d]", i));

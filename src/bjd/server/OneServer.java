@@ -104,21 +104,11 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	public final void dispose() {
 		// super.dispose()は、ThreadBaseでstop()が呼ばれるだけなので必要ない
 		stop();
-		//		Debug.print(this,"dispose() start");
-		//		
-		//		while(count()>0){ // 全部の子スレッドが終了するのを待つ
-		//			Debug.print(this,"count()>0");
-		//			try {
-		//				Thread.sleep(500);
-		//			} catch (InterruptedException e) {
-		//				e.printStackTrace();
-		//			}
-		//		}
-		//		Debug.print(this,"dispose() end");
 	}
 
 	//RemoteServerでのみ使用される
 	public void append(OneLog oneLog) {
+
 	}
 
 	public void addTrace(TraceKind traceKind, String str, Ip ip) {
