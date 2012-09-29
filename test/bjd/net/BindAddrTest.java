@@ -231,4 +231,50 @@ public class BindAddrTest {
 			assertThat(fx.b1.checkCompetition(fx.b2), is(fx.expected));
 		}
 	}
+	
+	@RunWith(Theories.class)
+	public static final class A007 {
+		
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader(" createOneBind()");
+		}
+
+		@DataPoints
+		public static Fixture[] datas = {
+			new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), ProtocolKind.Tcp, 1, "INADDR_ANY-Tcp"),
+			new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), ProtocolKind.Udp, 1, "INADDR_ANY-Udp"),
+			new Fixture(new BindAddr("V4ONLY,0.0.0.1,::1"), ProtocolKind.Tcp, 1, "0.0.0.1-Tcp"),
+			new Fixture(new BindAddr("V6ONLY,0.0.0.1,::1"), ProtocolKind.Tcp, 1, "::1-Tcp"),
+			new Fixture(new BindAddr("V46DUAL,0.0.0.1,::1"), ProtocolKind.Tcp, 2, "::1-Tcp"),
+			
+		};
+		static class Fixture {
+			private BindAddr bindAddr;
+			private ProtocolKind protocolKind;
+			private int count;
+			private String firstOneBind;
+
+			public Fixture(BindAddr bindAddr, ProtocolKind protocolKind, int count, String firstOneBind) {
+				this.bindAddr = bindAddr;
+				this.protocolKind = protocolKind;
+				this.count = count;
+				this.firstOneBind = firstOneBind;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+			
+			TestUtil.dispPrompt(this);
+			OneBind[] ar = fx.bindAddr.createOneBind(fx.protocolKind);
+			
+			System.out.printf("OneBind[] ar = (\"%s\").createOneBind(%s)\n", fx.bindAddr.toString(), fx.protocolKind);
+			assertThat(ar.length, is(fx.count));
+			if (fx.count > 0) {
+				assertThat(ar[0].toString(), is(fx.firstOneBind));
+			}
+		}
+	}
+
 }

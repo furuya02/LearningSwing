@@ -53,7 +53,7 @@ public final class Logger {
 					case 9000018: message = kernel.getJp() ? "この利用者のアクセスは許可されていません(ACL)" : "Access of this user is not admitted (ACL)"; break;
 					case 9000019: message = kernel.getJp() ? "アイドルタイムアウト" : "Timeout of an idle"; break;
 					case 9000020: message = kernel.getJp() ? "送信に失敗しました" : "Transmission of a message failure"; break;
-					//case 9000021: message = kernel.getJp() ? "OpenSSLの初期化に失敗しました" : "Initialization of OpenSSL made a blunder"; break;
+					case 9000021: message = kernel.getJp() ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()"; break;
 					//case 9000022: message = kernel.getJp() ? "秘密鍵の読み込みに失敗しました" : "Reading of private key made a blunder"; break;
 					case 9000023: message = kernel.getJp() ? "証明書の読み込みに失敗しました" : "Reading of a certificate made a blunder"; break;
 					//case 9000024: message = kernel.getJp() ? "SSLネゴシエーションに失敗しました" : "SSL connection procedure makes a blunder"; break;

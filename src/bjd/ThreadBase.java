@@ -42,16 +42,6 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		stop();
 	}
 
-	public String getMsg(int messageNo) {
-		switch (messageNo) {
-			case 1:
-				return (kernel.getJp()) ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
-			default:
-				break;
-		}
-		return "";
-	}
-
 	//【スレッド開始前処理】//return falseでスレッド起動をやめる
 	protected abstract boolean onStartThread();
 
@@ -101,8 +91,6 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	}
 
 	//【スレッドループ】
-	//onRenThreadの中で、必要な初期化処理が終わった時点で、runningのフラグを立てる
-	//また、終了時には、同フラグを倒す
 	protected abstract void onRunThread();
 
 	class MyThread extends Thread {
@@ -112,11 +100,10 @@ public abstract class ThreadBase implements IDispose, ILogger {
 			try {
 				onRunThread();
 			} catch (Exception ex) {
-				logger.set(LogKind.Error, null, 1, ex.getMessage());
+				logger.set(LogKind.Error, null, 9000021, ex.getMessage());
 				logger.exception(ex);
 			}
-			//life = true;//Stop()でスレッドを停止する時、life=falseでループから離脱させ、このlife=trueで処理終了を認知する
-			//			kernel.getView().setColor();
+			//	kernel.getView().setColor();
 			runnig = false;
 		}
 	}

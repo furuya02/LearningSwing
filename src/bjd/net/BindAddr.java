@@ -1,5 +1,7 @@
 package bjd.net;
 
+import java.util.ArrayList;
+
 public final class BindAddr {
     private Ip ipV4;
 	private Ip ipV6;
@@ -96,6 +98,17 @@ public final class BindAddr {
 	public int hashCode() {
 		assert false : "Use is not assumed.";
 		return 101;
+	}
+	
+	public OneBind[] createOneBind(ProtocolKind protocolKind){
+		ArrayList<OneBind> ar = new ArrayList<>();
+        if (bindStyle != BindStyle.V4ONLY) {
+            ar.add(new OneBind(ipV6, protocolKind));
+        }
+        if (bindStyle != BindStyle.V6ONLY) {
+            ar.add(new OneBind(ipV4, protocolKind));
+        }		
+        return ar.toArray(new OneBind[0]);
 	}
 
 	// 競合があるかどうかの確認

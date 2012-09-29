@@ -38,6 +38,11 @@ public class ThreadBaseTest {
 		protected void onStopThread() {
 		}
 
+		@Override
+		public String getMsg(int no) {
+			return "";
+		}
+
 	}
 
 	@Test

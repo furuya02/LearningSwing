@@ -25,13 +25,12 @@ import bjd.net.TcpObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.util.Debug;
-import bjd.util.IDispose;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
 // OneServer １つのバインドアドレス：ポートごとにサーバを表現するクラス
 //****************************************************************
-public abstract class OneServer extends ThreadBase implements ISocket, IDispose {
+public abstract class OneServer extends ThreadBase implements ISocket {
 
 	private SockServer sockServer = null;
 
@@ -44,8 +43,6 @@ public abstract class OneServer extends ThreadBase implements ISocket, IDispose 
 	protected int timeout;
 	private String nameTag;
 	private String _denyAddress = ""; //Ver5.3.5 DoS対処
-
-	//public abstract String getMsg(int messageNo);
 
 	//子スレッド管理
 	private Object lock = new Object(); //排他制御用オブジェクト
