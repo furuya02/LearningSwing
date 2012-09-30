@@ -3,7 +3,6 @@ package bjd;
 import bjd.log.ILogger;
 import bjd.log.LogKind;
 import bjd.log.Logger;
-import bjd.util.Debug;
 import bjd.util.IDispose;
 
 //スレッドの起動停止機能を持った基本クラス
@@ -47,7 +46,6 @@ public abstract class ThreadBase implements IDispose, ILogger {
 
 	//Override可能
 	public void start() {
-		Debug.print(this, "start() start");
 		if (isRunnig()) {
 			return;
 		}
@@ -65,15 +63,12 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		Debug.print(this, "start() end");
 	}
 
 	//【スレッド終了処理】
 	protected abstract void onStopThread();
 	//Override可能
 	public void stop() {
-		Debug.print(this, "stop() start");
-
 		life = false; //スイッチを切るとLoop内の無限ループからbreakする
 		while (isRunnig()) { //stop()を抜けた時点でisRunnigがfalseになるように、処理が終了するまで待つ
 			try {
@@ -84,8 +79,6 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		}
 		onStopThread();
 		myThread = null;
-
-		Debug.print(this, "stop() end");
 	}
 
 	//【スレッドループ】

@@ -7,7 +7,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
 
 import bjd.ThreadBase;
-import bjd.util.Debug;
 
 //サーバソケット
 public final class SockServer extends SockBase {
@@ -35,12 +34,10 @@ public final class SockServer extends SockBase {
 
 	//必要な処理が完了したら、このメソッドでbusyフラグをクリアする
 	public void clearBusy() {
-		Debug.print(this, "clearBusy()");
 		isBusy = false;
 	}
 
 	public void setBusy() {
-		Debug.print(this, "setBusy()");
 		isBusy = true;
 	}
 
@@ -48,7 +45,6 @@ public final class SockServer extends SockBase {
 	//止めるには、selector.close()する
 	//接続が有った場合は、ISocket(OneServer)のaccept()を呼び出す
 	public boolean bind(ThreadBase threadBase) {
-		Debug.print(this, String.format("bind() start (sockState=%s)", sockState));
 		try {
 			serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), multiple);
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
@@ -61,21 +57,18 @@ public final class SockServer extends SockBase {
 		
 		localAddress = (InetSocketAddress) serverChannel.socket().getLocalSocketAddress();
 		
-		Debug.print(this, String.format("起動しました(port=%d)", serverChannel.socket().getLocalPort()));
 		sockState = SockState.Bind;
 		clearBusy();
 
 		//サーバの場合は、Errorで無い限りループする
 		while (sockState != SockState.Error && isLife(threadBase)) {
 			if (isBusy) {
-				Debug.print(this, "◆isBusy==true");
 				continue; //iThread.accept()でclearBusy()が呼ばれるまで、次のselectを処理しない
 			}
 			try {
 				while (isLife(threadBase)) {
 					int n = selector.select(1);
 					if (n != 0) {
-						Debug.print(this, "■selector.select()<=0");
 						break;
 					}
 				}
@@ -105,10 +98,8 @@ public final class SockServer extends SockBase {
 	}
 
 	public void close() {
-		Debug.print(this, "close() start");
 		if (serverChannel != null && serverChannel.isOpen()) {
 			try {
-				Debug.print(this, "NonBlockingChannelEchoServerを停止します");
 				selector.wakeup();
 				selector.close();
 				serverChannel.close();
@@ -117,7 +108,6 @@ public final class SockServer extends SockBase {
 			}
 		}
 		sockState = SockState.Error; 
-		Debug.print(this, "close() end");
 	}
 
 }

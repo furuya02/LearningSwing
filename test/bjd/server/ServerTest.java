@@ -16,6 +16,7 @@ import bjd.option.Dat;
 import bjd.option.OptionSample;
 import bjd.server.OneServerTest.MyServer;
 import bjd.util.Debug;
+import bjd.util.TestUtil;
 
 public class ServerTest {
 	
@@ -41,21 +42,19 @@ public class ServerTest {
 
 		@Override
 		protected void onSubThread(SockAccept sockAccept) {
-			Debug.print(this, "onSubThread() start");
 			for (int i = 3; i >= 0 && isLife(); i--) {
 				if (sockAccept.getSockState() != SockState.Connect) {
-					Debug.print(this, String.format("接続中...sockAccept.getSockState!=Connect"));
+					TestUtil.dispPrompt(this, String.format("接続中...sockAccept.getSockState!=Connect"));
 					break;
 				}
 
-				Debug.print(this, String.format("接続中...あと%d回待機", i));
+				TestUtil.dispPrompt(this, String.format("接続中...あと%d回待機", i));
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			Debug.print(this, "onSubThread() end");
 		}
 	}
 	
@@ -74,7 +73,7 @@ public class ServerTest {
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 		for (int i = 3; i > 0; i--) {
-			Debug.print(this, String.format("test() loop..あと%d回 isRunning()=%s Count()=%d", i, myServer.isRunnig(), myServer.count()));
+			TestUtil.dispPrompt(this, String.format("test() loop..あと%d回 isRunning()=%s Count()=%d", i, myServer.isRunnig(), myServer.count()));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

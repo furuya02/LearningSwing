@@ -78,7 +78,7 @@ public final class OneServerTest {
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
-		conf.set("port", 8888);
+		conf.set("port", 9999);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));
 		conf.set("enableAcl", 1);
@@ -88,11 +88,11 @@ public final class OneServerTest {
 		for (int i = 0; i < 20; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			myServer.start();
-			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(true));
 
 			myServer.stop();
-			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(false));
 		}
 
@@ -118,11 +118,11 @@ public final class OneServerTest {
 			MyServer myServer = new MyServer(conf, oneBind);
 
 			myServer.start();
-			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(true));
 
 			myServer.stop();
-			Debug.print(this, String.format("●sockState=%s", myServer.getSockState()));
+			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(false));
 
 			myServer.dispose();
@@ -146,7 +146,7 @@ public final class OneServerTest {
 		conf.set("enableAcl", 1);
 		conf.set("timeOut", 3);
 
-		Debug.print(this, String.format("s = new OneServer() %s:%d multiple=%d", address, port, multiple));
+		TestUtil.dispPrompt(this, String.format("s = new OneServer() %s:%d multiple=%d", address, port, multiple));
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 

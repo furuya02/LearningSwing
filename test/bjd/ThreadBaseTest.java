@@ -23,7 +23,6 @@ public class ThreadBaseTest {
 
 		@Override
 		protected void onRunThread() {
-			Debug.print(this, "onRunThread() start");
 			while (isLife()) {
 				try {
 					Thread.sleep(100);
@@ -31,7 +30,6 @@ public class ThreadBaseTest {
 					e.printStackTrace();
 				}
 			}
-			Debug.print(this, "onRunThread() end");
 		}
 
 		@Override
@@ -91,7 +89,7 @@ public class ThreadBaseTest {
 		MyThread myThread = new MyThread();
 
 		for (int i = 0; i < 20; i++) {
-			Debug.print(this, String.format("[i=%d]", i));
+			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			myThread.start();
 			assertThat(myThread.isRunnig(), is(true));
 			myThread.stop();
@@ -107,7 +105,7 @@ public class ThreadBaseTest {
 		TestUtil.dispHeader("new start() stop()　dispose してisRunnig()の状態を確認する(負荷テスト)"); //TESTヘッダ
 
 		for (int i = 0; i < 20; i++) {
-			Debug.print(this, String.format("[i=%d]", i));
+			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			MyThread myThread = new MyThread();
 			myThread.start();
 			assertThat(myThread.isRunnig(), is(true));

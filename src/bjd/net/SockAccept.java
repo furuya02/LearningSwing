@@ -19,7 +19,6 @@ public final class SockAccept extends SockBase {
 	public SockAccept(SocketChannel channel, ISocket iSocket) {
 		super(iSocket);
 
-		Debug.print(this, "AScoket() start");
 
 		this.channel = channel;
 
@@ -29,7 +28,6 @@ public final class SockAccept extends SockBase {
 		sockState = SockState.Connect;
 		remoteAddress = (InetSocketAddress) channel.socket().getRemoteSocketAddress();
 		localAddress = (InetSocketAddress) channel.socket().getLocalSocketAddress();
-		Debug.print(this, String.format("接続されました %s", remoteAddress));
 
 		try {
 			channel.configureBlocking(false);
@@ -46,7 +44,6 @@ public final class SockAccept extends SockBase {
 		});
 		t.start();
 
-		Debug.print(this, "AScoket() end");
 	}
 
 	private void selectLoop() {
@@ -55,7 +52,6 @@ public final class SockAccept extends SockBase {
 		while (sockState == SockState.Connect) {
 			try {
 				if (selector.select() <= 0) {
-					Debug.print(this, "■selector.select()<=0");
 					break;
 				}
 			} catch (IOException ex) {
@@ -75,7 +71,6 @@ public final class SockAccept extends SockBase {
 	}
 
 	private void doRead(SocketChannel channel) {
-		Debug.print(this, "doRead() start");
 		ByteBuffer buf = ByteBuffer.allocate(3000);
 		Charset charset = Charset.forName("UTF-8");
 		try {
@@ -85,15 +80,12 @@ public final class SockAccept extends SockBase {
 				return;
 			}
 			buf.flip();
-			Debug.print(this, String.format("%s remote=%s", buf.toString(), remoteAddress));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Debug.print(this, "doRead() end");
 	}
 
 	public void close() {
-		Debug.print(this, "close() start");
 		if (channel != null && channel.isOpen()) {
 			try {
 				selector.wakeup();
@@ -102,7 +94,6 @@ public final class SockAccept extends SockBase {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
-		Debug.print(this, "close() end");
 	}
 
 }

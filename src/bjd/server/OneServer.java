@@ -24,7 +24,6 @@ import bjd.net.Ssl;
 import bjd.net.TcpObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
-import bjd.util.Debug;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
@@ -62,7 +61,6 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 		for (int i = childThreads.size() - 1; i >= 0; i--) {
 			if (!childThreads.get(i).isAlive()) {
 				childThreads.remove(i);
-				Debug.print(this, String.format("childThreads.remove(%d)", i));
 			}
 		}
 		return childThreads.size();
@@ -88,7 +86,6 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 
 		// 全部の子スレッドが終了するのを待つ
 		while (count() > 0) {
-			Debug.print(this, String.format("count()=%d",count()));
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -180,7 +177,6 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 	//**************************************************************
 	@Override
 	protected final void onRunThread() {
-		Debug.print(this, "onRunThread() start");
 
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
@@ -200,12 +196,11 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} //このウエイトが無いと応答不能になる
 		}
 		if (!sockServer.bind(this)) { // この中でループとなる(停止は、selector.close()する)
-			Debug.print(this, String.format("【bind ERROR】 %s", sockServer.getLastEror()));
+			System.out.println(String.format("【bind ERROR】 %s", sockServer.getLastEror()));
 		}
 		//もし、bindでエラーが発生したら、stop()で停止されるまで、下のループで待機となる
 		while (isLife()) {
@@ -216,14 +211,12 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 				e.printStackTrace();
 			}
 		}
-		Debug.print(this, "onRunThread() end");
 	}
 
 	@Override
 	public final void accept(final SocketChannel accept, SockServer sockServer) {
 
 		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
-		Debug.print(this, "accept() start");
 		if (count() >= multiple) {
 			//同時接続数を超えたのでリクエストをキャンセルします
 			logger.set(LogKind.Secure, null, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
@@ -251,7 +244,6 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 
 		}
 		sockServer.clearBusy(); //ASocketを生成できた時点で、accept()への再入を許可する
-		Debug.print(this, "accept() end");
 	}
 
 	//**************************************************************
@@ -260,10 +252,8 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 	protected abstract void onSubThread(SockAccept sockAccept);
 
 	private void subThread(SockAccept sockAccept) {
-		Debug.print(this, "subThread() start");
 		onSubThread(sockAccept);
 		sockAccept.close(); //子スレッドは、ここでクローズされる
-		Debug.print(this, "subThread() end");
 	}
 
 	//１リクエストに対する子スレッドとして起動される
