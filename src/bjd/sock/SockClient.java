@@ -19,6 +19,8 @@ public final class SockClient extends SockBase {
 	private Ssl ssl = null;
 	private TcpQueue tcpQueue = new TcpQueue();
 	private Object oneSsl = null;
+	//最大TcpQueueのMAXまでは樹脂可能
+	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
 
 	//【コンストラクタ（クライアント用）】
 	public SockClient(Ip ip, int port, int timeout, Ssl ssl) {
@@ -91,7 +93,7 @@ public final class SockClient extends SockBase {
 	}
 
 	private void doRead(SocketChannel channel) {
-		ByteBuffer recvBuf = ByteBuffer.allocate(tcpQueue.getSpace());
+		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
 		try {
 			recvBuf.clear();
 			if (channel.read(recvBuf) < 0) {
@@ -99,15 +101,11 @@ public final class SockClient extends SockBase {
 				set(SockState.Disconnect, null, null);
 				return;
 			}
+			
 			byte[] buf = new byte[recvBuf.position()];
 			recvBuf.get(buf);
 			tcpQueue.enqueue(buf, buf.length);
-			
-//			recvBuf.limit(len);
-//			Debug.print(this, String.format("recvBuf.position()=%d", len));
-//			byte[] buf = recvBuf.array();
-//			Debug.print(this, String.format("byte[] buf=recvBuf.array() buf.length=%d", buf.length));
-//			recvBuf.flip();
+
 		} catch (IOException e) {
 			set(SockState.Error, null, null);
 			e.printStackTrace();

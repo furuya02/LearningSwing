@@ -6,12 +6,16 @@ import java.nio.ByteBuffer;
 public final class TcpQueue {
 
 	private byte[] db = new byte[0]; //現在のバッファの内容
-	private final int max = 1048560; //保持可能な最大数<=この辺りが適切な値かもしれない
+	private static int max = 1048560; //保持可能な最大数<=この辺りが適切な値かもしれない
 	//TODO modifyの動作に不安あり（これ必要なのか？） 
 	private boolean modify; //バッファに追加があった場合にtrueに変更される
 
 	private Object lock = new Object(); // 排他制御
 
+	public static int MAX(){
+		return max;
+	}
+	
 	//空いているスペース
 	public int getSpace() {
 		return max - db.length;
