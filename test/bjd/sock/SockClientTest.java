@@ -66,7 +66,7 @@ public final class SockClientTest {
 					//Debug.print(this, String.format("recv=%d", len));
 					buf.flip();
 					channel.write(buf);
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -75,18 +75,17 @@ public final class SockClientTest {
 
 	}
 
-	
 	@Test
 	public void a001() {
 
 		TestUtil.dispHeader("a001 Echoサーバに送信して、tcpQueueにたまったデータ（length）を確認する");
-		
+
 		String addr = "127.0.0.1";
 		int port = 9999;
 
 		EchoServer echoServer = new EchoServer(addr, port);
 		echoServer.start();
-		
+
 		int timeout = 100;
 		Ssl ssl = null;
 		SockClient sockClient = new SockClient(new Ip(addr), port, timeout, ssl);
@@ -107,9 +106,56 @@ public final class SockClientTest {
 		sockClient.close();
 		echoServer.stop();
 		System.out.println(String.format("finich"));
-		
 	}
-	
-	
+
+	@Test
+	public void a002() {
+
+		TestUtil.dispHeader("a002 Echoサーバにsend(送信)して、tcpQueueのlength分ずつRecv()する");
+
+		String addr = "127.0.0.1";
+		int port = 9998;
+
+		EchoServer echoServer = new EchoServer(addr, port);
+		echoServer.start();
+
+		int timeout = 100;
+		Ssl ssl = null;
+		SockClient sockClient = new SockClient(new Ip(addr), port, timeout, ssl);
+
+		int max = 10000;
+		int loop = 10;
+		byte[] tmp = new byte[max];
+		for (int i = 0; i < max; i++) {
+			tmp[i] = (byte) i;
+		}
+
+		int recvCount = 0;
+
+		for (int i = 0; i < loop; i++) {
+			System.out.println(String.format("send(%dbyte)", tmp.length));
+			sockClient.send(tmp); 
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			int len = sockClient.length();
+			if (len > 0) {
+				byte[] b = sockClient.recv(len, timeout);
+				recvCount += b.length;
+				System.out.println(String.format("len=%d  recv()=%d", len, b.length));
+				for(int m=0;m<max;m+=10){
+					Assert.assertEquals(b[m],tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
+				}
+			}
+		}
+		System.out.println(String.format("send:%dbyte  recv:%d", loop * max, recvCount));
+		Assert.assertEquals(loop * max, recvCount); //送信したデータ数と受信したデータ数が一致するかどうかのテスト
+
+		sockClient.close();
+		echoServer.stop();
+		System.out.println(String.format("finich"));
+	}
 
 }

@@ -36,6 +36,7 @@ public final class TcpQueue {
 		if (getSpace() < len) {
 			return 0;
 		}
+
 		synchronized (lock) {
 			byte[] tmpBuf = new byte[db.length + len]; //テンポラリバッファ
 			System.arraycopy(db, 0, tmpBuf, 0, db.length); //現有DBのデータをテンポラリ前部へコピー

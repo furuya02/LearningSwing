@@ -103,12 +103,14 @@ public final class SockClient extends SockBase {
 			}
 			
 			byte[] buf = new byte[recvBuf.position()];
+			recvBuf.flip();
 			recvBuf.get(buf);
+
 			tcpQueue.enqueue(buf, buf.length);
 
 		} catch (IOException e) {
 			set(SockState.Error, null, null);
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -180,6 +182,13 @@ public final class SockClient extends SockBase {
 	}
 
 	public void close() {
+		//lifeによるループ脱出などの、他の処理を優先させる
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		if (channel != null && channel.isOpen()) {
 			try {
 				selector.wakeup();

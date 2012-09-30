@@ -64,7 +64,7 @@ public final class MLangTest {
 		Util.textFileSave(file, lines);
 
 		Charset charset = MLang.getEncoding(file.getPath());
-		assertThat(charset.name(), is("UTF-8"));
+		assertThat(charset.name(), is("Shift_JIS"));
 
 		TestUtil.dispPrompt(this, String.format("MLang.getEncoding(fileName)=%s", charset.name()));
 
