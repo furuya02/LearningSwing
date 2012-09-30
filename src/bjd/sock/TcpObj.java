@@ -1,14 +1,10 @@
 package bjd.sock;
 
-import bjd.ThreadBase;
-import bjd.log.Logger;
-import bjd.net.Ip;
-import bjd.net.OperateCrlf;
 
-public class TcpObj extends SockObj {
-
-    //【コンストラクタ（サーバ用）】bind/listen
-	public TcpObj(Logger logger, Ip bindIp, int port, int listenMax) {
+//public class TcpObj extends SockObj {
+//
+//    //【コンストラクタ（サーバ用）】bind/listen
+//	public TcpObj(Logger logger, Ip bindIp, int port, int listenMax) {
 //        //super(kernel, logger, bindIp.getInetKind());
 //        //SSL通信を使用する場合は、このオブジェクトがセットされる
 //        //通常の場合は、null
@@ -46,16 +42,10 @@ public class TcpObj extends SockObj {
 //            return;
 //        }
 //        localEndPoint = (InetSocketAddress) socket.getLocalSocketAddress();
-        //準備完了
-        //StartServerを実行すると待ち受け状態になる
-    }
-
-	public final byte[] lineRecv(int timeout, OperateCrlf yes, ThreadBase threadBase) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-}
+//        //準備完了
+//        //StartServerを実行すると待ち受け状態になる
+//    }
+//}
 /*
 public class TcpObj extends SockObj {
 

@@ -19,7 +19,7 @@ public final class SockServer extends SockBase {
 	private int multiple;
 	private boolean isBusy = true;
 
-	public SockServer(Ip bindIp, int port, int multiple, ISock iSock) {
+	public SockServer(ISock iSock, Ip bindIp, int port, int multiple) {
 		super(iSock);
 		this.bindIp = bindIp;
 		this.port = port;
@@ -52,17 +52,16 @@ public final class SockServer extends SockBase {
 		} catch (Exception e) {
 			//cannelの初期化に失敗
 			lastError = e.getMessage();
-			sockState = SockState.Error;
+			set(SockState.Error, null, null);
 			return false;
 		}
 		
-		localAddress = (InetSocketAddress) serverChannel.socket().getLocalSocketAddress();
+		set(SockState.Bind, (InetSocketAddress) serverChannel.socket().getLocalSocketAddress(), null);
 		
-		sockState = SockState.Bind;
 		clearBusy();
 
 		//サーバの場合は、Errorで無い限りループする
-		while (sockState != SockState.Error && isLife(threadBase)) {
+		while (getSockState() != SockState.Error && isLife(threadBase)) {
 			if (isBusy) {
 				continue; //iThread.accept()でclearBusy()が呼ばれるまで、次のselectを処理しない
 			}
@@ -76,7 +75,7 @@ public final class SockServer extends SockBase {
 			} catch (IOException ex) {
 				//ex.printStackTrace();
 				lastError = ex.getMessage();
-				sockState = SockState.Error;
+				set(SockState.Error, null, null);
 				return false;
 			}
 			setBusy(); //次にこのフラグがクリアされるのは、iThread.accept()側でclearBusy()を呼んだとき
@@ -93,7 +92,7 @@ public final class SockServer extends SockBase {
 				}
 			}
 		}
-		sockState = SockState.Error;
+		set(SockState.Error, null, null);
 		return true; //bind()を終了する
 
 	}
@@ -108,7 +107,7 @@ public final class SockServer extends SockBase {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
-		sockState = SockState.Error; 
+		set(SockState.Error, null, null);
 	}
 
 }

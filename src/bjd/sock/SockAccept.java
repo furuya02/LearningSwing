@@ -8,6 +8,8 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import bjd.ThreadBase;
+import bjd.net.OperateCrlf;
 import bjd.util.Debug;
 
 //サーバからacceptされたソケット
@@ -22,12 +24,10 @@ public final class SockAccept extends SockBase {
 
 		this.channel = channel;
 
-		if (sockState == SockState.Error) {
+		if (getSockState() == SockState.Error) {
 			return;
 		}
-		sockState = SockState.Connect;
-		remoteAddress = (InetSocketAddress) channel.socket().getRemoteSocketAddress();
-		localAddress = (InetSocketAddress) channel.socket().getLocalSocketAddress();
+		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
 
 		try {
 			channel.configureBlocking(false);
@@ -49,7 +49,7 @@ public final class SockAccept extends SockBase {
 	private void selectLoop() {
 
 		//Acceptの場合は、Connectの間だけループする
-		while (sockState == SockState.Connect) {
+		while (getSockState() == SockState.Connect) {
 			try {
 				if (selector.select() <= 0) {
 					break;
@@ -57,7 +57,7 @@ public final class SockAccept extends SockBase {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 				lastError = ex.getMessage();
-				sockState = SockState.Error;
+				set(SockState.Error, null, null);
 				return;
 			}
 			for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
@@ -76,7 +76,7 @@ public final class SockAccept extends SockBase {
 		try {
 			if (channel.read(buf) < 0) {
 				//切断されている
-				sockState = SockState.Disconnect;
+				set(SockState.Disconnect, null, null);
 				return;
 			}
 			buf.flip();
@@ -94,6 +94,10 @@ public final class SockAccept extends SockBase {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
+	}
+
+	public byte[] lineRecv(int timeout, OperateCrlf yes, ThreadBase threadBase) {
+		return new byte[0];
 	}
 
 }

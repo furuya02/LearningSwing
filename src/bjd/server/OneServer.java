@@ -21,7 +21,6 @@ import bjd.sock.SockAccept;
 import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.net.Ssl;
-import bjd.sock.TcpObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
 
@@ -186,7 +185,7 @@ public abstract class OneServer extends ThreadBase implements ISock {
 
 		if (oneBind.getProtocol() == ProtocolKind.Tcp) {
 			//sockObj = new TcpObj(kernel, logger, oneBind.getAddr(), port, multiple, ssl);
-			sockServer = new SockServer(oneBind.getAddr(), port, multiple, this);
+			sockServer = new SockServer(this, oneBind.getAddr(), port, multiple);
 		} else {
 			//sockObj = new UdpObj(kernel, logger, oneBind.getAddr(), port, multiple);
 			//sockObj = new UdpObj();
@@ -310,12 +309,12 @@ public abstract class OneServer extends ThreadBase implements ISock {
 	//		childCount--; //多重度のカウンタ
 	//	}
 
-	public final Cmd waitLine(TcpObj tcpObj) {
+	public final Cmd waitLine(SockAccept sockAccept) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.SECOND, timeout);
 
 		while (isLife()) {
-			Cmd cmd = recvCmd(tcpObj);
+			Cmd cmd = recvCmd(sockAccept);
 			if (cmd == null) {
 				return null;
 			}
@@ -335,11 +334,11 @@ public abstract class OneServer extends ThreadBase implements ISock {
 	}
 
 	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
-	protected final Cmd recvCmd(TcpObj tcpObj) {
-		if (tcpObj.getState() != SockState.Connect) { //切断されている
+	protected final Cmd recvCmd(SockAccept sockAccept) {
+		if (sockAccept.getSockState() != SockState.Connect) { //切断されている
 			return null;
 		}
-		byte[] recvbuf = tcpObj.lineRecv(timeout, OperateCrlf.Yes, this);
+		byte[] recvbuf = sockAccept.lineRecv(timeout, OperateCrlf.Yes, this);
 		if (recvbuf == null) {
 			return null; //切断された
 		}

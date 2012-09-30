@@ -1,17 +1,14 @@
-package bjd.net;
+package bjd.sock;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import bjd.Kernel;
-import bjd.ThreadBase;
+import bjd.net.Ip;
 import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.util.TestUtil;
@@ -28,7 +25,7 @@ public final class SockServerTest {
 		int port = 8881;
 		int multiple = 10;
 
-		final SockServer sockServer = new SockServer(bindIp, port, multiple, null);
+		final SockServer sockServer = new SockServer(null, bindIp, port, multiple);
 		TestUtil.dispPrompt(this, String.format("s = new SockServer"));
 
 		assertThat(sockServer.getSockState(), is(SockState.Idle));
@@ -69,7 +66,7 @@ public final class SockServerTest {
 		int port = 9999;
 		int multiple = 10;
 
-		final SockServer sockServer = new SockServer(bindIp, port, multiple, null);
+		final SockServer sockServer = new SockServer(null, bindIp, port, multiple);
 		TestUtil.dispPrompt(this, String.format("s = new SockServer"));
 
 		Thread t = new Thread(new Runnable() {

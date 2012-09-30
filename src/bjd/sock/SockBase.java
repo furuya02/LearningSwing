@@ -10,11 +10,10 @@ public abstract class SockBase {
 
 	protected ISock iSock;
 	protected String lastError = "";
-    protected SockState sockState;
     protected Selector selector = null;
-    protected InetSocketAddress remoteAddress = null;
-    protected InetSocketAddress localAddress = null;
-    
+    private SockState sockState;
+    private InetSocketAddress remoteAddress = null;
+    private InetSocketAddress localAddress = null;
 
     public final String getLastEror() {
         return lastError;
@@ -36,7 +35,13 @@ public abstract class SockBase {
 	public final SockState getSockState() {
         return sockState;
     }
-    
+	
+	protected final void set(SockState sockState, InetSocketAddress localAddress, InetSocketAddress remoteAddress) {
+		this.sockState = sockState;
+		this.localAddress = localAddress;
+		this.remoteAddress = remoteAddress;
+	}
+
 	protected final boolean isLife(ThreadBase threadBase) {
 		if (threadBase == null) {
 			return true;

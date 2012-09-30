@@ -1,41 +1,38 @@
 package bjd.sock;
 
-
-import java.net.Socket;
-
-public abstract class SockObj {
-
-    private Socket socket = null;
-    private SockState state = SockState.Idle;
-    private boolean clone = false;
-    
-    public final SockState getState() {
-        if (state == SockState.Connect && !socket.isConnected()) {
-            state = SockState.Disconnect;
-        }
-        return state;
-    }
-    
-    
-    //【ソケットクローズ】 (オーバーライド可能)
-    public final void close() {
-        if (clone) { //クローンの場合は破棄しない
-            return;
-        }
-        state = SockState.Disconnect;
-		if (socket != null) {
-            try {
-                socket.shutdownInput();
-                socket.shutdownOutput();
-                socket.close();
-            } catch (Exception ex) {
-                //シャットダウンのエラーは無視するs
-                ex.printStackTrace();
-            }
-            socket = null;
-        }
-    }
-}
+//public abstract class SockObj {
+//
+//    private Socket socket = null;
+//    private SockState state = SockState.Idle;
+//    private boolean clone = false;
+//    
+//    public final SockState getState() {
+//        if (state == SockState.Connect && !socket.isConnected()) {
+//            state = SockState.Disconnect;
+//        }
+//        return state;
+//    }
+//    
+//    
+//    //【ソケットクローズ】 (オーバーライド可能)
+//    public final void close() {
+//        if (clone) { //クローンの場合は破棄しない
+//            return;
+//        }
+//        state = SockState.Disconnect;
+//		if (socket != null) {
+//            try {
+//                socket.shutdownInput();
+//                socket.shutdownOutput();
+//                socket.close();
+//            } catch (Exception ex) {
+//                //シャットダウンのエラーは無視するs
+//                ex.printStackTrace();
+//            }
+//            socket = null;
+//        }
+//    }
+//}
 
 //Socketその他を保持するクラス(１つの接続を表現している)
 /*

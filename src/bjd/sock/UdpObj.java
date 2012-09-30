@@ -1,9 +1,5 @@
 package bjd.sock;
 
-public final class UdpObj extends SockObj {
-
-}
-
 /*
 public final class UdpObj extends SockObj {
 

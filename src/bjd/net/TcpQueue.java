@@ -1,5 +1,7 @@
 package bjd.net;
 
+import java.nio.ByteBuffer;
+
 //TCP用内部バッファ
 public final class TcpQueue {
 
@@ -30,19 +32,16 @@ public final class TcpQueue {
 		if (getSpace() < len) {
 			return 0;
 		}
-
 		synchronized (lock) {
-
 			byte[] tmpBuf = new byte[db.length + len]; //テンポラリバッファ
 			System.arraycopy(db, 0, tmpBuf, 0, db.length); //現有DBのデータをテンポラリ前部へコピー
 			System.arraycopy(buf, 0, tmpBuf, db.length, len); //追加のデータをテンポラリ後部へコピー
 			db = tmpBuf; //テンポラリを現用DBへ変更
-
 			modify = true; //データベースの内容が変化した
-
 			return len;
 		}
 	}
+
 
 	//キューからのデータ取得
 	public byte[] dequeue(int len) {
