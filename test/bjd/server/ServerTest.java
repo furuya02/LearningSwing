@@ -58,7 +58,7 @@ public class ServerTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void a001() {
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");

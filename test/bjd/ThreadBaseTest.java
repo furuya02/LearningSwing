@@ -88,7 +88,7 @@ public class ThreadBaseTest {
 
 		MyThread myThread = new MyThread();
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 5; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			myThread.start();
 			assertThat(myThread.isRunnig(), is(true));
@@ -104,7 +104,7 @@ public class ThreadBaseTest {
 
 		TestUtil.dispHeader("new start() stop()　dispose してisRunnig()の状態を確認する(負荷テスト)"); //TESTヘッダ
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 5; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			MyThread myThread = new MyThread();
 			myThread.start();

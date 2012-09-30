@@ -70,6 +70,67 @@ public final class OneServerTest {
 		}
 	}
 
+	class MyClient{
+		private Socket s = null;
+		private String addr;
+		private int port;
+		private Thread t;
+		private boolean life;
+
+		public MyClient(String addr, int port) {
+			this.addr = addr;
+			this.port = port;
+		}
+
+		public void connet() {
+			life = true;
+			t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						s = new Socket(addr, port);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					while (life) {
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+			t.start();
+			//接続完了まで少し時間が必要
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		public void dispose() {
+			try {
+				s.shutdownInput();
+				s.shutdownOutput();
+				s.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			life = false;
+			
+			while (t.isAlive()) {
+				try {
+					Thread.sleep(0);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	@Test
 	public final void a001() {
 
@@ -85,7 +146,7 @@ public final class OneServerTest {
 		conf.set("timeOut", 3);
 		MyServer myServer = new MyServer(conf, oneBind);
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 5; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			myServer.start();
 			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
@@ -113,7 +174,7 @@ public final class OneServerTest {
 		conf.set("enableAcl", 1);
 		conf.set("timeOut", 3);
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 5; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			MyServer myServer = new MyServer(conf, oneBind);
 
@@ -133,7 +194,7 @@ public final class OneServerTest {
 	public final void a003() {
 
 		TestUtil.dispHeader("a003 count() multipleを超えたリクエストは破棄される"); //TESTヘッダ
-		int multiple = 3;
+		int multiple = 2;
 		final int port = 8888;
 		final String address = "127.0.0.1";
 
@@ -150,41 +211,24 @@ public final class OneServerTest {
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
 
-		ArrayList<Thread> t = new ArrayList<>();
-		final ArrayList<Socket> s = new ArrayList<>();
+		ArrayList<MyClient> ar = new ArrayList<>();
 
-		for (int i = 0; i < 5; i++) {
-			System.out.println(String.format("[%d] s.count()=%d multiple以上は接続できない", i, myServer.count()));
-			int expected = i;
-			if (expected > multiple) {
-				expected = multiple;
-			}
-			assertThat(myServer.count(), is(expected));
-
+		for (int i = 0; i < 10; i++) {
 			System.out.println(String.format("[%d] client.connet()", i) );
-			t.add(new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						s.add(new Socket(address, port));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					while (true) {
-						;
-					}
-				}
-			}));
-			t.get(i).start();
-			//接続完了まで少し時間が必要
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			MyClient myClient = new MyClient(address, port);
+			myClient.connet();
+			ar.add(myClient);
 		}
+		
+		System.out.println(String.format("s.count()=%d multiple以上は接続できない", multiple));
+		assertThat(myServer.count(), is(multiple));
+
 		myServer.stop(); 
 		myServer.dispose();
+		
+		for (MyClient c : ar) {
+			c.dispose();
+		}
 	}
 
 }
