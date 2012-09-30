@@ -1,4 +1,5 @@
-package bjd.net;
+package bjd.sock;
+
 
 import java.net.Socket;
 

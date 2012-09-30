@@ -1,7 +1,9 @@
-package bjd.net;
+package bjd.sock;
 
 import bjd.ThreadBase;
 import bjd.log.Logger;
+import bjd.net.Ip;
+import bjd.net.OperateCrlf;
 
 public class TcpObj extends SockObj {
 

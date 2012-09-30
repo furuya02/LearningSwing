@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.sock.SockServer;
+import bjd.sock.SockState;
 import bjd.util.TestUtil;
 
 

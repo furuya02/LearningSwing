@@ -3,7 +3,7 @@ package bjd.log;
 import java.util.Calendar;
 
 import bjd.Kernel;
-import bjd.net.SockBase;
+import bjd.sock.SockBase;
 
 public final class Logger {
 	private Kernel kernel;

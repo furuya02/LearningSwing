@@ -12,16 +12,16 @@ import bjd.acl.AclList;
 import bjd.log.LogKind;
 import bjd.log.Logger;
 import bjd.log.OneLog;
-import bjd.net.ISocket;
+import bjd.sock.ISock;
 import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
-import bjd.net.SockAccept;
-import bjd.net.SockServer;
-import bjd.net.SockState;
+import bjd.sock.SockAccept;
+import bjd.sock.SockServer;
+import bjd.sock.SockState;
 import bjd.net.Ssl;
-import bjd.net.TcpObj;
+import bjd.sock.TcpObj;
 import bjd.option.Conf;
 import bjd.option.Dat;
 
@@ -29,7 +29,7 @@ import bjd.option.Dat;
 //****************************************************************
 // OneServer １つのバインドアドレス：ポートごとにサーバを表現するクラス
 //****************************************************************
-public abstract class OneServer extends ThreadBase implements ISocket {
+public abstract class OneServer extends ThreadBase implements ISock {
 
 	private SockServer sockServer = null;
 
