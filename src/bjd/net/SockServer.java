@@ -58,18 +58,21 @@ public final class SockServer extends SockBase {
 			sockState = SockState.Error;
 			return false;
 		}
+		
+		localAddress = (InetSocketAddress) serverChannel.socket().getLocalSocketAddress();
+		
 		Debug.print(this, String.format("起動しました(port=%d)", serverChannel.socket().getLocalPort()));
 		sockState = SockState.Bind;
 		clearBusy();
 
 		//サーバの場合は、Errorで無い限りループする
-		while (sockState != SockState.Error && threadBase.isLife()) {
+		while (sockState != SockState.Error && isLife(threadBase)) {
 			if (isBusy) {
 				Debug.print(this, "◆isBusy==true");
 				continue; //iThread.accept()でclearBusy()が呼ばれるまで、次のselectを処理しない
 			}
 			try {
-				while (threadBase.isLife()) {
+				while (isLife(threadBase)) {
 					int n = selector.select(1);
 					if (n != 0) {
 						Debug.print(this, "■selector.select()<=0");
@@ -77,7 +80,7 @@ public final class SockServer extends SockBase {
 					}
 				}
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
 				lastError = ex.getMessage();
 				sockState = SockState.Error;
 				return false;
@@ -113,6 +116,7 @@ public final class SockServer extends SockBase {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
+		sockState = SockState.Error; 
 		Debug.print(this, "close() end");
 	}
 

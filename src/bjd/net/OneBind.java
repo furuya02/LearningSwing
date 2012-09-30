@@ -17,7 +17,7 @@ public final class OneBind {
 		this.protocol = protocol;
 	}
 	@Override
-	public String toString(){
+	public String toString() {
 		return String.format("%s-%s", addr.toString(), protocol.toString());
 	}
 }

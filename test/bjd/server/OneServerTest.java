@@ -3,7 +3,12 @@ package bjd.server;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import javax.mail.internet.NewsAddress;
 
 import org.junit.Test;
 
@@ -33,7 +38,7 @@ public final class OneServerTest {
 		public MyServer(Conf conf, OneBind oneBind) {
 			super(new Kernel(), "TEST-SERVER", conf, oneBind);
 		}
-		
+
 		@Override
 		protected boolean onStartServer() {
 			return true;
@@ -42,7 +47,7 @@ public final class OneServerTest {
 		@Override
 		protected void onStopServer() {
 		}
-		
+
 		@Override
 		public String getMsg(int messageNo) {
 			return "";
@@ -50,54 +55,25 @@ public final class OneServerTest {
 
 		@Override
 		protected void onSubThread(SockAccept sockAccept) {
-			Debug.print(this, "onSubThread() start");
-			for (int i = 3; i >= 0 && isLife(); i--) {
-				if (sockAccept.getSockState() != SockState.Connect) {
-					Debug.print(this, String.format("接続中...sockAccept.getSockState!=Connect"));
-					break;
-				}
-
-				Debug.print(this, String.format("接続中...あと%d回待機", i));
+			while (isLife()) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(0);//これが無いと、別スレッドでlifeをfalseにできない
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				
+				if(sockAccept.getSockState()!=SockState.Connect){
+					System.out.println(">>>>>sockAccept.getSockState()!=SockState.Connect");
+					break;
+				}
 			}
-			Debug.print(this, "onSubThread() end");
 		}
-	}
-	
-	@Test
-	public void a001() {
-		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
-		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
-		Conf conf = new Conf(optionSample);
-		conf.set("protocolKind", 0); //TCP=0 UDP=1
-		conf.set("port", 8888);
-		conf.set("multiple", 10);
-		conf.set("acl", new Dat(new CtrlType[0]));
-		conf.set("enableAcl", 1);
-		conf.set("timeOut", 3);
-		
-		MyServer myServer = new MyServer(conf, oneBind);
-		myServer.start();
-		for (int i = 3; i > 0; i--) {
-			Debug.print(this, String.format("test() loop..あと%d回 isRunning()=%s Count()=%d", i, myServer.isRunnig(), myServer.count()));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-		}
-		myServer.dispose();
 	}
 
 	@Test
-	public final void a002() {
+	public final void a001() {
 
-		TestUtil.dispHeader("a002 start() stop()　の繰り返し(負荷テスト)"); //TESTヘッダ
+		TestUtil.dispHeader("a001 start() stop()　の繰り返し(負荷テスト)"); //TESTヘッダ
 
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
@@ -124,9 +100,9 @@ public final class OneServerTest {
 	}
 
 	@Test
-	public final void a003() {
+	public final void a002() {
 
-		TestUtil.dispHeader("a003 new start() stop()　dispose の繰り返し(負荷テスト)"); //TESTヘッダ
+		TestUtil.dispHeader("a002 new start() stop()　dispose の繰り返し(負荷テスト)"); //TESTヘッダ
 
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
@@ -152,4 +128,63 @@ public final class OneServerTest {
 			myServer.dispose();
 		}
 	}
+
+	@Test
+	public final void a003() {
+
+		TestUtil.dispHeader("a003 count() multipleを超えたリクエストは破棄される"); //TESTヘッダ
+		int multiple = 3;
+		final int port = 8888;
+		final String address = "127.0.0.1";
+
+		OneBind oneBind = new OneBind(new Ip(address), ProtocolKind.Tcp);
+		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+		Conf conf = new Conf(optionSample);
+		conf.set("port", port);
+		conf.set("multiple", multiple);
+		conf.set("acl", new Dat(new CtrlType[0]));
+		conf.set("enableAcl", 1);
+		conf.set("timeOut", 3);
+
+		Debug.print(this, String.format("s = new OneServer() %s:%d multiple=%d", address, port, multiple));
+		MyServer myServer = new MyServer(conf, oneBind);
+		myServer.start();
+
+		ArrayList<Thread> t = new ArrayList<>();
+		final ArrayList<Socket> s = new ArrayList<>();
+
+		for (int i = 0; i < 5; i++) {
+			System.out.println(String.format("[%d] s.count()=%d multiple以上は接続できない", i, myServer.count()));
+			int expected = i;
+			if (expected > multiple) {
+				expected = multiple;
+			}
+			assertThat(myServer.count(), is(expected));
+
+			System.out.println(String.format("[%d] client.connet()", i) );
+			t.add(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						s.add(new Socket(address, port));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					while (true) {
+						;
+					}
+				}
+			}));
+			t.get(i).start();
+			//接続完了まで少し時間が必要
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		myServer.stop(); 
+		myServer.dispose();
+	}
+
 }

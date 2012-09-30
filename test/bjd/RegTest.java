@@ -14,7 +14,10 @@ public final class RegTest {
 	// 前処理
 	private File before(String fileName) {
 		String currentDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
-		File file = new File(String.format("%s\\%s", currentDir, fileName));
+		File file = new File(String.format("%s\\%s.regtest", currentDir, fileName));
+		if (file.exists()) {
+			file.delete();
+		}
 		Reg reg = new Reg(file.getPath());
 		TestUtil.dispPrompt(this, String.format("reg=new Reg(%s) => setInt(key1,1) => setString(key2,\"2\") => dispose()", fileName));
 		reg.setInt("key1", 1);

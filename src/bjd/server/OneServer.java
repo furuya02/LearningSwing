@@ -88,7 +88,7 @@ public abstract class OneServer extends ThreadBase implements ISocket {
 
 		// 全部の子スレッドが終了するのを待つ
 		while (count() > 0) {
-			Debug.print(this, "count()>0");
+			Debug.print(this, String.format("count()=%d",count()));
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {

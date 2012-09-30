@@ -1,6 +1,7 @@
 package bjd.net;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -26,7 +27,8 @@ public final class SockAccept extends SockBase {
 			return;
 		}
 		sockState = SockState.Connect;
-		String remoteAddress = channel.socket().getRemoteSocketAddress().toString();
+		remoteAddress = (InetSocketAddress) channel.socket().getRemoteSocketAddress();
+		localAddress = (InetSocketAddress) channel.socket().getLocalSocketAddress();
 		Debug.print(this, String.format("接続されました %s", remoteAddress));
 
 		try {
@@ -76,7 +78,6 @@ public final class SockAccept extends SockBase {
 		Debug.print(this, "doRead() start");
 		ByteBuffer buf = ByteBuffer.allocate(3000);
 		Charset charset = Charset.forName("UTF-8");
-		String remoteAddress = channel.socket().getRemoteSocketAddress().toString();
 		try {
 			if (channel.read(buf) < 0) {
 				//切断されている

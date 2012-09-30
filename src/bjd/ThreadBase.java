@@ -74,14 +74,12 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	public void stop() {
 		Debug.print(this, "stop() start");
 
-		if (isRunnig()) { //起動されている場合
-			life = false; //スイッチを切るとLoop内の無限ループからbreakする
-			while (isRunnig()) { //stop()を抜けた時点でisRunnigがfalseになるように、処理が終了するまで待つ
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		life = false; //スイッチを切るとLoop内の無限ループからbreakする
+		while (isRunnig()) { //stop()を抜けた時点でisRunnigがfalseになるように、処理が終了するまで待つ
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		onStopThread();

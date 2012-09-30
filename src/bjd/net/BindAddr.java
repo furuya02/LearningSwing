@@ -100,7 +100,7 @@ public final class BindAddr {
 		return 101;
 	}
 	
-	public OneBind[] createOneBind(ProtocolKind protocolKind){
+	public OneBind[] createOneBind(ProtocolKind protocolKind) {
 		ArrayList<OneBind> ar = new ArrayList<>();
         if (bindStyle != BindStyle.V4ONLY) {
             ar.add(new OneBind(ipV6, protocolKind));
