@@ -320,19 +320,19 @@ public class TcpObj extends SockObj {
 
 	// 【１行受信】
 	//切断されている場合、nullが返される
-	public String AsciiRecv(int timeout, OperateCrlf operateCrlf,ThreadBase threadBase) {
-		var buf = LineRecv(timeout, operateCrlf, threadBase);
+	public String AsciiRecv(int timeout, OperateCrlf operateCrlf,ILife iLife) {
+		var buf = LineRecv(timeout, operateCrlf, iLife);
 		return buf == null ? null : Encoding.ASCII.GetString(buf);
 	}
 
 	// 【１行受信】
 	//切断されている場合、nullが返される
-	public byte[] LineRecv(int timeout, OperateCrlf operateCrlf, ThreadBase threadBase) {
+	public byte[] LineRecv(int timeout, OperateCrlf operateCrlf, ILife iLife) {
 		Socket.ReceiveTimeout = timeout * 1000;
 
 		var breakTime = DateTime.Now.AddSeconds(timeout);
 
-		while (threadBase.isLife()) {
+		while (iLife.isLife()) {
 			//Ver5.1.6
 			if (tcpQueue.Length == 0)
 				Thread.Sleep(100);
@@ -409,7 +409,7 @@ public class TcpObj extends SockObj {
 	}
 
 	////【バイナリ送信】
-	public boolean SendBinaryFile(String fileName, /*ThreadBase threadBase これいるのか*/) {
+	public boolean SendBinaryFile(String fileName, /*ILife iLife これいるのか*/) {
 		//トレース表示
 		var sb = new StringBuilder();
 		sb.Append(string.format("SendBinaryFile(%s) ", fileName));

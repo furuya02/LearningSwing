@@ -6,7 +6,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
 
-import bjd.ThreadBase;
+import bjd.ILife;
 import bjd.net.Ip;
 
 //サーバソケット
@@ -45,7 +45,7 @@ public final class SockServer extends SockBase {
 	//このメソッドが呼ばれると、延々と接続を待ち受ける
 	//止めるには、selector.close()する
 	//接続が有った場合は、ISocket(OneServer)のaccept()を呼び出す
-	public boolean bind(ThreadBase threadBase) {
+	public boolean bind(ILife iLife) {
 		try {
 			serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), multiple);
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
@@ -61,12 +61,12 @@ public final class SockServer extends SockBase {
 		clearBusy();
 
 		//サーバの場合は、Errorで無い限りループする
-		while (getSockState() != SockState.Error && isLife(threadBase)) {
+		while (getSockState() != SockState.Error && isLife(iLife)) {
 			if (isBusy) {
 				continue; //iThread.accept()でclearBusy()が呼ばれるまで、次のselectを処理しない
 			}
 			try {
-				while (isLife(threadBase)) {
+				while (isLife(iLife)) {
 					int n = selector.select(1);
 					if (n != 0) {
 						break;

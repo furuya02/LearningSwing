@@ -8,9 +8,8 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
-import bjd.ThreadBase;
+import bjd.ILife;
 import bjd.net.OperateCrlf;
-import bjd.util.Debug;
 
 //サーバからacceptされたソケット
 public final class SockAccept extends SockBase {
@@ -96,7 +95,7 @@ public final class SockAccept extends SockBase {
 		}
 	}
 
-	public byte[] lineRecv(int timeout, OperateCrlf yes, ThreadBase threadBase) {
+	public byte[] lineRecv(int timeout, OperateCrlf yes, ILife iLife) {
 		return new byte[0];
 	}
 

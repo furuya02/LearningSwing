@@ -54,7 +54,7 @@ public final class SockClientTest {
 
 			ByteBuffer buf = ByteBuffer.allocate(4000);
 
-			while (true) {
+			while (isLife()) {
 				try {
 					buf.clear();
 					int len = channel.read(buf);

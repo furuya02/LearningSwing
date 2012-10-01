@@ -6,10 +6,10 @@ import bjd.log.Logger;
 import bjd.util.IDispose;
 
 //スレッドの起動停止機能を持った基本クラス
-public abstract class ThreadBase implements IDispose, ILogger {
+public abstract class ThreadBase implements IDispose, ILogger, ILife{
 	private MyThread myThread = null;
 	private boolean runnig = false;
-	private boolean life;
+	private boolean life; //ILife
 	protected Kernel kernel;
 
 	private Logger logger;
@@ -32,7 +32,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 
 	//時間を要するループがある場合、ループ条件で値がtrueであることを確認する
 	//falseになったら直ちにループを中断する
-	public final boolean isLife() {
+	public boolean isLife() {
 		return life;
 	}
 

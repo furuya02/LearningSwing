@@ -1,10 +1,9 @@
 package bjd.sock;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.nio.channels.Selector;
 
-import bjd.ThreadBase;
+import bjd.ILife;
 
 public abstract class SockBase {
 
@@ -42,11 +41,11 @@ public abstract class SockBase {
 		this.remoteAddress = remoteAddress;
 	}
 
-	protected final boolean isLife(ThreadBase threadBase) {
-		if (threadBase == null) {
+	protected final boolean isLife(ILife iLife) {
+		if (iLife == null) {
 			return true;
 		}
-		return threadBase.isLife();
+		return iLife.isLife();
 	}
     
     public SockBase(ISock iSock) {
