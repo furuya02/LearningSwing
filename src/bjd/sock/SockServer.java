@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
 import bjd.ILife;
@@ -84,7 +85,9 @@ public final class SockServer extends SockBase {
 				it.remove();
 				if (key.isAcceptable()) {
 					try {
-						iSock.accept(serverChannel.accept(), this);
+						SocketChannel accept = serverChannel.accept();
+						accept.configureBlocking(false);
+						iSock.accept(accept, this);
 					} catch (IOException ex) {
 						//accept()が失敗した場合は処理を継続する
 						ex.printStackTrace();

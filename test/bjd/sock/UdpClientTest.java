@@ -81,7 +81,7 @@ public class UdpClientTest {
 		
 		for(int i=0;i<10;i++){
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();

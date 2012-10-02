@@ -49,6 +49,7 @@ public final class SockClient extends SockBase {
 
 			set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
 
+			channel.configureBlocking(false);
 			channel.register(selector, SelectionKey.OP_READ);
 
 			//ここまでくると接続が完了している  BeginReceive();//接続完了処理（受信待機開始）
@@ -93,6 +94,7 @@ public final class SockClient extends SockBase {
 	}
 
 	private void doRead(SocketChannel channel) {
+	//	System.out.println(String.format("doRead()"));
 		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
 		try {
 			recvBuf.clear();
@@ -108,7 +110,7 @@ public final class SockClient extends SockBase {
 
 			tcpQueue.enqueue(buf, buf.length);
 
-		} catch (IOException e) {
+		} catch (Exception ex) {
 			set(SockState.Error, null, null);
 			//e.printStackTrace();
 		}
@@ -170,8 +172,9 @@ public final class SockClient extends SockBase {
 				ByteBuffer byteBuffer = ByteBuffer.allocate(buf.length);
 				byteBuffer.put(buf);
 				byteBuffer.flip();
-				return channel.write(byteBuffer);
-				//return socket.Send(buffer, 0, buffer.length, SocketFlags.None);
+				int len = channel.write(byteBuffer);
+				Thread.sleep(1); //次の動作が実行されるようにsleepを置く
+				return len;
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

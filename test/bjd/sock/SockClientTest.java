@@ -51,13 +51,18 @@ public final class SockClientTest {
 		public void accept(SocketChannel channel, SockServer sockServer) {
 			sockServer.clearBusy();
 			System.out.println(String.format("accept"));
-
+			
+			
+			
 			ByteBuffer buf = ByteBuffer.allocate(4000);
 
 			while (isLife()) {
 				try {
 					buf.clear();
 					int len = channel.read(buf);
+					if(len==0){
+						continue;
+					}
 					if (len < 0) {
 						System.out.println(String.format("read()<0 => close"));
 						channel.close();
@@ -95,11 +100,14 @@ public final class SockClientTest {
 
 		for (int i = 0; i < 10; i++) {
 			sockClient.send(tmp);
+			
+			//送信データが到着するまで、少し待機する
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+
 			System.out.println(String.format("send(%dbyte) sockClient.length=%d", max, sockClient.length()));
 			Assert.assertEquals((i + 1) * max, sockClient.length());
 		}
@@ -136,19 +144,39 @@ public final class SockClientTest {
 			System.out.println(String.format("send(%dbyte)", tmp.length));
 			sockClient.send(tmp); 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(300);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			int len = sockClient.length();
-			if (len > 0) {
+
+		
+			int len=0;
+			while(len==0){
+				len = sockClient.length();
+				
+			}
+			System.out.println(String.format("len=%d", len));
+			
+//			try {
+//				Thread.sleep(300);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			if (len > 0) {
+//			if(len!=max){
+//				try {
+//					Thread.sleep(500);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
 				byte[] b = sockClient.recv(len, timeout);
 				recvCount += b.length;
 				System.out.println(String.format("len=%d  recv()=%d", len, b.length));
 				for(int m=0;m<max;m+=10){
 					Assert.assertEquals(b[m],tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
 				}
-			}
+//			}
 		}
 		System.out.println(String.format("send:%dbyte  recv:%d", loop * max, recvCount));
 		Assert.assertEquals(loop * max, recvCount); //送信したデータ数と受信したデータ数が一致するかどうかのテスト

@@ -79,7 +79,7 @@ public final class SockServerTest {
 		
 		while (sockServer.getSockState() == SockState.Idle) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
