@@ -6,4 +6,5 @@ import bjd.sock.SockServer;
 
 public interface ISock {
 	void accept(SocketChannel accept, SockServer sockServer);
+	void accept(SocketChannel accept, SockUdpServer sockUdpServer);
 }

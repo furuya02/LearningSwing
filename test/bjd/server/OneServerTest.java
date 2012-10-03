@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
 import javax.mail.internet.NewsAddress;
@@ -24,6 +25,7 @@ import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.sock.SockAccept;
 import bjd.sock.SockState;
+import bjd.sock.SockUdpServer;
 import bjd.option.Conf;
 import bjd.option.Crlf;
 import bjd.option.Dat;
@@ -67,6 +69,12 @@ public final class OneServerTest {
 					break;
 				}
 			}
+		}
+
+		@Override
+		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+			// TODO 自動生成されたメソッド・スタブ
+			
 		}
 	}
 

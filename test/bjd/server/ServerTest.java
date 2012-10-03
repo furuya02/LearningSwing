@@ -2,6 +2,8 @@ package bjd.server;
 
 import static org.junit.Assert.*;
 
+import java.nio.channels.SocketChannel;
+
 import org.junit.Test;
 
 import bjd.Kernel;
@@ -11,6 +13,7 @@ import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.sock.SockAccept;
 import bjd.sock.SockState;
+import bjd.sock.SockUdpServer;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OptionSample;
@@ -55,6 +58,12 @@ public class ServerTest {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		@Override
+		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+			// TODO 自動生成されたメソッド・スタブ
+			
 		}
 	}
 	

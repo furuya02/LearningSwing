@@ -78,6 +78,12 @@ public final class SockClientTest {
 			}
 		}
 
+		@Override
+		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+			// TODO 自動生成されたメソッド・スタブ
+			
+		}
+
 	}
 
 	@Test
@@ -95,7 +101,7 @@ public final class SockClientTest {
 		Ssl ssl = null;
 		SockClient sockClient = new SockClient(new Ip(addr), port, timeout, ssl);
 
-		int max = 10000;
+		int max = 1000;
 		byte[] tmp = new byte[max];
 
 		for (int i = 0; i < 10; i++) {
@@ -131,7 +137,7 @@ public final class SockClientTest {
 		Ssl ssl = null;
 		SockClient sockClient = new SockClient(new Ip(addr), port, timeout, ssl);
 
-		int max = 10000;
+		int max = 1000;
 		int loop = 10;
 		byte[] tmp = new byte[max];
 		for (int i = 0; i < max; i++) {
@@ -144,7 +150,7 @@ public final class SockClientTest {
 			System.out.println(String.format("send(%dbyte)", tmp.length));
 			sockClient.send(tmp); 
 			try {
-				Thread.sleep(300);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -155,13 +161,13 @@ public final class SockClientTest {
 				len = sockClient.length();
 				
 			}
-			System.out.println(String.format("len=%d", len));
-			
 //			try {
 //				Thread.sleep(300);
 //			} catch (InterruptedException e) {
 //				e.printStackTrace();
 //			}
+			System.out.println(String.format("len=%d", len));
+			
 //			if (len > 0) {
 //			if(len!=max){
 //				try {

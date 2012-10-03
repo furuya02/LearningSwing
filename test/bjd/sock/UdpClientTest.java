@@ -9,17 +9,16 @@ import org.junit.Test;
 import bjd.Kernel;
 import bjd.ThreadBase;
 import bjd.net.Ip;
-import bjd.sock.SockClientTest.EchoServer;
 import bjd.util.Debug;
 import bjd.util.TestUtil;
 
 public class UdpClientTest {
 	class EchoServer extends ThreadBase implements ISock {
-		SockServer sockServer;
+		private SockUdpServer sockUdpServer;
 
 		public EchoServer(String addr, int port) {
 			super(new Kernel(), "NAME");
-			sockServer = new SockServer(this, new Ip(addr), port, 1);
+			sockUdpServer = new SockUdpServer(this, new Ip(addr), port, 1);
 		}
 
 		@Override
@@ -34,12 +33,12 @@ public class UdpClientTest {
 
 		@Override
 		protected void onStopThread() {
-			sockServer.close();
+			sockUdpServer.close();
 		}
 
 		@Override
 		protected void onRunThread() {
-			sockServer.bind(this);
+			sockUdpServer.bind(this);
 		}
 
 		@Override
@@ -52,20 +51,31 @@ public class UdpClientTest {
 			while (isLife()) {
 				try {
 					buf.clear();
-					int len = channel.read(buf);
+					int len = 0;
+					while (len == 0 && isLife()) {
+						len = channel.read(buf);
+					}
 					if (len < 0) {
 						System.out.println(String.format("read()<0 => close"));
 						channel.close();
 						break;
 					}
-					Debug.print(this, String.format("recv=%d", len));
-					buf.flip();
-					channel.write(buf);
+					if (0 < len) {
+						Debug.print(this, String.format("recv=%d", len));
+						buf.flip();
+						channel.write(buf);
+					}
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		@Override
+		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+			// TODO 自動生成されたメソッド・スタブ
+			
 		}
 	}
 	
@@ -73,20 +83,21 @@ public class UdpClientTest {
 	public void a001() {
 		TestUtil.dispHeader("a001 Echoサーバ(UDP)");
 
-		String addr = "127.0.0.1";
-		int port = 9990;
+		//String addr = "127.0.0.1";
+		String addr = "::1";
+		int port = 9992;
 
 		EchoServer echoServer = new EchoServer(addr, port);
 		echoServer.start();
 		
-		for(int i=0;i<10;i++){
+		for (int i = 0; i < 10; i++) {
 			try {
-				Thread.sleep(1);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			}
-			System.out.println(String.format("[%d]",i));
+			System.out.println(String.format("[%d]", i));
 		}
 		
 		System.out.println("echoServer.dispose()");
