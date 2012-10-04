@@ -1,6 +1,11 @@
 package bjd.sock;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -83,10 +88,15 @@ public class UdpClientTest {
 	public void a001() {
 		TestUtil.dispHeader("a001 Echoサーバ(UDP)");
 
-		//String addr = "127.0.0.1";
+		//String addr = "10.0.0.241";
 		String addr = "::1";
-		int port = 9992;
-
+		//String addr = "127.0.0.1";
+		int port = 53;
+		
+		Ip ip = new Ip(addr);
+		InetSocketAddress x = new InetSocketAddress(ip.getInetAddress(), port);
+		System.out.println(String.format("%s", x.toString()));
+		
 		EchoServer echoServer = new EchoServer(addr, port);
 		echoServer.start();
 		

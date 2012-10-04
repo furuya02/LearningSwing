@@ -63,6 +63,9 @@ public final class SockServerTest {
 		TestUtil.dispHeader("a002 getLocalAddress()の確認");
 
 		Ip bindIp = new Ip("127.0.0.1");
+//		Ip bindIp = new Ip("INADDR_ANY");
+//		Ip bindIp = new Ip("0.0.0.0");
+//		Ip bindIp = new Ip("::1");
 		int port = 9999;
 		int multiple = 10;
 

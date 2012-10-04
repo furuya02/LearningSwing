@@ -2,8 +2,12 @@ package bjd.sock;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
+import java.net.StandardProtocolFamily;
+import java.net.StandardSocketOptions;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
@@ -11,6 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
 import bjd.ILife;
+import bjd.net.InetKind;
 import bjd.net.Ip;
 
 //サーバソケット
@@ -33,7 +38,13 @@ public final class SockUdpServer extends SockBase {
 		try {
 //			serverChannel = ServerSocketChannel.open();
 //			serverChannel.configureBlocking(false);
-			datagramChannel = DatagramChannel.open();
+		
+			if (bindIp.getInetKind() == InetKind.V4) {
+				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET);
+			} else {
+				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET6);
+			}
+			datagramChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
 			datagramChannel.configureBlocking(false);
 		} catch (Exception ex) {
 			setError(ex.getMessage());
@@ -67,6 +78,9 @@ public final class SockUdpServer extends SockBase {
 		try {
 			datagramChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port));
 			datagramChannel.register(selector, SelectionKey.OP_READ);
+			
+			//TODO Debug Print
+			System.out.println(String.format("bind = %s", datagramChannel.getLocalAddress().toString()));
 		} catch (Exception e) {
 			//TODO Debug Print
 			System.out.println(e.getMessage());
@@ -81,7 +95,7 @@ public final class SockUdpServer extends SockBase {
 		
 		clearBusy();
 
-		while(isLife(iLife)){
+		while (isLife(iLife)) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
