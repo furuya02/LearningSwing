@@ -88,9 +88,7 @@ public class UdpClientTest {
 	public void a001() {
 		TestUtil.dispHeader("a001 Echoサーバ(UDP)");
 
-		//String addr = "10.0.0.241";
-		String addr = "::1";
-		//String addr = "127.0.0.1";
+		String addr = "127.0.0.1";
 		int port = 53;
 		
 		Ip ip = new Ip(addr);
