@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 
 import org.junit.Test;
@@ -78,9 +79,27 @@ public class UdpClientTest {
 		}
 
 		@Override
-		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
-			// TODO 自動生成されたメソッド・スタブ
-			
+		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
+			sockUdpServer.clearBusy();
+
+			ByteBuffer buf = ByteBuffer.allocate(4000);
+
+			try {
+				SocketAddress socketAddress = channel.receive(buf);
+				System.out.println(String.format("read()= %s",socketAddress.toString()));
+				
+				//channel.write(buf);
+			} catch (IOException e1) {
+				// TODO 自動生成された catch ブロック
+				e1.printStackTrace();
+			}
+//			try {
+//				//TODO Debug Print
+//				System.out.println(String.format("channel.close()"));
+//				channel.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 	}
 	

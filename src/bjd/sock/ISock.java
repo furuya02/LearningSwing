@@ -1,10 +1,10 @@
 package bjd.sock;
 
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 
-import bjd.sock.SockServer;
 
 public interface ISock {
 	void accept(SocketChannel accept, SockServer sockServer);
-	void accept(SocketChannel accept, SockUdpServer sockUdpServer);
+	void read(DatagramChannel channel, SockUdpServer sockUdpServer);
 }

@@ -2,6 +2,7 @@ package bjd.server;
 
 import static org.junit.Assert.*;
 
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 
 import org.junit.Test;
@@ -61,10 +62,11 @@ public class ServerTest {
 		}
 
 		@Override
-		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
 			// TODO 自動生成されたメソッド・スタブ
 			
 		}
+
 	}
 	
 	//@Test

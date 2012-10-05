@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 
 import junit.framework.Assert;
@@ -79,10 +80,11 @@ public final class SockClientTest {
 		}
 
 		@Override
-		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
 			// TODO 自動生成されたメソッド・スタブ
 			
 		}
+
 
 	}
 

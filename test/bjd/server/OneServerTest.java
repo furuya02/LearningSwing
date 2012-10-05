@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
@@ -72,10 +73,11 @@ public final class OneServerTest {
 		}
 
 		@Override
-		public void accept(SocketChannel accept, SockUdpServer sockUdpServer) {
+		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
 			// TODO 自動生成されたメソッド・スタブ
 			
 		}
+
 	}
 
 	class MyClient{
