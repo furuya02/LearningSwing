@@ -14,7 +14,8 @@ import java.util.Date;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OneDat;
-import bjd.server.OneServer;
+import bjd.server.OneServer2;
+import bjd.sock.SockBase;
 import bjd.util.FileSearch;
 import bjd.util.IDispose;
 import bjd.util.Util;
@@ -23,7 +24,7 @@ import bjd.util.Util;
 public final class LogFile implements IDispose {
 
 	private Logger logger;
-	private OneServer remoteServer;
+	private OneServer2 remoteServer;
 	private Conf conf;
 	private LogView logView;
 
@@ -39,7 +40,7 @@ public final class LogFile implements IDispose {
 	private Object lock = new Object(); //排他制御用オブジェクト
 
 	public LogFile(Logger logger, Conf conf, LogView logView,
-			boolean useLog, OneServer remoteServer) {
+			boolean useLog, OneServer2 remoteServer) {
 		this.logger = logger;
 		this.conf = conf;
 		this.logView = logView;
@@ -56,7 +57,7 @@ public final class LogFile implements IDispose {
 
 		if (useLog) {
 			if (!(new File((String) conf.get("saveDirectory")).exists())) {
-				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s", (String) conf.get("saveDirectory")));
+				logger.set(LogKind.Error, (SockBase)null, 9000031, String.format("saveDirectory=%s", (String) conf.get("saveDirectory")));
 				useLog = false;
 			}
 			logOpen();
@@ -281,12 +282,12 @@ public final class LogFile implements IDispose {
 			targetDt.add(Calendar.DAY_OF_MONTH, saveDays);
 
 			if (dt.getTimeInMillis() > targetDt.getTimeInMillis()) {
-				logger.set(LogKind.Detail, null, 9000032, fullName);
+				logger.set(LogKind.Detail, (SockBase) null, 9000032, fullName);
 				(new File(fullName)).delete();
 			}
 
 		} catch (Exception ex) {
-			logger.set(LogKind.Error, null, 9000045, String.format(
+			logger.set(LogKind.Error, (SockBase) null, 9000045, String.format(
 					"year=%d mont=%d day=%d %s", year, month, day, fullName));
 			(new File(fullName)).delete();
 		}

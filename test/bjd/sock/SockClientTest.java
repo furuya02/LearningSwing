@@ -13,19 +13,27 @@ import org.junit.Test;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.log.LogKind;
 import bjd.net.Ip;
+import bjd.net.OneBind;
 import bjd.net.Ssl;
+import bjd.option.Conf;
+import bjd.server.OneServer;
 import bjd.util.Debug;
 import bjd.util.TestUtil;
 
 public final class SockClientTest {
-
+	
 	class EchoServer extends ThreadBase implements ISock {
-		SockServer sockServer;
-
+		private TcpObj tcpObj;
+		private String addr;
+		private int port;
+		
 		public EchoServer(String addr, int port) {
 			super(new Kernel(), "NAME");
-			sockServer = new SockServer(this, new Ip(addr), port, 1);
+			tcpObj = new TcpObj();
+			this.addr = addr;
+			this.port = port;
 		}
 
 		@Override
@@ -40,20 +48,37 @@ public final class SockClientTest {
 
 		@Override
 		protected void onStopThread() {
-			sockServer.close();
+			tcpObj.close();
 		}
 
 		@Override
 		protected void onRunThread() {
-			sockServer.bind(this);
+			if(tcpObj.bind(new Ip(addr),port,1)){
+
+				System.out.println(String.format("bind"));
+				
+				while(isLife()){
+					final TcpObj child = tcpObj.select(this);
+					System.out.println(String.format("shild"));
+					if (child == null) {
+						break;
+					}
+					while(isLife() && child.getSockState()==SockState.Connect){
+						int len = child.length();
+						if(len>0){
+							System.out.println(String.format("len=%d",len));
+							byte[] buf = child.recv(len,100);
+							child.send(buf);
+						}
+					}
+				}
+			}
 		}
 
 		@Override
 		public void accept(SocketChannel channel, SockServer sockServer) {
-			sockServer.clearBusy();
+			//sockServer.clearBusy();
 			System.out.println(String.format("accept"));
-			
-			
 			
 			ByteBuffer buf = ByteBuffer.allocate(4000);
 
@@ -130,7 +155,7 @@ public final class SockClientTest {
 		TestUtil.dispHeader("a002 Echoサーバにsend(送信)して、tcpQueueのlength分ずつRecv()する");
 
 		String addr = "127.0.0.1";
-		int port = 9998;
+		int port = 9997;
 
 		EchoServer echoServer = new EchoServer(addr, port);
 		echoServer.start();

@@ -1,194 +1,174 @@
 package bjd.sock;
 
-//public abstract class SockObj {
-//
-//    private Socket socket = null;
-//    private SockState state = SockState.Idle;
-//    private boolean clone = false;
-//    
-//    public final SockState getState() {
-//        if (state == SockState.Connect && !socket.isConnected()) {
-//            state = SockState.Disconnect;
-//        }
-//        return state;
-//    }
-//    
-//    
-//    //【ソケットクローズ】 (オーバーライド可能)
-//    public final void close() {
-//        if (clone) { //クローンの場合は破棄しない
-//            return;
-//        }
-//        state = SockState.Disconnect;
-//		if (socket != null) {
-//            try {
-//                socket.shutdownInput();
-//                socket.shutdownOutput();
-//                socket.close();
-//            } catch (Exception ex) {
-//                //シャットダウンのエラーは無視するs
-//                ex.printStackTrace();
-//            }
-//            socket = null;
-//        }
-//    }
-//}
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
+import bjd.log.LogKind;
+import bjd.log.Logger;
+
 
 //Socketその他を保持するクラス(１つの接続を表現している)
-/*
 public abstract class SockObj {
+	public Socket socket = null;
+	protected String lastError = "";
+    
+	protected SockState sockState  = SockState.Idle;
+	
+	//****************************************************************
+	//プロパティ
+	//****************************************************************
+	private String remoteHost;
+    private InetSocketAddress remoteAddress = null;
+    private InetSocketAddress localAddress = null;
 
+    public final String getLastEror() {
+        return lastError;
+    }
 
-	protected Logger logger;
-	protected Kernel kernel;
-	protected InetSocketAddress localEndPoint; //{ get; set; }
-	protected InetSocketAddress remoteEndPoint; // { get; set; }
-	protected InetKind inetKind; //{get;private set;}
-	protected boolean clone; //クローン UDPサーバオブジェクトからコピーされた場合は、clone=trueとなり、closeは無視される
-	private String remoteHost = "";
-	private Ip remoteAddr;
+    protected final void setError(String lastError) {
+        sockState = SockState.Error;
+        this.lastError = lastError;
+    }
 
-	public final InetSocketAddress getLocalEndPoint() {
-		return localEndPoint;
-	}
-
-	public final InetSocketAddress getRemoteEndPoint() {
-		return remoteEndPoint;
-	}
-
-	public final String getRemoteHost() {
+    public String getRemoteHost() {
 		return remoteHost;
 	}
 
-	public final SocketObjState getState() {
-		if (state == SocketObjState.Connect && !socket.isConnected()) {
-			state = SocketObjState.Disconnect;
-		}
-		return state;
+	public InetSocketAddress getRemoteAddress() {
+		return remoteAddress;
 	}
 
-	public final void setSendTimeout() {
-		//socket.SendTimeout = 1000 * value;
+	public InetSocketAddress getLocalAddress() {
+		return localAddress;
+	}
+
+	public SockState getSockState() {
+//		if (sockState == SockState.Connect && !socket.isConnected()) {
+//			sockState = SockState.Disconnect;
+//		}
+		return sockState;
+	}
+    protected final void set(SockState sockState, InetSocketAddress localAddress, InetSocketAddress remoteAddress) {
+    	this.sockState = sockState;
+		this.localAddress = localAddress;
+		this.remoteAddress = remoteAddress;
+	}
+
+	//クローン
+	//UDPサーバオブジェクトからコピーされた場合は、clone=trueとなり、closeは無視される
+	protected boolean clone;
+
+	public int setSendTimeout() {
+//			Socket.SendTimeout = 1000 * value;
+		return 0;
 	}
 
 	//****************************************************************
 	//コンストラクタ
 	//****************************************************************
-	protected SockObj(Kernel kernel, Logger logger, InetKind inetKind) {
-		this.kernel = kernel;
-		this.logger = logger;
-		this.inetKind = inetKind;
-
-		//RemoteHostName = "";//接続先のホスト名
-		remoteHost = ""; //接続先のホスト名
-		remoteAddr = new Ip("0.0.0.0");
-
+	protected SockObj() {
+		remoteHost = "";//接続先のホスト名
 	}
 
 	//TCPの場合 EndAccept() UDPの場合 EndReceiveFrom()
-	public abstract SockObj createChildObj(IAsyncResult ar);
+	//abstract public SockObj CreateChildObj(IAsyncResult ar);
 
 	//TCPの場合 BeginAccept() UDPの場合BeginReceiveFrom()
-	public abstract void startServer(AsyncCallback callBack);
+	//abstract public void StartServer(AsyncCallback callBack);
 
-	//【2009.01.13 追加】IPアドレスからホスト名を取得する
-	public final void resolve(boolean useResolve, Logger logger) {
+
+	//【ソケットクローズ】
+	public void close() {
+		if (!clone) { //クローンの場合は破棄しない
+			sockState = SockState.Disconnect;
+			if(socket!=null){
+				try {
+					socket.shutdownInput();
+					socket.shutdownOutput();
+					socket.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				
+			}
+		}
+	}
+
+	public void resolve(boolean useResolve,Logger logger) {
 		if (useResolve) {
 			remoteHost = "resolve error!";
 			try {
-				remoteHost = kernel.getDnsCache().get(remoteEndPoint.getAddress(), logger);
-			} catch (Exception ex) {
-				logger.set(LogKind.Error, null, 9000053, ex.getMessage());
+				//remoteHost = kernel.DnsCache.Get(RemoteEndPoint.Address,logger);
+			} catch(Exception ex) {
+				logger.set(LogKind.Error, (SockObj)null, 9000053,ex.getMessage());
 			}
 		} else {
-			//remoteHost = RemoteEndPoint.Address.ToString();
-			remoteHost = remoteEndPoint.getAddress().toString();
+			remoteHost = remoteAddress.getAddress().toString(); 
 		}
 	}
-
-	//【ソケットクローズ】 (オーバーライド可能)
-	public void close() {
-		if (clone) { //クローンの場合は破棄しない
-			return;
-		}
-		state = SocketObjState.Disconnect;
-		try {
-			//socket.Shutdown(SocketShutdown.Both);
-			socket.shutdownInput();
-			socket.shutdownOutput();
-		} catch (Exception ex) { //TCPのサーバソケットをシャットダウンするとエラーになる（無視する）
-			ex.printStackTrace();
-		}
-		if (socket != null) {
-			try {
-				socket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	//バイナリデータであることが判明している場合は、noEncodeをtrueに設定する
 	//これによりテキスト判断ロジックを省略できる
-	protected final void trace(TraceKind traceKind, byte[] buf, boolean noEncode) {
+//	protected void Trace(TraceKind traceKind,byte [] buf,boolean noEncode) {
+//
+//		if (buf == null || buf.length == 0){
+//			return;
+//		}
+//
+//		if (kernel.getRunMode() == RunMode.Remote){
+//			return;//リモートクライアントの場合は、ここから追加されることはない
+//		}
+//
+//		//Ver5.0.0-a22 サービス起動の場合は、このインスタンスは生成されていない
+//		boolean enableDlg = kernel.TraceDlg != null && kernel.TraceDlg.Visible;
+//		if (!enableDlg && kernel.RemoteServer==null) {
+//			//どちらも必要ない場合は処置なし
+//			return;
+//		}
+//
+//		boolean isText = false;//対象がテキストかどうかの判断
+//		Encoding encoding = null;
+//
+//		if(!noEncode) {//エンコード試験が必要な場合
+//			try {
+//				encoding = MLang.GetEncoding(buf);
+//			} catch {
+//				encoding = null;
+//			}
+//			if(encoding != null) {
+//				//int codePage = encoding.CodePage;
+//				if(encoding.CodePage == 20127 || encoding.CodePage == 65001 || encoding.CodePage == 51932 || encoding.CodePage == 1200 || encoding.CodePage == 932 || encoding.CodePage == 50220) {
+//					//"US-ASCII" 20127
+//					//"Unicode (UTF-8)" 65001
+//					//"日本語(EUC)" 51932
+//					//"Unicode" 1200
+//					//"日本語(シフトJIS)" 932
+//					//日本語(JIS) 50220
+//					isText = true;
+//				}
+//			}
+//		}
+//
+//		ArrayList<String> ar = new ArrayList<String>();
+//		if (isText){
+//			var lines = Inet.GetLines(buf);
+//			ar.AddRange(lines.Select(line => encoding.GetString(Inet.TrimCrlf(line))));
+//		}
+//		else {
+//			ar.Add(noEncode
+//					? String.Format("binary {0} byte", buf.length)
+//							: String.Format("Binary {0} byte", buf.length));
+//		}
+//		for (String str : ar) {
+//			Ip ip = new Ip(remoteAddress.getAddress().ToString());
+//
+//			if(enableDlg) {//トレースダイアログが表示されてい場合、データを送る
+//				kernel.TraceDlg.AddTrace(traceKind,str,ip);
+//			}
+//			if(kernel.RemoteServer!=null) {//リモートサーバへもデータを送る（クライアントが接続中の場合は、クライアントへ送信される）
+//				kernel.RemoteServer.AddTrace(traceKind,str,ip);
+//			}
+//		}
+//
+//	}
 
-		if (buf == null || buf.length == 0) {
-			return;
-		}
-		if (kernel.getRunMode() == RunMode.Remote) {
-			return; //リモートクライアントの場合は、ここから追加されることはない
-		}
-		//Ver5.0.0-a22 サービス起動の場合は、このインスタンスは生成されていない
-		boolean enableDlg = kernel.getTraceDlg() != null && kernel.getTraceDlg().isVisible();
-		if (!enableDlg && kernel.getRemoteServer() == null) {
-			//どちらも必要ない場合は処置なし
-			return;
-		}
-
-		boolean isText = false; //対象がテキストかどうかの判断
-		Charset charset = null;
-
-		if (!noEncode) { //エンコード試験が必要な場合
-			try {
-				charset = MLang.getEncoding(buf);
-			} catch (Exception ex) {
-				charset = null;
-			}
-			if (charset != null) {
-				//int codePage = encoding.CodePage;
-				switch (charset.name()) {
-					case "ISO-2022-JP":
-					case "US-ASCII":
-					case "UTF-8":
-					case "UTF-16":
-					case "EUC-JP":
-					case "Shift_JIS":
-						isText = true;
-						break;
-					default:
-						break;
-				}
-			}
-		}
-
-		ArrayList<String> ar = new ArrayList<>();
-		if (isText) {
-			for (byte[] line : Inet.getLines(buf)) {
-				ar.add(new String(Inet.trimCrlf(line), charset));
-			}
-		} else {
-			ar.add(noEncode ? String.format("binary %d byte", buf.length) : String.format("Binary %d byte", buf.length));
-		}
-		for (String str : ar) {
-			Ip ip = new Ip(remoteEndPoint.getAddress().getHostAddress());
-
-			if (enableDlg) { //トレースダイアログが表示されてい場合、データを送る
-				kernel.getTraceDlg().addTrace(traceKind, str, ip);
-			}
-			if (kernel.getRemoteServer() != null) { //リモートサーバへもデータを送る（クライアントが接続中の場合は、クライアントへ送信される）
-				kernel.getRemoteServer().addTrace(traceKind, str, ip);
-			}
-		}
-	}
 }
-*/

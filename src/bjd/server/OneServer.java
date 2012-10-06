@@ -1,5 +1,7 @@
 package bjd.server;
 
+import java.io.IOException;
+import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -7,52 +9,60 @@ import java.util.Calendar;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
-import bjd.TraceKind;
-import bjd.acl.AclList;
 import bjd.log.LogKind;
 import bjd.log.Logger;
-import bjd.log.OneLog;
-import bjd.sock.ISock;
+import bjd.net.InetKind;
 import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
-import bjd.sock.SockAccept;
-import bjd.sock.SockServer;
-import bjd.sock.SockState;
+import bjd.acl.AclList;
 import bjd.net.Ssl;
 import bjd.option.Conf;
 import bjd.option.Dat;
+import bjd.option.OneOption;
+import bjd.server.OneServer2.Cmd;
+import bjd.sock.SockAccept;
+import bjd.sock.SockObj;
+import bjd.sock.SockState;
+import bjd.sock.TcpObj;
+import bjd.sock.UdpObj;
+import bjd.util.Debug;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
 // OneServer １つのバインドアドレス：ポートごとにサーバを表現するクラス
 //****************************************************************
-public abstract class OneServer extends ThreadBase implements ISock {
-
-	private SockServer sockServer = null;
+public abstract class OneServer extends ThreadBase {
 
 	protected OneBind oneBind;
+
 	protected AclList aclList;
 	protected Ssl ssl;
-	protected Logger logger;
-	protected Conf conf;
+	private Logger logger;
+	private Conf conf;
+	private SockObj sockObj = null;
+
+	private boolean isBusy; //排他制御
+
+	public abstract String getMsg(int messageNo);
 
 	protected int timeout;
-	private String nameTag;
-	private String _denyAddress = ""; //Ver5.3.5 DoS対処
 
 	//子スレッド管理
 	private Object lock = new Object(); //排他制御用オブジェクト
 	private ArrayList<Thread> childThreads = new ArrayList<Thread>();
 	private int multiple; //同時接続数
 
-	public final String getNameTag() {
-		return nameTag;
-	}
-
-	public final SockState getSockState() {
-		return sockServer.getSockState();
+	//ステータス表示用
+	@Override
+	public String toString() {
+		String stat = kernel.getJp() ? "+ サービス中 " : "+ In execution ";
+		if (!isRunnig()) {
+			stat = kernel.getJp() ? "- 停止 " : "- Initialization failure ";
+		}
+		return String.format("%s\t%20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(),
+				(int) conf.get("port"), count(), multiple);
 	}
 
 	public final int count() {
@@ -65,11 +75,41 @@ public abstract class OneServer extends ThreadBase implements ISock {
 		return childThreads.size();
 	}
 
+	//リモート操作(データの取得)
+	public String cmd(String cmdStr) {
+		return "";
+	}
+
+	public final SockState getSockState() {
+		return sockObj.getSockState();
+	}
+
+	//コンストラクタ
+	protected OneServer(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
+		super(kernel, nameTag);
+
+		this.conf = conf;
+		this.oneBind = oneBind;
+		this.logger = kernel.createLogger(nameTag, (boolean) conf.get("useDetailsLog"), this);
+
+		multiple = (int) conf.get("multiple");
+
+		//ACLリスト
+		try {
+			//定義が存在するかどうかのチェック
+			Dat acl = (Dat) conf.get("acl");
+			aclList = new AclList(acl, (int) conf.get("enableAcl"), logger);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		timeout = (int) conf.get("timeOut");
+	}
+	
 	@Override
 	public final void start() {
 		super.start();
 		//sockStateがBind若しくはエラーとなるまで待機する
-		while (sockServer == null || sockServer.getSockState() == SockState.Idle) {
+		while (sockObj == null || sockObj.getSockState() == SockState.Idle) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -80,7 +120,7 @@ public abstract class OneServer extends ThreadBase implements ISock {
 
 	@Override
 	public final void stop() {
-		sockServer.close();
+		sockObj.close();
 		super.stop();
 
 		// 全部の子スレッドが終了するのを待つ
@@ -99,215 +139,124 @@ public abstract class OneServer extends ThreadBase implements ISock {
 		stop();
 	}
 
-	//RemoteServerでのみ使用される
-	public void append(OneLog oneLog) {
 
-	}
 
-	public void addTrace(TraceKind traceKind, String str, Ip ip) {
-		// TODO Auto-generated method stub
 
-	}
-
-	//ステータス表示用
-	@Override
-	public final String toString() {
-		String stat = (kernel.getJp()) ? "+ サービス中 " : "+ In execution ";
-		if (!isRunnig()) {
-			stat = (kernel.getJp()) ? "- 停止 " : "- Initialization failure ";
-		}
-		return String.format("%s\t%-20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(),
-				(int) conf.get("port"), count(), multiple);
-	}
-
-	//リモート操作(データの取得)
-	public final String cmd(String cmdStr) {
-		return "";
-	}
-
-	//コンストラクタ
-	protected OneServer(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
-		super(kernel, nameTag);
-		this.conf = conf;
-
-		this.oneBind = oneBind;
-		logger = kernel.createLogger(nameTag, (boolean) conf.get("useDetailsLog"), this);
-
-		multiple = (int) conf.get("multiple");
-
-		//ACLリスト
-		try {
-			//定義が存在するかどうかのチェック
-			Dat acl = (Dat) conf.get("acl");
-			aclList = new AclList(acl, (int) conf.get("enableAcl"), logger);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		timeout = (int) conf.get("timeOut");
-	}
-
-	//**************************************************************
-	// サーバ開始処理
-	//サーバが正常に起動できる場合(isInitSuccess==true)のみスレッド開始できる
-	//**************************************************************
-	protected abstract boolean onStartServer(); //サーバ開始処理
+	//スレッド停止処理
+	protected abstract void onStopServer(); //スレッド停止処理
 
 	@Override
-	protected final boolean onStartThread() {
-		return onStartServer(); //子クラスのスレッド開始処理
-	}
-
-	//**************************************************************
-	//サーバ停止処理
-	//**************************************************************
-	protected abstract void onStopServer(); //サーバ停止処理
-
-	@Override
-	protected final void onStopThread() {
+	protected void onStopThread() {
 		onStopServer(); //子クラスのスレッド停止処理
 		if (ssl != null) {
 			ssl.dispose();
 		}
-		sockServer.close();
 	}
 
-	//**************************************************************
-	//サーバループ
-	//**************************************************************
-	@Override
-	protected final void onRunThread() {
+	//スレッド開始処理
+	//サーバが正常に起動できる場合(isInitSuccess==true)のみスレッド開始できる
+	protected abstract boolean onStartServer(); //スレッド開始処理
 
+	@Override
+	protected boolean onStartThread() {
+		return onStartServer(); //子クラスのスレッド開始処理
+	}
+
+	@Override
+	protected void onRunThread() {
+		
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
-		logger.set(LogKind.Normal, null, 9000000, bindStr);
-		//Dosを受けた場合、multiple数まで連続アクセスまでは記憶してしまう
-		//Dosが終わった後も、その分だけ復帰に時間を要する
+		logger.set(LogKind.Normal, (SockObj) null, 9000000, bindStr);
 
-		if (oneBind.getProtocol() == ProtocolKind.Tcp) {
-			//sockObj = new TcpObj(kernel, logger, oneBind.getAddr(), port, multiple, ssl);
-			sockServer = new SockServer(this, oneBind.getAddr(), port, multiple);
-		} else {
-			//sockObj = new UdpObj(kernel, logger, oneBind.getAddr(), port, multiple);
-			//sockObj = new UdpObj();
-		}
-		if (sockServer.getSockState() == SockState.Error) {
-			logger.set(LogKind.Error, null, 9000035, sockServer.getLastEror()); //Socket生成でエラーが発生しました。[TCP]
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} //このウエイトが無いと応答不能になる
-		}
-		if (!sockServer.bind(this)) { // この中でループとなる(停止は、selector.close()する)
-			System.out.println(String.format("【bind ERROR】 %s", sockServer.getLastEror()));
-		}
-		//もし、bindでエラーが発生したら、stop()で停止されるまで、下のループで待機となる
-		while (isLife()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+		//DOSを受けた場合、multiple数まで連続アクセスまでは記憶してしまう
+		//DOSが終わった後も、その分だけ復帰に時間を要する
 
-	@Override
-	public final void accept(final SocketChannel accept, SockServer sockServer) {
+		sockObj = (oneBind.getProtocol() == ProtocolKind.Tcp) ? (SockObj) new TcpObj() : new UdpObj(InetKind.V4);
 
-		//このメソッドは、bindのスレッドから重複して次々呼びだされるので、排他制御が必要
-		if (count() >= multiple) {
-			//同時接続数を超えたのでリクエストをキャンセルします
-			logger.set(LogKind.Secure, null, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
-		} else {
-			//子ソケット作成
-			final SockAccept sockAccept = new SockAccept(accept, this);
 
-			//			if (sockObj.getRemoteEndPoint().getAddress().toString().equals(_denyAddress)){
-			//			logger.set(LogKind.Secure, null, 9000016, String.format("address:%s", _denyAddress));
-			//			//このアドレスからのリクエストは許可されていません
-			//			Thread.sleep(100);
-			//			sockObj.close();
-			//		}
+		if (sockObj.getSockState() != SockState.Error) {
+			TcpObj tcpObj = (TcpObj) sockObj;
 
-			synchronized (lock) {
-				Thread t = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						subThread(sockAccept);
+			int listenMax = 5;
+			if(!tcpObj.bind(oneBind.getAddr(), port, listenMax)){
+				//TODO Debug Print
+				System.out.println(String.format("bind()=false %s",tcpObj.getLastEror()));
+			}else{
+				while (isLife()) {
+					final TcpObj child = tcpObj.select(this);
+					if (child == null) {
+						break;
 					}
-				});
-				t.start();
-				childThreads.add(t);
+					if (count() >= multiple) {
+						logger.set(LogKind.Secure, sockObj, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
+						//同時接続数を超えたのでリクエストをキャンセルします
+						child.close();
+						continue;
+					}
+					//***************************************************************
+					// ACL制限のチェック
+					//***************************************************************
+//					if (aclList != null) {
+//						if (!aclList.check(new Ip(sockObj.getRemoteAddress().getAddress().toString()))) {
+//							child.close();
+//							denyAddress = sockObj.getRemoteAddress().getAddress().toString();
+//							continue;
+//						}
+//					}
+
+					synchronized (lock) {
+						Thread t = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								subThread((TcpObj) child);
+							}
+						});
+						t.start();
+						childThreads.add(t);
+					}
+				}
+
 			}
-
 		}
-		sockServer.clearBusy(); //ASocketを生成できた時点で、accept()への再入を許可する
 	}
 
-	//**************************************************************
-	//子スレッドループ
-	//**************************************************************
-	protected abstract void onSubThread(SockAccept sockAccept);
 
-	private void subThread(SockAccept sockAccept) {
-		onSubThread(sockAccept);
-		sockAccept.close(); //子スレッドは、ここでクローズされる
-	}
+
+	protected abstract void onSubThread(SockObj sockObj);
+
+	private String denyAddress = ""; //Ver5.3.5 DoS対処
 
 	//１リクエストに対する子スレッドとして起動される
-	//	public void SubThread(Object o){
-	//		childCount++; //多重度のカウンタ
-	//
-	//		SockObj sockObj = (SockObj) o;
-	//
-	//		try{
-	//			//***************************************************************
-	//			// ACL制限のチェック
-	//			//***************************************************************
-	//			if (aclList != null){
-	//				if (!aclList.check(new Ip(sockObj.getRemoteEndPoint().getAddress().toString()))){
-	//					sockObj.close();
-	//					_denyAddress = sockObj.getRemoteEndPoint().getAddress().toString();
-	//					childCount--; //多重度のカウンタ
-	//					return;
-	//				}
-	//			}
-	//
-	//			//クライアントのホスト名を逆引きする
-	//			sockObj.resolve((boolean) oneOption.getValue("useResolve"), logger);
-	//
-	//
-	//
-	//			//_subThreadの中でSockObjは破棄する（ただしUDPの場合は、クローンなのでClose()してもsocketは破棄されない）
-	//			logger.set(LogKind.Detail, sockObj, 9000002,
-	//					String.format("count=%d Local=%s Remote=%s", childCount, sockObj.getLocalEndPoint(),sockObj.getRemoteEndPoint()));
-	//
-	//			//接続元情報
-	//			//Ip remoteAddr = new Ip(sockObj.RemoteEndPoint.Address.toString());
-	//			//Ver5.4.1 sockObjのプロパティ(RemoteAddr)に変更
-	//			//Ip remoteAddr = new Ip(sockObj.RemoteEndPoint.Address.toString());
-	//			sockObj.RemoteAddr = new Ip(sockObj.getRemoteEndPoint().Address.toString());
-	//
-	//			//Ver5.4.1 sockObjのプロパティ(RemoteHost)に変更
-	//			//String remoteHost = sockObj.RemoteHostName;
-	//
-	//			//Ver5.4.1
-	//			//_subThread(sockObj, new RemoteInfo(remoteHost, remoteAddr));//接続単位の処理
-	//			onSubThread(sockObj); //接続単位の処理
-	//
-	//			sockObj.close();
-	//
-	//			logger.set(LogKind.Detail, sockObj, 9000003,
-	//					String.format("count=%d Local=%s Remote=%s", childCount, sockObj.getLocalEndPoint(),sockObj.getRemoteEndPoint()));
-	//
-	//		}
-	//		catch (Exception ex){
-	//			logger.set(LogKind.Error, sockObj, 9000037, ex.getMessage());
-	//			logger.exception(ex);
-	//		}
-	//		childCount--; //多重度のカウンタ
-	//	}
+	public void subThread(SockObj sockObj) {
+
+		try {
+
+			//クライアントのホスト名を逆引きする
+			sockObj.resolve((boolean) conf.get("useResolve"), logger);
+
+			//_subThreadの中でSockObjは破棄する（ただしUDPの場合は、クローンなのでClose()してもsocketは破棄されない）
+			logger.set(LogKind.Detail, sockObj, 9000002,
+					String.format("count={0} Local={1} Remote={2}", count(), sockObj.getLocalAddress().toString(),
+							sockObj.getRemoteAddress().toString()));
+
+			onSubThread(sockObj); //接続単位の処理
+			sockObj.close();
+
+			System.out.println(String.format("subThread() sock.close()"));
+
+			logger.set(LogKind.Detail, sockObj, 9000003,
+					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(),
+							sockObj.getRemoteAddress().toString()));
+
+		} catch (Exception ex) {
+			logger.set(LogKind.Error, sockObj, 9000037, ex.getMessage());
+			logger.exception(ex);
+		}
+	}
+
+	//RemoteServerでのみ使用される
+	//public virtual void Append(OneLog oneLog){}
 
 	public final Cmd waitLine(SockAccept sockAccept) {
 		Calendar c = Calendar.getInstance();

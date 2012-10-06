@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import bjd.Kernel;
 import bjd.sock.SockBase;
+import bjd.sock.SockObj;
 
 public final class Logger {
 	private Kernel kernel;
@@ -17,6 +18,9 @@ public final class Logger {
 		this.useDetailsLog = useDetailsLog;
 		this.logger = logger;
     }
+	public void set(LogKind logKind, SockObj sockObj, int messageNo,String detailInfomation) {
+		set(logKind,(SockBase)null,messageNo,detailInfomation);
+	}
 
 	public void set(LogKind logKind, SockBase sockBase, int messageNo, String detailInfomation) {
 		if (logKind == LogKind.Detail) {
@@ -119,7 +123,7 @@ public final class Logger {
 
 	public void exception(Exception ex) {
 		int messageNo = 9000060;
-        set(LogKind.Error, null, messageNo, ex.getMessage());
+        set(LogKind.Error,(SockBase) null, messageNo, ex.getMessage());
         //TODO Logger 例外メッセージが投かんされた時のスタックトレース　未実装
 //        string[] tmp = ex.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 //        for (String s : tmp) {
@@ -142,5 +146,6 @@ public final class Logger {
 //            }
 //        }
     }
+
 }
 

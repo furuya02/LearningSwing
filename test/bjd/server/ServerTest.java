@@ -13,13 +13,12 @@ import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.sock.SockAccept;
+import bjd.sock.SockObj;
 import bjd.sock.SockState;
 import bjd.sock.SockUdpServer;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OptionSample;
-import bjd.server.OneServerTest.MyServer;
-import bjd.util.Debug;
 import bjd.util.TestUtil;
 
 public class ServerTest {
@@ -44,10 +43,33 @@ public class ServerTest {
 			return "";
 		}
 
+//		@Override
+//		protected void onSubThread(SockAccept sockAccept) {
+//			for (int i = 3; i >= 0 && isLife(); i--) {
+//				if (sockAccept.getSockState() != SockState.Connect) {
+//					TestUtil.dispPrompt(this, String.format("接続中...sockAccept.getSockState!=Connect"));
+//					break;
+//				}
+//
+//				TestUtil.dispPrompt(this, String.format("接続中...あと%d回待機", i));
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+
+//		@Override
+//		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
+//			// TODO 自動生成されたメソッド・スタブ
+//			
+//		}
+
 		@Override
-		protected void onSubThread(SockAccept sockAccept) {
+		protected void onSubThread(SockObj sockObj) {
 			for (int i = 3; i >= 0 && isLife(); i--) {
-				if (sockAccept.getSockState() != SockState.Connect) {
+				if (sockObj.getSockState() != SockState.Connect) {
 					TestUtil.dispPrompt(this, String.format("接続中...sockAccept.getSockState!=Connect"));
 					break;
 				}
@@ -61,15 +83,9 @@ public class ServerTest {
 			}
 		}
 
-		@Override
-		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
-			// TODO 自動生成されたメソッド・スタブ
-			
-		}
-
 	}
 	
-	//@Test
+	@Test
 	public void a001() {
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
@@ -83,7 +99,7 @@ public class ServerTest {
 		
 		MyServer myServer = new MyServer(conf, oneBind);
 		myServer.start();
-		for (int i = 3; i > 0; i--) {
+		for (int i = 10; i > 0; i--) {
 			TestUtil.dispPrompt(this, String.format("test() loop..あと%d回 isRunning()=%s Count()=%d", i, myServer.isRunnig(), myServer.count()));
             try {
                 Thread.sleep(1000);
