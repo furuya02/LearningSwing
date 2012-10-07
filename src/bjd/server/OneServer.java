@@ -18,6 +18,7 @@ import bjd.net.Ssl;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.sock.SockObj;
+import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.sock.TcpObj;
 import bjd.sock.UdpObj;
@@ -34,7 +35,7 @@ public abstract class OneServer extends ThreadBase {
 	protected Ssl ssl;
 	private Logger logger;
 	private Conf conf;
-	private SockObj sockObj = null;
+	private SockServer sockServer = null;
 
 	private boolean isBusy; //排他制御
 
@@ -74,10 +75,10 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	public final SockState getSockState() {
-		if (sockObj == null) {
+		if (sockServer == null) {
 			return SockState.Error;
 		}
-		return sockObj.getSockState();
+		return sockServer.getSockState();
 	}
 
 	//コンストラクタ
@@ -105,9 +106,9 @@ public abstract class OneServer extends ThreadBase {
 	public final void start() {
 
 		super.start();
-		
+
 		//bindが完了するまで待機する
-		while (sockObj == null || sockObj.getSockState() == SockState.Idle) {
+		while (sockServer == null || sockServer.getSockState() == SockState.Idle) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -118,11 +119,11 @@ public abstract class OneServer extends ThreadBase {
 
 	@Override
 	public final void stop() {
-		if (sockObj == null) {
+		if (sockServer == null) {
 			return; //すでに終了処理が終わっている
 		}
 		super.stop(); //life=false ですべてのループを解除する
-		sockObj.close();
+		sockServer.close();
 
 		// 全部の子スレッドが終了するのを待つ
 		while (count() > 0) {
@@ -132,7 +133,7 @@ public abstract class OneServer extends ThreadBase {
 				e.printStackTrace();
 			}
 		}
-		sockObj = null;
+		sockServer = null;
 
 	}
 
@@ -172,51 +173,100 @@ public abstract class OneServer extends ThreadBase {
 		//DOSを受けた場合、multiple数まで連続アクセスまでは記憶してしまう
 		//DOSが終わった後も、その分だけ復帰に時間を要する
 
-		sockObj = (oneBind.getProtocol() == ProtocolKind.Tcp) ? (SockObj) new TcpObj() : new UdpObj();
+		sockServer = new SockServer(oneBind.getProtocol());
 
-		if (sockObj.getSockState() != SockState.Error) {
-			TcpObj tcpObj = (TcpObj) sockObj;
-
-			int listenMax = 5;
-			if (!tcpObj.bind(oneBind.getAddr(), port, listenMax)) {
-				//TODO Debug Print
-				System.out.println(String.format("bind()=false %s", tcpObj.getLastEror()));
+		if (sockServer.getSockState() != SockState.Error) {
+			if (sockServer.getProtocolKind() == ProtocolKind.Tcp) {
+				runTcpServer(port);
 			} else {
-				while (isLife()) {
-					final TcpObj child = tcpObj.select(this);
-					if (child == null) {
-						break;
-					}
-					if (count() >= multiple) {
-						logger.set(LogKind.Secure, sockObj, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
-						//同時接続数を超えたのでリクエストをキャンセルします
-						child.close();
-						continue;
-					}
-					//***************************************************************
-					// ACL制限のチェック
-					//***************************************************************
-					//					if (aclList != null) {
-					//						if (!aclList.check(new Ip(sockObj.getRemoteAddress().getAddress().toString()))) {
-					//							child.close();
-					//							denyAddress = sockObj.getRemoteAddress().getAddress().toString();
-					//							continue;
-					//						}
-					//					}
-
-					synchronized (lock) {
-						Thread t = new Thread(new Runnable() {
-							@Override
-							public void run() {
-								subThread((TcpObj) child);
-							}
-						});
-						t.start();
-						childThreads.add(t);
-					}
-				}
-
+				runUdpServer(port);
 			}
+		}
+	}
+
+	private void runTcpServer(int port) {
+
+		int listenMax = 5;
+
+		if (!sockServer.bind(oneBind.getAddr(), port, listenMax)) {
+			System.out.println(String.format("bind()=false %s", sockServer.getLastEror()));
+		} else {
+			while (isLife()) {
+				final TcpObj child = (TcpObj) sockServer.select(this);
+				if (child == null) {
+					break;
+				}
+				if (count() >= multiple) {
+					logger.set(LogKind.Secure, sockServer, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
+					//同時接続数を超えたのでリクエストをキャンセルします
+					child.close();
+					continue;
+				}
+				//***************************************************************
+				// ACL制限のチェック
+				//***************************************************************
+				//					if (aclList != null) {
+				//						if (!aclList.check(new Ip(sockObj.getRemoteAddress().getAddress().toString()))) {
+				//							child.close();
+				//							denyAddress = sockObj.getRemoteAddress().getAddress().toString();
+				//							continue;
+				//						}
+				//					}
+
+				synchronized (lock) {
+					Thread t = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							subThread((TcpObj) child);
+						}
+					});
+					t.start();
+					childThreads.add(t);
+				}
+			}
+
+		}
+	}
+
+	private void runUdpServer(int port) {
+
+		if (!sockServer.bind(oneBind.getAddr(), port)) {
+			System.out.println(String.format("bind()=false %s", sockServer.getLastEror()));
+		} else {
+			while (isLife()) {
+				final UdpObj child = (UdpObj) sockServer.select(this);
+				if (child == null) {
+					break;
+				}
+				if (count() >= multiple) {
+					logger.set(LogKind.Secure, sockServer, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
+					//同時接続数を超えたのでリクエストをキャンセルします
+					child.close();
+					continue;
+				}
+				//***************************************************************
+				// ACL制限のチェック
+				//***************************************************************
+				//					if (aclList != null) {
+				//						if (!aclList.check(new Ip(sockObj.getRemoteAddress().getAddress().toString()))) {
+				//							child.close();
+				//							denyAddress = sockObj.getRemoteAddress().getAddress().toString();
+				//							continue;
+				//						}
+				//					}
+
+				synchronized (lock) {
+					Thread t = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							subThread((UdpObj) child);
+						}
+					});
+					t.start();
+					childThreads.add(t);
+				}
+			}
+
 		}
 	}
 
@@ -338,6 +388,6 @@ public abstract class OneServer extends ThreadBase {
 
 	//未実装
 	public void append(OneLog oneLog) {
-		
+
 	}
 }

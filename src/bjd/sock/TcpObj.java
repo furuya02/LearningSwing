@@ -25,7 +25,7 @@ public class TcpObj extends SockObj {
 	//ALL
 	private Selector selector = null;
 	//SERVER
-	private ServerSocketChannel serverChannel = null;
+	//private ServerSocketChannel serverChannel = null;
 	//ACCEPT・CLIENT
 	private SocketChannel channel = null;  //ACCEPTの場合は、コンストラクタでコピーされる
 	private Thread t = null; //select(read)で待機するスレッド
@@ -33,7 +33,11 @@ public class TcpObj extends SockObj {
 	private TcpQueue tcpQueue = new TcpQueue();
 	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
 
+	private TcpObj(){
+		//隠蔽
+	}
 	//SERVER
+	/*
 	public TcpObj() {
 		sockKind = sockKind.SERVER;
 		//************************************************
@@ -46,6 +50,7 @@ public class TcpObj extends SockObj {
 			return;
 		}
 	}
+	*/
 	//CLIENT
 	public TcpObj(Ip ip, int port, int timeout, Ssl ssl) {
 		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
@@ -272,7 +277,7 @@ public class TcpObj extends SockObj {
 			}
 		}
 		//SERVER
-		if (serverChannel != null && serverChannel.isOpen()) {
+		/*if (serverChannel != null && serverChannel.isOpen()) {
 			try {
 				selector.wakeup();
 				selector.close();
@@ -280,65 +285,10 @@ public class TcpObj extends SockObj {
 			} catch (IOException ex) {
 				ex.printStackTrace(); //エラーは無視する
 			}
-		}
+		}*/
 		setError("close()");
 	}
 
-	//SERVER
-	public boolean bind(Ip bindIp, int port, int listenMax) {
-		
-		try {
-			//************************************************
-			//channel生成
-			//************************************************
-			serverChannel = ServerSocketChannel.open();
-			serverChannel.configureBlocking(false);
-			//************************************************
-			//bind
-			//************************************************
-			serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), listenMax);
-			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-		} catch (Exception ex) {
-			setException(ex);
-			return false;
-		}
-		set(SockState.Bind, (InetSocketAddress) serverChannel.socket().getLocalSocketAddress(), null);
-		return true;
-	}
-	
-	//SERVER
-	public TcpObj select(ThreadBase threadBase) {
-		while (threadBase.isLife()) {
-
-			int n;
-			try {
-				n = selector.select(1);
-				if (n < 0) {
-					setError(String.format("selector.select(1)=%d",n));
-					break;
-				}
-			} catch (Exception ex) {
-				setException(ex);
-				break;
-			}
-			if (n > 0) {
-				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
-					SelectionKey key = (SelectionKey) it.next();
-					it.remove();
-					if (key.isAcceptable()) {
-						try {
-							return new TcpObj(serverChannel.accept()); //ACCEPT
-						} catch (IOException ex) {
-							//accept()が失敗した場合は処理を継続する
-							ex.printStackTrace();
-						}
-					}
-				}
-			}
-		}
-		setError("isLife()==false");
-		return null;
-	}
 	//TODO 未実装
 	public byte[] lineRecv(int timeout, OperateCrlf yes, OneServer oneServer) {
 		return null;

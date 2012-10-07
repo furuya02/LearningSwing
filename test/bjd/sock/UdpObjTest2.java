@@ -7,6 +7,7 @@ import org.junit.Test;
 import bjd.Kernel;
 import bjd.ThreadBase;
 import bjd.net.Ip;
+import bjd.net.ProtocolKind;
 import bjd.net.Ssl;
 import bjd.util.TestUtil;
 
@@ -15,13 +16,13 @@ import bjd.util.TestUtil;
 //**************************************************
 public class UdpObjTest2 {
 	class EchoServer extends ThreadBase {
-		private UdpObj sock;
+		private SockServer sockServer;
 		private String addr;
 		private int port;
 
 		public EchoServer(String addr, int port) {
 			super(new Kernel(), "NAME");
-			sock = new UdpObj();
+			sockServer = new SockServer(ProtocolKind.Udp);
 			this.addr = addr;
 			this.port = port;
 		}
@@ -38,15 +39,15 @@ public class UdpObjTest2 {
 
 		@Override
 		protected void onStopThread() {
-			sock.close();
+			sockServer.close();
 		}
 
 		@Override
 		protected void onRunThread() {
-			if (sock.bind(new Ip(addr), port)) {
+			if (sockServer.bind(new Ip(addr), port)) {
 				//System.out.println(String.format("EchoServer bind"));
 				while (isLife()) {
-					final UdpObj child = sock.select(this);
+					final UdpObj child = (UdpObj) sockServer.select(this);
 					if (child == null) {
 						break;
 					}

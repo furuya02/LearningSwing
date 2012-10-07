@@ -25,9 +25,6 @@ public final class UdpObj extends SockObj {
 
 	//ALL
 	private Selector selector = null;
-	//SERVER
-	//private ServerSocketChannel serverChannel = null;
-	private DatagramChannel datagramChannel = null;
 	//ACCEPT・CLIENT
 	//private SocketChannel channel = null;  //ACCEPTの場合は、コンストラクタでコピーされる
 	private DatagramChannel channel = null;
@@ -36,6 +33,10 @@ public final class UdpObj extends SockObj {
 	private TcpQueue tcpQueue = new TcpQueue();
 	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
 
+	private UdpObj() {
+		//隠蔽する
+	}
+	/*
 	//SERVER
 	public UdpObj() {
 		sockKind = SockKind.SERVER;
@@ -49,7 +50,7 @@ public final class UdpObj extends SockObj {
 			return;
 		}
 	}
-	
+	*/
 	//ACCEPT
 	public UdpObj(DatagramChannel channel) {
 		
@@ -284,7 +285,7 @@ public final class UdpObj extends SockObj {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
-		//SERVER
+/*		//SERVER
 		if (datagramChannel != null && datagramChannel.isOpen()) {
 			try {
 				selector.wakeup();
@@ -293,64 +294,8 @@ public final class UdpObj extends SockObj {
 			} catch (IOException ex) {
 				ex.printStackTrace(); //エラーは無視する
 			}
-		}
+		}*/
 		setError("close()");
 	}
-
-
-	public boolean bind(Ip bindIp, int port) {
-		try {
-			//************************************************
-			//channel生成
-			//************************************************
-			if (bindIp.getInetKind() == InetKind.V4) {
-				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET);
-			} else {
-				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET6);
-			}
-			datagramChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-			datagramChannel.configureBlocking(false);
-			//************************************************
-			//bind
-			//************************************************
-			datagramChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port));
-			datagramChannel.register(selector, SelectionKey.OP_READ);
-		} catch (Exception ex) {
-			setException(ex);
-			return false;
-		}
-		set(SockState.Bind, (InetSocketAddress) datagramChannel.socket().getLocalSocketAddress(), null);
-		return true;
-	}
 	
-	//SERVER
-	public UdpObj select(ThreadBase threadBase) {
-		while (threadBase.isLife()) {
-
-			int n;
-			try {
-				n = selector.select(1);
-				if (n < 0) {
-					setError(String.format("selector.select(1)=%d",n));
-					break;
-				}
-			} catch (Exception ex) {
-				setException(ex);
-				break;
-			}
-			if (n > 0) {
-				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
-					SelectionKey key = (SelectionKey) it.next();
-					it.remove();
-					if (key.isReadable()) {
-						return new UdpObj((DatagramChannel) key.channel());
-					}
-				}
-			}
-		}
-		setError("isLife()==false");
-		return null;
-	}
-	
-
 }
