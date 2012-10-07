@@ -9,9 +9,10 @@ import bjd.log.Logger;
 
 //Socketその他を保持するクラス(１つの接続を表現している)
 public abstract class SockObj {
-	public Socket socket = null;
+	//public Socket socket = null;
+
+	
 	protected String lastError = "";
-    
 	protected SockState sockState  = SockState.Idle;
 	
 	//****************************************************************
@@ -81,16 +82,16 @@ public abstract class SockObj {
 	public void close() {
 		if (!clone) { //クローンの場合は破棄しない
 			sockState = SockState.Disconnect;
-			if(socket!=null){
+			//if(socket!=null){
 				try {
-					socket.shutdownInput();
-					socket.shutdownOutput();
-					socket.close();
+					//socket.shutdownInput();
+					//socket.shutdownOutput();
+					//socket.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 				
-			}
+			//}
 		}
 	}
 

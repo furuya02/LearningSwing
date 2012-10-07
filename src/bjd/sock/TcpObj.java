@@ -28,11 +28,13 @@ public class TcpObj extends SockObj {
 	private SockKind sockKind;
 
 	//SERVER
-	private Selector selector = null;
 	private ServerSocketChannel serverChannel = null;
 	
+	//ALL
+	private Selector selector = null;
+
 	//ACCEPT・CLIENT
-	private SocketChannel channel = null;
+	private SocketChannel channel = null;  //ACCEPTの場合は、コンストラクタでコピーされる
 	private Thread t = null; //select(read)で待機するスレッド
 	private Object oneSsl;
 	private TcpQueue tcpQueue = new TcpQueue();

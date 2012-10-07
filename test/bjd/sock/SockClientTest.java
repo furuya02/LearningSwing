@@ -24,7 +24,7 @@ import bjd.util.TestUtil;
 
 public final class SockClientTest {
 	
-	class EchoServer extends ThreadBase implements ISock {
+	class EchoServer extends ThreadBase{
 		private TcpObj tcpObj;
 		private String addr;
 		private int port;
@@ -75,40 +75,40 @@ public final class SockClientTest {
 			}
 		}
 
-		@Override
-		public void accept(SocketChannel channel, SockServer sockServer) {
-			//sockServer.clearBusy();
-			System.out.println(String.format("accept"));
-			
-			ByteBuffer buf = ByteBuffer.allocate(4000);
-
-			while (isLife()) {
-				try {
-					buf.clear();
-					int len = channel.read(buf);
-					if(len==0){
-						continue;
-					}
-					if (len < 0) {
-						System.out.println(String.format("read()<0 => close"));
-						channel.close();
-						break;
-					}
-					//Debug.print(this, String.format("recv=%d", len));
-					buf.flip();
-					channel.write(buf);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		@Override
-		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
-			// TODO 自動生成されたメソッド・スタブ
-			
-		}
+//		@Override
+//		public void accept(SocketChannel channel, SockServer sockServer) {
+//			//sockServer.clearBusy();
+//			System.out.println(String.format("accept"));
+//			
+//			ByteBuffer buf = ByteBuffer.allocate(4000);
+//
+//			while (isLife()) {
+//				try {
+//					buf.clear();
+//					int len = channel.read(buf);
+//					if(len==0){
+//						continue;
+//					}
+//					if (len < 0) {
+//						System.out.println(String.format("read()<0 => close"));
+//						channel.close();
+//						break;
+//					}
+//					//Debug.print(this, String.format("recv=%d", len));
+//					buf.flip();
+//					channel.write(buf);
+//
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//
+//		@Override
+//		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
+//			// TODO 自動生成されたメソッド・スタブ
+//			
+//		}
 
 
 	}
