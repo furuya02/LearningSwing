@@ -1,13 +1,12 @@
 package bjd.log;
 
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import bjd.ctrl.ListView;
 import bjd.util.IDispose;

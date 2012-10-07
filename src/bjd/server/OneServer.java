@@ -6,22 +6,21 @@ import java.util.Calendar;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.acl.AclList;
 import bjd.log.LogKind;
 import bjd.log.Logger;
 import bjd.log.OneLog;
-import bjd.net.InetKind;
 import bjd.net.OneBind;
 import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
-import bjd.acl.AclList;
 import bjd.net.Ssl;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.sock.SockObj;
 import bjd.sock.SockServer;
 import bjd.sock.SockState;
-import bjd.sock.TcpObj;
-import bjd.sock.UdpObj;
+import bjd.sock.SockTcp;
+import bjd.sock.SockUdp;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
@@ -192,7 +191,7 @@ public abstract class OneServer extends ThreadBase {
 			System.out.println(String.format("bind()=false %s", sockServer.getLastEror()));
 		} else {
 			while (isLife()) {
-				final TcpObj child = (TcpObj) sockServer.select(this);
+				final SockTcp child = (SockTcp) sockServer.select(this);
 				if (child == null) {
 					break;
 				}
@@ -217,7 +216,7 @@ public abstract class OneServer extends ThreadBase {
 					Thread t = new Thread(new Runnable() {
 						@Override
 						public void run() {
-							subThread((TcpObj) child);
+							subThread((SockTcp) child);
 						}
 					});
 					t.start();
@@ -234,7 +233,7 @@ public abstract class OneServer extends ThreadBase {
 			System.out.println(String.format("bind()=false %s", sockServer.getLastEror()));
 		} else {
 			while (isLife()) {
-				final UdpObj child = (UdpObj) sockServer.select(this);
+				final SockUdp child = (SockUdp) sockServer.select(this);
 				if (child == null) {
 					break;
 				}
@@ -259,7 +258,7 @@ public abstract class OneServer extends ThreadBase {
 					Thread t = new Thread(new Runnable() {
 						@Override
 						public void run() {
-							subThread((UdpObj) child);
+							subThread((SockUdp) child);
 						}
 					});
 					t.start();
@@ -303,12 +302,12 @@ public abstract class OneServer extends ThreadBase {
 	//RemoteServerでのみ使用される
 	//public virtual void Append(OneLog oneLog){}
 
-	public final Cmd waitLine(TcpObj tcpObj) {
+	public final Cmd waitLine(SockTcp sockTcp) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.SECOND, timeout);
 
 		while (isLife()) {
-			Cmd cmd = recvCmd(tcpObj);
+			Cmd cmd = recvCmd(sockTcp);
 			if (cmd == null) {
 				return null;
 			}
@@ -328,11 +327,11 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
-	protected final Cmd recvCmd(TcpObj tcpObj) {
-		if (tcpObj.getSockState() != SockState.Connect) { //切断されている
+	protected final Cmd recvCmd(SockTcp sockTcp) {
+		if (sockTcp.getSockState() != SockState.Connect) { //切断されている
 			return null;
 		}
-		byte[] recvbuf = tcpObj.lineRecv(timeout, OperateCrlf.Yes, this);
+		byte[] recvbuf = sockTcp.lineRecv(timeout, OperateCrlf.Yes, this);
 		if (recvbuf == null) {
 			return null; //切断された
 		}

@@ -2,6 +2,7 @@ package bjd.net;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 import bjd.util.TestUtil;

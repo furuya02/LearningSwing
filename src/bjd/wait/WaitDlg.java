@@ -1,16 +1,16 @@
 package bjd.wait;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingWorker;
-
-import javax.swing.JButton;
 import javax.swing.JProgressBar;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import javax.swing.SwingWorker;
 
 //使用方法
 //public void test() {

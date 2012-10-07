@@ -7,11 +7,11 @@ import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
-import bjd.sock.SockObj;
-import bjd.sock.SockState;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OptionSample;
+import bjd.sock.SockObj;
+import bjd.sock.SockState;
 import bjd.util.TestUtil;
 
 public class ServerTest {

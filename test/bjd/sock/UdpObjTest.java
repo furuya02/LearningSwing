@@ -1,99 +1,148 @@
 package bjd.sock;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.net.InetSocketAddress;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-
+import bjd.Kernel;
+import bjd.ThreadBase;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
-import bjd.util.TestUtil;
 
-
+//**************************************************
+// Echoサーバを使用したテスト
+//**************************************************
 public class UdpObjTest {
+	class EchoServer extends ThreadBase {
+		private SockServer sockServer;
+		private String addr;
+		private int port;
+
+		public EchoServer(String addr, int port) {
+			super(new Kernel(), "NAME");
+			sockServer = new SockServer(ProtocolKind.Udp);
+			this.addr = addr;
+			this.port = port;
+		}
+
+		@Override
+		public String getMsg(int no) {
+			return null;
+		}
+
+		@Override
+		protected boolean onStartThread() {
+			return true;
+		}
+
+		@Override
+		protected void onStopThread() {
+			sockServer.close();
+		}
+
+		@Override
+		protected void onRunThread() {
+			if (sockServer.bind(new Ip(addr), port)) {
+				//System.out.println(String.format("EchoServer bind"));
+				while (isLife()) {
+					final SockUdp child = (SockUdp) sockServer.select(this);
+					if (child == null) {
+						break;
+					}
+					//System.out.println(String.format("EchoServer child"));
+					while (isLife() && child.getSockState() == SockState.Connect) {
+						int len = child.length();
+						if (len > 0) {
+							//System.out.println(String.format("EchoServer len=%d", len));
+							byte[] buf = child.recv(len, 100);
+							child.send(buf);
+						}
+					}
+				}
+			}
+		}
+	}
+	/*
 	@Test
 	public void a001() {
-		TestUtil.dispHeader("a001 起動・停止時のSockState()の確認");
 
-		final Ip bindIp = new Ip("127.0.0.1");
-		final int port = 8881;
-		final int listenMax = 10;
+		TestUtil.dispHeader("a001 Echoサーバに送信して、たまったデータサイズ（length）を確認する");
 
-		final SockServer sockServer = new SockServer(ProtocolKind.Udp); //SERVER
-		TestUtil.dispPrompt(this, String.format("s = new UdpObj()"));
+		String addr = "127.0.0.1";
+		int port = 9999;
 
-		assertThat(sockServer.getSockState(), is(SockState.Idle));
-		TestUtil.dispPrompt(this, String.format("s.getSockState()=%s", sockServer.getSockState()));
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				sockServer.bind(bindIp,port);
-			}
-		});
-		t.start();
+		EchoServer echoServer = new EchoServer(addr, port);
+		echoServer.start();
 
-		TestUtil.dispPrompt(this, String.format("s.bind()"));
+		int timeout = 100;
+		Ssl ssl = null;
+		UdpObj sock = new UdpObj(new Ip(addr), port, timeout, ssl);
+		TestUtil.dispPrompt(this,"sock = new UdpObj()");
 
-		while (sockServer.getSockState() == SockState.Idle) {
+		int max = 1000;
+		byte[] tmp = new byte[max];
+
+		for (int i = 0; i < 10; i++) {
+			sock.send(tmp);
+			TestUtil.dispPrompt(this,String.format("sock.send(%dbyte)",tmp.length));
+
+			//送信データが到着するまで、少し待機する
+			int sleep=100; //あまり短いと、Testを全部一緒にまわしたときにエラーとなる
 			try {
-				Thread.sleep(100);
+				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			TestUtil.dispPrompt(this,String.format("Thread.sleep(%d)",sleep));
+
+			TestUtil.dispPrompt(this,String.format("sock.length()=%d",sock.length()));
+			Assert.assertEquals((i + 1) * max, sock.length());
 		}
-		assertThat(sockServer.getSockState(), is(SockState.Bind));
-		TestUtil.dispPrompt(this, String.format("s.getSockState()=%s", sockServer.getSockState()));
-
-		TestUtil.dispPrompt(this, String.format("s.close()"));
-		sockServer.close(); //bind()にThreadBaseのポインタを送っていないため、isLifeでブレイクできないので、selectで例外を発生させて終了する
-
-		assertThat(sockServer.getSockState(), is(SockState.Error));
-		TestUtil.dispPrompt(this, String.format("getSockState()=%s", sockServer.getSockState()));
+		TestUtil.dispPrompt(this,String.format("sock.close()"));
+		sock.close();
+		echoServer.stop();
 	}
 
 	@Test
 	public void a002() {
-		
-		TestUtil.dispHeader("a002 getLocalAddress()の確認");
 
-		final Ip bindIp = new Ip("127.0.0.1");
-//		final Ip bindIp = new Ip("INADDR_ANY");
-//		final Ip bindIp = new Ip("0.0.0.0");
-//		final Ip bindIp = new Ip("::1");
-		final int port = 9999;
-		final int listenMax = 10;
+		TestUtil.dispHeader("a002 Echoサーバにsend(送信)して、tcpQueueのlength分ずつRecv()する");
 
-		final SockServer sockServer = new SockServer(ProtocolKind.Udp); //SERVER
-		TestUtil.dispPrompt(this, String.format("s = new UdpObj()"));
+		String addr = "127.0.0.1";
+		int port = 9997;
 
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				sockServer.bind(bindIp,port);
-			}
-		});
-		t.start();
-		
-		while (sockServer.getSockState() == SockState.Idle) {
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		EchoServer echoServer = new EchoServer(addr, port);
+		echoServer.start();
+
+		int timeout = 100;
+		Ssl ssl = null;
+		UdpObj sock = new UdpObj(new Ip(addr), port, timeout, ssl);
+		TestUtil.dispPrompt(this,"sock = new UdpObj()");
+
+		int max = 10000;
+		int loop = 10;
+		byte[] tmp = new byte[max];
+		for (int i = 0; i < max; i++) {
+			tmp[i] = (byte) i;
 		}
 
-		InetSocketAddress localAddress = sockServer.getLocalAddress();
-		assertThat(localAddress.toString(), is("/127.0.0.1:9999"));
-		TestUtil.dispPrompt(this, String.format("s.getLocalAddress() = %s bind()後 localAddressの取得が可能になる", localAddress.toString()));
-		
-		InetSocketAddress remoteAddress = sockServer.getRemoteAddress();
-		Assert.assertNull(remoteAddress);
-		TestUtil.dispPrompt(this, String.format("s.getRemoteAddress() = %s SockServerでは、remoteＡｄｄｒｅｓｓは常にnullになる", remoteAddress));
+		int recvCount = 0;
+		for (int i = 0; i < loop; i++) {
+			TestUtil.dispPrompt(this,String.format("sock.send(%dbyte)", tmp.length));
+			sock.send(tmp);
+			int len = 0;
+			while (len == 0) {
+				len = sock.length();
+			}
+			byte[] b = sock.recv(len, timeout);
+			recvCount += b.length;
+			TestUtil.dispPrompt(this,String.format("len=%d  recv()=%d", len, b.length));
+			for (int m = 0; m < max; m += 10) {
+				Assert.assertEquals(b[m], tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
+			}
+		}
+		TestUtil.dispPrompt(this,String.format("loop*max=%dbyte  recvCount:%d", loop * max, recvCount));
+		Assert.assertEquals(loop * max, recvCount); //送信したデータ数と受信したデータ数が一致するかどうかのテスト
 
-		sockServer.close(); 
+		TestUtil.dispPrompt(this,String.format("sock.close()"));
+		sock.close();
+		echoServer.stop();
 	}
+	*/
 }

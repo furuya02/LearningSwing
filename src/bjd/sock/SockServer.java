@@ -138,12 +138,12 @@ public final class SockServer extends SockObj {
 					it.remove();
 					if (protocolKind == ProtocolKind.Udp) {
 						if (key.isReadable()) {
-							return new UdpObj((DatagramChannel) key.channel());
+							return new SockUdp((DatagramChannel) key.channel());
 						}
 					} else {
 						if (key.isAcceptable()) {
 							try {
-								return new TcpObj(serverChannel.accept()); //ACCEPT
+								return new SockTcp(serverChannel.accept()); //ACCEPT
 							} catch (IOException ex) {
 								//accept()が失敗した場合は処理を継続する
 								ex.printStackTrace();

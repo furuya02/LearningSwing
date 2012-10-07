@@ -1,11 +1,11 @@
 package bjd.util;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Font;
 import java.io.File;
 import java.util.ArrayList;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;

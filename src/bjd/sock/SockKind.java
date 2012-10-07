@@ -1,7 +1,7 @@
 package bjd.sock;
 
 public enum SockKind {
-	SERVER,
+	//SERVER,
 	ACCEPT,
 	CLIENT
 }

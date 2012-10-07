@@ -2,13 +2,13 @@ package bjd;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-
 
 import bjd.ctrl.ListView;
 import bjd.ctrl.StatusBar;
@@ -17,8 +17,6 @@ import bjd.util.Msg;
 import bjd.util.MsgKind;
 import bjd.wait.IWaitDlg;
 import bjd.wait.WaitDlg;
-
-import java.awt.event.WindowEvent;
 
 public final class MainForm implements WindowListener {
 
