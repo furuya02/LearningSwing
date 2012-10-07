@@ -1,34 +1,22 @@
 package bjd.sock;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SocketChannel;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
-import bjd.log.LogKind;
 import bjd.net.Ip;
-import bjd.net.OneBind;
 import bjd.net.Ssl;
-import bjd.option.Conf;
-import bjd.server.OneServer;
-import bjd.util.Debug;
 import bjd.util.TestUtil;
 
 public final class SockClientTest {
-	
-	class EchoServer extends ThreadBase{
+
+	class EchoServer extends ThreadBase {
 		private TcpObj tcpObj;
 		private String addr;
 		private int port;
-		
+
 		public EchoServer(String addr, int port) {
 			super(new Kernel(), "NAME");
 			tcpObj = new TcpObj();
@@ -53,21 +41,21 @@ public final class SockClientTest {
 
 		@Override
 		protected void onRunThread() {
-			if(tcpObj.bind(new Ip(addr),port,1)){
+			if (tcpObj.bind(new Ip(addr), port, 1)) {
 
 				System.out.println(String.format("bind"));
-				
-				while(isLife()){
+
+				while (isLife()) {
 					final TcpObj child = tcpObj.select(this);
 					System.out.println(String.format("shild"));
 					if (child == null) {
 						break;
 					}
-					while(isLife() && child.getSockState()==SockState.Connect){
+					while (isLife() && child.getSockState() == SockState.Connect) {
 						int len = child.length();
-						if(len>0){
-							System.out.println(String.format("len=%d",len));
-							byte[] buf = child.recv(len,100);
+						if (len > 0) {
+							System.out.println(String.format("len=%d", len));
+							byte[] buf = child.recv(len, 100);
 							child.send(buf);
 						}
 					}
@@ -75,41 +63,40 @@ public final class SockClientTest {
 			}
 		}
 
-//		@Override
-//		public void accept(SocketChannel channel, SockServer sockServer) {
-//			//sockServer.clearBusy();
-//			System.out.println(String.format("accept"));
-//			
-//			ByteBuffer buf = ByteBuffer.allocate(4000);
-//
-//			while (isLife()) {
-//				try {
-//					buf.clear();
-//					int len = channel.read(buf);
-//					if(len==0){
-//						continue;
-//					}
-//					if (len < 0) {
-//						System.out.println(String.format("read()<0 => close"));
-//						channel.close();
-//						break;
-//					}
-//					//Debug.print(this, String.format("recv=%d", len));
-//					buf.flip();
-//					channel.write(buf);
-//
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//
-//		@Override
-//		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
-//			// TODO 自動生成されたメソッド・スタブ
-//			
-//		}
-
+		//		@Override
+		//		public void accept(SocketChannel channel, SockServer sockServer) {
+		//			//sockServer.clearBusy();
+		//			System.out.println(String.format("accept"));
+		//			
+		//			ByteBuffer buf = ByteBuffer.allocate(4000);
+		//
+		//			while (isLife()) {
+		//				try {
+		//					buf.clear();
+		//					int len = channel.read(buf);
+		//					if(len==0){
+		//						continue;
+		//					}
+		//					if (len < 0) {
+		//						System.out.println(String.format("read()<0 => close"));
+		//						channel.close();
+		//						break;
+		//					}
+		//					//Debug.print(this, String.format("recv=%d", len));
+		//					buf.flip();
+		//					channel.write(buf);
+		//
+		//				} catch (IOException e) {
+		//					e.printStackTrace();
+		//				}
+		//			}
+		//		}
+		//
+		//		@Override
+		//		public void read(DatagramChannel channel, SockUdpServer sockUdpServer) {
+		//			// TODO 自動生成されたメソッド・スタブ
+		//			
+		//		}
 
 	}
 
@@ -126,14 +113,14 @@ public final class SockClientTest {
 
 		int timeout = 100;
 		Ssl ssl = null;
-		SockClient sockClient = new SockClient(new Ip(addr), port, timeout, ssl);
+		TcpObj tcpObj = new TcpObj(new Ip(addr), port, timeout, ssl);
 
 		int max = 1000;
 		byte[] tmp = new byte[max];
 
 		for (int i = 0; i < 10; i++) {
-			sockClient.send(tmp);
-			
+			tcpObj.send(tmp);
+
 			//送信データが到着するまで、少し待機する
 			try {
 				Thread.sleep(100);
@@ -141,10 +128,10 @@ public final class SockClientTest {
 				e.printStackTrace();
 			}
 
-			System.out.println(String.format("send(%dbyte) sockClient.length=%d", max, sockClient.length()));
-			Assert.assertEquals((i + 1) * max, sockClient.length());
+			System.out.println(String.format("send(%dbyte) sockClient.length=%d", max, tcpObj.length()));
+			Assert.assertEquals((i + 1) * max, tcpObj.length());
 		}
-		sockClient.close();
+		tcpObj.close();
 		echoServer.stop();
 		System.out.println(String.format("finich"));
 	}
@@ -162,9 +149,9 @@ public final class SockClientTest {
 
 		int timeout = 100;
 		Ssl ssl = null;
-		SockClient sockClient = new SockClient(new Ip(addr), port, timeout, ssl);
+		TcpObj tcpObj = new TcpObj(new Ip(addr), port, timeout, ssl);
 
-		int max = 1000;
+		int max = 10000;
 		int loop = 10;
 		byte[] tmp = new byte[max];
 		for (int i = 0; i < max; i++) {
@@ -172,49 +159,32 @@ public final class SockClientTest {
 		}
 
 		int recvCount = 0;
-
 		for (int i = 0; i < loop; i++) {
 			System.out.println(String.format("send(%dbyte)", tmp.length));
-			sockClient.send(tmp); 
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		
-			int len=0;
-			while(len==0){
-				len = sockClient.length();
-				
-			}
+			tcpObj.send(tmp);
 //			try {
-//				Thread.sleep(300);
+//				Thread.sleep(10);
 //			} catch (InterruptedException e) {
 //				e.printStackTrace();
 //			}
+
+			int len = 0;
+			while (len == 0) {
+				len = tcpObj.length();
+
+			}
 			System.out.println(String.format("len=%d", len));
-			
-//			if (len > 0) {
-//			if(len!=max){
-//				try {
-//					Thread.sleep(500);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
-				byte[] b = sockClient.recv(len, timeout);
-				recvCount += b.length;
-				System.out.println(String.format("len=%d  recv()=%d", len, b.length));
-				for(int m=0;m<max;m+=10){
-					Assert.assertEquals(b[m],tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
-				}
-//			}
+			byte[] b = tcpObj.recv(len, timeout);
+			recvCount += b.length;
+			System.out.println(String.format("len=%d  recv()=%d", len, b.length));
+			for (int m = 0; m < max; m += 10) {
+				Assert.assertEquals(b[m], tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
+			}
 		}
 		System.out.println(String.format("send:%dbyte  recv:%d", loop * max, recvCount));
 		Assert.assertEquals(loop * max, recvCount); //送信したデータ数と受信したデータ数が一致するかどうかのテスト
 
-		sockClient.close();
+		tcpObj.close();
 		echoServer.stop();
 		System.out.println(String.format("finich"));
 	}

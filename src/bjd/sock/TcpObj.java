@@ -7,32 +7,25 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Iterator;
 
-import bjd.ILife;
-import bjd.Kernel;
 import bjd.ThreadBase;
-import bjd.log.Logger;
-import bjd.net.InetKind;
 import bjd.net.Ip;
+import bjd.net.OperateCrlf;
 import bjd.net.Ssl;
 import bjd.net.TcpQueue;
 import bjd.server.OneServer;
 import bjd.util.Bytes;
-import bjd.util.Debug;
 
 public class TcpObj extends SockObj {
 	
 	private SockKind sockKind;
 
-	//SERVER
-	private ServerSocketChannel serverChannel = null;
-	
 	//ALL
 	private Selector selector = null;
-
+	//SERVER
+	private ServerSocketChannel serverChannel = null;
 	//ACCEPT・CLIENT
 	private SocketChannel channel = null;  //ACCEPTの場合は、コンストラクタでコピーされる
 	private Thread t = null; //select(read)で待機するスレッド
@@ -44,41 +37,72 @@ public class TcpObj extends SockObj {
 	public TcpObj() {
 		sockKind = sockKind.SERVER;
 
+		//************************************************
+		//selector/channel生成
+		//************************************************
 		try {
 			selector = Selector.open();
 			serverChannel = ServerSocketChannel.open();
 			serverChannel.configureBlocking(false);
 		} catch (Exception ex) {
 			setException(ex);
-		}
-
-	}
-	//ACCEPT
-	public TcpObj(SocketChannel channel) {
-		
-		sockKind = SockKind.ACCEPT;
-		tcpQueue = new TcpQueue();
-
-		this.channel = channel;
-
-		try {
-			selector = Selector.open();
-		} catch (Exception ex) {
-			setException(ex);
-		}
-
-		if (getSockState() == SockState.Error) {
 			return;
 		}
+	}
+	//CLIENT
+	public TcpObj(Ip ip, int port, int timeout, Ssl ssl) {
+		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
+		//this.ssl = ssl;
+
+		sockKind = SockKind.CLIENT;
+		tcpQueue = new TcpQueue();
+
+		//************************************************
+		//selector/channel生成
+		//************************************************
+		try {
+			selector = Selector.open();
+
+			channel = SocketChannel.open();
+			channel.configureBlocking(false);
+			
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		//************************************************
+		//connect
+		//************************************************
+		InetSocketAddress address = new InetSocketAddress(ip.getInetAddress(), port);
+		try {
+			channel.connect(address);
+			int msec = timeout;
+			while (!channel.finishConnect()) {
+				Thread.sleep(10);
+				msec -= 10;
+				if (msec < 0) {
+					setError("timeout");
+					return;
+				}
+			}
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		//************************************************
+		//ここまでくると接続が完了している
+		//************************************************
 		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
 
+		//************************************************
+		//read待機
+		//************************************************
 		try {
-			channel.configureBlocking(false);
 			channel.register(selector, SelectionKey.OP_READ);
 		} catch (Exception ex) {
 			setException(ex);
+			return;
 		}
-
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -89,6 +113,46 @@ public class TcpObj extends SockObj {
 	}
 
 	//ACCEPT
+	public TcpObj(SocketChannel channel) {
+		
+		sockKind = SockKind.ACCEPT;
+		tcpQueue = new TcpQueue();
+
+		//************************************************
+		//selector/channel生成
+		//************************************************
+		try {
+			this.channel = channel;
+			this.channel.configureBlocking(false);
+			selector = Selector.open();
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		//************************************************
+		//ここまでくると接続が完了している
+		//************************************************
+		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
+
+		//************************************************
+		//read待機
+		//************************************************
+		try {
+			channel.register(selector, SelectionKey.OP_READ);
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				selectLoop();
+			}
+		});
+		t.start();
+	}
+
+	//ACCEPT・CLIENT
 	private void selectLoop() {
 
 		//Acceptの場合は、Connectの間だけループする
@@ -110,7 +174,7 @@ public class TcpObj extends SockObj {
 			}
 		}
 	}
-	//ACCEPT
+	//ACCEPT・CLIENT
 	private void doRead(SocketChannel channel) {
 		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
 		try {
@@ -131,11 +195,11 @@ public class TcpObj extends SockObj {
 			setException(ex);
 		}
 	}
-	//ACCEPT
+	//ACCEPT・CLIENT
 	public int length() {
 		return tcpQueue.length();
 	}
-	//ACCEPT
+	//ACCEPT・CLIENT
 	public byte[] recv(int len, int timeout) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.SECOND, timeout);
@@ -179,7 +243,7 @@ public class TcpObj extends SockObj {
 		//trace(TraceKind.Recv, buffer, false);//noEncode = false;テキストかバイナリかは不明
 		return buffer;
 	}
-	//ACCEPT
+	//ACCEPT・CLIENT
 	public int send(byte[] buf) {
 		try {
 			if (oneSsl != null) {
@@ -200,10 +264,10 @@ public class TcpObj extends SockObj {
 		return -1;
 	}
 
-	
+	//ALL
 	@Override
 	public void close() {
-		//ACCEPT
+		//ACCEPT・CLIENT
 		if (channel != null && channel.isOpen()) {
 			try {
 				selector.wakeup();
@@ -270,6 +334,10 @@ public class TcpObj extends SockObj {
 			}
 		}
 		setError("isLife()==false");
+		return null;
+	}
+	//TODO 未実装
+	public byte[] lineRecv(int timeout, OperateCrlf yes, OneServer oneServer) {
 		return null;
 	}
 }

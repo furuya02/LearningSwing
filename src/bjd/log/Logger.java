@@ -3,7 +3,6 @@ package bjd.log;
 import java.util.Calendar;
 
 import bjd.Kernel;
-import bjd.sock.SockBase;
 import bjd.sock.SockObj;
 
 public final class Logger {
@@ -18,11 +17,8 @@ public final class Logger {
 		this.useDetailsLog = useDetailsLog;
 		this.logger = logger;
     }
-	public void set(LogKind logKind, SockObj sockObj, int messageNo,String detailInfomation) {
-		set(logKind,(SockBase)null,messageNo,detailInfomation);
-	}
 
-	public void set(LogKind logKind, SockBase sockBase, int messageNo, String detailInfomation) {
+	public void set(LogKind logKind, SockObj sockBase, int messageNo, String detailInfomation) {
 		if (logKind == LogKind.Detail) {
 			if (!useDetailsLog) {
 				return;
@@ -111,7 +107,7 @@ public final class Logger {
     			c.get(Calendar.MINUTE),
     			c.get(Calendar.SECOND));
 		String messageNoStr = String.format("%7d", messageNo);
-        String remoteAddrStr = (sockBase == null) ? "-" : sockBase.getRemoteHost();
+        String remoteAddrStr = (sockBase == null) ? "-" : sockBase.getRemoteHostname();
 		OneLog oneLog = new OneLog(dateStr, logKind.toString(), nameTag, String.valueOf(threadId), remoteAddrStr, messageNoStr, message, detailInfomation);
 
 		//ログファイルへの追加
@@ -123,7 +119,7 @@ public final class Logger {
 
 	public void exception(Exception ex) {
 		int messageNo = 9000060;
-        set(LogKind.Error,(SockBase) null, messageNo, ex.getMessage());
+        set(LogKind.Error,null, messageNo, ex.getMessage());
         //TODO Logger 例外メッセージが投かんされた時のスタックトレース　未実装
 //        string[] tmp = ex.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 //        for (String s : tmp) {
@@ -146,6 +142,5 @@ public final class Logger {
 //            }
 //        }
     }
-
 }
 

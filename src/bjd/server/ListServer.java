@@ -4,10 +4,10 @@ import bjd.util.IDispose;
 import bjd.util.ListBase;
 import bjd.util.Util;
 
-public final class ListServer extends ListBase<OneServer2> implements IDispose {
+public final class ListServer extends ListBase<OneServer> implements IDispose {
 
-	public OneServer2 get(String nameTag) {
-		for (OneServer2 oneServer : ar) {
+	public OneServer get(String nameTag) {
+		for (OneServer oneServer : ar) {
 			if (oneServer.getNameTag().equals(nameTag)) {
 				return oneServer;
 			}

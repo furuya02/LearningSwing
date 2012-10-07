@@ -16,7 +16,7 @@ import bjd.option.Conf;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
 import bjd.server.ListServer;
-import bjd.server.OneServer2;
+import bjd.server.OneServer;
 import bjd.util.IDispose;
 import bjd.util.Util;
 
@@ -34,7 +34,7 @@ public final class Kernel implements IDispose {
 	private WindowSize windowSize;
 	private Menu menu; 
 	private MainForm mainForm;
-	private OneServer2 remoteServer=null;	
+	private OneServer remoteServer=null;	
 	private TraceDlg traceDlg;
 	private DnsCache dnsCache;
     
@@ -46,7 +46,7 @@ public final class Kernel implements IDispose {
 		return traceDlg;
 	}
 
-	public OneServer2 getRemoteServer() {
+	public OneServer getRemoteServer() {
 		return remoteServer;
 	}
 

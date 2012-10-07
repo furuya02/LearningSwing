@@ -1,8 +1,5 @@
 package bjd.server;
 
-import java.io.IOException;
-import java.nio.channels.Channel;
-import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,8 +8,8 @@ import bjd.Kernel;
 import bjd.ThreadBase;
 import bjd.log.LogKind;
 import bjd.log.Logger;
+import bjd.log.OneLog;
 import bjd.net.InetKind;
-import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
@@ -20,14 +17,10 @@ import bjd.acl.AclList;
 import bjd.net.Ssl;
 import bjd.option.Conf;
 import bjd.option.Dat;
-import bjd.option.OneOption;
-import bjd.server.OneServer2.Cmd;
-import bjd.sock.SockAccept;
 import bjd.sock.SockObj;
 import bjd.sock.SockState;
 import bjd.sock.TcpObj;
 import bjd.sock.UdpObj;
-import bjd.util.Debug;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
@@ -47,7 +40,7 @@ public abstract class OneServer extends ThreadBase {
 
 	public abstract String getMsg(int messageNo);
 
-	protected int timeout;
+	private int timeout;
 
 	//子スレッド管理
 	private Object lock = new Object(); //排他制御用オブジェクト
@@ -260,12 +253,12 @@ public abstract class OneServer extends ThreadBase {
 	//RemoteServerでのみ使用される
 	//public virtual void Append(OneLog oneLog){}
 
-	public final Cmd waitLine(SockAccept sockAccept) {
+	public final Cmd waitLine(TcpObj tcpObj) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.SECOND, timeout);
 
 		while (isLife()) {
-			Cmd cmd = recvCmd(sockAccept);
+			Cmd cmd = recvCmd(tcpObj);
 			if (cmd == null) {
 				return null;
 			}
@@ -285,11 +278,11 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
-	protected final Cmd recvCmd(SockAccept sockAccept) {
-		if (sockAccept.getSockState() != SockState.Connect) { //切断されている
+	protected final Cmd recvCmd(TcpObj tcpObj) {
+		if (tcpObj.getSockState() != SockState.Connect) { //切断されている
 			return null;
 		}
-		byte[] recvbuf = sockAccept.lineRecv(timeout, OperateCrlf.Yes, this);
+		byte[] recvbuf = tcpObj.lineRecv(timeout, OperateCrlf.Yes, this);
 		if (recvbuf == null) {
 			return null; //切断された
 		}
@@ -341,5 +334,10 @@ public abstract class OneServer extends ThreadBase {
 			this.cmdStr = cmdStr;
 			this.paramStr = paramStr;
 		}
+	}
+
+	//未実装
+	public void append(OneLog oneLog) {
+		
 	}
 }

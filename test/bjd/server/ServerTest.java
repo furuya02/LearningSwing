@@ -1,10 +1,5 @@
 package bjd.server;
 
-import static org.junit.Assert.*;
-
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SocketChannel;
-
 import org.junit.Test;
 
 import bjd.Kernel;
@@ -12,10 +7,8 @@ import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
-import bjd.sock.SockAccept;
 import bjd.sock.SockObj;
 import bjd.sock.SockState;
-import bjd.sock.SockUdpServer;
 import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.OptionSample;

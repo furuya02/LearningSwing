@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import bjd.util.Debug;
 import bjd.util.TestUtil;
 
 public class ThreadBaseTest {

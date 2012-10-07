@@ -1,7 +1,5 @@
 package bjd.net;
 
-import java.nio.ByteBuffer;
-
 //TCP用内部バッファ
 public final class TcpQueue {
 

@@ -3,7 +3,6 @@ package bjd;
 import bjd.log.ILogger;
 import bjd.log.LogKind;
 import bjd.log.Logger;
-import bjd.sock.SockBase;
 import bjd.util.IDispose;
 
 //スレッドの起動停止機能を持った基本クラス
@@ -93,7 +92,7 @@ public abstract class ThreadBase implements IDispose, ILogger, ILife {
 			try {
 				onRunThread();
 			} catch (Exception ex) {
-				logger.set(LogKind.Error, (SockBase) null, 9000021, ex.getMessage());
+				logger.set(LogKind.Error, null, 9000021, ex.getMessage());
 				logger.exception(ex);
 			}
 			//	kernel.getView().setColor();
