@@ -46,15 +46,10 @@ public class TcpObj extends SockObj {
 
 		try {
 			selector = Selector.open();
-		} catch (Exception ex) {
-			setError(ex.getMessage());
-		}
-
-		try {
 			serverChannel = ServerSocketChannel.open();
 			serverChannel.configureBlocking(false);
 		} catch (Exception ex) {
-			setError(ex.getMessage());
+			setException(ex);
 		}
 
 	}
@@ -69,7 +64,7 @@ public class TcpObj extends SockObj {
 		try {
 			selector = Selector.open();
 		} catch (Exception ex) {
-			setError(ex.getMessage());
+			setException(ex);
 		}
 
 		if (getSockState() == SockState.Error) {
@@ -81,7 +76,7 @@ public class TcpObj extends SockObj {
 			channel.configureBlocking(false);
 			channel.register(selector, SelectionKey.OP_READ);
 		} catch (Exception ex) {
-			setError(ex.getMessage());
+			setException(ex);
 		}
 
 		Thread t = new Thread(new Runnable() {
@@ -103,10 +98,7 @@ public class TcpObj extends SockObj {
 					break;
 				}
 			} catch (IOException ex) {
-
-				ex.printStackTrace();
-				lastError = ex.getMessage();
-				set(SockState.Error, null, null);
+				setException(ex);
 				return;
 			}
 			for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
@@ -125,7 +117,7 @@ public class TcpObj extends SockObj {
 			recvBuf.clear();
 			if (channel.read(recvBuf) < 0) {
 				//切断されている
-				set(SockState.Disconnect, null, null);
+				setError("channel.read()<0");
 				return;
 			}
 			
@@ -136,8 +128,7 @@ public class TcpObj extends SockObj {
 			tcpQueue.enqueue(buf, buf.length);
 
 		} catch (Exception ex) {
-			set(SockState.Error, null, null);
-			//e.printStackTrace();
+			setException(ex);
 		}
 	}
 	//ACCEPT
@@ -203,15 +194,14 @@ public class TcpObj extends SockObj {
 				return len;
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			lastError = ex.getMessage(); 
+			setException(ex);
 			//logger.set(LogKind.Error, this, 9000046, String.format("Length=%d %s", buffer.length, ex.getMessage()));
 		}
 		return -1;
 	}
 
 	
-
+	@Override
 	public void close() {
 		//ACCEPT
 		if (channel != null && channel.isOpen()) {
@@ -232,7 +222,7 @@ public class TcpObj extends SockObj {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
-		set(SockState.Error, null, null);
+		setError("close()");
 	}
 
 	//SERVER
@@ -241,9 +231,8 @@ public class TcpObj extends SockObj {
 		try {
 			serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), listenMax);
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-		} catch (Exception e) {
-			lastError = e.getMessage();
-			set(SockState.Error, null, null);
+		} catch (Exception ex) {
+			setException(ex);
 			return false;
 		}
 		set(SockState.Bind, (InetSocketAddress) serverChannel.socket().getLocalSocketAddress(), null);
@@ -258,11 +247,11 @@ public class TcpObj extends SockObj {
 			try {
 				n = selector.select(1);
 				if (n < 0) {
-					lastError = "select(1)<0";
+					setError(String.format("selector.select(1)=%d",n));
 					break;
 				}
-			} catch (IOException e) {
-				lastError = e.getMessage();
+			} catch (Exception ex) {
+				setException(ex);
 				break;
 			}
 			if (n > 0) {
@@ -280,7 +269,7 @@ public class TcpObj extends SockObj {
 				}
 			}
 		}
-		set(SockState.Error, null, null);
+		setError("isLife()==false");
 		return null;
 	}
 }

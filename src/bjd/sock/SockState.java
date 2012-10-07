@@ -4,7 +4,7 @@ public enum SockState {
 	//TODO 移植完了後　リファクタリングで大文字に変更
 	Idle, //初期
 	Connect, //接続
-	Disconnect, //切断
+	//Disconnect, //切断
 	Bind, //bind中
 	Error, //エラー発生
 }

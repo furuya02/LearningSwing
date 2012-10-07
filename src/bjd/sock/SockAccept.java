@@ -75,7 +75,7 @@ public final class SockAccept extends SockBase {
 		try {
 			if (channel.read(buf) < 0) {
 				//切断されている
-				set(SockState.Disconnect, null, null);
+				setError("channel.read()<0");
 				return;
 			}
 			buf.flip();

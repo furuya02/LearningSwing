@@ -17,7 +17,7 @@ import bjd.net.InetKind;
 import bjd.net.Ip;
 
 public final class UdpObj extends SockObj {
-	
+
 	private SockKind sockKind;
 
 	//SERVER
@@ -28,7 +28,7 @@ public final class UdpObj extends SockObj {
 	private DatagramChannel channel = null;
 
 	//ACCEPT
-	public UdpObj(DatagramChannel channel){
+	public UdpObj(DatagramChannel channel) {
 		sockKind = SockKind.ACCEPT;
 
 		this.channel = channel;
@@ -42,27 +42,26 @@ public final class UdpObj extends SockObj {
 			channel.configureBlocking(false);
 			channel.register(selector, SelectionKey.OP_READ);
 		} catch (Exception ex) {
-			setError(ex.getMessage());
+			setException(ex);
 		}
 
-//		Thread t = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				selectLoop();
-//			}
-//		});
-//		t.start();
+		//		Thread t = new Thread(new Runnable() {
+		//			@Override
+		//			public void run() {
+		//				selectLoop();
+		//			}
+		//		});
+		//		t.start();
 
 	}
 
-	
 	//SERVER
 	public UdpObj(InetKind inetKind) {
 		sockKind = SockKind.SERVER;
 		try {
 			selector = Selector.open();
 		} catch (Exception ex) {
-			setError(ex.getMessage());
+			setException(ex);
 		}
 
 		try {
@@ -74,27 +73,22 @@ public final class UdpObj extends SockObj {
 			datagramChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
 			datagramChannel.configureBlocking(false);
 		} catch (Exception ex) {
-			setError(ex.getMessage());
+			setException(ex);
 		}
 
 	}
 
-
-
-	public boolean bind(Ip bindIp,int port) {
+	public boolean bind(Ip bindIp, int port) {
 		try {
 			datagramChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port));
 			datagramChannel.register(selector, SelectionKey.OP_READ);
-		} catch (Exception e) {
-			//TODO Debug Print
-			System.out.println(e.getMessage());
-
-			lastError = e.getMessage();
-			set(SockState.Error, null, null);
+		} catch (Exception ex) {
+			setException(ex);
 			return false;
 		}
 		return true;
 	}
+
 	//SERVER
 	public UdpObj select(ThreadBase threadBase) {
 		while (threadBase.isLife()) {
@@ -102,11 +96,11 @@ public final class UdpObj extends SockObj {
 			try {
 				n = selector.select(1);
 				if (n < 0) {
-					lastError = "select(1)<0";
+					setError("select(1)<0");
 					break;
 				}
-			} catch (IOException e) {
-				lastError = e.getMessage();
+			} catch (Exception ex) {
+				setException(ex);
 				break;
 			}
 			if (n >= 0) {
@@ -119,7 +113,13 @@ public final class UdpObj extends SockObj {
 				}
 			}
 		}
-		set(SockState.Error, null, null);
+		setError("isLife()==false");
 		return null;
 	}
+
+	@Override
+	public void close() {
+
+	}
+
 }

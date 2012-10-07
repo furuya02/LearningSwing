@@ -139,7 +139,7 @@ public class OneServerTest {
 		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
-		conf.set("port", 9999);
+		conf.set("port", 9990);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));
 		conf.set("enableAcl", 1);
@@ -148,14 +148,22 @@ public class OneServerTest {
 		TestUtil.dispPrompt(this, String.format("new MyServer()"));
 		MyServer myServer = new MyServer(conf, oneBind);
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			myServer.start();
+
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO 自動生成された catch ブロック
+//				e.printStackTrace();
+//			}
+
 			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(true));
 			assertThat(myServer.getSockState(), is(SockState.Bind));
 
-
+			
 			myServer.stop();
 			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(false));

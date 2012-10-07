@@ -100,7 +100,7 @@ public final class SockClient extends SockBase {
 			recvBuf.clear();
 			if (channel.read(recvBuf) < 0) {
 				//切断されている
-				set(SockState.Disconnect, null, null);
+				setError("channel.read()<0");
 				return;
 			}
 			

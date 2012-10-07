@@ -81,6 +81,9 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	public final SockState getSockState() {
+		if (sockObj == null) {
+			return SockState.Error;
+		}
 		return sockObj.getSockState();
 	}
 
@@ -104,11 +107,13 @@ public abstract class OneServer extends ThreadBase {
 		}
 		timeout = (int) conf.get("timeOut");
 	}
-	
+
 	@Override
 	public final void start() {
+
 		super.start();
-		//sockStateがBind若しくはエラーとなるまで待機する
+		
+		//bindが完了するまで待機する
 		while (sockObj == null || sockObj.getSockState() == SockState.Idle) {
 			try {
 				Thread.sleep(100);
@@ -120,8 +125,11 @@ public abstract class OneServer extends ThreadBase {
 
 	@Override
 	public final void stop() {
+		if (sockObj == null) {
+			return; //すでに終了処理が終わっている
+		}
+		super.stop(); //life=false ですべてのループを解除する
 		sockObj.close();
-		super.stop();
 
 		// 全部の子スレッドが終了するのを待つ
 		while (count() > 0) {
@@ -131,6 +139,8 @@ public abstract class OneServer extends ThreadBase {
 				e.printStackTrace();
 			}
 		}
+		sockObj = null;
+
 	}
 
 	@Override
@@ -138,9 +148,6 @@ public abstract class OneServer extends ThreadBase {
 		// super.dispose()は、ThreadBaseでstop()が呼ばれるだけなので必要ない
 		stop();
 	}
-
-
-
 
 	//スレッド停止処理
 	protected abstract void onStopServer(); //スレッド停止処理
@@ -164,7 +171,7 @@ public abstract class OneServer extends ThreadBase {
 
 	@Override
 	protected void onRunThread() {
-		
+
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
 		logger.set(LogKind.Normal, (SockObj) null, 9000000, bindStr);
@@ -174,15 +181,14 @@ public abstract class OneServer extends ThreadBase {
 
 		sockObj = (oneBind.getProtocol() == ProtocolKind.Tcp) ? (SockObj) new TcpObj() : new UdpObj(InetKind.V4);
 
-
 		if (sockObj.getSockState() != SockState.Error) {
 			TcpObj tcpObj = (TcpObj) sockObj;
 
 			int listenMax = 5;
-			if(!tcpObj.bind(oneBind.getAddr(), port, listenMax)){
+			if (!tcpObj.bind(oneBind.getAddr(), port, listenMax)) {
 				//TODO Debug Print
-				System.out.println(String.format("bind()=false %s",tcpObj.getLastEror()));
-			}else{
+				System.out.println(String.format("bind()=false %s", tcpObj.getLastEror()));
+			} else {
 				while (isLife()) {
 					final TcpObj child = tcpObj.select(this);
 					if (child == null) {
@@ -197,13 +203,13 @@ public abstract class OneServer extends ThreadBase {
 					//***************************************************************
 					// ACL制限のチェック
 					//***************************************************************
-//					if (aclList != null) {
-//						if (!aclList.check(new Ip(sockObj.getRemoteAddress().getAddress().toString()))) {
-//							child.close();
-//							denyAddress = sockObj.getRemoteAddress().getAddress().toString();
-//							continue;
-//						}
-//					}
+					//					if (aclList != null) {
+					//						if (!aclList.check(new Ip(sockObj.getRemoteAddress().getAddress().toString()))) {
+					//							child.close();
+					//							denyAddress = sockObj.getRemoteAddress().getAddress().toString();
+					//							continue;
+					//						}
+					//					}
 
 					synchronized (lock) {
 						Thread t = new Thread(new Runnable() {
@@ -221,8 +227,6 @@ public abstract class OneServer extends ThreadBase {
 		}
 	}
 
-
-
 	protected abstract void onSubThread(SockObj sockObj);
 
 	private String denyAddress = ""; //Ver5.3.5 DoS対処
@@ -237,8 +241,7 @@ public abstract class OneServer extends ThreadBase {
 
 			//_subThreadの中でSockObjは破棄する（ただしUDPの場合は、クローンなのでClose()してもsocketは破棄されない）
 			logger.set(LogKind.Detail, sockObj, 9000002,
-					String.format("count={0} Local={1} Remote={2}", count(), sockObj.getLocalAddress().toString(),
-							sockObj.getRemoteAddress().toString()));
+					String.format("count={0} Local={1} Remote={2}", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
 
 			onSubThread(sockObj); //接続単位の処理
 			sockObj.close();
@@ -246,8 +249,7 @@ public abstract class OneServer extends ThreadBase {
 			System.out.println(String.format("subThread() sock.close()"));
 
 			logger.set(LogKind.Detail, sockObj, 9000003,
-					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(),
-							sockObj.getRemoteAddress().toString()));
+					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
 
 		} catch (Exception ex) {
 			logger.set(LogKind.Error, sockObj, 9000037, ex.getMessage());

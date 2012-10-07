@@ -1,38 +1,65 @@
 package bjd.sock;
 
 import java.net.InetSocketAddress;
-import java.net.Socket;
-
 import bjd.log.LogKind;
 import bjd.log.Logger;
 
-
-//Socketその他を保持するクラス(１つの接続を表現している)
+//*******************************************************
+// TcpObj UdpObj の基底クラス
+//*******************************************************
 public abstract class SockObj {
-	//public Socket socket = null;
+	//****************************************************************
+	// LastError関連
+	//****************************************************************
+	private String lastError = "";
 
-	
-	protected String lastError = "";
-	protected SockState sockState  = SockState.Idle;
-	
+	public final String getLastEror() {
+		return lastError;
+	}
+
 	//****************************************************************
-	//プロパティ
+	// SockState関連
 	//****************************************************************
-	private String remoteHost;
+	private SockState sockState = SockState.Idle;
+
+	public SockState getSockState() {
+		return sockState;
+	}
+
+	//****************************************************************
+	//ステータスの変化  Connect/bindで使用する
+	//****************************************************************
+	protected final void set(SockState sockState, InetSocketAddress localAddress, InetSocketAddress remoteAddress) {
+		this.sockState = sockState;
+		this.localAddress = localAddress;
+		this.remoteAddress = remoteAddress;
+	}
+
+	//****************************************************************
+	// エラー（切断）発生時にステータスの変更とLastErrorを設定するメソッド
+	//****************************************************************
+	protected final void setException(Exception ex) {
+		System.out.println(String.format("setException(\"%s\") %s",ex.getMessage(),ex.toString()));
+		ex.printStackTrace();
+		lastError = ex.getMessage();
+		set(SockState.Error, null, null);
+	}
+	protected final void setError(String msg) {
+		System.out.println(String.format("setError(\"%s\")",msg));
+		lastError = msg;
+		set(SockState.Error, null, null);
+	}
+
+	//****************************************************************
+	// アドレス関連
+	//****************************************************************
+	private String remoteHostname = ""; 
     private InetSocketAddress remoteAddress = null;
     private InetSocketAddress localAddress = null;
 
-    public final String getLastEror() {
-        return lastError;
-    }
 
-    protected final void setError(String lastError) {
-        sockState = SockState.Error;
-        this.lastError = lastError;
-    }
-
-    public String getRemoteHost() {
-		return remoteHost;
+    public String getRemoteHostname() {
+		return remoteHostname;
 	}
 
 	public InetSocketAddress getRemoteAddress() {
@@ -42,71 +69,40 @@ public abstract class SockObj {
 	public InetSocketAddress getLocalAddress() {
 		return localAddress;
 	}
-
-	public SockState getSockState() {
-//		if (sockState == SockState.Connect && !socket.isConnected()) {
-//			sockState = SockState.Disconnect;
-//		}
-		return sockState;
-	}
-    protected final void set(SockState sockState, InetSocketAddress localAddress, InetSocketAddress remoteAddress) {
-    	this.sockState = sockState;
-		this.localAddress = localAddress;
-		this.remoteAddress = remoteAddress;
-	}
-
-	//クローン
-	//UDPサーバオブジェクトからコピーされた場合は、clone=trueとなり、closeは無視される
-	protected boolean clone;
-
-	public int setSendTimeout() {
-//			Socket.SendTimeout = 1000 * value;
-		return 0;
-	}
-
-	//****************************************************************
-	//コンストラクタ
-	//****************************************************************
-	protected SockObj() {
-		remoteHost = "";//接続先のホスト名
-	}
-
-	//TCPの場合 EndAccept() UDPの場合 EndReceiveFrom()
-	//abstract public SockObj CreateChildObj(IAsyncResult ar);
-
-	//TCPの場合 BeginAccept() UDPの場合BeginReceiveFrom()
-	//abstract public void StartServer(AsyncCallback callBack);
-
-
-	//【ソケットクローズ】
-	public void close() {
-		if (!clone) { //クローンの場合は破棄しない
-			sockState = SockState.Disconnect;
-			//if(socket!=null){
-				try {
-					//socket.shutdownInput();
-					//socket.shutdownOutput();
-					//socket.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-				
-			//}
-		}
-	}
-
+	
+	//TODO メソッドの配置はここでよいか？
 	public void resolve(boolean useResolve,Logger logger) {
 		if (useResolve) {
-			remoteHost = "resolve error!";
+			remoteHostname = "resolve error!";
 			try {
 				//remoteHost = kernel.DnsCache.Get(RemoteEndPoint.Address,logger);
 			} catch(Exception ex) {
 				logger.set(LogKind.Error, (SockObj)null, 9000053,ex.getMessage());
 			}
 		} else {
-			remoteHost = remoteAddress.getAddress().toString(); 
+			remoteHostname = remoteAddress.getAddress().toString(); 
 		}
 	}
+	
+	
+	//クローン
+	//UDPサーバオブジェクトからコピーされた場合は、clone=trueとなり、closeは無視される
+//	protected boolean clone;
+
+//	public int setSendTimeout() {
+////			Socket.SendTimeout = 1000 * value;
+//		return 0;
+//	}
+
+	public abstract void close();
+	
+	
+	//TCPの場合 EndAccept() UDPの場合 EndReceiveFrom()
+	//abstract public SockObj CreateChildObj(IAsyncResult ar);
+
+	//TCPの場合 BeginAccept() UDPの場合BeginReceiveFrom()
+	//abstract public void StartServer(AsyncCallback callBack);
+
 	//バイナリデータであることが判明している場合は、noEncodeをtrueに設定する
 	//これによりテキスト判断ロジックを省略できる
 //	protected void Trace(TraceKind traceKind,byte [] buf,boolean noEncode) {
