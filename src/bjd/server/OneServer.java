@@ -172,7 +172,7 @@ public abstract class OneServer extends ThreadBase {
 		//DOSを受けた場合、multiple数まで連続アクセスまでは記憶してしまう
 		//DOSが終わった後も、その分だけ復帰に時間を要する
 
-		sockObj = (oneBind.getProtocol() == ProtocolKind.Tcp) ? (SockObj) new TcpObj() : new UdpObj(InetKind.V4);
+		sockObj = (oneBind.getProtocol() == ProtocolKind.Tcp) ? (SockObj) new TcpObj() : new UdpObj();
 
 		if (sockObj.getSockState() != SockState.Error) {
 			TcpObj tcpObj = (TcpObj) sockObj;

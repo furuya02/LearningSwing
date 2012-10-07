@@ -36,14 +36,11 @@ public class TcpObj extends SockObj {
 	//SERVER
 	public TcpObj() {
 		sockKind = sockKind.SERVER;
-
 		//************************************************
-		//selector/channel生成
+		//selector生成(channelの生成はbindで行う)
 		//************************************************
 		try {
 			selector = Selector.open();
-			serverChannel = ServerSocketChannel.open();
-			serverChannel.configureBlocking(false);
 		} catch (Exception ex) {
 			setException(ex);
 			return;
@@ -55,7 +52,6 @@ public class TcpObj extends SockObj {
 		//this.ssl = ssl;
 
 		sockKind = SockKind.CLIENT;
-		tcpQueue = new TcpQueue();
 
 		//************************************************
 		//selector/channel生成
@@ -116,7 +112,6 @@ public class TcpObj extends SockObj {
 	public TcpObj(SocketChannel channel) {
 		
 		sockKind = SockKind.ACCEPT;
-		tcpQueue = new TcpQueue();
 
 		//************************************************
 		//selector/channel生成
@@ -293,6 +288,14 @@ public class TcpObj extends SockObj {
 	public boolean bind(Ip bindIp, int port, int listenMax) {
 		
 		try {
+			//************************************************
+			//channel生成
+			//************************************************
+			serverChannel = ServerSocketChannel.open();
+			serverChannel.configureBlocking(false);
+			//************************************************
+			//bind
+			//************************************************
 			serverChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port), listenMax);
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 		} catch (Exception ex) {

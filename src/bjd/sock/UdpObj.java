@@ -8,12 +8,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 import java.util.Calendar;
 import java.util.Iterator;
 
 import bjd.ThreadBase;
 import bjd.net.InetKind;
 import bjd.net.Ip;
+import bjd.net.Ssl;
 import bjd.net.TcpQueue;
 import bjd.util.Bytes;
 
@@ -35,23 +37,13 @@ public final class UdpObj extends SockObj {
 	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
 
 	//SERVER
-	public UdpObj(InetKind inetKind) {
+	public UdpObj() {
 		sockKind = SockKind.SERVER;
-
 		//************************************************
-		//selector/channel生成
+		//selector生成(channelの生成はbindで行う)
 		//************************************************
 		try {
 			selector = Selector.open();
-//			serverChannel = ServerSocketChannel.open();
-//			serverChannel.configureBlocking(false);
-			if (inetKind == InetKind.V4) {
-				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET);
-			} else {
-				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET6);
-			}
-			datagramChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-			datagramChannel.configureBlocking(false);
 		} catch (Exception ex) {
 			setException(ex);
 			return;
@@ -62,7 +54,6 @@ public final class UdpObj extends SockObj {
 	public UdpObj(DatagramChannel channel) {
 		
 		sockKind = SockKind.ACCEPT;
-		//tcpQueue = new TcpQueue();
 
 		//************************************************
 		//selector/channel生成
@@ -98,6 +89,71 @@ public final class UdpObj extends SockObj {
 		t.start();
 	}
 	
+	//CLIENT
+	public UdpObj(Ip ip, int port, int timeout, Ssl ssl) {
+		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
+		//this.ssl = ssl;
+
+		sockKind = SockKind.CLIENT;
+
+		//************************************************
+		//selector/channel生成
+		//************************************************
+		try {
+			selector = Selector.open();
+
+			channel = DatagramChannel.open();
+			channel.configureBlocking(false);
+			
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		//************************************************
+		//connect
+		//************************************************
+		
+		InetSocketAddress address = new InetSocketAddress(ip.getInetAddress(), port);
+		/*
+		try {
+			channel.connect(address);
+			int msec = timeout;
+			while (!channel.finishConnect()) {
+				Thread.sleep(10);
+				msec -= 10;
+				if (msec < 0) {
+					setError("timeout");
+					return;
+				}
+			}
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		//************************************************
+		//ここまでくると接続が完了している
+		//************************************************
+		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
+		*/
+		//************************************************
+		//read待機
+		//************************************************
+		try {
+			channel.register(selector, SelectionKey.OP_READ);
+		} catch (Exception ex) {
+			setException(ex);
+			return;
+		}
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				selectLoop();
+			}
+		});
+		t.start();
+	}
+
+
 	//ACCEPT・CLIENT
 	private void selectLoop() {
 
@@ -244,6 +300,19 @@ public final class UdpObj extends SockObj {
 
 	public boolean bind(Ip bindIp, int port) {
 		try {
+			//************************************************
+			//channel生成
+			//************************************************
+			if (bindIp.getInetKind() == InetKind.V4) {
+				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET);
+			} else {
+				datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET6);
+			}
+			datagramChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+			datagramChannel.configureBlocking(false);
+			//************************************************
+			//bind
+			//************************************************
 			datagramChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port));
 			datagramChannel.register(selector, SelectionKey.OP_READ);
 		} catch (Exception ex) {
