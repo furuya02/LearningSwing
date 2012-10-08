@@ -89,7 +89,7 @@ public class TcpObjTest {
 			TestUtil.dispPrompt(this, String.format("tcpObj.send(%dbyte)", tmp.length));
 
 			//送信データが到着するまで、少し待機する
-			int sleep = 100; //あまり短いと、Testを全部一緒にまわしたときにエラーとなる
+			int sleep = 500; //あまり短いと、Testを全部一緒にまわしたときにエラーとなる
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
@@ -111,7 +111,7 @@ public class TcpObjTest {
 		TestUtil.dispHeader("a002 Echoサーバにsend(送信)して、tcpQueueのlength分ずつRecv()する");
 
 		String addr = "127.0.0.1";
-		int port = 9997;
+		int port = 9992;
 
 		EchoServer echoServer = new EchoServer(addr, port);
 		echoServer.start();
@@ -122,7 +122,6 @@ public class TcpObjTest {
 		TestUtil.dispPrompt(this, "tcpObj = new TcpObj()");
 
 		int max = 10000;
-		//int max = 100;
 		int loop = 10;
 		byte[] tmp = new byte[max];
 		for (int i = 0; i < max; i++) {
@@ -132,11 +131,18 @@ public class TcpObjTest {
 		int recvCount = 0;
 		for (int i = 0; i < loop; i++) {
 			TestUtil.dispPrompt(this, String.format("tcpObj.send(%dbyte)", tmp.length));
-			sockTcp.send(tmp);
-			int len = 0;
-			while (len == 0) {
-				len = sockTcp.length();
+			int len = sockTcp.send(tmp);
+			Assert.assertEquals(len, tmp.length);
+
+			int sleep = 100;
+			try {
+				Thread.sleep(sleep);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			TestUtil.dispPrompt(this, String.format("Thread.sleep(%d)", sleep));
+		
+			
 			byte[] b = sockTcp.recv(len, timeout);
 			recvCount += b.length;
 			TestUtil.dispPrompt(this, String.format("len=%d  recv()=%d", len, b.length));

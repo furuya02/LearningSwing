@@ -16,17 +16,14 @@ import bjd.net.TcpQueue;
 import bjd.server.OneServer;
 import bjd.util.Bytes;
 
-public class SockTcp extends SockObj {
-	
-	private SockKind sockKind;
+public final class SockTcp extends SockObj {
 
 	//ALL
 	private Selector selector = null;
 	//SERVER
 	//private ServerSocketChannel serverChannel = null;
 	//ACCEPT・CLIENT
-	private SocketChannel channel = null;  //ACCEPTの場合は、コンストラクタでコピーされる
-	private Thread t = null; //select(read)で待機するスレッド
+	private SocketChannel channel = null; //ACCEPTの場合は、コンストラクタでコピーされる
 	private Object oneSsl;
 	private TcpQueue tcpQueue = new TcpQueue();
 	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
@@ -34,6 +31,7 @@ public class SockTcp extends SockObj {
 	private SockTcp() {
 		//隠蔽
 	}
+
 	//SERVER
 	/*
 	public TcpObj() {
@@ -54,8 +52,6 @@ public class SockTcp extends SockObj {
 		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
 		//this.ssl = ssl;
 
-		sockKind = SockKind.CLIENT;
-
 		//************************************************
 		//selector/channel生成
 		//************************************************
@@ -64,7 +60,7 @@ public class SockTcp extends SockObj {
 
 			channel = SocketChannel.open();
 			channel.configureBlocking(false);
-			
+
 		} catch (Exception ex) {
 			setException(ex);
 			return;
@@ -113,8 +109,6 @@ public class SockTcp extends SockObj {
 
 	//ACCEPT
 	public SockTcp(SocketChannel channel) {
-		
-		sockKind = SockKind.ACCEPT;
 
 		//************************************************
 		//selector/channel生成
@@ -172,6 +166,7 @@ public class SockTcp extends SockObj {
 			}
 		}
 	}
+
 	//ACCEPT・CLIENT
 	private void doRead(SocketChannel channel) {
 		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
@@ -182,7 +177,7 @@ public class SockTcp extends SockObj {
 				setError("channel.read()<0");
 				return;
 			}
-			
+
 			byte[] buf = new byte[recvBuf.position()];
 			recvBuf.flip();
 			recvBuf.get(buf);
@@ -193,6 +188,7 @@ public class SockTcp extends SockObj {
 			setException(ex);
 		}
 	}
+
 	//ACCEPT・CLIENT
 	public int length() {
 		try {
@@ -203,6 +199,7 @@ public class SockTcp extends SockObj {
 		}
 		return tcpQueue.length();
 	}
+
 	//ACCEPT・CLIENT
 	public byte[] recv(int len, int timeout) {
 		Calendar c = Calendar.getInstance();
@@ -232,7 +229,7 @@ public class SockTcp extends SockObj {
 						if (getSockState() != SockState.Connect) {
 							return null;
 						}
-						Thread.sleep(10); 
+						Thread.sleep(10);
 					}
 					if (c.compareTo(Calendar.getInstance()) < 0) {
 						buffer = tcpQueue.dequeue(len); //タイムアウト
@@ -247,6 +244,7 @@ public class SockTcp extends SockObj {
 		//trace(TraceKind.Recv, buffer, false);//noEncode = false;テキストかバイナリかは不明
 		return buffer;
 	}
+
 	//ACCEPT・CLIENT
 	public int send(byte[] buf) {
 		try {

@@ -2,6 +2,7 @@ package bjd.sock;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -13,6 +14,7 @@ import bjd.net.Ip;
 import bjd.net.Ssl;
 import bjd.net.TcpQueue;
 import bjd.util.Bytes;
+import bjd.util.Debug;
 
 public final class SockUdp extends SockObj {
 
@@ -25,8 +27,8 @@ public final class SockUdp extends SockObj {
 	private DatagramChannel channel = null;
 	private Thread t = null; //select(read)で待機するスレッド
 	private Object oneSsl;
-	private TcpQueue tcpQueue = new TcpQueue();
-	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
+	//private TcpQueue tcpQueue = new TcpQueue();
+	private ByteBuffer recvBuf = ByteBuffer.allocate(1600);
 
 	private SockUdp() {
 		//隠蔽する
@@ -48,29 +50,27 @@ public final class SockUdp extends SockObj {
 			setException(ex);
 			return;
 		}
-		//************************************************
-		//ここまでくると接続が完了している
-		//************************************************
+
+		//UDP-ACCEPTの場合は、もう受信しているときに、ここに来るので、これ以上待機する必要はない
+		doRead(channel);
+
 		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
 
-		//************************************************
-		//read待機
-		//************************************************
-		try {
-			channel.register(selector, SelectionKey.OP_READ);
-		} catch (Exception ex) {
-			setException(ex);
-			return;
-		}
+		//あとは、クローズされるまで待機
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				selectLoop();
+				while (getSockState() == SockState.Connect) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		t.start();
 	}
-
 	//CLIENT
 	public SockUdp(Ip ip, int port, int timeout, Ssl ssl) {
 		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
@@ -91,32 +91,14 @@ public final class SockUdp extends SockObj {
 			setException(ex);
 			return;
 		}
-		//************************************************
-		//connect
-		//************************************************
 
 		InetSocketAddress address = new InetSocketAddress(ip.getInetAddress(), port);
-		/*
-		try {
-			channel.connect(address);
-			int msec = timeout;
-			while (!channel.finishConnect()) {
-				Thread.sleep(10);
-				msec -= 10;
-				if (msec < 0) {
-					setError("timeout");
-					return;
-				}
-			}
-		} catch (Exception ex) {
-			setException(ex);
-			return;
-		}
-		//************************************************
-		//ここまでくると接続が完了している
-		//************************************************
+
+		//ここで送信処理
+		
+		
 		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
-		*/
+
 		//************************************************
 		//read待機
 		//************************************************
@@ -130,12 +112,12 @@ public final class SockUdp extends SockObj {
 			@Override
 			public void run() {
 				selectLoop();
+				close();
 			}
 		});
 		t.start();
 	}
-
-	//ACCEPT・CLIENT
+	//CLIENT
 	private void selectLoop() {
 
 		//Acceptの場合は、Connectの間だけループする
@@ -153,6 +135,7 @@ public final class SockUdp extends SockObj {
 				it.remove();
 				if (key.isReadable()) {
 					doRead(channel);
+					break; // UDPの場合は、１度受信したら、もう待機しない
 				}
 			}
 		}
@@ -160,77 +143,31 @@ public final class SockUdp extends SockObj {
 
 	//ACCEPT・CLIENT
 	private void doRead(DatagramChannel channel) {
-		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
+		recvBuf.clear();
 		try {
-			recvBuf.clear();
-			if (channel.read(recvBuf) < 0) {
-				//切断されている
-				setError("channel.read()<0");
-				return;
-			}
-
-			byte[] buf = new byte[recvBuf.position()];
-			recvBuf.flip();
-			recvBuf.get(buf);
-
-			tcpQueue.enqueue(buf, buf.length);
-
-		} catch (Exception ex) {
+			SocketAddress remoteAddress = channel.receive(recvBuf);
+			Debug.print(this, String.format("addr= %s recvBuf.position()=%d", remoteAddress, recvBuf.position()));
+			recvBuf.limit(recvBuf.position()); //受信したサイズをバッファのlimitに設定する
+			recvBuf.flip(); //ポインタを最初に移動する
+		} catch (IOException ex) {
 			setException(ex);
 		}
 	}
 
 	//ACCEPT・CLIENT
 	public int length() {
-		return tcpQueue.length();
+		return recvBuf.limit() - recvBuf.position();
 	}
-
+	
+	public byte[] recv(int len) {
+		byte[] buf = new byte[length()];
+		recvBuf.get(buf);
+		return buf;
+	}	
+	
 	//ACCEPT・CLIENT
-	public byte[] recv(int len, int timeout) {
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.SECOND, timeout);
-
-		byte[] buffer = new byte[0];
-		try {
-			if (len <= tcpQueue.length()) {
-				// キューから取得する
-				buffer = tcpQueue.dequeue(len);
-			} else {
-				while (true) {
-					Thread.sleep(0);
-					if (0 < tcpQueue.length()) {
-						//size=受信が必要なバイト数
-						int size = len - buffer.length;
-						//受信に必要なバイト数がバッファにない場合
-						if (size > tcpQueue.length()) {
-							size = tcpQueue.length(); //とりあえずバッファサイズ分だけ受信する
-						}
-						byte[] tmp = tcpQueue.dequeue(size);
-						buffer = Bytes.create(buffer, tmp);
-						if (len <= buffer.length) {
-							break;
-						}
-					} else {
-						if (getSockState() != SockState.Connect) {
-							return null;
-						}
-						Thread.sleep(10);
-					}
-					if (c.compareTo(Calendar.getInstance()) < 0) {
-						buffer = tcpQueue.dequeue(len); //タイムアウト
-						break;
-					}
-				}
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-		//trace(TraceKind.Recv, buffer, false);//noEncode = false;テキストかバイナリかは不明
-		return buffer;
-	}
-
-	//ACCEPT・CLIENT
+	
+	????これもUDP用に書き換える必要ある
 	public int send(byte[] buf) {
 		try {
 			if (oneSsl != null) {
@@ -267,17 +204,6 @@ public final class SockUdp extends SockObj {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
-		/*		//SERVER
-				if (datagramChannel != null && datagramChannel.isOpen()) {
-					try {
-						selector.wakeup();
-						selector.close();
-						datagramChannel.close();
-					} catch (IOException ex) {
-						ex.printStackTrace(); //エラーは無視する
-					}
-				}*/
 		setError("close()");
 	}
-
 }
