@@ -195,6 +195,12 @@ public class SockTcp extends SockObj {
 	}
 	//ACCEPT・CLIENT
 	public int length() {
+		try {
+			Thread.sleep(1); //次の動作が実行されるようにsleepを置く
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return 0;
+		}
 		return tcpQueue.length();
 	}
 	//ACCEPT・CLIENT

@@ -122,6 +122,7 @@ public class TcpObjTest {
 		TestUtil.dispPrompt(this, "tcpObj = new TcpObj()");
 
 		int max = 10000;
+		//int max = 100;
 		int loop = 10;
 		byte[] tmp = new byte[max];
 		for (int i = 0; i < max; i++) {
