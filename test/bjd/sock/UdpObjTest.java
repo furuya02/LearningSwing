@@ -13,7 +13,7 @@ import bjd.util.TestUtil;
 //**************************************************
 // Echoサーバを使用したテスト
 //**************************************************
-public class UdpObjTest {
+public final class UdpObjTest {
 	class EchoServer extends ThreadBase {
 		private SockServer sockServer;
 		private String addr;
@@ -55,8 +55,10 @@ public class UdpObjTest {
 						int len = child.length();
 						if (len > 0) {
 							System.out.println(String.format("EchoServer len=%d", len));
-							byte[] buf = child.recv(len);
+							byte[] buf = child.recv();
 							child.send(buf);
+							//送信が完了したら、この処理は終了
+							break;
 						}
 					}
 				}
@@ -64,7 +66,7 @@ public class UdpObjTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void a001() {
 
 		TestUtil.dispHeader("a001 Echoサーバに送信して、たまったデータサイズ（length）を確認する");
@@ -81,25 +83,25 @@ public class UdpObjTest {
 			e.printStackTrace();
 		}
 		
+		int max = 1000;
+		byte[] tmp = new byte[max];
 
 		int timeout = 100;
 		Ssl ssl = null;
-		SockUdp sock = new SockUdp(new Ip(addr), port, timeout, ssl);
+		SockUdp sock = new SockUdp(new Ip(addr), port, timeout, ssl, tmp);
 		TestUtil.dispPrompt(this, "sock = new SockUdp()");
 
-		int max = 1000;
-		byte[] tmp = new byte[max];
 		
-		sock.send(tmp);
-		TestUtil.dispPrompt(this, String.format("sock.send(%dbyte)", tmp.length));
+		//sock.send(tmp);
+		//TestUtil.dispPrompt(this, String.format("sock.send(%dbyte)", tmp.length));
 		
-		for (int i = 0; i < 100; i++) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		for (int i = 0; i < 100; i++) {
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		for (int i = 0; i < 10; i++) {
 			sock.send(tmp);
@@ -121,51 +123,49 @@ public class UdpObjTest {
 		sock.close();
 		echoServer.stop();
 	}
-	/*
-		@Test
-		public void a002() {
 
-			TestUtil.dispHeader("a002 Echoサーバにsend(送信)して、tcpQueueのlength分ずつRecv()する");
+	@Test
+	public void a002() {
 
-			String addr = "127.0.0.1";
-			int port = 9997;
+		TestUtil.dispHeader("a002 Echoサーバにsend(送信)して、length分ずつRecv()する");
 
-			EchoServer echoServer = new EchoServer(addr, port);
-			echoServer.start();
+		String addr = "127.0.0.1";
+		int port = 53;
 
-			int timeout = 100;
-			Ssl ssl = null;
-			UdpObj sock = new UdpObj(new Ip(addr), port, timeout, ssl);
-			TestUtil.dispPrompt(this,"sock = new UdpObj()");
+		EchoServer echoServer = new EchoServer(addr, port);
+		echoServer.start();
 
-			int max = 10000;
-			int loop = 10;
-			byte[] tmp = new byte[max];
-			for (int i = 0; i < max; i++) {
-				tmp[i] = (byte) i;
-			}
+		int timeout = 100;
+		Ssl ssl = null;
 
-			int recvCount = 0;
-			for (int i = 0; i < loop; i++) {
-				TestUtil.dispPrompt(this,String.format("sock.send(%dbyte)", tmp.length));
-				sock.send(tmp);
-				int len = 0;
-				while (len == 0) {
-					len = sock.length();
-				}
-				byte[] b = sock.recv(len, timeout);
-				recvCount += b.length;
-				TestUtil.dispPrompt(this,String.format("len=%d  recv()=%d", len, b.length));
-				for (int m = 0; m < max; m += 10) {
-					Assert.assertEquals(b[m], tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
-				}
-			}
-			TestUtil.dispPrompt(this,String.format("loop*max=%dbyte  recvCount:%d", loop * max, recvCount));
-			Assert.assertEquals(loop * max, recvCount); //送信したデータ数と受信したデータ数が一致するかどうかのテスト
-
-			TestUtil.dispPrompt(this,String.format("sock.close()"));
-			sock.close();
-			echoServer.stop();
+		int max = 1500;
+		int loop = 10;
+		byte[] tmp = new byte[max];
+		for (int i = 0; i < max; i++) {
+			tmp[i] = (byte) i;
 		}
-		*/
+
+		for (int i = 0; i < loop; i++) {
+
+			SockUdp sockUdp = new SockUdp(new Ip(addr), port, timeout, ssl, tmp);
+			TestUtil.dispPrompt(this, String.format("sockUdp = new SockUdp(%dbyte)", tmp.length));
+			int len = 0;
+			while (len == 0) {
+				len = sockUdp.length();
+				try {
+					Thread.sleep(0);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			TestUtil.dispPrompt(this, String.format("len=%d", len));
+			byte[] b = sockUdp.recv();
+			TestUtil.dispPrompt(this, String.format("b=recv()  b.length=%d", b.length));
+			for (int m = 0; m < max; m += 10) {
+				Assert.assertEquals(b[m], tmp[m]); //送信したデータと受信したデータが同一かどうかのテスト
+			}
+			sockUdp.close();
+		}
+		echoServer.stop();
+	}
 }

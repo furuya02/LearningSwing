@@ -14,7 +14,6 @@ import bjd.ThreadBase;
 import bjd.net.InetKind;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
-import bjd.util.Debug;
 import bjd.util.Util;
 
 public final class SockServer extends SockObj {
@@ -125,27 +124,21 @@ public final class SockServer extends SockObj {
 			int n;
 			try {
 				n = selector.select(1);
-				//TODO DEBUG 
-				Debug.print(this, String.format("selector.select(1)=%d", n));
-				if (n < 0) {
-					setError(String.format("selector.select(1)=%d", n));
-					break;
-				}
 			} catch (Exception ex) {
 				setException(ex);
 				break;
 			}
-
-			//TODO DEBUG とりあえずスリープする
-			if (n == 0) {
+			if (n < 0) {
+				setError(String.format("selector.select(1)=%d", n));
+				break;
+			} else if (n == 0) {
 				try {
-					Thread.sleep(300);
+					//Thread.sleep(300);
+					Thread.sleep(0);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
-			
-			if (n > 0) {
+			} else if (n > 0) {
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
 					SelectionKey key = (SelectionKey) it.next();
 					it.remove();

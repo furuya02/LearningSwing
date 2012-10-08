@@ -28,6 +28,7 @@ public final class SockTcp extends SockObj {
 	private TcpQueue tcpQueue = new TcpQueue();
 	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
 
+	@SuppressWarnings("unused")
 	private SockTcp() {
 		//隠蔽
 	}
@@ -278,16 +279,6 @@ public final class SockTcp extends SockObj {
 				ex.printStackTrace(); //エラーは無視する
 			}
 		}
-		//SERVER
-		/*if (serverChannel != null && serverChannel.isOpen()) {
-			try {
-				selector.wakeup();
-				selector.close();
-				serverChannel.close();
-			} catch (IOException ex) {
-				ex.printStackTrace(); //エラーは無視する
-			}
-		}*/
 		setError("close()");
 	}
 

@@ -40,13 +40,13 @@ public abstract class SockObj {
 	// エラー（切断）発生時にステータスの変更とLastErrorを設定するメソッド
 	//****************************************************************
 	protected final void setException(Exception ex) {
-		System.out.println(String.format("setException(\"%s\") %s",ex.getMessage(),ex.toString()));
+		//System.out.println(String.format("setException(\"%s\") %s",ex.getMessage(),ex.toString()));
 		ex.printStackTrace();
 		lastError = ex.getMessage();
 		set(SockState.Error, null, null);
 	}
 	protected final void setError(String msg) {
-		System.out.println(String.format("setError(\"%s\")",msg));
+		//System.out.println(String.format("setError(\"%s\")",msg));
 		lastError = msg;
 		set(SockState.Error, null, null);
 	}

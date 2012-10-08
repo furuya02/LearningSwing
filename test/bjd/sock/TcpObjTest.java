@@ -89,7 +89,7 @@ public class TcpObjTest {
 			TestUtil.dispPrompt(this, String.format("tcpObj.send(%dbyte)", tmp.length));
 
 			//送信データが到着するまで、少し待機する
-			int sleep = 500; //あまり短いと、Testを全部一緒にまわしたときにエラーとなる
+			int sleep = 100; //あまり短いと、Testを全部一緒にまわしたときにエラーとなる
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
@@ -121,7 +121,7 @@ public class TcpObjTest {
 		SockTcp sockTcp = new SockTcp(new Ip(addr), port, timeout, ssl);
 		TestUtil.dispPrompt(this, "tcpObj = new TcpObj()");
 
-		int max = 10000;
+		int max = 1000;
 		int loop = 10;
 		byte[] tmp = new byte[max];
 		for (int i = 0; i < max; i++) {

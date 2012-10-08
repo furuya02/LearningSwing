@@ -288,8 +288,6 @@ public abstract class OneServer extends ThreadBase {
 			onSubThread(sockObj); //接続単位の処理
 			sockObj.close();
 
-			System.out.println(String.format("subThread() sock.close()"));
-
 			logger.set(LogKind.Detail, sockObj, 9000003,
 					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
 
