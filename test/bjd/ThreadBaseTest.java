@@ -103,7 +103,7 @@ public class ThreadBaseTest {
 
 		TestUtil.dispHeader("new start() stop()　dispose してisRunnig()の状態を確認する(負荷テスト)"); //TESTヘッダ
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			MyThread myThread = new MyThread();
 			myThread.start();

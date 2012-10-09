@@ -5,9 +5,15 @@ import org.junit.Test;
 import junit.framework.Assert;
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
+import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.net.Ssl;
+import bjd.option.Conf;
+import bjd.option.Dat;
+import bjd.option.OptionSample;
+import bjd.server.OneServer;
 import bjd.util.TestUtil;
 
 //**************************************************
@@ -65,8 +71,40 @@ public final class UdpObjTest {
 			}
 		}
 	}
+/*
+	class EchoServer extends OneServer {
 
-	//@Test
+		public EchoServer(Conf conf, OneBind oneBind) {
+			super(new Kernel(),"NAME",conf,oneBind);
+		}
+
+		@Override
+		public String getMsg(int messageNo) {
+			return null;
+		}
+
+		@Override
+		protected void onStopServer() {
+		}
+
+		@Override
+		protected boolean onStartServer() {
+			return true;
+		}
+
+		@Override
+		protected void onSubThread(SockObj sockObj) {
+			SockUdp sockUdp = (SockUdp) sockObj;
+			System.out.println(String.format("onSubThread"));
+
+			byte[] buf = sockUdp.recv();
+			sockUdp.send(buf);
+		}
+	}
+*/
+
+	/*
+	@Test
 	public void a001() {
 
 		TestUtil.dispHeader("a001 Echoサーバに送信して、たまったデータサイズ（length）を確認する");
@@ -74,7 +112,17 @@ public final class UdpObjTest {
 		String addr = "127.0.0.1";
 		int port = 53; //TOCO DEBUG 9999^>53
 
+		OneBind oneBind = new OneBind(new Ip(addr), ProtocolKind.Udp);
+		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+		Conf conf = new Conf(optionSample);
+		conf.set("port", port);
+		conf.set("multiple", 10);
+		conf.set("acl", new Dat(new CtrlType[0]));
+		conf.set("enableAcl", 1);
+		conf.set("timeOut", 3);
+		
 		EchoServer echoServer = new EchoServer(addr, port);
+		//EchoServer echoServer = new EchoServer(conf,oneBind);
 		echoServer.start();
 		
 		try {
@@ -90,18 +138,6 @@ public final class UdpObjTest {
 		Ssl ssl = null;
 		SockUdp sock = new SockUdp(new Ip(addr), port, timeout, ssl, tmp);
 		TestUtil.dispPrompt(this, "sock = new SockUdp()");
-
-		
-		//sock.send(tmp);
-		//TestUtil.dispPrompt(this, String.format("sock.send(%dbyte)", tmp.length));
-		
-//		for (int i = 0; i < 100; i++) {
-//			try {
-//				Thread.sleep(1000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
 
 		for (int i = 0; i < 10; i++) {
 			sock.send(tmp);
@@ -123,7 +159,7 @@ public final class UdpObjTest {
 		sock.close();
 		echoServer.stop();
 	}
-
+	*/
 	@Test
 	public void a002() {
 
@@ -132,6 +168,15 @@ public final class UdpObjTest {
 		String addr = "127.0.0.1";
 		int port = 53;
 
+//		OneBind oneBind = new OneBind(new Ip(addr), ProtocolKind.Udp);
+//		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+//		Conf conf = new Conf(optionSample);
+//		conf.set("port", port);
+//		conf.set("multiple", 10);
+//		conf.set("acl", new Dat(new CtrlType[0]));
+//		conf.set("enableAcl", 1);
+//		conf.set("timeOut", 3);
+//		EchoServer echoServer = new EchoServer(conf, oneBind);
 		EchoServer echoServer = new EchoServer(addr, port);
 		echoServer.start();
 
@@ -168,4 +213,5 @@ public final class UdpObjTest {
 		}
 		echoServer.stop();
 	}
+
 }

@@ -16,7 +16,7 @@ import bjd.net.Ip;
 import bjd.net.ProtocolKind;
 import bjd.util.Util;
 
-public final class SockServer extends SockObj {
+public class SockServer extends SockObj {
 
 	private Selector selector = null;
 	private ProtocolKind protocolKind;
@@ -24,7 +24,7 @@ public final class SockServer extends SockObj {
 	private ServerSocketChannel serverChannel = null;
 	private DatagramChannel datagramChannel = null;
 
-	public ProtocolKind getProtocolKind() {
+	public final ProtocolKind getProtocolKind() {
 		return protocolKind;
 	}
 
@@ -42,7 +42,7 @@ public final class SockServer extends SockObj {
 	}
 
 	@Override
-	public void close() {
+	public final void close() {
 		if (serverChannel != null && serverChannel.isOpen()) {
 			try {
 				selector.wakeup();
@@ -67,7 +67,7 @@ public final class SockServer extends SockObj {
 	}
 
 	//SERVER
-	public boolean bind(Ip bindIp, int port, int listenMax) {
+	public final boolean bind(Ip bindIp, int port, int listenMax) {
 		if (protocolKind != ProtocolKind.Tcp) {
 			Util.designProblem(String.format("this object is %s", protocolKind));
 		}
@@ -90,7 +90,7 @@ public final class SockServer extends SockObj {
 		return true;
 	}
 
-	public boolean bind(Ip bindIp, int port) {
+	public final boolean bind(Ip bindIp, int port) {
 		if (protocolKind != ProtocolKind.Udp) {
 			Util.designProblem(String.format("this object is %s", protocolKind));
 		}
@@ -119,7 +119,7 @@ public final class SockServer extends SockObj {
 	}
 
 	//SERVER
-	public SockObj select(ThreadBase threadBase) {
+	public final SockObj select(ThreadBase threadBase) {
 		while (threadBase.isLife()) {
 			int n;
 			try {

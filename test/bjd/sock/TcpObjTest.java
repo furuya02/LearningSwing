@@ -84,7 +84,7 @@ public class TcpObjTest {
 		int max = 1000;
 		byte[] tmp = new byte[max];
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 3; i++) {
 			sockTcp.send(tmp);
 			TestUtil.dispPrompt(this, String.format("tcpObj.send(%dbyte)", tmp.length));
 
@@ -122,7 +122,7 @@ public class TcpObjTest {
 		TestUtil.dispPrompt(this, "tcpObj = new TcpObj()");
 
 		int max = 1000;
-		int loop = 10;
+		int loop = 3;
 		byte[] tmp = new byte[max];
 		for (int i = 0; i < max; i++) {
 			tmp[i] = (byte) i;

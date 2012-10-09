@@ -182,7 +182,7 @@ public class OneServerTest {
 		conf.set("enableAcl", 1);
 		conf.set("timeOut", 3);
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			TestUtil.dispPrompt(this, String.format("new MyServer()"));
 			MyServer myServer = new MyServer(conf, oneBind);
@@ -225,7 +225,7 @@ public class OneServerTest {
 
 		ArrayList<MyClient> ar = new ArrayList<>();
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 4; i++) {
 			System.out.println(String.format("[%d] client.connet()", i) );
 			MyClient myClient = new MyClient(address, port);
 			myClient.connet();
@@ -242,6 +242,4 @@ public class OneServerTest {
 			c.dispose();
 		}
 	}
-
-
 }

@@ -76,7 +76,7 @@ public class SockServerTest {
 //			Ip bindIp = new Ip("INADDR_ANY");
 //			Ip bindIp = new Ip("0.0.0.0");
 //			Ip bindIp = new Ip("::1");
-			final int port = 9999;
+			final int port = 9991;
 			final int listenMax = 10;
 
 			final SockServer sockServer = new SockServer(protocolKind);
@@ -103,7 +103,7 @@ public class SockServerTest {
 			}
 
 			InetSocketAddress localAddress = sockServer.getLocalAddress();
-			assertThat(localAddress.toString(), is("/127.0.0.1:9999"));
+			assertThat(localAddress.toString(), is("/127.0.0.1:9991"));
 			TestUtil.dispPrompt(this, String.format("s.getLocalAddress() = %s bind()後 localAddressの取得が可能になる", localAddress.toString()));
 			
 			InetSocketAddress remoteAddress = sockServer.getRemoteAddress();
