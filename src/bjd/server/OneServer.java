@@ -21,7 +21,6 @@ import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.sock.SockTcp;
 import bjd.sock.SockUdp;
-import bjd.util.Debug;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
@@ -29,17 +28,16 @@ import bjd.util.Debug;
 //****************************************************************
 public abstract class OneServer extends ThreadBase {
 
-	protected OneBind oneBind;
-
-	protected AclList aclList;
-	protected Ssl ssl;
+	private OneBind oneBind;
+	private AclList aclList;
+	private Ssl ssl;
 	private Logger logger;
 	private Conf conf;
 	private SockServer sockServer = null;
+	private int timeout;
 
 	public abstract String getMsg(int messageNo);
 
-	private int timeout;
 
 	//子スレッド管理
 	private Object lock = new Object(); //排他制御用オブジェクト

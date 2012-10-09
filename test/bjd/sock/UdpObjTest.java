@@ -5,15 +5,9 @@ import org.junit.Test;
 import junit.framework.Assert;
 import bjd.Kernel;
 import bjd.ThreadBase;
-import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
-import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.net.Ssl;
-import bjd.option.Conf;
-import bjd.option.Dat;
-import bjd.option.OptionSample;
-import bjd.server.OneServer;
 import bjd.util.TestUtil;
 
 //**************************************************

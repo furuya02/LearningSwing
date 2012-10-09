@@ -17,7 +17,6 @@ import bjd.sock.SockObj;
 import bjd.sock.SockState;
 import bjd.sock.SockTcp;
 import bjd.sock.SockUdp;
-import bjd.util.Debug;
 import bjd.util.TestUtil;
 
 public class OneServerTest2 {
