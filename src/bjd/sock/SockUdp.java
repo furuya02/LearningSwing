@@ -33,13 +33,13 @@ public final class SockUdp extends SockObj {
 
 	//ACCEPT
 	public SockUdp(DatagramChannel channel) {
-
 		sockKind = SockKind.ACCEPT;
 
 		//************************************************
 		//selector/channel生成
 		//************************************************
 		try {
+			set(SockState.Connect,(InetSocketAddress) channel.getLocalAddress(),null);
 			this.channel = channel;
 			this.channel.configureBlocking(false);
 			selector = Selector.open();
@@ -92,6 +92,7 @@ public final class SockUdp extends SockObj {
 		//************************************************
 		InetSocketAddress remoteAddress = new InetSocketAddress(ip.getInetAddress(), port);
 		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), remoteAddress);
+		//set(SockState.Connect, getLocalAddress(), remoteAddress);
 		
 		send(buf);
 		
@@ -135,7 +136,6 @@ public final class SockUdp extends SockObj {
 		recvBuf.clear();
 		try {
 			SocketAddress remoteAddress = channel.receive(recvBuf);
-			Debug.print(this, String.format("addr= %s recvBuf.position()=%d", remoteAddress, recvBuf.position()));
 			//UDPの場合、受信した時点でRemoteAddressが判明する
 			set(SockState.Connect, getLocalAddress(), (InetSocketAddress) remoteAddress);
 		} catch (IOException ex) {

@@ -14,6 +14,7 @@ import bjd.ThreadBase;
 import bjd.net.InetKind;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
+import bjd.util.Debug;
 import bjd.util.Util;
 
 public class SockServer extends SockObj {
@@ -94,6 +95,7 @@ public class SockServer extends SockObj {
 		if (protocolKind != ProtocolKind.Udp) {
 			Util.designProblem(String.format("this object is %s", protocolKind));
 		}
+		//InetSocketAddress l = new InetSocketAddress(bindIp.getInetAddress(), port);
 		try {
 			//************************************************
 			//channel生成
@@ -109,7 +111,10 @@ public class SockServer extends SockObj {
 			//bind
 			//************************************************
 			datagramChannel.socket().bind(new InetSocketAddress(bindIp.getInetAddress(), port));
+			//datagramChannel.socket().bind(l);
 			datagramChannel.register(selector, SelectionKey.OP_READ);
+			
+			//set(SockState.Bind, l, null);
 		} catch (Exception ex) {
 			setException(ex);
 			return false;

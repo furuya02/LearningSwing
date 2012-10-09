@@ -4,11 +4,13 @@ import java.net.InetSocketAddress;
 
 import bjd.log.LogKind;
 import bjd.log.Logger;
+import bjd.util.Debug;
 
 //*******************************************************
 // TcpObj UdpObj の基底クラス
 //*******************************************************
 public abstract class SockObj {
+	
 	//****************************************************************
 	// LastError関連
 	//****************************************************************

@@ -37,7 +37,7 @@ public class OneServerTest {
 		@Override
 		protected void onStopServer() {
 			// TODO 自動生成されたメソッド・スタブ
-			
+
 		}
 
 		@Override
@@ -49,19 +49,20 @@ public class OneServerTest {
 		protected void onSubThread(SockObj sockObj) {
 			while (isLife()) {
 				try {
-					Thread.sleep(0);//これが無いと、別スレッドでlifeをfalseにできない
+					Thread.sleep(0); //これが無いと、別スレッドでlifeをfalseにできない
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				
-				if(sockObj.getSockState()!=SockState.Connect){
+
+				if (sockObj.getSockState() != SockState.Connect) {
 					System.out.println(">>>>>sockAccept.getSockState()!=SockState.Connect");
 					break;
 				}
 			}
 		}
 	}
-	class MyClient{
+
+	class MyClient {
 		private Socket s = null;
 		private String addr;
 		private int port;
@@ -78,7 +79,7 @@ public class OneServerTest {
 			t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					
+
 					try {
 						s = new Socket(addr, port);
 					} catch (IOException e) {
@@ -112,7 +113,7 @@ public class OneServerTest {
 				e1.printStackTrace();
 			}
 			life = false;
-			
+
 			while (t.isAlive()) {
 				try {
 					Thread.sleep(0);
@@ -122,7 +123,6 @@ public class OneServerTest {
 			}
 		}
 	}
-	
 
 	@Test
 	public final void a001() {
@@ -145,18 +145,17 @@ public class OneServerTest {
 			TestUtil.dispPrompt(this, String.format("[i=%d]", i));
 			myServer.start();
 
-//			try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				// TODO 自動生成された catch ブロック
-//				e.printStackTrace();
-//			}
+			//			try {
+			//				Thread.sleep(500);
+			//			} catch (InterruptedException e) {
+			//				// TODO 自動生成された catch ブロック
+			//				e.printStackTrace();
+			//			}
 
 			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(true));
 			assertThat(myServer.getSockState(), is(SockState.Bind));
 
-			
 			myServer.stop();
 			TestUtil.dispPrompt(this, String.format("●sockState=%s", myServer.getSockState()));
 			assertThat(myServer.isRunnig(), is(false));
@@ -167,7 +166,7 @@ public class OneServerTest {
 		TestUtil.dispPrompt(this, String.format("myServer.despose()"));
 		myServer.dispose();
 	}
-	
+
 	@Test
 	public final void a002() {
 
@@ -226,18 +225,18 @@ public class OneServerTest {
 		ArrayList<MyClient> ar = new ArrayList<>();
 
 		for (int i = 0; i < 4; i++) {
-			System.out.println(String.format("[%d] client.connet()", i) );
+			System.out.println(String.format("[%d] client.connet()", i));
 			MyClient myClient = new MyClient(address, port);
 			myClient.connet();
 			ar.add(myClient);
 		}
-		
+
 		System.out.println(String.format("s.count()=%d multiple以上は接続できない", multiple));
 		assertThat(myServer.count(), is(multiple));
 
-		myServer.stop(); 
+		myServer.stop();
 		myServer.dispose();
-		
+
 		for (MyClient c : ar) {
 			c.dispose();
 		}

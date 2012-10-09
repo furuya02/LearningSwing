@@ -21,6 +21,7 @@ import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.sock.SockTcp;
 import bjd.sock.SockUdp;
+import bjd.util.Debug;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
@@ -36,8 +37,6 @@ public abstract class OneServer extends ThreadBase {
 	private Conf conf;
 	private SockServer sockServer = null;
 
-	private boolean isBusy; //排他制御
-
 	public abstract String getMsg(int messageNo);
 
 	private int timeout;
@@ -49,7 +48,7 @@ public abstract class OneServer extends ThreadBase {
 
 	//ステータス表示用
 	@Override
-	public String toString() {
+	public final String toString() {
 		String stat = kernel.getJp() ? "+ サービス中 " : "+ In execution ";
 		if (!isRunnig()) {
 			stat = kernel.getJp() ? "- 停止 " : "- Initialization failure ";
@@ -69,7 +68,7 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	//リモート操作(データの取得)
-	public String cmd(String cmdStr) {
+	public final String cmd(String cmdStr) {
 		return "";
 	}
 
@@ -146,7 +145,7 @@ public abstract class OneServer extends ThreadBase {
 	protected abstract void onStopServer(); //スレッド停止処理
 
 	@Override
-	protected void onStopThread() {
+	protected final void onStopThread() {
 		onStopServer(); //子クラスのスレッド停止処理
 		if (ssl != null) {
 			ssl.dispose();
@@ -158,12 +157,12 @@ public abstract class OneServer extends ThreadBase {
 	protected abstract boolean onStartServer(); //スレッド開始処理
 
 	@Override
-	protected boolean onStartThread() {
+	protected final boolean onStartThread() {
 		return onStartServer(); //子クラスのスレッド開始処理
 	}
 
 	@Override
-	protected void onRunThread() {
+	protected final void onRunThread() {
 
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
@@ -229,9 +228,11 @@ public abstract class OneServer extends ThreadBase {
 
 	private void runUdpServer(int port) {
 
+
 		if (!sockServer.bind(oneBind.getAddr(), port)) {
 			System.out.println(String.format("bind()=false %s", sockServer.getLastEror()));
 		} else {
+
 			while (isLife()) {
 				final SockUdp child = (SockUdp) sockServer.select(this);
 				if (child == null) {
@@ -274,7 +275,7 @@ public abstract class OneServer extends ThreadBase {
 	private String denyAddress = ""; //Ver5.3.5 DoS対処
 
 	//１リクエストに対する子スレッドとして起動される
-	public void subThread(SockObj sockObj) {
+	public final void subThread(SockObj sockObj) {
 
 		try {
 
@@ -283,7 +284,7 @@ public abstract class OneServer extends ThreadBase {
 
 			//_subThreadの中でSockObjは破棄する（ただしUDPの場合は、クローンなのでClose()してもsocketは破棄されない）
 			logger.set(LogKind.Detail, sockObj, 9000002,
-					String.format("count={0} Local={1} Remote={2}", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
+					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
 
 			onSubThread(sockObj); //接続単位の処理
 			sockObj.close();
