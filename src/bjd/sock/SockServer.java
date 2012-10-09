@@ -14,7 +14,6 @@ import bjd.ThreadBase;
 import bjd.net.InetKind;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
-import bjd.util.Debug;
 import bjd.util.Util;
 
 public class SockServer extends SockObj {
@@ -63,11 +62,8 @@ public class SockServer extends SockObj {
 			}
 		}
 		setError("close()");
-
-		setError("close()");
 	}
 
-	//SERVER
 	public final boolean bind(Ip bindIp, int port, int listenMax) {
 		if (protocolKind != ProtocolKind.Tcp) {
 			Util.designProblem(String.format("this object is %s", protocolKind));
@@ -123,7 +119,6 @@ public class SockServer extends SockObj {
 		return true;
 	}
 
-	//SERVER
 	public final SockObj select(ThreadBase threadBase) {
 		while (threadBase.isLife()) {
 			int n;
@@ -138,7 +133,6 @@ public class SockServer extends SockObj {
 				break;
 			} else if (n == 0) {
 				try {
-					//Thread.sleep(300);
 					Thread.sleep(0);
 				} catch (InterruptedException e) {
 					e.printStackTrace();

@@ -15,14 +15,11 @@ import bjd.net.Ssl;
 import bjd.net.TcpQueue;
 import bjd.server.OneServer;
 import bjd.util.Bytes;
+import bjd.util.Util;
 
 public final class SockTcp extends SockObj {
 
-	//ALL
 	private Selector selector = null;
-	//SERVER
-	//private ServerSocketChannel serverChannel = null;
-	//ACCEPT・CLIENT
 	private SocketChannel channel = null; //ACCEPTの場合は、コンストラクタでコピーされる
 	private Object oneSsl;
 	private TcpQueue tcpQueue = new TcpQueue();
@@ -33,21 +30,6 @@ public final class SockTcp extends SockObj {
 		//隠蔽
 	}
 
-	//SERVER
-	/*
-	public TcpObj() {
-		sockKind = sockKind.SERVER;
-		//************************************************
-		//selector生成(channelの生成はbindで行う)
-		//************************************************
-		try {
-			selector = Selector.open();
-		} catch (Exception ex) {
-			setException(ex);
-			return;
-		}
-	}
-	*/
 	//CLIENT
 	public SockTcp(Ip ip, int port, int timeout, Ssl ssl) {
 		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
@@ -145,7 +127,6 @@ public final class SockTcp extends SockObj {
 		t.start();
 	}
 
-	//ACCEPT・CLIENT
 	private void selectLoop() {
 
 		//Acceptの場合は、Connectの間だけループする
@@ -168,7 +149,6 @@ public final class SockTcp extends SockObj {
 		}
 	}
 
-	//ACCEPT・CLIENT
 	private void doRead(SocketChannel channel) {
 		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
 		try {
@@ -190,7 +170,6 @@ public final class SockTcp extends SockObj {
 		}
 	}
 
-	//ACCEPT・CLIENT
 	public int length() {
 		try {
 			Thread.sleep(1); //次の動作が実行されるようにsleepを置く
@@ -201,7 +180,6 @@ public final class SockTcp extends SockObj {
 		return tcpQueue.length();
 	}
 
-	//ACCEPT・CLIENT
 	public byte[] recv(int len, int timeout) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.SECOND, timeout);
@@ -246,7 +224,6 @@ public final class SockTcp extends SockObj {
 		return buffer;
 	}
 
-	//ACCEPT・CLIENT
 	public int send(byte[] buf) {
 		try {
 			if (oneSsl != null) {
@@ -267,7 +244,6 @@ public final class SockTcp extends SockObj {
 		return -1;
 	}
 
-	//ALL
 	@Override
 	public void close() {
 		//ACCEPT・CLIENT
@@ -282,8 +258,8 @@ public final class SockTcp extends SockObj {
 		setError("close()");
 	}
 
-	//TODO 未実装
 	public byte[] lineRecv(int timeout, OperateCrlf yes, OneServer oneServer) {
+		Util.designProblem("未実装");
 		return null;
 	}
 }

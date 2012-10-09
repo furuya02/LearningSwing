@@ -11,19 +11,15 @@ import java.util.Iterator;
 
 import bjd.net.Ip;
 import bjd.net.Ssl;
-import bjd.util.Debug;
 
 public final class SockUdp extends SockObj {
 
 	private SockKind sockKind;
 
-	//ALL
 	private Selector selector = null;
-	//ACCEPT・CLIENT
-	//private SocketChannel channel = null;  //ACCEPTの場合は、コンストラクタでコピーされる
 	private DatagramChannel channel = null;
 	private Object oneSsl;
-	//private TcpQueue tcpQueue = new TcpQueue();
+
 	private ByteBuffer recvBuf = ByteBuffer.allocate(1600);
 
 	@SuppressWarnings("unused")
@@ -39,7 +35,7 @@ public final class SockUdp extends SockObj {
 		//selector/channel生成
 		//************************************************
 		try {
-			set(SockState.Connect,(InetSocketAddress) channel.getLocalAddress(),null);
+			set(SockState.Connect, (InetSocketAddress) channel.getLocalAddress(), null);
 			this.channel = channel;
 			this.channel.configureBlocking(false);
 			selector = Selector.open();
@@ -67,8 +63,9 @@ public final class SockUdp extends SockObj {
 		});
 		t.start();
 	}
+
 	//CLIENT
-	public SockUdp(Ip ip, int port, int timeout, Ssl ssl, byte [] buf) {
+	public SockUdp(Ip ip, int port, int timeout, Ssl ssl, byte[] buf) {
 		//SSL通信を使用する場合は、このオブジェクトがセットされる 通常の場合は、null
 		//this.ssl = ssl;
 
@@ -93,9 +90,9 @@ public final class SockUdp extends SockObj {
 		InetSocketAddress remoteAddress = new InetSocketAddress(ip.getInetAddress(), port);
 		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), remoteAddress);
 		//set(SockState.Connect, getLocalAddress(), remoteAddress);
-		
+
 		send(buf);
-		
+
 		//************************************************
 		//read待機
 		//************************************************
@@ -130,7 +127,7 @@ public final class SockUdp extends SockObj {
 			setException(ex);
 		}
 	}
-	
+
 	//ACCEPT・CLIENT
 	private void doRead(DatagramChannel channel) {
 		recvBuf.clear();
@@ -143,19 +140,17 @@ public final class SockUdp extends SockObj {
 		}
 	}
 
-	//ACCEPT・CLIENT
 	public int length() {
 		return recvBuf.position();
 	}
-	
-	//ACCEPT・CLIENT
+
 	public byte[] recv() {
 		byte[] buf = new byte[recvBuf.position()];
 		recvBuf.flip();
 		recvBuf.get(buf);
 		return buf;
-	}	
-	
+	}
+
 	//ACCEPTのみで使用する　CLIENTは、コンストラクタで送信する
 	public int send(byte[] buf) {
 		try {
@@ -175,7 +170,6 @@ public final class SockUdp extends SockObj {
 		return -1;
 	}
 
-	//ALL
 	@Override
 	public void close() {
 		//ACCEPT

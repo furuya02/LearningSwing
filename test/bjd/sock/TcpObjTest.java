@@ -14,7 +14,7 @@ import bjd.util.TestUtil;
 //**************************************************
 // Echoサーバを使用したテスト
 //**************************************************
-public class TcpObjTest {
+public final class TcpObjTest {
 	class EchoServer extends ThreadBase {
 		private SockServer sockServer;
 		private String addr;
