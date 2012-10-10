@@ -36,6 +36,10 @@ public abstract class OneServer extends ThreadBase {
 	private SockServer sockServer = null;
 	private int timeout;
 
+	protected Conf getConf() {
+		return conf;
+	}
+	
 	public abstract String getMsg(int messageNo);
 
 
