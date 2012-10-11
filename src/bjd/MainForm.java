@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -142,6 +143,7 @@ public final class MainForm implements WindowListener {
 		}
 		kernel.dispose();
 		System.exit(0);
+		
 	}
 
 	public void test() {
@@ -160,7 +162,11 @@ public final class MainForm implements WindowListener {
 			}
 		});
 	}
-
+	
+	public void test2() {
+		String s = System.getProperty("user.dir") + File.separator + "plugins";
+		Msg.show(MsgKind.Infomation,s);
+	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowActivated()"));
@@ -196,5 +202,8 @@ public final class MainForm implements WindowListener {
 	public void windowOpened(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowOpend()"));
 	}
+
+
+
 
 }

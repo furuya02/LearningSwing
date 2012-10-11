@@ -16,6 +16,10 @@
 //import org.junit.experimental.theories.Theory;
 //import org.junit.runner.RunWith;
 //
+
+class example{
+	
+}
 //
 //@RunWith(Enclosed.class)
 //public class ListValTest {

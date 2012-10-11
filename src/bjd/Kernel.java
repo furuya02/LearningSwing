@@ -337,6 +337,7 @@ public final class Kernel implements IDispose {
                 	mainForm.test();
                     break;
                 case "Help_Homepage":
+                	mainForm.test2();
                     //Process.Start(Define.WebHome());
                     break;
                 case "Help_Document":
