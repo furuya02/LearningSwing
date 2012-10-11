@@ -164,8 +164,8 @@ public final class MainForm implements WindowListener {
 	}
 	
 	public void test2() {
-		String s = System.getProperty("user.dir") + File.separator + "plugins";
-		Msg.show(MsgKind.Infomation,s);
+		//String s = System.getProperty("user.dir") + File.separator + "plugins";
+		Msg.show(MsgKind.Infomation,kernel.getProgDir());
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
