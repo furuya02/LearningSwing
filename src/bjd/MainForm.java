@@ -171,7 +171,7 @@ public final class MainForm implements WindowListener {
 	public void windowActivated(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowActivated()"));
 	}
-
+	
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowClosed()"));
