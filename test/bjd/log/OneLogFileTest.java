@@ -12,7 +12,7 @@ import org.junit.Test;
 import bjd.util.TestUtil;
 import bjd.util.Util;
 
-public class OneLogFileTest {
+public final class OneLogFileTest {
 
     @Test
     public void a001() {

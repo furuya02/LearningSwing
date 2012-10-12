@@ -13,20 +13,20 @@ import bjd.net.Ip;
 import bjd.net.ProtocolKind;
 import bjd.util.TestUtil;
 
-public class SockServerTest {
+public final class SockServerTest {
 
 	@Test
-	public void Test() {
+	public void test() {
 		Execute execute = new Execute();
-		execute.StartStop("a001 TCPサーバの 起動・停止時のSockState()の確認",ProtocolKind.Tcp);
-		execute.StartStop("a002 UDPサーバの 起動・停止時のSockState()の確認",ProtocolKind.Udp);
-		execute.GetLocalAddress("a003 TCPサーバのgetLocalAddress()の確認",ProtocolKind.Tcp);
-		execute.GetLocalAddress("a004 UDPサーバのgetLocalAddress()の確認",ProtocolKind.Udp);
+		execute.startStop("a001 TCPサーバの 起動・停止時のSockState()の確認", ProtocolKind.Tcp);
+		execute.startStop("a002 UDPサーバの 起動・停止時のSockState()の確認", ProtocolKind.Udp);
+		execute.getLocalAddress("a003 TCPサーバのgetLocalAddress()の確認", ProtocolKind.Tcp);
+		execute.getLocalAddress("a004 UDPサーバのgetLocalAddress()の確認", ProtocolKind.Udp);
 	}
-	
-	class Execute{
-		public void StartStop(String title,final ProtocolKind protocolKind){
-			
+
+	class Execute {
+		public void startStop(String title, final ProtocolKind protocolKind) {
+
 			TestUtil.dispHeader(title);
 
 			final Ip bindIp = new Ip("127.0.0.1");
@@ -41,10 +41,10 @@ public class SockServerTest {
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					if(protocolKind == ProtocolKind.Tcp){
-						sockServer.bind(bindIp,port,listenMax);
-					}else{
-						sockServer.bind(bindIp,port);
+					if (protocolKind == ProtocolKind.Tcp) {
+						sockServer.bind(bindIp, port, listenMax);
+					} else {
+						sockServer.bind(bindIp, port);
 					}
 				}
 			});
@@ -68,32 +68,32 @@ public class SockServerTest {
 			assertThat(sockServer.getSockState(), is(SockState.Error));
 			TestUtil.dispPrompt(this, String.format("getSockState()=%s", sockServer.getSockState()));
 		}
-		
-		public void GetLocalAddress(String title,final ProtocolKind protocolKind){
+
+		public void getLocalAddress(String title, final ProtocolKind protocolKind) {
 			TestUtil.dispHeader(title);
 
 			final Ip bindIp = new Ip("127.0.0.1");
-//			Ip bindIp = new Ip("INADDR_ANY");
-//			Ip bindIp = new Ip("0.0.0.0");
-//			Ip bindIp = new Ip("::1");
+			//			Ip bindIp = new Ip("INADDR_ANY");
+			//			Ip bindIp = new Ip("0.0.0.0");
+			//			Ip bindIp = new Ip("::1");
 			final int port = 9991;
 			final int listenMax = 10;
 
 			final SockServer sockServer = new SockServer(protocolKind);
-			TestUtil.dispPrompt(this, String.format("s = new SockServer(%s)",protocolKind));
+			TestUtil.dispPrompt(this, String.format("s = new SockServer(%s)", protocolKind));
 
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					if(protocolKind == ProtocolKind.Tcp){
-						sockServer.bind(bindIp,port,listenMax);
-					}else{
-						sockServer.bind(bindIp,port);
+					if (protocolKind == ProtocolKind.Tcp) {
+						sockServer.bind(bindIp, port, listenMax);
+					} else {
+						sockServer.bind(bindIp, port);
 					}
 				}
 			});
 			t.start();
-			
+
 			while (sockServer.getSockState() == SockState.Idle) {
 				try {
 					Thread.sleep(200);
@@ -105,13 +105,13 @@ public class SockServerTest {
 			InetSocketAddress localAddress = sockServer.getLocalAddress();
 			assertThat(localAddress.toString(), is("/127.0.0.1:9991"));
 			TestUtil.dispPrompt(this, String.format("s.getLocalAddress() = %s bind()後 localAddressの取得が可能になる", localAddress.toString()));
-			
+
 			InetSocketAddress remoteAddress = sockServer.getRemoteAddress();
 			Assert.assertNull(remoteAddress);
 			TestUtil.dispPrompt(this, String.format("s.getRemoteAddress() = %s SockServerでは、remoteＡｄｄｒｅｓｓは常にnullになる", remoteAddress));
 
-			sockServer.close(); 
-			
+			sockServer.close();
+
 		}
 	}
 }

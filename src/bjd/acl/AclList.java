@@ -30,27 +30,27 @@ public final class AclList {
 				if (ipStr.equals("*")) { //全部
 					Acl acl = new AclV4(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj)null, 9000034, String.format("Name:%s Address %s", name, ipStr));
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV4.add(acl);
 					}
 					acl = new AclV6(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj)null, 9000034, String.format("Name:%s Address %s", name, ipStr));
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV6.add(acl);
 					}
 				} else if (ipStr.indexOf('.') != -1) { //IPv4ルール
 					Acl acl = new AclV4(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj)null, 9000034, String.format("Name:%s Address %s", name, ipStr));
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV4.add(acl);
 					}
 				} else { //IPv6ルール
 					Acl acl = new AclV6(name, ipStr);
 					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj)null, 9000034, String.format("Name:%s Address %s", name, ipStr));
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					} else {
 						arV6.add(acl);
 					}
@@ -107,11 +107,11 @@ public final class AclList {
 		}
 
 		if (!enable && acl == null) {
-			logger.set(LogKind.Secure, (SockObj)null, 9000017, String.format("address:%s", ip.toString())); //このアドレスからのリクエストは許可されていません
+			logger.set(LogKind.Secure, (SockObj) null, 9000017, String.format("address:%s", ip.toString())); //このアドレスからのリクエストは許可されていません
 			return false;
 		}
 		if (enable && acl != null) {
-			logger.set(LogKind.Secure,(SockObj) null, 9000018, String.format("user:%s address:%s", acl.getName(), ip.toString())); //この利用者のアクセスは許可されていません
+			logger.set(LogKind.Secure, (SockObj) null, 9000018, String.format("user:%s address:%s", acl.getName(), ip.toString())); //この利用者のアクセスは許可されていません
 			return false;
 		}
 		return true;

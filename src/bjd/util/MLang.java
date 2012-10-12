@@ -114,9 +114,9 @@ public final class MLang {
 		for (int i = 0; i < len; i++) {
 			int b1 = bytes[i] & 0xFF; //byte b1 = bytes[i];
 			if (b1 <= 0x7F) { //ASCII
-				;
+			
 			} else if (0xA1 <= b1 && b1 <= 0xDF) { //半角カタカナ
-				;
+
 			} else if (i < len - 1) {
 				int b2 = bytes[i + 1] & 0xFF; //byte b2 = bytes[i + 1];
 				//第1バイト: 0x81～0x9F、0xE0～0xFC 第2バイト: 0x40～0x7E、0x80～0xFC

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -27,7 +26,6 @@ public final class MainForm implements WindowListener {
 	public JFrame getFrame() {
 		return frame;
 	}
-
 
 	/**
 	 * Launch the application.
@@ -57,7 +55,7 @@ public final class MainForm implements WindowListener {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,8 +77,7 @@ public final class MainForm implements WindowListener {
 		listView.setColWidth(5, 70);
 		listView.setColWidth(6, 200);
 		listView.setColWidth(7, 300);
-		
-        
+
 		for (int i = 0; i < 100; i++) {
 			listView.itemAdd(new String[] { "1234567890", "abcdefghikl", "c" });
 		}
@@ -94,10 +91,10 @@ public final class MainForm implements WindowListener {
 
 		kernel = new Kernel(this, listView, menuBar);
 
-//		frame.getContentPane().add(listView);
+		//		frame.getContentPane().add(listView);
 
-//		StatusBar bar = new StatusBar();
-//		frame.getContentPane().add(bar, BorderLayout.PAGE_END);
+		//		StatusBar bar = new StatusBar();
+		//		frame.getContentPane().add(bar, BorderLayout.PAGE_END);
 
 		// appFunc.dispose();
 		// appMeu.dispase();
@@ -143,7 +140,7 @@ public final class MainForm implements WindowListener {
 		}
 		kernel.dispose();
 		System.exit(0);
-		
+
 	}
 
 	public void test() {
@@ -162,16 +159,17 @@ public final class MainForm implements WindowListener {
 			}
 		});
 	}
-	
+
 	public void test2() {
 		//String s = System.getProperty("user.dir") + File.separator + "plugins";
-		Msg.show(MsgKind.Infomation,kernel.getProgDir());
+		Msg.show(MsgKind.Infomation, kernel.getProgDir());
 	}
+
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowActivated()"));
 	}
-	
+
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowClosed()"));
@@ -202,8 +200,5 @@ public final class MainForm implements WindowListener {
 	public void windowOpened(WindowEvent arg0) {
 		//System.out.println(String.format("mainForm.windowOpend()"));
 	}
-
-
-
 
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="MS932" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
     <jar path="LearningSwing/bin/plugins/SampleServer.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/LearningSwing/src/sample/SampleServer.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>

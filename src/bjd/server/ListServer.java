@@ -19,11 +19,4 @@ public final class ListServer extends ListBase<OneServer> implements IDispose {
 		Util.designProblem(String.format("nameTag=%s", nameTag));
 		return null;
 	}
-
-	@Override
-	public void dispose() {
-		//Stop();
-		super.dispose();
-	}
-
 }

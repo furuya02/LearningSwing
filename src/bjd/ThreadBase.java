@@ -22,7 +22,7 @@ public abstract class ThreadBase implements IDispose, ILogger, ILife {
 		logger = kernel.createLogger(nameTag, true, this);
 	}
 
-	public String getNameTag() {
+	public final String getNameTag() {
 		return nameTag;
 	}
 
@@ -32,11 +32,10 @@ public abstract class ThreadBase implements IDispose, ILogger, ILife {
 
 	//時間を要するループがある場合、ループ条件で値がtrueであることを確認する
 	//falseになったら直ちにループを中断する
-	public boolean isLife() {
+	public final boolean isLife() {
 		return life;
 	}
-
-	@Override
+	//Override可能
 	public void dispose() {
 		stop();
 	}

@@ -17,8 +17,8 @@
 //import org.junit.runner.RunWith;
 //
 
-class example{
-	
+class example {
+
 }
 //
 //@RunWith(Enclosed.class)
@@ -58,7 +58,7 @@ class example{
 //		}
 //	}
 
-	//TestUtil.dispHeader("TODO TEST example");
-	//fail("まだ実装されていません");
+//TestUtil.dispHeader("TODO TEST example");
+//fail("まだ実装されていません");
 //}
 

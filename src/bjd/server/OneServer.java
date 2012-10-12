@@ -33,13 +33,13 @@ public abstract class OneServer extends ThreadBase {
 
 	private OneBind oneBind;
 	private AclList aclList;
-	private Ssl ssl;
+	private Ssl ssl = null;
 	private Logger logger;
 	private Conf conf;
 	private SockServer sockServer = null;
 	private int timeout;
 
-	protected Conf getConf() {
+	protected final Conf getConf() {
 		return conf;
 	}
 	
@@ -105,18 +105,18 @@ public abstract class OneServer extends ThreadBase {
 			this.oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
 		}
 
-		this.logger = kernel.createLogger(nameTag, (boolean) conf.get("useDetailsLog"), this);
-		multiple = (int) conf.get("multiple");
+		this.logger = kernel.createLogger(nameTag, (boolean) this.conf.get("useDetailsLog"), this);
+		multiple = (int) this.conf.get("multiple");
 
 		//ACLリスト
 		try {
 			//定義が存在するかどうかのチェック
-			Dat acl = (Dat) conf.get("acl");
-			aclList = new AclList(acl, (int) conf.get("enableAcl"), logger);
+			Dat acl = (Dat) this.conf.get("acl");
+			aclList = new AclList(acl, (int) this.conf.get("enableAcl"), logger);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		timeout = (int) conf.get("timeOut");
+		timeout = (int) this.conf.get("timeOut");
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package bjd.plugin;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -12,13 +11,10 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
-import sample.Server;
-
-import bjd.option.OneOption;
 import bjd.server.OneServer;
 import bjd.util.FileSearch;
 
-public class Plugin {
+public final class Plugin {
 
 	private ArrayList<String> ar = new ArrayList<>();
 
@@ -57,10 +53,10 @@ public class Plugin {
 				JarFile jar = new JarFile(file);
 				Manifest mf = jar.getManifest();
 				Attributes att = mf.getMainAttributes();
-				String cname = "sample.Server";att.getValue("Plugin-Class");
+				String cname = "sample.Server";
+				att.getValue("Plugin-Class");
 				URL url = file.getCanonicalFile().toURI().toURL();
-				URLClassLoader loader = new URLClassLoader(
-						new URL[] { url });
+				URLClassLoader loader = new URLClassLoader(new URL[] { url });
 				Class cobj = loader.loadClass(cname);
 				Class[] ifnames = cobj.getInterfaces();
 				//for (int j = 0; j < ifnames.length; j++) {
@@ -71,36 +67,36 @@ public class Plugin {
 				//		plugins.add(plugin);
 				//		break;
 				//	}
-				OneServer oneServer = (OneServer)cobj.newInstance();  
+				OneServer oneServer = (OneServer) cobj.newInstance();
 				//Object newInstance = cobj.newInstance();
 				//OneServer oneServer = (OneServer)cobj.newInstance();
+				int x = 0;
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		/*ar.add(file.getPath());
+		String[] classNameList = getClassNameList(file);
+		for (String className : classNameList) {
+			OneServer oneServer = null;
+			OneOption oneOption = null;
+			
+		    //JarFile jar = new JarFile(file);
+		    //Manifest mf = jar.getManifest();
+		    //Attributes att = mf.getMainAttributes();
+		    //String cname = att.getValue("Plugin-Class");
+			try {
+				URL url = file.getCanonicalFile().toURI().toURL();
+				URLClassLoader loader = new URLClassLoader( new URL[] { url });
+				Class cobj = loader.loadClass("sample.Server");
+				
+				Server a = (Server) cobj.newInstance();
+
 				int x=0;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		}			
-			/*ar.add(file.getPath());
-			String[] classNameList = getClassNameList(file);
-			for (String className : classNameList) {
-				OneServer oneServer = null;
-				OneOption oneOption = null;
-				
-                //JarFile jar = new JarFile(file);
-                //Manifest mf = jar.getManifest();
-                //Attributes att = mf.getMainAttributes();
-                //String cname = att.getValue("Plugin-Class");
-				try {
-					URL url = file.getCanonicalFile().toURI().toURL();
-					URLClassLoader loader = new URLClassLoader( new URL[] { url });
-					Class cobj = loader.loadClass("sample.Server");
-					
-					Server a = (Server) cobj.newInstance();
-
-					int x=0;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}*/
+		}*/
 	}
 
 	public int length() {

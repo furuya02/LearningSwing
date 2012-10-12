@@ -10,10 +10,10 @@ public final class TcpQueue {
 
 	private Object lock = new Object(); // 排他制御
 
-	public static int MAX(){
+	public static int MAX() {
 		return max;
 	}
-	
+
 	//空いているスペース
 	public int getSpace() {
 		return max - db.length;
@@ -44,7 +44,6 @@ public final class TcpQueue {
 			return len;
 		}
 	}
-
 
 	//キューからのデータ取得
 	public byte[] dequeue(int len) {

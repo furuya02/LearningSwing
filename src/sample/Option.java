@@ -13,7 +13,7 @@ import bjd.option.Crlf;
 import bjd.option.OneOption;
 import bjd.option.OneVal;
 
-public class Option extends OneOption{
+public final class Option extends OneOption {
 
 	@Override
 	public String getJpMenu() {
@@ -30,13 +30,13 @@ public class Option extends OneOption{
 		return 'Z';
 	}
 
-	public Option(Kernel kernel, String path, String nameTag){
-		super(kernel,path,nameTag);
-		
+	public Option(Kernel kernel, String path, String nameTag) {
+		super(kernel, path, nameTag);
+
 		ArrayList<OnePage> pageList = new ArrayList<>();
 
-		add(new OneVal("useServer",false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "SAMPLEサーバを使用する" : "Use Sample Server")));
-		
+		add(new OneVal("useServer", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "SAMPLEサーバを使用する" : "Use Sample Server")));
+
 		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
 		pageList.add(pageAcl());
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));

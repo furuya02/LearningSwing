@@ -4,12 +4,6 @@ import java.awt.Font;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.print.DocFlavor;
-import javax.print.DocFlavor.URL;
 import javax.swing.JMenuBar;
 
 import bjd.ctrl.ListView;
@@ -98,10 +92,10 @@ public final class Kernel implements IDispose {
 	public void init(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
 		this.mainForm = mainForm;
 		//        MailBox = null;//実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
-		traceDlg = null;//トレース表示
+		traceDlg = null; //トレース表示
 		//        Ver = null;//バージョン管理
 		this.menu = null; //メニュー管理クラス
-		remoteServer = null;//クライアントへ接続中のみオブジェクトが存在する
+		remoteServer = null; //クライアントへ接続中のみオブジェクトが存在する
 		//        RemoteClient = null;//リモートクライアント
 		//
 		//動作モードの初期化
@@ -274,7 +268,7 @@ public final class Kernel implements IDispose {
 				Package pack = this.getClass().getPackage();
 				if (pack == null) { //無名パッケージ
 					return classFile.getParentFile().toString();
-				}else { //パッケージ名がある場合、階層の分だけ上に上がる
+				} else { //パッケージ名がある場合、階層の分だけ上に上がる
 					String packName = pack.getName();
 					String[] words = packName.split("\\.");
 					File dir = classFile.getParentFile();

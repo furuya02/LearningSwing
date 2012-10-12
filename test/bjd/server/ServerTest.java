@@ -14,7 +14,7 @@ import bjd.sock.SockObj;
 import bjd.sock.SockState;
 import bjd.util.TestUtil;
 
-public class ServerTest {
+public final class ServerTest {
 	
 	//サーバ動作確認用
 	class MyServer extends OneServer {
