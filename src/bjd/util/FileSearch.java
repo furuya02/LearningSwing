@@ -22,7 +22,7 @@ public final class FileSearch {
 		return func(path, pattern);
 	}
 
-	public File[] func(String path, String pattern) {
+	private File[] func(String path, String pattern) {
 		for (File file : (new File(path)).listFiles()) {
 			if (pattern != null && !file.getName().matches(pattern)) {
 				continue;

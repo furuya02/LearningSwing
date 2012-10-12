@@ -7,15 +7,18 @@ import java.util.Calendar;
 import bjd.Kernel;
 import bjd.ThreadBase;
 import bjd.acl.AclList;
+import bjd.ctrl.CtrlType;
 import bjd.log.LogKind;
 import bjd.log.Logger;
 import bjd.log.OneLog;
+import bjd.net.Ip;
 import bjd.net.OneBind;
 import bjd.net.OperateCrlf;
 import bjd.net.ProtocolKind;
 import bjd.net.Ssl;
 import bjd.option.Conf;
 import bjd.option.Dat;
+import bjd.option.OptionSample;
 import bjd.sock.SockObj;
 import bjd.sock.SockServer;
 import bjd.sock.SockState;
@@ -87,8 +90,22 @@ public abstract class OneServer extends ThreadBase {
 
 		this.conf = conf;
 		this.oneBind = oneBind;
-		this.logger = kernel.createLogger(nameTag, (boolean) conf.get("useDetailsLog"), this);
+		//DEBUG用
+		if (this.conf == null) {
+			OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+			this.conf = new Conf(optionSample);
+			this.conf.set("port", 9990);
+			this.conf.set("multiple", 10);
+			this.conf.set("acl", new Dat(new CtrlType[0]));
+			this.conf.set("enableAcl", 1);
+			this.conf.set("timeOut", 3);
+		}
+		//DEBUG用
+		if (this.oneBind == null) {
+			this.oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+		}
 
+		this.logger = kernel.createLogger(nameTag, (boolean) conf.get("useDetailsLog"), this);
 		multiple = (int) conf.get("multiple");
 
 		//ACLリスト

@@ -1,8 +1,12 @@
 package sample;
 
 import bjd.Kernel;
+import bjd.net.Ip;
 import bjd.net.OneBind;
+import bjd.net.ProtocolKind;
 import bjd.option.Conf;
+import bjd.option.OneOption;
+import bjd.option.OptionSample;
 import bjd.server.OneServer;
 import bjd.sock.SockObj;
 import bjd.sock.SockTcp;
@@ -12,6 +16,9 @@ public class Server extends OneServer {
 	public Server(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
 		super(kernel, nameTag, conf, oneBind);
 
+	}
+	public Server(){
+		super(new Kernel(), "nameTag",null,null);
 	}
 
 	//	//リモート操作（データの取得）Toolダイログとのデータ送受
