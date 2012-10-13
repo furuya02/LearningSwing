@@ -2,6 +2,7 @@ package bjd.acl;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -10,6 +11,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.acl.AclV4Test.A003.Fixture;
 import bjd.net.Ip;
 import bjd.util.TestUtil;
 
@@ -97,6 +99,45 @@ public class AclV6Test {
 			assertThat(aclV6.isHit(new Ip(fx.ipStr)), is(fx.expected));
 		}
 	}
+	
+	@RunWith(Theories.class)
+	public static final class A003 {
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("無効な文字列で初期化した場合に例外が発生するかの検証"); //TESTヘッダ
+		}
+
+		@DataPoints
+		public static Fixture[] datas = {
+				//コントロールの種類,デフォルト値,toRegの出力
+				new Fixture("192.168.0.1"),
+				new Fixture("x"),
+				new Fixture("::1-234"),
+				new Fixture("::1/200"),
+		};
+		static class Fixture {
+			private String aclStr;
+
+			public Fixture(String aclStr) {
+				this.aclStr = aclStr;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+			TestUtil.dispPrompt(this); //TESTプロンプト
+			try {
+				@SuppressWarnings("unused")
+				AclV6 aclV6 = new AclV6("test", fx.aclStr);
+				Assert.fail("この行が実行されたらエラー");
+			} catch (IllegalArgumentException ex) {
+				System.out.printf("new AclV6(%s) => IllegalArgumentException\n", fx.aclStr);
+				return;
+			}
+			Assert.fail("この行が実行されたらエラー");
+		}
+	}
+
 
 }
 

@@ -51,7 +51,7 @@ public final class MainForm implements WindowListener {
 	 */
 	private MainForm() {
 		initialize();
-
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

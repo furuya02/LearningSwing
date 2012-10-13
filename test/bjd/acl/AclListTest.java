@@ -30,8 +30,10 @@ public class AclListTest {
 		public static Fixture[] datas = {
 				//コントロールの種類,デフォルト値,toRegの出力
 				new Fixture("192.168.0.1", "192.168.0.1", true),
+				new Fixture("192.168.0.300", "192.168.0.1", false), //無効リスト
 				new Fixture("192.168.0.0/24", "192.168.0.1", true),
 				new Fixture("192.168.1.0/24", "192.168.0.1", false),
+				new Fixture("192.168.1.0/200", "192.168.1.0", false), //無効リスト
 				new Fixture("192.168.0.0-192.168.0.100", "192.168.0.1", true),
 				new Fixture("192.168.0.2-192.168.0.100", "192.168.0.1", false),
 				new Fixture("192.168.0.0-192.168.2.100", "192.168.0.1", true),
@@ -43,6 +45,7 @@ public class AclListTest {
 				new Fixture("192.*.*.*", "192.168.0.1", true),
 				new Fixture("*.*.*.*", "192.168.0.1", true),
 				new Fixture("*", "192.168.0.1", true),
+				new Fixture("xxx", "192.168.0.1", false), //無効リスト
 				new Fixture("172.*.*.*", "192.168.0.1", false),
 		};
 		static class Fixture {

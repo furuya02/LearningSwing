@@ -1,5 +1,6 @@
 package bjd.acl;
 
+import bjd.net.InetKind;
 import bjd.net.Ip;
 
 /**
@@ -18,24 +19,25 @@ import bjd.net.Ip;
  * @author SIN
  *
  */
-public final class AclV4 extends Acl {
+final class AclV4 extends Acl {
 
 	/**
 	 * コンストラクタ
-	 * 初期化文字列によってstart、endが設定され、初期化に成功した場合にstatusがtrueとなる
+	 * 初期化文字列によってstart、endが設定される
 	 * 
 	 * @param name 名前
 	 * @param ipStr IPアドレス範囲を示す初期化文字列
+	 * @throws パラメータが不正に初期化に失敗した場合 IllegalArgumentExceptionがスローされる
 	 * 
 	 */
-	public AclV4(String name, String ipStr) {
+	AclV4(String name, String ipStr) throws IllegalArgumentException {
 		super(name);
 
 		//「*」によるALL指定
 		if (ipStr.equals("*") || ipStr.equals("*.*.*.*")) {
 			setStart(new Ip("0.0.0.0"));
 			setEnd(new Ip("255.255.255.255"));
-			setStatus(true);
+			//setStatus(true);
 			return; //初期化成功
 		}
 
@@ -57,7 +59,7 @@ public final class AclV4 extends Acl {
 			//************************************************************
 			tmp = ipStr.split("-");
 			if (tmp.length != 2) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 			setStart(new Ip(tmp[0]));
 			String strTo = tmp[1];
@@ -68,15 +70,16 @@ public final class AclV4 extends Acl {
 			} else if (tmp.length == 1) { //100
 				//try {
 				int n = Integer.valueOf(strTo);
-				//if(n < 0 || 255 < n)
-				//    return;//初期化失敗
+				if (n < 0 || 255 < n) {
+					throwException(ipStr); //初期化失敗
+				}
 				strTo = String.format("%d.%d.%d.%d", getStart().getIpV4()[0] & 0xFF, getStart().getIpV4()[1] & 0xFF, getStart().getIpV4()[2] & 0xFF, n);
 				setEnd(new Ip(strTo));
 				if (!getEnd().getStatus()) {
-					return; //初期化失敗
+					throwException(ipStr); //初期化失敗
 				}
 			} else {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 
 			//開始アドレスが終了アドレスより大きい場合、入れ替える
@@ -90,18 +93,19 @@ public final class AclV4 extends Acl {
 			//************************************************************
 			tmp = ipStr.split("/");
 			if (tmp.length != 2) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 			String strIp = tmp[0];
 			String strMask = tmp[1];
 
-			//TODO uint から intにした場合の影響はまだ未確認
-			//uint mask = 0;
-			//uint xor;
 			int mask = 0;
-			int xor;
+			int xor = 0;
 			try {
 				int m = Integer.valueOf(strMask);
+				if (m < 0 || 32 < m) {
+					//マスクは32ビットが最大
+					throwException(ipStr); //初期化失敗
+				}
 				for (int i = 0; i < 32; i++) {
 					if (i != 0) {
 						mask = mask << 1;
@@ -112,11 +116,11 @@ public final class AclV4 extends Acl {
 				}
 				xor = (0xffffffff ^ mask);
 			} catch (Exception ex) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 			Ip ip = new Ip(strIp);
 			if (!ip.getStatus()) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 			setStart(new Ip(ip.getAddrV4() & mask));
 			setEnd(new Ip(ip.getAddrV4() | xor));
@@ -128,21 +132,29 @@ public final class AclV4 extends Acl {
 			setEnd(new Ip(ipStr));
 		}
 		if (!getStart().getStatus()) {
-			return; //初期化失敗
+			throwException(ipStr); //初期化失敗
 		}
 		if (!getEnd().getStatus()) {
-			return; //初期化失敗
+			throwException(ipStr); //初期化失敗
 		}
 		//最終チェック
+
+		if (getStart().getInetKind() != InetKind.V4) {
+			throwException(ipStr); //初期化失敗
+		}
+		if (getStart().getInetKind() != InetKind.V4) {
+			throwException(ipStr); //初期化失敗
+		}
+
 		if (getStart().getAddrV4() != 0 || getEnd().getAddrV4() != 0) {
 			if (getStart().getAddrV4() <= getEnd().getAddrV4()) {
-				setStatus(true); //初期化成功
+				return; //setStatus(true); //初期化成功
 			}
 		}
 	}
 
 	@Override
-	public boolean isHit(Ip ip) {
+	boolean isHit(Ip ip) {
 
 		long longIp = ip.getAddrV4() & 0xFFFFFFFFL;
 		long longStart = getStart().getAddrV4() & 0xFFFFFFFFL;

@@ -69,7 +69,6 @@ public final class Plugin {
 				//cobj = loader.loadClass("sample.Option");
 				//oneOption = (OneOption) cobj.newInstance();
 
-				int x=0;
 				
 			} catch (Exception ex) {
 				ex.printStackTrace();

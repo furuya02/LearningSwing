@@ -2,6 +2,7 @@ package bjd.acl;
 
 import java.math.BigInteger;
 
+import bjd.net.InetKind;
 import bjd.net.Ip;
 
 /**
@@ -19,24 +20,25 @@ import bjd.net.Ip;
  * @author SIN
  *
  */
-public final class AclV6 extends Acl {
+final class AclV6 extends Acl {
 
 	/**
 	 * コンストラクタ
-	 * 初期化文字列によってstart、endが設定され、初期化に成功した場合にstatusがtrueとなる
+	 * 初期化文字列によってstart、endが設定される
 	 * 
 	 * @param name 名前
 	 * @param ipStr IPアドレス範囲を示す初期化文字列
+	 * @throws パラメータが不正に初期化に失敗した場合 IllegalArgumentExceptionががスローされる
 	 * 
 	 */
-	public AclV6(String name, String ipStr) {
+	AclV6(String name, String ipStr) throws IllegalArgumentException  {
 		super(name);
 
 		//「*」によるALL指定
 		if (ipStr.equals("*") || ipStr.equals("*:*:*:*:*:*:*:*")) {
 			setStart(new Ip("::0"));
 			setEnd(new Ip("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"));
-			setStatus(true);
+			//setStatus(true);
 			return; //初期化成功
 		}
 
@@ -47,7 +49,7 @@ public final class AclV6 extends Acl {
 			//************************************************************
 			tmp = ipStr.split("-");
 			if (tmp.length != 2) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 
 			setStart(new Ip(tmp[0]));
@@ -70,7 +72,7 @@ public final class AclV6 extends Acl {
 			//************************************************************
 			tmp = ipStr.split("/");
 			if (tmp.length != 2) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 
 			String strIp = tmp[0];
@@ -78,10 +80,15 @@ public final class AclV6 extends Acl {
 
 			long maskH = 0;
 			long maskL = 0;
-			long xorH;
-			long xorL;
+			long xorH = 0;
+			long xorL = 0;
 			try {
 				long m = Long.valueOf(strMask);
+				if (m < 0 || 128 < m) {
+					//マスクは128ビットが最大
+					throwException(ipStr); //初期化失敗
+				}
+
 				for (long i = 0; i < 64; i++) {
 					if (i != 0) {
 						maskH = maskH << 1;
@@ -102,11 +109,11 @@ public final class AclV6 extends Acl {
 				}
 				xorL = (0xffffffffffffffffL ^ maskL);
 			} catch (Exception ex) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 			Ip ip = new Ip(strIp);
 			if (!ip.getStatus()) {
-				return; //初期化失敗
+				throwException(ipStr); //初期化失敗
 			}
 			setStart(new Ip(ip.getAddrV6H() & maskH, ip.getAddrV6L() & maskL));
 			setEnd(new Ip(ip.getAddrV6H() | xorH, ip.getAddrV6L() | xorL));
@@ -118,18 +125,25 @@ public final class AclV6 extends Acl {
 			setEnd(new Ip(ipStr));
 		}
 		if (!getStart().getStatus()) {
-			return; //初期化失敗
+			throwException(ipStr); //初期化失敗
 		}
 		if (!getEnd().getStatus()) {
-			return; //初期化失敗
+			throwException(ipStr); //初期化失敗
+		}
+
+		if (getStart().getInetKind() != InetKind.V6) {
+			throwException(ipStr); //初期化失敗
+		}
+		if (getStart().getInetKind() != InetKind.V6) {
+			throwException(ipStr); //初期化失敗
 		}
 
 		//最終チェック
-		setStatus(true); //初期化成功
+		//setStatus(true); //初期化成功
 	}
 
 	@Override
-	public boolean isHit(Ip ip) {
+	boolean isHit(Ip ip) {
 
 		BigInteger bigIp = new BigInteger(ip.getIpV6());
 		BigInteger bigStart = new BigInteger(getStart().getIpV6());

@@ -12,6 +12,7 @@ import bjd.option.OneDat;
 import bjd.sock.SockObj;
 /**
  * 複数のACLを保持して、範囲に該当するかどうかをチェックする
+ * ACLの初期化に失敗した場合は、Loggerにエラーを表示し、その行は無効になる
  * 
  * @author SIN
  *
@@ -31,31 +32,31 @@ public final class AclList {
 				String ipStr = o.getStrList().get(1);
 
 				if (ipStr.equals("*")) { //全部
-					Acl acl = new AclV4(name, ipStr);
-					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
-					} else {
+					try {
+						Acl acl = new AclV4(name, ipStr);
 						arV4.add(acl);
-					}
-					acl = new AclV6(name, ipStr);
-					if (!acl.getStatus()) {
+					} catch (IllegalArgumentException e) {
 						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
-					} else {
+					}
+					try {
+						Acl acl = new AclV6(name, ipStr);
 						arV6.add(acl);
+					} catch (IllegalArgumentException e) {
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 				} else if (ipStr.indexOf('.') != -1) { //IPv4ルール
-					Acl acl = new AclV4(name, ipStr);
-					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
-					} else {
+					try {
+						Acl acl = new AclV4(name, ipStr);
 						arV4.add(acl);
+					} catch (IllegalArgumentException e) {
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 				} else { //IPv6ルール
-					Acl acl = new AclV6(name, ipStr);
-					if (!acl.getStatus()) {
-						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
-					} else {
+					try {
+						Acl acl = new AclV6(name, ipStr);
 						arV6.add(acl);
+					} catch (IllegalArgumentException e) {
+						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 				}
 			}
@@ -67,24 +68,38 @@ public final class AclList {
 		if (!enable) {
 			return false;
 		}
+		
 		if (ip.getInetKind() == InetKind.V4) {
 			for (Acl a : arV4) {
 				if (a.isHit(ip)) {
 					return false;
 				}
 			}
-			Calendar c = Calendar.getInstance();
-			Acl acl = new AclV4(String.format("AutoDeny-%s", c.toString()), ip.toString());
-			arV4.add(acl);
 		} else {
 			for (Acl a : arV6) {
 				if (a.isHit(ip)) {
 					return false;
 				}
 			}
-			Calendar c = Calendar.getInstance();
-			Acl acl = new AclV6(String.format("AutoDeny-%s", c.toString()), ip.toString());
-			arV6.add(acl);
+		}
+
+		Calendar c = Calendar.getInstance();
+		String name = String.format("AutoDeny-%s", c.toString());
+
+		if (ip.getInetKind() == InetKind.V4) {
+			try {
+				Acl acl = new AclV4(name, ip.toString());
+				arV4.add(acl);
+			} catch (IllegalArgumentException e) {
+				logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ip.toString()));
+			}
+		} else {
+			try {
+				Acl acl = new AclV6(String.format("AutoDeny-%s", c.toString()), ip.toString());
+				arV6.add(acl);
+			} catch (IllegalArgumentException e) {
+				logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ip.toString()));
+			}
 		}
 		return true;
 	}

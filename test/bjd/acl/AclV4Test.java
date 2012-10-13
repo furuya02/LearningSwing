@@ -2,12 +2,14 @@ package bjd.acl;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
+import org.junit.internal.runners.statements.Fail;
 import org.junit.runner.RunWith;
 
 import bjd.net.Ip;
@@ -97,4 +99,42 @@ public class AclV4Test {
 		}
 	}
 
+	@RunWith(Theories.class)
+	public static final class A003 {
+		@BeforeClass
+		public static void before() {
+			TestUtil.dispHeader("無効な文字列で初期化した場合に例外が発生するかの検証"); //TESTヘッダ
+		}
+
+		@DataPoints
+		public static Fixture[] datas = {
+				//コントロールの種類,デフォルト値,toRegの出力
+				new Fixture("192.168.1.0.0"),
+				new Fixture("::1"),
+				new Fixture("x"),
+				new Fixture("192.168.1.0-267"),
+				new Fixture("192.168.1.0/200"),
+		};
+		static class Fixture {
+			private String aclStr;
+
+			public Fixture(String aclStr) {
+				this.aclStr = aclStr;
+			}
+		}
+
+		@Theory
+		public void test(Fixture fx) {
+			TestUtil.dispPrompt(this); //TESTプロンプト
+			try {
+				@SuppressWarnings("unused")
+				AclV4 aclV4 = new AclV4("test", fx.aclStr);
+				Assert.fail("この行が実行されたらエラー");
+			} catch (IllegalArgumentException ex) {
+				System.out.printf("new AclV4(%s) => IllegalArgumentException\n", fx.aclStr);
+				return;
+			}
+			Assert.fail("この行が実行されたらエラー");
+		}
+	}
 }
