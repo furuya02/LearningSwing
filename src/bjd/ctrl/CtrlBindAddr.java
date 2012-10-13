@@ -143,7 +143,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 				radioButtonList[2].setSelected(true);
 				break;
 			default:
-				Util.designProblem(String.format("bindAddr.getBindStyle()=%s", bindAddr.getBindStyle()));
+				Util.runtimeError(String.format("bindAddr.getBindStyle()=%s", bindAddr.getBindStyle()));
 		}
 		for (int i = 0; i < 2; i++) {
 			ArrayList<Ip> list = (i == 0) ? listV4 : listV6;
@@ -220,13 +220,13 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 
 	@Override
 	protected String abstractToText() {
-		Util.designProblem("未実装");
+		Util.runtimeError("未実装");
 		return "";
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		Util.designProblem("未実装");
+		Util.runtimeError("未実装");
 	}
 
 	@Override

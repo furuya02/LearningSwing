@@ -150,7 +150,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 			}
 
 		}
-		Util.designProblem("radioButtunに選択がない");
+		Util.runtimeError("radioButtunに選択がない");
 		return "";
 	}
 
@@ -160,7 +160,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 		if (0 < n && n <= radioButtonList.length) {
 			radioButtonList[n].setSelected(true);
 		} else {
-			Util.designProblem(String.format("n=%d radioButtonList.length=%d ", n, radioButtonList.length));
+			Util.runtimeError(String.format("n=%d radioButtonList.length=%d ", n, radioButtonList.length));
 		}
 	}
 

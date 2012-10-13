@@ -193,7 +193,7 @@ public final class Kernel implements IDispose {
 	//		if (oneOption != null) {
 	//			return oneOption.getValue(name);
 	//		}
-	//		Util.designProblem(String.format("nameTag=%s name=%s", nameTag, name));
+	//		Util.runtimeError(String.format("nameTag=%s name=%s", nameTag, name));
 	//		return null;
 	//	}
 
@@ -348,7 +348,7 @@ public final class Kernel implements IDispose {
 					//SetupService(); //サービスの設定
 					break;
 				default:
-					Util.designProblem(String.format("cmd=%s", cmd));
+					Util.runtimeError(String.format("cmd=%s", cmd));
 					break;
 
 			}
@@ -383,7 +383,7 @@ public final class Kernel implements IDispose {
 					//Process.Start(Define.WebSupport());
 					break;
 				default:
-					Util.designProblem(String.format("cmd=%s", cmd));
+					Util.runtimeError(String.format("cmd=%s", cmd));
 					break;
 			}
 		}

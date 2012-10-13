@@ -407,23 +407,23 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	//***********************************************************************
 	@Override
 	protected boolean abstractIsComplete() {
-		Util.designProblem("使用禁止");
+		Util.runtimeError("使用禁止");
 		return false;
 	}
 
 	@Override
 	protected String abstractToText() {
-		Util.designProblem("使用禁止");
+		Util.runtimeError("使用禁止");
 		return "";
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		Util.designProblem("使用禁止");
+		Util.runtimeError("使用禁止");
 	}
 
 	@Override
 	protected void abstractClear() {
-		Util.designProblem("使用禁止");
+		Util.runtimeError("使用禁止");
 	}
 }

@@ -129,7 +129,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 			save();
 			return;
 		}
-		Util.designProblem(String.format("名前が見つかりません name=%s", name));
+		Util.runtimeError(String.format("名前が見つかりません name=%s", name));
 	}
 
 	//値の取得
@@ -144,7 +144,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		if (oneVal != null) {
 			return oneVal.getValue();
 		}
-		Util.designProblem(String.format("名前が見つかりません name=%s", name));
+		Util.runtimeError(String.format("名前が見つかりません name=%s", name));
 		return null;
 	}
 

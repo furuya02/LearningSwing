@@ -259,7 +259,7 @@ public final class SockTcp extends SockObj {
 	}
 
 	public byte[] lineRecv(int timeout, OperateCrlf yes, OneServer oneServer) {
-		Util.designProblem("未実装");
+		Util.runtimeError("未実装");
 		return null;
 	}
 }

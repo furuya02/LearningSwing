@@ -32,8 +32,8 @@ public final class Util {
 		return btn;
 	}
 
-	public static void designProblem(String msg) {
-		throw new UnsupportedOperationException("設計不良  " + msg);
+	public static void runtimeError(String msg) {
+		throw new RuntimeException("実行時例外" + msg);
 	}
 
 	//２つの配列の結合

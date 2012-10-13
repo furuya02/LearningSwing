@@ -37,21 +37,21 @@ public final class Conf {
 				case LABEL:
 					break;
 				default:
-					Util.designProblem(String.format("未定義 %s", ctrlType));
+					Util.runtimeError(String.format("未定義 %s", ctrlType));
 			}
 		}
 	}
 
 	public Object get(String name) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
-			Util.designProblem(String.format("未定義 %s", name));
+			Util.runtimeError(String.format("未定義 %s", name));
 		}
 		return ar.get(name);
 	}
 
 	public void set(String name, Object value) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
-			Util.designProblem(String.format("未定義 %s", name));
+			Util.runtimeError(String.format("未定義 %s", name));
 		}
 		ar.put(name, value);
 	}

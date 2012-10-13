@@ -98,7 +98,7 @@ public final class OneDat implements IDispose {
 
 	@Override
 	public String toString() {
-		Util.designProblem("誤って使用されないように例外（未実装）とする");
+		Util.runtimeError("誤って使用されないように例外（未実装）とする");
 		return "ERROR";
 	}
 }

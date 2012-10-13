@@ -127,18 +127,18 @@ public final class CtrlFont extends OneCtrl implements ActionListener {
 
 	@Override
 	protected String abstractToText() {
-		Util.designProblem("未実装");
+		Util.runtimeError("未実装");
 		return "";
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		Util.designProblem("未実装");
+		Util.runtimeError("未実装");
 	}
 
 	@Override
 	protected void abstractClear() {
-		Util.designProblem("未実装");
+		Util.runtimeError("未実装");
 	}
 
 }

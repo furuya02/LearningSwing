@@ -107,13 +107,13 @@ public final class CtrlGroup extends OneCtrl {
 
 	@Override
 	protected String abstractToText() {
-		Util.designProblem("使用禁止");
+		Util.runtimeError("使用禁止");
 		return "";
 }
 
 	@Override
 	protected void abstractFromText(String s) {
-		Util.designProblem("使用禁止");
+		Util.runtimeError("使用禁止");
 	}
 
 	@Override
