@@ -56,9 +56,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		this.kernel = kernel;
 		this.path = path;
 		this.nameTag = nameTag;
-
-		String progDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
-		iniDb = new IniDb(progDir, "Option");
+		iniDb = new IniDb(kernel.getProgDir(), "Option");
 	}
 
 	//レジストリからの読み込み

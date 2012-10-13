@@ -18,17 +18,14 @@
 				
 
 		<!-- SampleServer.jar -->      	
-   		<delete verbose="true">
-   			<fileset dir="${project_dir}/bin/sample" includes="*.jardesc" />
-   	    </delete>
 		<jar destfile="${output_dir}/plugins/SampleServer.jar">
-            <fileset dir="${project_dir}/bin/sample/"/>
+            <fileset dir="${project_dir}/bin/SampleServer/"/>
         </jar>
 		
 		<delete verbose="true">
 			<!--pluginコードの削除 -->
-			<fileset dir="${project_dir}/bin/sample" />
-			<fileset dir="${project_dir}/bin/web" />
+			<fileset dir="${project_dir}/bin/SampleServer" />
+			<fileset dir="${project_dir}/bin/WebServer" />
 			<!-- <fileset dir="${project_dir}/bin/plugins" /> -->
 			<!--テストコードの削除 -->
 			<fileset dir="${project_dir}/bin" includes="**/*Test*" /> 

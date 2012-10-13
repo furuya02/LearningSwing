@@ -162,6 +162,7 @@ public final class MainForm implements WindowListener {
 	}
 
 	public void test2() {
+		//カレントフォルダ表示
 		Msg.show(MsgKind.Infomation, kernel.getProgDir());
 	}
 

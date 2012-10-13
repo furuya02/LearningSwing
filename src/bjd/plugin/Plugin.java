@@ -11,6 +11,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
+import bjd.option.OneOption;
 import bjd.server.OneServer;
 import bjd.util.FileSearch;
 
@@ -28,7 +29,6 @@ public final class Plugin {
 				if (!entry.isDirectory()) { //ディレクトリは対象外
 					String name = entry.getName();
 					//　sample/Server.class
-
 					//　sample/Server　　.classを外す
 					int index = name.indexOf(".class");
 					if (index != -1) {
@@ -49,28 +49,31 @@ public final class Plugin {
 	public Plugin(String dir) {
 		FileSearch fileSearch = new FileSearch(dir);
 		for (File file : fileSearch.listFiles("*Server.jar")) {
+			ar.add(file.getPath());
+			
+			String [] classNameList = getClassNameList(file);
+			if(classNameList.length==2){
+				
+			
+			}
+			OneServer oneServer = null;
+			OneOption oneOption = null;
 			try {
 				JarFile jar = new JarFile(file);
-				Manifest mf = jar.getManifest();
-				Attributes att = mf.getMainAttributes();
-				String cname = "sample.Server";
-				att.getValue("Plugin-Class");
+				//Manifest mf = jar.getManifest();
+				//Attributes att = mf.getMainAttributes();
+				//String cname = "sample.Server";
+				//att.getValue("Plugin-Class");
 				URL url = file.getCanonicalFile().toURI().toURL();
 				URLClassLoader loader = new URLClassLoader(new URL[] { url });
-				Class cobj = loader.loadClass(cname);
-				Class[] ifnames = cobj.getInterfaces();
-				//for (int j = 0; j < ifnames.length; j++) {
-				//	if (ifnames[j] == SamplePluginAppPlugin.class) {
-				//		System.out.println("load..... " + cname);
-				//		SamplePluginAppPlugin plugin =
-				//				(SamplePluginAppPlugin)cobj.newInstance();
-				//		plugins.add(plugin);
-				//		break;
-				//	}
-				OneServer oneServer = (OneServer) cobj.newInstance();
-				//Object newInstance = cobj.newInstance();
-				//OneServer oneServer = (OneServer)cobj.newInstance();
-				int x = 0;
+				Class cobj = loader.loadClass("sample.Server");
+				oneServer = (OneServer) cobj.newInstance();
+
+				//cobj = loader.loadClass("sample.Option");
+				//oneOption = (OneOption) cobj.newInstance();
+
+				int x=0;
+				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
