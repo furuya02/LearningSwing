@@ -5,19 +5,16 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
+import bjd.net.IpTest.A001.Fixture;
+
 public final class Ip {
 
-	private boolean status = false;
 	private InetKind inetKind;
 	private boolean any;
 	private byte[] ipV4;
 	private byte[] ipV6;
 	private int scopeId;
 
-	public boolean getStatus() {
-		return status;
-	}
-	
 	public int getScopeId() {
 		return scopeId;
 	}
@@ -30,10 +27,6 @@ public final class Ip {
 		return ipV6;
 	}
 
-	public boolean setStatus() {
-		return status;
-	}
-
 	public boolean getAny() {
 		return any;
 	}
@@ -42,7 +35,10 @@ public final class Ip {
 		return inetKind;
 	}
 
-	// デフォルト値の初期化
+	/**
+	 * デフォルト値の初期化
+	 * @param inetKind TCP/UDP
+	 */
 	void init(InetKind inetKind) {
 		this.inetKind = inetKind;
 		ipV4 = new byte[] { 0, 0, 0, 0 };
@@ -57,7 +53,24 @@ public final class Ip {
 	}
 
 	// コンストラクタ
-	public Ip(String ipStr) {
+	/**
+	 * コンストラクタ<br>
+	 * 初期化文字列でIPアドレスを初期化する<br>
+	 * 文字列が無効で初期化に失敗した場合は、例外(IllegalArgumentException)がスローされる<br>
+	 * 無効なこのオブジェクトを使用するのは、危険性が高いため、生成時に必ず例外処理しなければならない
+	 * 
+	 * Ip(192.168.0.1)<br>
+	 * Ip(INADDR_ANY)<br>
+	 * Ip(IN6ADDR_ANY_INIT)<br>
+	 * Ip(0.0.0.0)<br>
+	 * Ip(::)<br>
+	 * Ip(::1)<br>
+	 * Ip([12::78:90ab])  [括弧付きで指定された場合]<br>
+	 * 
+	 * @param ipStr　初期化文字列
+	 * @throws IllegalArgumentException 
+	 */
+	public Ip(String ipStr) throws IllegalArgumentException  {
 		init(InetKind.V4);
 
 		if (ipStr == null) {
@@ -151,13 +164,6 @@ public final class Ip {
 		} else {
 			throwException(ipStr); //例外終了
 		}
-		status = true; // 初期化成功
-	}
-
-	//データを初期化し、例外を発生させる
-	private void throwException(String ipStr) {
-		init(inetKind); // デフォルト値での初期化
-		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
 	}
 
 	// ホストバイトオーダのデータで初期化する
@@ -168,7 +174,6 @@ public final class Ip {
 		if (isAllZero(ipV4)) {
 			any = true;
 		}
-		status = true; // 初期化成功
 	}
 
 	// ホストバイトオーダのデータで初期化する
@@ -183,7 +188,6 @@ public final class Ip {
 		for (int i = 0; i < 8; i++) {
 			ipV6[i + 8] = b[i];
 		}
-		status = true; // 初期化成功
 	}
 
 	@Override
@@ -352,5 +356,17 @@ public final class Ip {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * コンストラクタで初期化に失敗した時に使用する
+	 * 内部変数は初期化され例外（IllegalArgumentException）がスローされる
+	 * @param ipStr 初期化文字列
+	 * @throws IllegalArgumentException 
+	 */
+	private void throwException(String ipStr) {
+		init(inetKind); // デフォルト値での初期化
+		//throw new Exception(String.format("引数が不正です \"%s\"", ipStr)); 
+		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
 	}
 }

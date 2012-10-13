@@ -134,7 +134,12 @@ public final class CtrlAddress extends OneCtrl implements DocumentListener {
 
 	@Override
 	protected void abstractFromText(String s) {
-		abstractWrite(new Ip(s));
+		try {
+			Ip ip = new Ip(s);
+			abstractWrite(ip);
+		} catch (IllegalArgumentException e) {
+			//TODO ここの例外処理が必要
+		}
 	}
 
 	@Override

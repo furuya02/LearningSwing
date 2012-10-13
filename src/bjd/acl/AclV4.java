@@ -22,12 +22,12 @@ import bjd.net.Ip;
 final class AclV4 extends Acl {
 
 	/**
-	 * コンストラクタ
+	 * コンストラクタ<br>
 	 * 初期化文字列によってstart、endが設定される
 	 * 
 	 * @param name 名前
 	 * @param ipStr IPアドレス範囲を示す初期化文字列
-	 * @throws パラメータが不正に初期化に失敗した場合 IllegalArgumentExceptionがスローされる
+	 * @throws パラメータが不正で初期化に失敗した場合 IllegalArgumentExceptionがスローされる
 	 * 
 	 */
 	AclV4(String name, String ipStr) throws IllegalArgumentException {
@@ -61,12 +61,23 @@ final class AclV4 extends Acl {
 			if (tmp.length != 2) {
 				throwException(ipStr); //初期化失敗
 			}
-			setStart(new Ip(tmp[0]));
+			try {
+				Ip ip = new Ip(tmp[0]);
+				setStart(ip);
+			} catch (IllegalArgumentException e) {
+				throwException(ipStr); //初期化失敗
+			}
 			String strTo = tmp[1];
 			//to（終了アドレス）が192.168.2.254のように４オクテットで表現されているかどうかの確認
 			tmp = strTo.split("\\.");
 			if (tmp.length == 4) { //192.168.0.100
-				setEnd(new Ip(strTo));
+				try {
+					Ip ip = new Ip(strTo);
+					setEnd(ip);
+
+				} catch (IllegalArgumentException e) {
+					throwException(ipStr); //初期化失敗
+				}
 			} else if (tmp.length == 1) { //100
 				//try {
 				int n = Integer.valueOf(strTo);
@@ -74,8 +85,10 @@ final class AclV4 extends Acl {
 					throwException(ipStr); //初期化失敗
 				}
 				strTo = String.format("%d.%d.%d.%d", getStart().getIpV4()[0] & 0xFF, getStart().getIpV4()[1] & 0xFF, getStart().getIpV4()[2] & 0xFF, n);
-				setEnd(new Ip(strTo));
-				if (!getEnd().getStatus()) {
+				try {
+					Ip ip = new Ip(strTo);
+					setEnd(ip);
+				} catch (IllegalArgumentException e) {
 					throwException(ipStr); //初期化失敗
 				}
 			} else {
@@ -118,27 +131,30 @@ final class AclV4 extends Acl {
 			} catch (Exception ex) {
 				throwException(ipStr); //初期化失敗
 			}
-			Ip ip = new Ip(strIp);
-			if (!ip.getStatus()) {
+
+			try {
+				Ip ip = new Ip(strIp);
+				Ip start = new Ip(ip.getAddrV4() & mask);
+				Ip end = new Ip(ip.getAddrV4() | xor);
+				setStart(start);
+				setEnd(end);
+			} catch (IllegalArgumentException e) {
 				throwException(ipStr); //初期化失敗
 			}
-			setStart(new Ip(ip.getAddrV4() & mask));
-			setEnd(new Ip(ip.getAddrV4() | xor));
 		} else {
 			//************************************************************
 			// 通常指定
 			//************************************************************
-			setStart(new Ip(ipStr));
-			setEnd(new Ip(ipStr));
+			try {
+				Ip ip = new Ip(ipStr);
+				setStart(ip);
+				setEnd(ip);
+			} catch (IllegalArgumentException e) {
+				throwException(ipStr); //初期化失敗
+			}
 		}
-		if (!getStart().getStatus()) {
-			throwException(ipStr); //初期化失敗
-		}
-		if (!getEnd().getStatus()) {
-			throwException(ipStr); //初期化失敗
-		}
-		//最終チェック
 
+		//最終チェック
 		if (getStart().getInetKind() != InetKind.V4) {
 			throwException(ipStr); //初期化失敗
 		}

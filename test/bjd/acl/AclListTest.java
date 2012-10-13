@@ -16,7 +16,6 @@ import bjd.net.Ip;
 import bjd.option.Dat;
 import bjd.util.TestUtil;
 
-
 @RunWith(Enclosed.class)
 public class AclListTest {
 	@RunWith(Theories.class)
@@ -29,31 +28,25 @@ public class AclListTest {
 		@DataPoints
 		public static Fixture[] datas = {
 				//コントロールの種類,デフォルト値,toRegの出力
-				new Fixture("192.168.0.1", "192.168.0.1", true),
-				new Fixture("192.168.0.300", "192.168.0.1", false), //無効リスト
-				new Fixture("192.168.0.0/24", "192.168.0.1", true),
-				new Fixture("192.168.1.0/24", "192.168.0.1", false),
-				new Fixture("192.168.1.0/200", "192.168.1.0", false), //無効リスト
-				new Fixture("192.168.0.0-192.168.0.100", "192.168.0.1", true),
-				new Fixture("192.168.0.2-192.168.0.100", "192.168.0.1", false),
-				new Fixture("192.168.0.0-192.168.2.100", "192.168.0.1", true),
-				new Fixture("192.168.0.1-5", "192.168.0.1", true),
-				new Fixture("192.168.0.2-5", "192.168.0.1", false),
-				new Fixture("192.168.0.*", "192.168.0.1", true),
-				new Fixture("192.168.1.*", "192.168.0.1", false),
-				new Fixture("192.168.*.*", "192.168.0.1", true),
-				new Fixture("192.*.*.*", "192.168.0.1", true),
-				new Fixture("*.*.*.*", "192.168.0.1", true),
-				new Fixture("*", "192.168.0.1", true),
-				new Fixture("xxx", "192.168.0.1", false), //無効リスト
-				new Fixture("172.*.*.*", "192.168.0.1", false),
-		};
+				new Fixture("192.168.0.1", "192.168.0.1", AclKind.Allow),
+				new Fixture("192.168.0.300", "192.168.0.1", AclKind.Deny), //無効リスト
+				new Fixture("192.168.0.0/24", "192.168.0.1", AclKind.Allow),
+				new Fixture("192.168.1.0/24", "192.168.0.1", AclKind.Deny),
+				new Fixture("192.168.1.0/200", "192.168.1.0", AclKind.Deny), //無効リスト
+				new Fixture("192.168.0.0-192.168.0.100", "192.168.0.1", AclKind.Allow), new Fixture("192.168.0.2-192.168.0.100", "192.168.0.1", AclKind.Deny),
+				new Fixture("192.168.0.0-192.168.2.100", "192.168.0.1", AclKind.Allow), new Fixture("192.168.0.1-5", "192.168.0.1", AclKind.Allow),
+				new Fixture("192.168.0.2-5", "192.168.0.1", AclKind.Deny), new Fixture("192.168.0.*", "192.168.0.1", AclKind.Allow),
+				new Fixture("192.168.1.*", "192.168.0.1", AclKind.Deny), new Fixture("192.168.*.*", "192.168.0.1", AclKind.Allow),
+				new Fixture("192.*.*.*", "192.168.0.1", AclKind.Allow), new Fixture("*.*.*.*", "192.168.0.1", AclKind.Allow),
+				new Fixture("*", "192.168.0.1", AclKind.Allow), new Fixture("xxx", "192.168.0.1", AclKind.Deny), //無効リスト
+				new Fixture("172.*.*.*", "192.168.0.1", AclKind.Deny), };
+
 		static class Fixture {
 			private String aclStr;
 			private String ip;
-			private boolean expected;
+			private AclKind expected;
 
-			public Fixture(String aclStr, String ip, boolean expected) {
+			public Fixture(String aclStr, String ip, AclKind expected) {
 				this.aclStr = aclStr;
 				this.ip = ip;
 				this.expected = expected;
@@ -64,7 +57,7 @@ public class AclListTest {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			
+
 			Logger logger = new Logger(new Kernel(), "TEST", true, null);
 
 			Ip ip = new Ip(fx.ip);
@@ -77,11 +70,11 @@ public class AclListTest {
 
 			enableNum = 1; //enableNum=1 のみを禁止する
 			o = new AclList(dat, enableNum, logger);
-			Assert.assertEquals(o.check(ip), !(fx.expected));
+			AclKind expected = (fx.expected == AclKind.Allow) ? AclKind.Deny : AclKind.Allow;
+			Assert.assertEquals(o.check(ip), expected);
 
-			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expected);			
+			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ip, fx.expected);
 
 		}
 	}
 }
-

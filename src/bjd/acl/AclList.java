@@ -11,7 +11,7 @@ import bjd.option.Dat;
 import bjd.option.OneDat;
 import bjd.sock.SockObj;
 /**
- * 複数のACLを保持して、範囲に該当するかどうかをチェックする
+ * 複数のACLを保持して、範囲に該当するかどうかをチェックする<br>
  * ACLの初期化に失敗した場合は、Loggerにエラーを表示し、その行は無効になる
  * 
  * @author SIN
@@ -63,7 +63,12 @@ public final class AclList {
 		}
 	}
 
-	//リストへの追加
+	/**
+	 * ACLリストへのIP追加 ダイナミックにアドレスをDenyリストに加えるためのメソッド<br>
+	 * 追加に失敗した場合、Loggerにはエラー表示されるが、追加は無効（追加されない） 
+	 * @param ip 追加するIp 
+	 * @return 成否
+	 */
 	public boolean append(Ip ip) {
 		if (!enable) {
 			return false;
@@ -103,8 +108,14 @@ public final class AclList {
 		}
 		return true;
 	}
-
-	public boolean check(Ip ip) {
+	/**
+	 * ACLリストにヒットするかどうかのチェック<br>
+	 * 範囲にヒットしたものが有効/無効のフラグ（enable）も内部で評価されている
+	 * 
+	 * @param ip 検査対象IP
+	 * @return AclKind  Allow or Deny　
+	 */
+	public AclKind check(Ip ip) {
 
 		//ユーザリストの照合
 		Acl acl = null;
@@ -126,12 +137,12 @@ public final class AclList {
 
 		if (!enable && acl == null) {
 			logger.set(LogKind.Secure, (SockObj) null, 9000017, String.format("address:%s", ip.toString())); //このアドレスからのリクエストは許可されていません
-			return false;
+			return AclKind.Deny;
 		}
 		if (enable && acl != null) {
 			logger.set(LogKind.Secure, (SockObj) null, 9000018, String.format("user:%s address:%s", acl.getName(), ip.toString())); //この利用者のアクセスは許可されていません
-			return false;
+			return AclKind.Deny;
 		}
-		return true;
+		return AclKind.Allow;
 	}
 }

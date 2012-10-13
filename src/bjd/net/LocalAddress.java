@@ -38,18 +38,28 @@ public final class LocalAddress {
 					}
 					while (addrList.hasMoreElements()) {
 						InetAddress inetAddress = addrList.nextElement();
-	
+
 						if (inetAddress instanceof Inet4Address) {
 							String s = inetAddress.getHostAddress();
-							v4.add(new Ip(s));
+							try {
+								Ip ip = new Ip(s);
+								v4.add(new Ip(s));
+							} catch (IllegalArgumentException e) {
+								//TODO ここのエラー処理が必要
+							}
 						} else if (inetAddress instanceof Inet6Address) {
-	                        boolean linkLocal = inetAddress.isLinkLocalAddress();
-	                        boolean multicast = inetAddress.isMulticastAddress();
-	                        boolean siteLocal = inetAddress.isSiteLocalAddress();
+							boolean linkLocal = inetAddress.isLinkLocalAddress();
+							boolean multicast = inetAddress.isMulticastAddress();
+							boolean siteLocal = inetAddress.isSiteLocalAddress();
 							if (!linkLocal && !multicast && !siteLocal) {
 								String s = inetAddress.getHostAddress();
-								v6.add(new Ip(s));
-	                        }
+								try {
+									Ip ip = new Ip(s);
+									v6.add(new Ip(s));
+								} catch (IllegalArgumentException e) {
+									//TODO ここのエラー処理が必要
+								}
+							}
 						}
 					}
 				}
@@ -64,10 +74,20 @@ public final class LocalAddress {
 		String[] tmp = str.split("\t");
 
 		for (String s : tmp[0].split("\b", 0)) {
-			v4.add(new Ip(s));
+			try {
+				Ip ip = new Ip(s);
+				v4.add(ip);
+			} catch (IllegalArgumentException e) {
+				//TODO ここのエラー処理が必要
+			}
 		}
 		for (String s : tmp[1].split("\b", 0)) {
-			v6.add(new Ip(s));
+			try {
+				Ip ip = new Ip(s);
+				v6.add(new Ip(s));
+			} catch (IllegalArgumentException e) {
+				//TODO ここのエラー処理が必要
+			}
 		}
 	}
 

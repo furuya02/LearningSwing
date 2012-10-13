@@ -23,15 +23,15 @@ import bjd.net.Ip;
 final class AclV6 extends Acl {
 
 	/**
-	 * コンストラクタ
+	 * コンストラクタ<br>
 	 * 初期化文字列によってstart、endが設定される
 	 * 
 	 * @param name 名前
 	 * @param ipStr IPアドレス範囲を示す初期化文字列
-	 * @throws パラメータが不正に初期化に失敗した場合 IllegalArgumentExceptionががスローされる
+	 * @throws パラメータが不正で初期化に失敗した場合 IllegalArgumentExceptionががスローされる
 	 * 
 	 */
-	AclV6(String name, String ipStr) throws IllegalArgumentException  {
+	AclV6(String name, String ipStr) throws IllegalArgumentException {
 		super(name);
 
 		//「*」によるALL指定
@@ -52,8 +52,18 @@ final class AclV6 extends Acl {
 				throwException(ipStr); //初期化失敗
 			}
 
-			setStart(new Ip(tmp[0]));
-			setEnd(new Ip(tmp[1]));
+			try {
+				Ip ip = new Ip(tmp[0]);
+				setStart(ip);
+			} catch (IllegalArgumentException e) {
+				throwException(ipStr); //初期化失敗
+			}
+			try {
+				Ip ip = new Ip(tmp[1]);
+				setEnd(ip);
+			} catch (IllegalArgumentException e) {
+				throwException(ipStr); //初期化失敗
+			}
 
 			//開始アドレスが終了アドレスより大きい場合、入れ替える
 			if (getStart().getAddrV6H() == getEnd().getAddrV6H()) {
@@ -111,24 +121,24 @@ final class AclV6 extends Acl {
 			} catch (Exception ex) {
 				throwException(ipStr); //初期化失敗
 			}
-			Ip ip = new Ip(strIp);
-			if (!ip.getStatus()) {
+			try {
+				Ip ip = new Ip(strIp);
+				setStart(new Ip(ip.getAddrV6H() & maskH, ip.getAddrV6L() & maskL));
+				setEnd(new Ip(ip.getAddrV6H() | xorH, ip.getAddrV6L() | xorL));
+			} catch (IllegalArgumentException e) {
 				throwException(ipStr); //初期化失敗
 			}
-			setStart(new Ip(ip.getAddrV6H() & maskH, ip.getAddrV6L() & maskL));
-			setEnd(new Ip(ip.getAddrV6H() | xorH, ip.getAddrV6L() | xorL));
 		} else {
 			//************************************************************
 			// 通常指定
 			//************************************************************
-			setStart(new Ip(ipStr));
-			setEnd(new Ip(ipStr));
-		}
-		if (!getStart().getStatus()) {
-			throwException(ipStr); //初期化失敗
-		}
-		if (!getEnd().getStatus()) {
-			throwException(ipStr); //初期化失敗
+			try {
+				Ip ip = new Ip(ipStr);
+				setStart(ip);
+				setEnd(ip);
+			} catch (IllegalArgumentException e) {
+				throwException(ipStr); //初期化失敗
+			}
 		}
 
 		if (getStart().getInetKind() != InetKind.V6) {
