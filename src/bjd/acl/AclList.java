@@ -10,12 +10,15 @@ import bjd.net.Ip;
 import bjd.option.Dat;
 import bjd.option.OneDat;
 import bjd.sock.SockObj;
-
+/**
+ * 複数のACLを保持して、範囲に該当するかどうかをチェックする
+ * 
+ * @author SIN
+ *
+ */
 public final class AclList {
-	//private static final String OneDat = null;
 	private ArrayList<Acl> arV4 = new ArrayList<>();
 	private ArrayList<Acl> arV6 = new ArrayList<>();
-
 	private boolean enable; //許可:0 不許可:1
 	private Logger logger;
 

@@ -130,7 +130,7 @@ public final class CtrlTabPage extends OneCtrl implements ChangeListener {
 	@Override
 	protected String abstractToText() {
 		Util.designProblem("未実装");
-		return null;
+		return "";
 	}
 
 	@Override

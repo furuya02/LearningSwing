@@ -2,51 +2,40 @@ package bjd.acl;
 
 import bjd.net.Ip;
 
+/**
+ * 
+ * IPv4のACL
+ * 
+ * コンストラクタの指定要領
+ * AclV4(192.168.0.1)
+ * AclV4(192.168.0.1-200)
+ * AclV4(192.168.0.1-192.168.10.254)
+ * AclV4(192.168.10.254-192.168.0.1) 開始と終了が逆転してもよい
+ * AclV4(192.168.0.1/24)
+ * AclV4(*.*.*,*)
+ * AclV4(*)
+ * 
+ * @author SIN
+ *
+ */
 public final class AclV4 extends Acl {
-	//指定の要領
-	//192.168.0.1
-	//192.168.0.1-200
-	//192.168.0.1-192.168.10.254
-	//192.168.10.254-192.168.0.1（開始と終了が逆転してもＯＫ）
-	//192.168.0.1/24
-	//192.168.*.* 
-	//*.*.*,*
-	//*
 
-	//****************************************************************
-	//オーバーライド
-	//****************************************************************
-	@Override
-	public boolean isHit(Ip ip) {
-		
-		long longIp = ip.getAddrV4() & 0xFFFFFFFFL;
-		long longStart = start.getAddrV4() & 0xFFFFFFFFL;
-		
-		if (longIp < longStart) {
-			return false;
-		}
-		long longEnd = end.getAddrV4() & 0xFFFFFFFFL;
-		if (longEnd < longIp) {
-			return false;
-		}
-//		if (ip.getAddrV4() < start.getAddrV4()) {
-//			return false;
-//		}
-//		if (end.getAddrV4() < ip.getAddrV4()) {
-//			return false;
-//		}
-		return true;
-	}
-
-	//コンストラクタ
+	/**
+	 * コンストラクタ
+	 * 初期化文字列によってstart、endが設定され、初期化に成功した場合にstatusがtrueとなる
+	 * 
+	 * @param name 名前
+	 * @param ipStr IPアドレス範囲を示す初期化文字列
+	 * 
+	 */
 	public AclV4(String name, String ipStr) {
 		super(name);
 
 		//「*」によるALL指定
 		if (ipStr.equals("*") || ipStr.equals("*.*.*.*")) {
-			start = new Ip("0.0.0.0");
-			end = new Ip("255.255.255.255");
-			status = true;
+			setStart(new Ip("0.0.0.0"));
+			setEnd(new Ip("255.255.255.255"));
+			setStatus(true);
 			return; //初期化成功
 		}
 
@@ -70,35 +59,30 @@ public final class AclV4 extends Acl {
 			if (tmp.length != 2) {
 				return; //初期化失敗
 			}
-			start = new Ip(tmp[0]);
+			setStart(new Ip(tmp[0]));
 			String strTo = tmp[1];
 			//to（終了アドレス）が192.168.2.254のように４オクテットで表現されているかどうかの確認
 			tmp = strTo.split("\\.");
 			if (tmp.length == 4) { //192.168.0.100
-				end = new Ip(strTo);
+				setEnd(new Ip(strTo));
 			} else if (tmp.length == 1) { //100
 				//try {
-					int n = Integer.valueOf(strTo);
-					//if(n < 0 || 255 < n)
-					//    return;//初期化失敗
-					strTo = String.format("%d.%d.%d.%d", start.getIpV4()[0] & 0xFF, start.getIpV4()[1] & 0xFF, start.getIpV4()[2] & 0xFF, n);
-					end = new Ip(strTo);
-					if (!end.getStatus()) {
-						return; //初期化失敗
-					}
-				//} catch (Exception ex) {
-				//	return; //初期化失敗
-				//}
+				int n = Integer.valueOf(strTo);
+				//if(n < 0 || 255 < n)
+				//    return;//初期化失敗
+				strTo = String.format("%d.%d.%d.%d", getStart().getIpV4()[0] & 0xFF, getStart().getIpV4()[1] & 0xFF, getStart().getIpV4()[2] & 0xFF, n);
+				setEnd(new Ip(strTo));
+				if (!getEnd().getStatus()) {
+					return; //初期化失敗
+				}
 			} else {
 				return; //初期化失敗
 			}
 
 			//開始アドレスが終了アドレスより大きい場合、入れ替える
 			//if ((start.getAddrV4() & 0xFFFFFFFFL) > (end.getAddrV4() & 0xFFFFFFFFL)) {
-			if (start.getAddrV4() > end.getAddrV4()) {
-				Ip ip = start;
-				start = end;
-				end = ip;
+			if (getStart().getAddrV4() > getEnd().getAddrV4()) {
+				swap(); // startとendの入れ替え
 			}
 		} else if (ipStr.indexOf('/') != -1) {
 			//************************************************************
@@ -134,28 +118,42 @@ public final class AclV4 extends Acl {
 			if (!ip.getStatus()) {
 				return; //初期化失敗
 			}
-			
-			start = new Ip(ip.getAddrV4() & mask);
-			end = new Ip(ip.getAddrV4() | xor);
+			setStart(new Ip(ip.getAddrV4() & mask));
+			setEnd(new Ip(ip.getAddrV4() | xor));
 		} else {
 			//************************************************************
 			// 通常指定
 			//************************************************************
-			start = new Ip(ipStr);
-			end = new Ip(ipStr);
+			setStart(new Ip(ipStr));
+			setEnd(new Ip(ipStr));
 		}
-		if (!start.getStatus()) {
+		if (!getStart().getStatus()) {
 			return; //初期化失敗
 		}
-		if (!end.getStatus()) {
+		if (!getEnd().getStatus()) {
 			return; //初期化失敗
 		}
-
 		//最終チェック
-		if (start.getAddrV4() != 0 || end.getAddrV4() != 0) {
-			if (start.getAddrV4() <= end.getAddrV4()) {
-				status = true; //初期化成功
+		if (getStart().getAddrV4() != 0 || getEnd().getAddrV4() != 0) {
+			if (getStart().getAddrV4() <= getEnd().getAddrV4()) {
+				setStatus(true); //初期化成功
 			}
 		}
+	}
+
+	@Override
+	public boolean isHit(Ip ip) {
+
+		long longIp = ip.getAddrV4() & 0xFFFFFFFFL;
+		long longStart = getStart().getAddrV4() & 0xFFFFFFFFL;
+
+		if (longIp < longStart) {
+			return false;
+		}
+		long longEnd = getEnd().getAddrV4() & 0xFFFFFFFFL;
+		if (longEnd < longIp) {
+			return false;
+		}
+		return true;
 	}
 }

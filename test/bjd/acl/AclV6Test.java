@@ -25,6 +25,7 @@ public class AclV6Test {
 
 		@DataPoints
 		public static Fixture[] datas = {
+				new Fixture("1122:3344::", "1122:3344::", "1122:3344::"),
 				new Fixture("1122:3344::/32", "1122:3344::", "1122:3344:ffff:ffff:ffff:ffff:ffff:ffff"),
 				new Fixture("1122:3344::/64", "1122:3344::", "1122:3344::ffff:ffff:ffff:ffff"),
 				new Fixture("1122:3344::-1122:3355::", "1122:3344::", "1122:3355::"),

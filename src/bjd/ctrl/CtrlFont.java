@@ -128,7 +128,7 @@ public final class CtrlFont extends OneCtrl implements ActionListener {
 	@Override
 	protected String abstractToText() {
 		Util.designProblem("未実装");
-		return null;
+		return "";
 	}
 
 	@Override

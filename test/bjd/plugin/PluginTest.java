@@ -13,7 +13,7 @@ public final class PluginTest {
 		Kernel kernel = new Kernel();
 		String dir = String.format("%s\\plugins", kernel.getProgDir());
 		//TODO Debug Print
-		System.out.println(String.format("dir=%s",dir));
+		System.out.println(String.format("dir=%s", dir));
 		Plugin plugin = new Plugin(dir);
 		assertThat(plugin.length(), is(1));
 	}

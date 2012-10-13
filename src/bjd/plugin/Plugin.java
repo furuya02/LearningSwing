@@ -5,12 +5,9 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import java.util.jar.Manifest;
-
 import bjd.option.OneOption;
 import bjd.server.OneServer;
 import bjd.util.FileSearch;
@@ -52,7 +49,7 @@ public final class Plugin {
 			ar.add(file.getPath());
 			
 			String [] classNameList = getClassNameList(file);
-			if(classNameList.length==2){
+			if (classNameList.length == 2) {
 				
 			
 			}

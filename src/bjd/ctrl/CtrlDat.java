@@ -414,7 +414,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	@Override
 	protected String abstractToText() {
 		Util.designProblem("使用禁止");
-		return null;
+		return "";
 	}
 
 	@Override

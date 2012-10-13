@@ -151,7 +151,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 
 		}
 		Util.designProblem("radioButtunに選択がない");
-		return null;
+		return "";
 	}
 
 	@Override

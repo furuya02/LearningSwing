@@ -108,7 +108,7 @@ public final class CtrlGroup extends OneCtrl {
 	@Override
 	protected String abstractToText() {
 		Util.designProblem("使用禁止");
-		return null;
+		return "";
 }
 
 	@Override

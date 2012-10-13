@@ -48,7 +48,7 @@ public final class TcpQueue {
 	//キューからのデータ取得
 	public byte[] dequeue(int len) {
 		if (db.length == 0 || len == 0 || !modify) {
-			return null;
+			return new byte[0];
 		}
 
 		synchronized (lock) {
