@@ -2,6 +2,7 @@ package bjd;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.swing.JMenuBar;
@@ -283,9 +284,16 @@ public final class Kernel implements IDispose {
 			}
 		}
 		//jarファイルの場合
-		String path = System.getProperty("java.class.path");
-		File file = new File(path);
-		return file.getParent();
+		File f = new File(System.getProperty("java.class.path"));
+		String path = "";
+		try {
+			path = f.getCanonicalPath(); //正規化したパスを取得する
+		} catch (IOException e) {
+			e.printStackTrace();
+			//正規化に失敗した場合は、正規化されないパスを取得する
+			path = f.getAbsolutePath();
+		}
+		return new File(path).getParent();
 	}
 
 	public String env(String str) {

@@ -8,7 +8,6 @@ import bjd.sock.SockObj;
 import bjd.sock.SockTcp;
 
 public final class Server extends OneServer {
-
 	public Server(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
 		super(kernel, nameTag, conf, oneBind);
 
@@ -20,7 +19,7 @@ public final class Server extends OneServer {
 
 	//	//リモート操作（データの取得）Toolダイログとのデータ送受
 	//	override public String Cmd(String cmdStr) { return ""; }
-
+	
 	@Override
 	public String getMsg(int messageNo) {
 		switch (messageNo) {
@@ -41,7 +40,6 @@ public final class Server extends OneServer {
 	protected boolean onStartServer() {
 		return true;
 	}
-
 	@Override
 	protected void onSubThread(SockObj sockObj) {
 		//UDPサーバの場合は、UdpObjで受ける

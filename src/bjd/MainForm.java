@@ -13,6 +13,7 @@ import javax.swing.WindowConstants;
 import bjd.ctrl.ListView;
 import bjd.ctrl.StatusBar;
 import bjd.option.Conf;
+import bjd.plugin.Plugin;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 import bjd.wait.IWaitDlg;
@@ -161,7 +162,6 @@ public final class MainForm implements WindowListener {
 	}
 
 	public void test2() {
-		//String s = System.getProperty("user.dir") + File.separator + "plugins";
 		Msg.show(MsgKind.Infomation, kernel.getProgDir());
 	}
 
