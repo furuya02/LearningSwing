@@ -8,7 +8,7 @@ import bjd.Kernel;
 
 public final class PluginTest {
 
-	@Test
+	//@Test
 	public void test() {
 		Kernel kernel = new Kernel();
 		String dir = String.format("%s\\plugins", kernel.getProgDir());

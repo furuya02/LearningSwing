@@ -35,9 +35,9 @@ public abstract class Acl {
 		this.status = status;
 	}
 
-	//public final boolean getStatus() {
-	//	return status;
-	//}
+	public final boolean getStatus() {
+		return status;
+	}
 
 	protected final void setStart(Ip start) {
 		this.start = start;

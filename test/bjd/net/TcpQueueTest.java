@@ -25,8 +25,8 @@ public final class TcpQueueTest {
 		TestUtil.dispPrompt(this, String.format("byte[] buf = tcpQueue.dequeu(100) 0のキューから100バイト取得"));
 		byte[] buf = tcpQueu.dequeue(100);
 
-		TestUtil.dispPrompt(this, String.format("buf == null　戻り値はnullになる"));
-		assertNull(buf);
+		TestUtil.dispPrompt(this, String.format("buf.length=0 サイズ0のバッファが返される"));
+		assertThat(buf.length, is(0));
 
 		TestUtil.dispPrompt(this, String.format("byte[] buf = new byte[100]{0,1,2,3....} テスト用データを作成"));
 		buf = new byte[100];
