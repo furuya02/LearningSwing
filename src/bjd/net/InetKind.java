@@ -1,6 +1,6 @@
 package bjd.net;
 /**
- * プロトコル TCP/UDP
+ * プロトコル V4/V6
  * @author SIN
  *
  */

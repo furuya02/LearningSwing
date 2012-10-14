@@ -4,6 +4,10 @@ package bjd.net;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
@@ -11,6 +15,7 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
+import org.junit.internal.runners.statements.Fail;
 import org.junit.runner.RunWith;
 
 import bjd.util.TestUtil;
@@ -106,7 +111,12 @@ public class IpTest {
 			System.out.printf("new Ip(\"%s\") IP.getInetAddress().toString()=\"%s\"\n", fx.actual, fx.expected);
 
 			Ip ip = new Ip(fx.actual);
-			assertThat(ip.getInetAddress().toString(), is(fx.expected));
+			try {
+				InetAddress inetAddress = ip.getInetAddress();
+				assertThat(inetAddress.toString(), is(fx.expected));
+			} catch (UnknownHostException ex) {
+				Assert.fail("InetAddressの取得に失敗しました");
+			}
 		}
 	}
 	

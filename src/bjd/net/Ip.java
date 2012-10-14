@@ -3,10 +3,20 @@ package bjd.net;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import bjd.net.IpTest.A001.Fixture;
+import bjd.util.Util;
 
+/**
+ * Ipアドレスを表現するクラス<br>
+ * Ipv4,Ipv6に対応<br>
+ * 初期化に失敗したオブジェクトを使用すると、実行時例外が発生する<br>
+ * 
+ * @author SIN
+ *
+ */
 public final class Ip {
 
 	private InetKind inetKind;
@@ -14,24 +24,54 @@ public final class Ip {
 	private byte[] ipV4;
 	private byte[] ipV6;
 	private int scopeId;
+	/**
+	 * 所為化に失敗するとtrueに設定される
+	 * trueの時に、このオブジェクトを使用すると実行時例外が発生する
+	 */
+	private boolean initialiseFailed = false; //初期化失敗
 
+	/**
+	 * スコープIDの取得
+	 * @return スコープID
+	 */
 	public int getScopeId() {
+		checkInitialise();
 		return scopeId;
 	}
 
+	/**
+	 * IpV4のバイト配列取得
+	 * @return バイト配列  byte[4]
+	 */
 	public byte[] getIpV4() {
+		checkInitialise();
 		return ipV4;
 	}
 
+	/**
+	 * IpV6のバイト配列取得
+	 * @return バイト配列  byte[16]
+	 */
 	public byte[] getIpV6() {
+		checkInitialise();
 		return ipV6;
 	}
 
+	/**
+	 * INADDR_ANY 若しくは、IN6ADDR_ANY_INITかどうかの取得
+	 * @return true/false
+	 */
 	public boolean getAny() {
+		checkInitialise();
 		return any;
 	}
 
+	/**
+	 * プロトコルの種類を取得
+	 * @return V4 or V6
+	 */
 	public InetKind getInetKind() {
+		checkInitialise();
 		return inetKind;
 	}
 
@@ -47,18 +87,20 @@ public final class Ip {
 		scopeId = 0;
 	}
 
+	/**
+	 * デフォルトコンストラクタの隠蔽
+	 */
 	@SuppressWarnings("unused")
-	private Ip() {
-		// デフォルトコンストラクタの隠蔽
-	}
+	private Ip() { }
 
 	// コンストラクタ
 	/**
 	 * コンストラクタ<br>
 	 * 初期化文字列でIPアドレスを初期化する<br>
 	 * 文字列が無効で初期化に失敗した場合は、例外(IllegalArgumentException)がスローされる<br>
-	 * 無効なこのオブジェクトを使用するのは、危険性が高いため、生成時に必ず例外処理しなければならない
+	 * 初期化に失敗したオブジェクトを使用すると「実行時例外」が発生するので、生成時に必ず例外処理しなければならない<br>
 	 * 
+	 * <初期化例><br>
 	 * Ip(192.168.0.1)<br>
 	 * Ip(INADDR_ANY)<br>
 	 * Ip(IN6ADDR_ANY_INIT)<br>
@@ -70,7 +112,7 @@ public final class Ip {
 	 * @param ipStr　初期化文字列
 	 * @throws IllegalArgumentException 
 	 */
-	public Ip(String ipStr) throws IllegalArgumentException  {
+	public Ip(String ipStr) throws IllegalArgumentException {
 		init(InetKind.V4);
 
 		if (ipStr == null) {
@@ -166,7 +208,11 @@ public final class Ip {
 		}
 	}
 
-	// ホストバイトオーダのデータで初期化する
+	/**
+	 * コンストラクタ<br>
+	 * IPv4のバイトオーダで初期化する<br>
+	 * @param ip バイトオーダ 　4byte(32bit)
+	 */
 	public Ip(int ip) {
 		init(InetKind.V4); // デフォルト値での初期化
 
@@ -176,7 +222,13 @@ public final class Ip {
 		}
 	}
 
-	// ホストバイトオーダのデータで初期化する
+	/**
+	 * コンストラクタ<br>
+	 * IPv6のバイトオーダで初期化する<br>
+	 * 
+	 * @param h 上位バイトオーダ　8byte(64bit)
+	 * @param l　下位バイトオーダ　8byte(64bit)
+	 */
 	public Ip(long h, long l) {
 
 		init(InetKind.V6); // デフォルト値での初期化
@@ -190,8 +242,13 @@ public final class Ip {
 		}
 	}
 
+	/**
+	 * アドレスが同じかどうかの検査
+	 * @param o Ipオブジェクト
+	 */
 	@Override
 	public boolean equals(Object o) {
+		checkInitialise();
 		// 非NULL及び型の確認
 		if (o == null || !(o instanceof Ip)) {
 			return false;
@@ -226,15 +283,23 @@ public final class Ip {
 		return 100;
 	}
 
-	// 1回だけ省略表記を使用する
-	enum State {
+	/**
+	 * 1回だけ省略表記を使用する
+	 * @author SIN
+	 *
+	 */
+	private enum State {
 		UNUSED, //未使用
 		USING, //使用中
 		FINISH, //使用済
 	}
 
+	/**
+	 * 文字列化
+	 */
 	@Override
 	public String toString() {
+		checkInitialise();
 		if (inetKind == InetKind.V4) {
 			if (any) {
 				return "INADDR_ANY";
@@ -283,16 +348,13 @@ public final class Ip {
 		return sb.toString();
 	}
 
-	// ネットワークバイトオーダ
-	public byte[] netBytes() {
-		if (inetKind == InetKind.V4) {
-			return ipV4;
-		}
-		return ipV6;
-	}
-
-	// ホストバイトオーダ　この値を比較に使用する場合は、longへのキャストが必要 (getAddrV4()&0xFFFFFFFFL)
+	/**
+	 * IPv4  バイトオーダ<br>
+	 * この値を比較に使用する場合は、longへのキャストが必要 (getAddrV4()&0xFFFFFFFFL)
+	 * @return int 4byte(32bit) 
+	 */
 	public int getAddrV4() {
+		checkInitialise();
 		if (inetKind == InetKind.V4) {
 			ByteBuffer byteBuffer = ByteBuffer.allocate(4);
 			byteBuffer.put(ipV4[0]);
@@ -305,8 +367,12 @@ public final class Ip {
 		return 0;
 	}
 
-	// ホストバイトオーダ
+	/**
+	 * IPv6 上位バイトオーダ
+	 * @return byte[] 8byte(64bit) 
+	 */
 	public long getAddrV6H() {
+		checkInitialise();
 		if (inetKind == InetKind.V6) {
 			ByteBuffer byteBuffer = ByteBuffer.allocate(8);
 			for (int i = 0; i < 8; i++) {
@@ -318,8 +384,12 @@ public final class Ip {
 		return 0;
 	}
 
-	// ホストバイトオーダ
+	/**
+	 * IPv6 下位バイトオーダ
+	 * @return byte[] 8byte(64bit) 
+	 */
 	public long getAddrV6L() {
+		checkInitialise();
 		if (inetKind == InetKind.V6) {
 			ByteBuffer byteBuffer = ByteBuffer.allocate(8);
 			for (int i = 0; i < 8; i++) {
@@ -331,24 +401,46 @@ public final class Ip {
 		return 0;
 	}
 
-	public InetAddress getInetAddress() {
-		try {
-			if (any) {
-				if (inetKind == InetKind.V4) {
-					return Inet4Address.getByName("0.0.0.0");
-				} else {
-					return Inet6Address.getByName("0::0");
-				}
-			}
+	/**
+	 * InetAddress(Inet4Address/Inet6Address)形式での取得
+	 * 変換に失敗した場合、例外がスローされる
+	 * 
+	 * @return　InetAddress
+	 * @throws UnknownHostException 
+	 */
+	public InetAddress getInetAddress() throws UnknownHostException {
+		checkInitialise();
+		if (any) {
 			if (inetKind == InetKind.V4) {
-				return Inet4Address.getByAddress(netBytes());
+				return Inet4Address.getByName("0.0.0.0");
+			} else {
+				return Inet6Address.getByName("0::0");
 			}
-			return Inet6Address.getByAddress("", netBytes(), scopeId);
-		} catch (Exception ex) {
-			return null;
 		}
+		if (inetKind == InetKind.V4) {
+			return Inet4Address.getByAddress(netBytes());
+		}
+		return Inet6Address.getByAddress("", netBytes(), scopeId);
 	}
 
+	/**
+	 * ネットワークバイトオーダ<br>
+	 * getInetAddress()内で使用される
+	 * @return
+	 */
+	private byte[] netBytes() {
+		checkInitialise();
+		if (inetKind == InetKind.V4) {
+			return ipV4;
+		}
+		return ipV6;
+	}
+
+	/**
+	 * バイト値がすべて0かどうかの検査
+	 * @param buf 検査対象バッファ
+	 * @return 全部0の場合true
+	 */
 	private boolean isAllZero(byte[] buf) {
 		for (byte b : buf) {
 			if (b != 0) {
@@ -359,14 +451,27 @@ public final class Ip {
 	}
 
 	/**
-	 * コンストラクタで初期化に失敗した時に使用する
-	 * 内部変数は初期化され例外（IllegalArgumentException）がスローされる
+	 * コンストラクタで初期化に失敗した時に使用する<br>
+	 * 内部変数は初期化され例外（IllegalArgumentException）がスローされる<br>
 	 * @param ipStr 初期化文字列
 	 * @throws IllegalArgumentException 
 	 */
 	private void throwException(String ipStr) {
+		initialiseFailed = true; //初期化失敗
 		init(inetKind); // デフォルト値での初期化
 		//throw new Exception(String.format("引数が不正です \"%s\"", ipStr)); 
 		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
 	}
+
+	/**
+	 * 初期化成否のチェック<br>
+	 * 初期化が失敗している場合は、実行時例外が発生する<br>
+	 * 全ての公開メソッドで使用される<br>
+	 */
+	private void checkInitialise() {
+		if (initialiseFailed) {
+			Util.runtimeError("このオブジェクト(Ip)は、初期化に失敗るため使用することができません");
+		}
+	}
+
 }

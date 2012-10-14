@@ -1,8 +1,10 @@
 package bjd.sock;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -87,8 +89,16 @@ public final class SockUdp extends SockObj {
 		//************************************************
 		//送信処理
 		//************************************************
-		InetSocketAddress remoteAddress = new InetSocketAddress(ip.getInetAddress(), port);
-		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), remoteAddress);
+		try {
+			InetAddress inetAddress = ip.getInetAddress();
+			InetSocketAddress remoteAddress = new InetSocketAddress(inetAddress, port);
+			set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), remoteAddress);
+		} catch (UnknownHostException ex) {
+			setException(ex);
+		}
+		
+//		InetSocketAddress remoteAddress = new InetSocketAddress(inetAddress, port);
+//		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), remoteAddress);
 		//set(SockState.Connect, getLocalAddress(), remoteAddress);
 
 		send(buf);

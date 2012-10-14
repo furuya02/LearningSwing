@@ -51,8 +51,8 @@ public final class SockTcp extends SockObj {
 		//************************************************
 		//connect
 		//************************************************
-		InetSocketAddress address = new InetSocketAddress(ip.getInetAddress(), port);
 		try {
+			InetSocketAddress address = new InetSocketAddress(ip.getInetAddress(), port);
 			channel.connect(address);
 			int msec = timeout;
 			while (!channel.finishConnect()) {
