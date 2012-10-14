@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import bjd.ValidObj;
 
 /**
- * バインドアドレスを表現するクラス
+ * バインドアドレスを表現するクラス<br>
+ * ValidObjを継承<br>
  * 
  * @author SIN
  *

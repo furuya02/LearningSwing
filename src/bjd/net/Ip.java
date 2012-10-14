@@ -10,6 +10,7 @@ import bjd.ValidObj;
 
 /**
  * Ipアドレスを表現するクラス<br>
+ * ValidObjを継承<br>
  * Ipv4,Ipv6に対応<br>
  * 初期化に失敗したオブジェクトを使用すると、実行時例外が発生する<br>
  * 

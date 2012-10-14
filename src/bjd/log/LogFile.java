@@ -20,6 +20,7 @@ import bjd.util.IDispose;
 import bjd.util.Util;
 
 
+
 public final class LogFile implements IDispose {
 
 	private Logger logger;
@@ -105,6 +106,7 @@ public final class LogFile implements IDispose {
 			}
 		}
 	}
+
 
 	// ログファイルへの追加
 	public void append(OneLog oneLog) {

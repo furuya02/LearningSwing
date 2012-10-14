@@ -213,12 +213,12 @@ public final class Logger {
 				}
 			}
 		}
-		Calendar c = Calendar.getInstance(); //現在時間で初期化される
-		String dateStr = String.format("%04d/%02d/%02d %02d:%02d:%02d", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE),
-				c.get(Calendar.HOUR), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
-		String messageNoStr = String.format("%7d", messageNo);
-		String remoteAddrStr = (sockBase == null) ? "-" : sockBase.getRemoteHostname();
-		OneLog oneLog = new OneLog(dateStr, logKind.toString(), nameTag, String.valueOf(threadId), remoteAddrStr, messageNoStr, message, detailInfomation);
+		Calendar calendar = Calendar.getInstance(); //現在時間で初期化される
+//		String dateStr = String.format("%04d/%02d/%02d %02d:%02d:%02d", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE),
+//				c.get(Calendar.HOUR), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
+//		String messageNoStr = String.format("%7d", messageNo);
+		String remoteHostname = (sockBase == null) ? "-" : sockBase.getRemoteHostname();
+		OneLog oneLog = new OneLog(calendar, logKind, nameTag, threadId, remoteHostname, messageNo, message, detailInfomation);
 
 		//ログファイルへの追加
 		if (kernel.getLogFile() != null) {

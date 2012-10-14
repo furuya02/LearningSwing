@@ -3,7 +3,8 @@ package bjd.net;
 import bjd.ValidObj;
 
 /**
- * MACアドレスを表現するクラス
+ * MACアドレスを表現するクラス<br>
+ * ValidObjを継承<br>
  * 
  * @author SIN
  *

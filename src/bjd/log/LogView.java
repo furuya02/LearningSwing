@@ -134,11 +134,11 @@ public final class LogView implements IDispose {
 				}
 				//リストビューへの出力       
 				String [] s = new String[8];
-				s[0] = oneLog.getDateStr();
+				s[0] = oneLog.getCalendar();
 				s[1] = oneLog.getLogKind();
 				s[2] = oneLog.getThreadId();
 				s[3] = oneLog.getNameTag();
-				s[4] = oneLog.getRemoteAddr();
+				s[4] = oneLog.getRemoteHostname();
 				s[5] = oneLog.getMessageNo();
 				s[6] = oneLog.getMessage();
 				s[7] = oneLog.getDetailInfomation();
