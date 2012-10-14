@@ -11,7 +11,6 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import bjd.acl.AclV4Test.A003.Fixture;
 import bjd.net.Ip;
 import bjd.util.TestUtil;
 

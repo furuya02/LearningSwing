@@ -7,7 +7,7 @@ import bjd.util.Util;
 public final class ListServer extends ListBase<OneServer> implements IDispose {
 
 	public OneServer get(String nameTag) {
-		for (OneServer oneServer : ar) {
+		for (OneServer oneServer : getAr()) {
 			if (oneServer.getNameTag().equals(nameTag)) {
 				return oneServer;
 			}

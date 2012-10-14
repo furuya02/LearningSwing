@@ -9,11 +9,15 @@ import java.util.Iterator;
 //****************************************************************
 public abstract class ListBase<T extends IDispose> implements Iterable<T>,
         Iterator<T> {
-    protected ArrayList<T> ar = new ArrayList<T>();
+    private ArrayList<T> ar = new ArrayList<T>();
     private int index;
 
     public ListBase() {
         index = 0;
+    }
+    
+    protected final ArrayList<T> getAr() {
+    	return ar;
     }
 
     public final void dispose() {

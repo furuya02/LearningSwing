@@ -3,7 +3,6 @@ package bjd.net;
 import java.util.ArrayList;
 
 import bjd.ValidObj;
-import bjd.util.Util;
 
 /**
  * バインドアドレスを表現するクラス

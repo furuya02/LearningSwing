@@ -71,7 +71,7 @@ public final class Reg implements IDispose {
 	 * @throws IllegalArgumentException
 	 */
 	public int getInt(String key) throws IllegalArgumentException {
-		String s = getString(key);
+		//String s = getString(key);
 		try {
 			return Integer.valueOf(getString(key));
 		} catch (NumberFormatException ex) {

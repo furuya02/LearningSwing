@@ -9,7 +9,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import bjd.net.Ip;
 import bjd.util.TestUtil;
 
 public final class RegTest {

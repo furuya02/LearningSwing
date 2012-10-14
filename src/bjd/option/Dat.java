@@ -30,7 +30,7 @@ public final class Dat extends ListBase<OneDat> {
 			throw new IllegalArgumentException("カラム数が一致しません");
 		}
 
-		if (!ar.add(new OneDat(enable, list, isSecretList))) {
+		if (!getAr().add(new OneDat(enable, list, isSecretList))) {
 			return false;
 		}
 		return true;
@@ -38,7 +38,7 @@ public final class Dat extends ListBase<OneDat> {
 	
     public String toReg(boolean isSecret) {
     	StringBuilder sb = new StringBuilder();
-        for (OneDat o : ar) {
+        for (OneDat o : getAr()) {
             if (sb.length() != 0) {
                 sb.append("\b");
             }
@@ -48,7 +48,7 @@ public final class Dat extends ListBase<OneDat> {
     }
 
 	public boolean fromReg(String str) {
-		ar.clear();
+		getAr().clear();
 		if (str == null) {
 			return false;
 		}
@@ -64,12 +64,12 @@ public final class Dat extends ListBase<OneDat> {
 			//ダミーのOneDatを作成
 			OneDat oneDat = new OneDat(true, new String[colMax], isSecretList);
 			if (oneDat.fromReg(l)) {
-				if (ar.add(oneDat)) {
+				if (getAr().add(oneDat)) {
 					continue; // 処理成功
 				}
 			}
 			//処理失敗
-			ar.clear();
+			getAr().clear();
 			return false;
 		}
 		return true;

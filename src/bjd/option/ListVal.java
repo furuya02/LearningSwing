@@ -27,7 +27,7 @@ public final class ListVal extends ListBase<OneVal> {
 			}
 		}
 		// 重複が無いので追加する
-		ar.add(oneVal);
+		getAr().add(oneVal);
 	}
 
 	// 階層下のOneValを一覧する
@@ -35,7 +35,7 @@ public final class ListVal extends ListBase<OneVal> {
 		if (list == null) {
 			list = new ArrayList<>();
 		}
-		for (OneVal o : ar) {
+		for (OneVal o : getAr()) {
 			list = o.getList(list);
 		}
 		return list;
@@ -58,7 +58,7 @@ public final class ListVal extends ListBase<OneVal> {
 		int y = baseY;
 		int h = y; // １行の中で一番背の高いオブジェクトの高さを保持する・
 		int w = x; // xオフセットの最大値を保持する
-		for (OneVal o : ar) {
+		for (OneVal o : getAr()) {
 
 			o.createCtrl(mainPanel, x, y);
 
@@ -83,14 +83,14 @@ public final class ListVal extends ListBase<OneVal> {
 
 	// コントロール破棄
 	public void deleteCtrl() {
-		for (OneVal o : ar) {
+		for (OneVal o : getAr()) {
 			o.deleteCtrl();
 		}
 	}
 
 	// コントロールからの値のコピー(isComfirm==true 確認のみ)
 	public boolean readCtrl(boolean isComfirm) {
-		for (OneVal o : ar) {
+		for (OneVal o : getAr()) {
 			if (!o.readCtrl(isComfirm)) {
 				return false;
 			}
@@ -106,7 +106,7 @@ public final class ListVal extends ListBase<OneVal> {
 	}
 
 	public boolean isComplete() {
-		for (OneVal o : ar) {
+		for (OneVal o : getAr()) {
 			if (!o.isComplete()) {
 				return false;
 			}
@@ -115,7 +115,7 @@ public final class ListVal extends ListBase<OneVal> {
 	}
 
 	public void setListener(ICtrlEventListener listener) {
-		for (OneVal o : ar) {
+		for (OneVal o : getAr()) {
 			o.setListener(listener);
 		}
 	}

@@ -22,7 +22,7 @@ public class ListBaseTest {
 	}
 	class TestClass extends ListBase<OneClass> {
 		public void add(OneClass o) {
-			ar.add(o);
+			getAr().add(o);
 		}
 	}
 		

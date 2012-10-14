@@ -15,7 +15,7 @@ public final class ListOption extends ListBase<OneOption> {
 	}
 
 	public OneOption get(String nameTag) {
-		for (OneOption o : ar) {
+		for (OneOption o : getAr()) {
 			if (o.getNameTag().equals(nameTag)) {
 				return o;
 			}
@@ -28,18 +28,18 @@ public final class ListOption extends ListBase<OneOption> {
 		return null;
 	}
 
-	//null追加を回避するために、ar.add()は、このファンクションを使用する
+	//null追加を回避するために、getAr().add()は、このファンクションを使用する
 	private boolean add(OneOption o) {
 		if (o == null) {
 			return false;
 		}
-		ar.add(o);
+		getAr().add(o);
 		return true;
 	}
 
 	//Kernel.Dispose()で、有効なオプションだけを出力するために使用する
 	public void save() {
-		for (OneOption o : ar) {
+		for (OneOption o : getAr()) {
 			o.save();
 		}
 	}
@@ -58,7 +58,7 @@ public final class ListOption extends ListBase<OneOption> {
 	//オプションリストの初期化
 	public void initialize() {
 
-		ar.clear();
+		getAr().clear();
 
 		//固定的にBasicとLogを生成する
 		String executePath = ""; // Application.ExecutablePath
@@ -161,7 +161,7 @@ public final class ListOption extends ListBase<OneOption> {
         ListMenu proxyMenu = null;
         int countTunnel = 0;
         
-        for (OneOption a : ar) {
+        for (OneOption a : getAr()) {
             ListMenu menu = mainMenu;
 
             if (a.getNameTag().equals("DnsServer")) {

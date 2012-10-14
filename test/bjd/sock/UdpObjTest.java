@@ -1,8 +1,9 @@
 package bjd.sock;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
-import junit.framework.Assert;
 import bjd.Kernel;
 import bjd.ThreadBase;
 import bjd.net.Ip;
