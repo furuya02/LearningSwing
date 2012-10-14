@@ -2,6 +2,7 @@ package bjd.net;
 
 import java.util.ArrayList;
 
+import bjd.ValidObj;
 import bjd.util.Util;
 
 /**
@@ -10,15 +11,10 @@ import bjd.util.Util;
  * @author SIN
  *
  */
-public final class BindAddr {
+public final class BindAddr extends ValidObj  {
 	private Ip ipV4;
 	private Ip ipV6;
 	private BindStyle bindStyle;
-	/**
-	 * 所為化に失敗するとtrueに設定される
-	 * trueの時に、このオブジェクトを使用すると実行時例外が発生する
-	 */
-	private boolean initialiseFailed = false; //初期化失敗
 
 	/**
 	 * IPv4アドレスの取得
@@ -48,12 +44,13 @@ public final class BindAddr {
 	}
 
 	/**
-	 * デフォルト値の初期化<br>
+	 * 初期化<br>
 	 * IPv4=INADDR_ANY<br>
 	 * IPv6=IN6ADDR_ANY_INIT<br>
 	 * ディアルバインド<br>
 	 */
-	private void init() {
+	@Override
+	protected void init() {
 		bindStyle = BindStyle.V4ONLY;
 		ipV4 = new Ip("INADDR_ANY");
 		ipV6 = new Ip("IN6ADDR_ANY_INIT");
@@ -234,28 +231,4 @@ public final class BindAddr {
 		}
 		return false;
 	}
-
-	/**
-	 * コンストラクタで初期化に失敗した時に使用する<br>
-	 * 内部変数は初期化され例外（IllegalArgumentException）がスローされる<br>
-	 * @param ipStr 初期化文字列
-	 * @throws IllegalArgumentException 
-	 */
-	private void throwException(String ipStr) {
-		initialiseFailed = true; //初期化失敗
-		init(); // デフォルト値での初期化
-		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
-	}
-
-	/**
-	 * 初期化成否のチェック<br>
-	 * 初期化が失敗している場合は、実行時例外が発生する<br>
-	 * 全ての公開メソッドで使用される<br>
-	 */
-	private void checkInitialise() {
-		if (initialiseFailed) {
-			Util.runtimeError("このオブジェクト(Ip)は、初期化に失敗るため使用することができません");
-		}
-	}
-
 }

@@ -6,8 +6,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-import bjd.net.IpTest.A001.Fixture;
-import bjd.util.Util;
+import bjd.ValidObj;
 
 /**
  * Ipアドレスを表現するクラス<br>
@@ -17,18 +16,13 @@ import bjd.util.Util;
  * @author SIN
  *
  */
-public final class Ip {
+public final class Ip extends ValidObj {
 
 	private InetKind inetKind;
 	private boolean any;
 	private byte[] ipV4;
 	private byte[] ipV6;
 	private int scopeId;
-	/**
-	 * 所為化に失敗するとtrueに設定される
-	 * trueの時に、このオブジェクトを使用すると実行時例外が発生する
-	 */
-	private boolean initialiseFailed = false; //初期化失敗
 
 	/**
 	 * スコープIDの取得
@@ -76,6 +70,14 @@ public final class Ip {
 	}
 
 	/**
+	 * 初期化
+	 */
+	@Override
+	protected void init() {
+		init(InetKind.V4);
+	}
+
+	/**
 	 * デフォルト値の初期化
 	 * @param inetKind TCP/UDP
 	 */
@@ -91,7 +93,8 @@ public final class Ip {
 	 * デフォルトコンストラクタの隠蔽
 	 */
 	@SuppressWarnings("unused")
-	private Ip() { }
+	private Ip() {
+	}
 
 	// コンストラクタ
 	/**
@@ -448,30 +451,6 @@ public final class Ip {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * コンストラクタで初期化に失敗した時に使用する<br>
-	 * 内部変数は初期化され例外（IllegalArgumentException）がスローされる<br>
-	 * @param ipStr 初期化文字列
-	 * @throws IllegalArgumentException 
-	 */
-	private void throwException(String ipStr) {
-		initialiseFailed = true; //初期化失敗
-		init(inetKind); // デフォルト値での初期化
-		//throw new Exception(String.format("引数が不正です \"%s\"", ipStr)); 
-		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
-	}
-
-	/**
-	 * 初期化成否のチェック<br>
-	 * 初期化が失敗している場合は、実行時例外が発生する<br>
-	 * 全ての公開メソッドで使用される<br>
-	 */
-	private void checkInitialise() {
-		if (initialiseFailed) {
-			Util.runtimeError("このオブジェクト(Ip)は、初期化に失敗るため使用することができません");
-		}
 	}
 
 }
