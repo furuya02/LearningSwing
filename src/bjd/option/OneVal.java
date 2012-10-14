@@ -300,7 +300,7 @@ public final class OneVal implements IDispose {
 			case BINDADDR:
 				try {
 					value = new BindAddr(str);
-				} catch (Exception ex) {
+				} catch (IllegalArgumentException ex) {
 					value = 0;
 					return false;
 				}
