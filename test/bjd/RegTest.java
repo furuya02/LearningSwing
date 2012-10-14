@@ -5,8 +5,11 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
+import bjd.net.Ip;
 import bjd.util.TestUtil;
 
 public final class RegTest {
@@ -70,121 +73,156 @@ public final class RegTest {
 	@Test
 	public void a003() {
 
-		TestUtil.dispHeader("a003 保存されていないKeyで読み出すと0を返す　getInt()");
+		TestUtil.dispHeader("a003 保存されていないKeyで読み出すと例外が発生する　getInt()");
 
 		File file = before("a003"); //前処理
 		
 		Reg reg = new Reg(file.getPath());
 		String key = "xxx";
-		int actual = reg.getInt(key);
-		TestUtil.dispPrompt(this, String.format("reg.getInt(\"%s\")= %d", key, actual));
-		assertThat(actual, is(0));
-		reg.dispose();
-
-		after(file); //後始末
-
+		
+		TestUtil.dispPrompt(this, String.format("reg.getInt(\"%s\") => IllegalArgumentException", key));
+		try {
+			@SuppressWarnings("unused")
+			int actual = reg.getInt(key);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
+			reg.dispose();
+			after(file); //後始末
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
 	}
 
 
 	@Test
 	public void a004() {
 
-		TestUtil.dispHeader("a004 保存されていないKeyで読み出すと\"\"を返す　getString()");
+		TestUtil.dispHeader("a004 保存されていないKeyで読み出すと 例外が発生する　getString()");
 
 		File file = before("a004"); //前処理
 		
 		Reg reg = new Reg(file.getPath());
 		String key = "xxx";
-		String actual = reg.getString(key);
-		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")= \"%s\"", key, actual));
-		assertThat(actual, is(""));
-		reg.dispose();
-
-		after(file); //後始末
+		
+		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")  => IllegalArgumentException", key));
+		try {
+			@SuppressWarnings("unused")
+			String actual = reg.getString(key);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
+			reg.dispose();
+			after(file); //後始末
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
+		
 
 	}
 	
 	@Test
 	public void a005() {
 
-		TestUtil.dispHeader("a005 Key=null で読み出すと0を返す　getInt()");
+		TestUtil.dispHeader("a005 Key=null で読み出すと例外がが発生する　getInt()");
 
 		File file = before("a005"); //前処理
 		
 		Reg reg = new Reg(file.getPath());
 		String key = null;
-		int actual = reg.getInt(key);
-		TestUtil.dispPrompt(this, String.format("reg.getInt(%s)= %d", key, actual));
-		assertThat(actual, is(0));
-		reg.dispose();
-
-		after(file); //後始末
-
+		
+		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")  => IllegalArgumentException", key));
+		try {
+			@SuppressWarnings("unused")
+			int actual = reg.getInt(key);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
+			reg.dispose();
+			after(file); //後始末
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
 	}
 
 
 	@Test
 	public void a006() {
 
-		TestUtil.dispHeader("a006 Key=null で読みだすと\"\"を返す　getString()");
+		TestUtil.dispHeader("a006 Key=null で読みだすと例外が発生する　getString()");
 
 		File file = before("a006"); //前処理
 		
 		Reg reg = new Reg(file.getPath());
 		String key = null;
-		String actual = reg.getString(key);
-		TestUtil.dispPrompt(this, String.format("reg.getString(%s)= \"%s\"", key, actual));
-		assertThat(actual, is(""));
-		reg.dispose();
 
-		after(file); //後始末
+		
+		TestUtil.dispPrompt(this, String.format("reg.getString(%s)  => IllegalArgumentException", key));
+		try {
+			@SuppressWarnings("unused")
+			String actual = reg.getString(key);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
+			reg.dispose();
+			after(file); //後始末
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
 
 	}
 	
 	@Test
 	public void a007() {
 
-		TestUtil.dispHeader("a007 Key=null で値を設定すると無視される　setInt()");
+		TestUtil.dispHeader("a007 Key=null で値を設定すると例外が発生する　setInt()");
 
 		File file = before("a007"); //前処理
 		
 		Reg reg = new Reg(file.getPath());
-		String key = null;
+		String key = "TEST";
 		int val = 123;
 		reg.setInt(key, val);
 		TestUtil.dispPrompt(this, String.format("reg.setInt(%s,%d)", key, val));
 
-		int actual = reg.getInt(key);
-		TestUtil.dispPrompt(this, String.format("reg.getInt(%s)= %d", key, actual));
-		assertThat(actual, is(0));
-		
-		reg.dispose();
+		key = null;
+		TestUtil.dispPrompt(this, String.format("reg.getString(%s)  => IllegalArgumentException", key));
+		try {
+			@SuppressWarnings("unused")
+			int actual = reg.getInt(key);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
 
-		after(file); //後始末
+			key = "TEST";
+			int actual = reg.getInt(key);
+			assertThat(actual, is(val));
+			TestUtil.dispPrompt(this, String.format("reg.getInt(%s)=%d", key, actual));
+			
+			reg.dispose();
+			after(file); //後始末
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
 
 	}
 
 	@Test
 	public void a008() {
 
-		TestUtil.dispHeader("a008 Key=null で値を設定すると無視される　setString()");
+		TestUtil.dispHeader("a008 Key=null で値を設定すると例外が発生する　setString()");
 
 		File file = before("a008"); //前処理
 		
 		Reg reg = new Reg(file.getPath());
 		String key = null;
 		String val = "123";
-		reg.setString(key, val);
-		TestUtil.dispPrompt(this, String.format("reg.setString(%s,\"%s\")", key, val));
-
-		String actual = reg.getString(key);
-		TestUtil.dispPrompt(this, String.format("reg.getString(%s)= \"%s\"", key, actual));
-		assertThat(actual, is(""));
 		
-		reg.dispose();
-
-		after(file); //後始末
-
+		TestUtil.dispPrompt(this, String.format("reg.setString(%s,\"%s\") => IllegalArgumentException", key, val));
+		try {
+			reg.setString(key, val);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
+			reg.dispose();
+			after(file); //後始末
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
 	}
 	
 	@Test

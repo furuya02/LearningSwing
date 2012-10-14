@@ -13,7 +13,7 @@ public final class WindowSize implements IDispose {
 	private Reg reg; //記録する仮想レジストリ
 
 	public WindowSize(Conf conf, String path) {
-		this.conf = conf; 
+		this.conf = conf;
 		reg = new Reg(path); //ウインドサイズ等を記録する仮想レジストリ
 	}
 
@@ -38,31 +38,34 @@ public final class WindowSize implements IDispose {
 		}
 
 		String n = frame.getTitle();
-		int w = reg.getInt(String.format("%s_width", n));
-		if (w <= 0) {
-			w = 800;
+		int w = 0;
+		int h = 0;
+		try {
+			w = reg.getInt(String.format("%s_width", n));
+			h = reg.getInt(String.format("%s_hight", n));
+		} catch (IllegalArgumentException ex) {
 		}
-		int h = reg.getInt(String.format("%s_hight", n));
 		if (h <= 0) {
 			h = 400;
 		}
+		if (w <= 0) {
+			w = 800;
+		}
 		frame.setSize(w, h);
 
-		int y = reg.getInt(String.format("%s_top", n));
-		if (y != -1) {
+		try {
+			int y = reg.getInt(String.format("%s_top", n));
+			int x = reg.getInt(String.format("%s_left", n));
 			if (y <= 0) {
 				y = 0;
 			}
-		}
-		int x = reg.getInt(String.format("%s_left", n));
-		if (x == -1) {
-			return;
-		}
-		if (x <= 0) {
-			x = 0;
-		}
-		frame.setLocation(x, y);
+			if (x <= 0) {
+				x = 0;
+			}
+			frame.setLocation(x, y);
+		} catch (IllegalArgumentException ex) {
 
+		}
 	}
 
 	//カラム幅の復元
@@ -81,11 +84,15 @@ public final class WindowSize implements IDispose {
 		}
 		for (int i = 0; i < listView.getColumnCount(); i++) {
 			String key = String.format("%s_col-%03d", listView.getName(), i);
-			int width = reg.getInt(key);
-			if (width <= 0) {
-				width = 100; //最低100を確保する
+			try {
+				int width = reg.getInt(key);
+				if (width <= 0) {
+					width = 100; //最低100を確保する
+				}
+				listView.setColWidth(i, width);
+			} catch (IllegalArgumentException ex) {
+				listView.setColWidth(i, 100); //デフォルト値
 			}
-			listView.setColWidth(i, width);
 		}
 	}
 

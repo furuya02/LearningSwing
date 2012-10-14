@@ -24,7 +24,7 @@ public final class Server extends OneServer {
 	public String getMsg(int messageNo) {
 		switch (messageNo) {
 			case 1:
-				return kernel.getJp() ? "日本語" : "English"; //この形式でログ用のメッセージ追加できます。
+				return getJp() ? "日本語" : "English"; //この形式でログ用のメッセージ追加できます。
 			default:
 				break;
 		}

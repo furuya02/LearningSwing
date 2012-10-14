@@ -7,17 +7,28 @@ import java.util.HashMap;
 import bjd.util.IDispose;
 import bjd.util.Util;
 
-//オプションを記憶するＤＢ
-//明示的にDispose()若しくはSave()を呼ばないと、保存されない
+/**
+ * オプションを記憶するＤＢ<br>
+ * 明示的にDispose()若しくはSave()を呼ばないと、保存されない
+ * 
+ * @author SIN
+ *
+ */
 public final class Reg implements IDispose {
 
 	private String path;
 	private HashMap<String, String> ar = new HashMap<>();
 
+	/**
+	 * コンストラクタ
+	 * 
+	 * @param path 記憶ファイル名
+	 */
 	public Reg(String path) {
 		this.path = path;
 		File file = new File(path);
-		if (file.exists()) {
+
+		if (file.exists()) { //ファイルが存在する場合は、保存されているデータを読み込む
 			ArrayList<String> lines = Util.textFileRead(file);
 			for (String s : lines) {
 				int index = s.indexOf("=");
@@ -31,11 +42,17 @@ public final class Reg implements IDispose {
 		}
 	}
 
+	/**
+	 * 終了処理
+	 */
 	@Override
 	public void dispose() {
 		save();
 	}
 
+	/**
+	 * 保存
+	 */
 	public void save() {
 		ArrayList<String> lines = new ArrayList<>();
 		for (String key : ar.keySet()) {
@@ -45,50 +62,75 @@ public final class Reg implements IDispose {
 		Util.textFileSave(new File(path), lines);
 	}
 
-	public int getInt(String key) {
-		if (key == null) { //key==nulの場合　0が返される
-			return 0;
-		}
-		
-		if (key.equals("")) { //key==""の場合　0が返される
-			return 0;
-		}
-		
+	/**
+	 * int値を読み出す<br>
+	 * key==null若しくは、Key=="" の場合や、Keyの値がintでない場合、例外がスローされる
+	 * 
+	 * @param key キー
+	 * @return int値
+	 * @throws IllegalArgumentException
+	 */
+	public int getInt(String key) throws IllegalArgumentException {
+		String s = getString(key);
 		try {
 			return Integer.valueOf(getString(key));
-		} catch (Exception ex) {
-			return 0;
+		} catch (NumberFormatException ex) {
+
 		}
+		throw new IllegalArgumentException();
 	}
 
-	public void setInt(String key, int val) {
-		if (key != null) { // key==nullの場合は処理なし
-			setString(key, String.valueOf(val));
-		}
+	/**
+	 * int値を設定する<br>
+	 * 
+	 * key==null若しくはKey==""の場合、例外がスローされる
+	 * 
+	 * @param key
+	 * @param val
+	 * @throws IllegalArgumentException
+	 */
+	public void setInt(String key, int val) throws IllegalArgumentException {
+		setString(key, String.valueOf(val));
 	}
 
-	public String getString(String key) {
-		if (key == null) { //ket==""の場合　””が返される
-			return "";
+	/**
+	 * String値を読み出す<br>
+	 * key==nullの場合や、Key==""の場合、例外がスローされる
+	 * 
+	 * @param key
+	 * @return String値
+	 * @throws IllegalArgumentException
+	 */
+	public String getString(String key) throws IllegalArgumentException {
+		if (key == null || key.equals("")) {
+			// key==null 若しくは Key==""の時、例外がスローされる
+			throw new IllegalArgumentException();
 		}
-		if (key.equals("")) { //key==""の場合　""が返される
-			return "";
-		}
-		
 		String ret = ar.get(key);
 		if (ret == null) {
-			return ""; //検索結果がヒットしなかった場合は""が返される
+			//検索結果がヒットしなかった場合、例外がスローされる
+			throw new IllegalArgumentException();
 		}
 		return ret;
 	}
 
-	public void setString(String key, String val) {
-		if (key != null) { // key==nullの場合は処理なし
-			ar.remove(key);
-			if (val == null) { //val==nullの場合は、""を保存する
-				val = "";
-			}
-			ar.put(key, val);
+	/**
+	 * String値の設定<br>
+	 * key==nullの場合や、Key==""の場合、例外がスローされる
+	 * 
+	 * @param key
+	 * @param val Strnig値
+	 * @throws IllegalArgumentException
+	 */
+	public void setString(String key, String val) throws IllegalArgumentException {
+		if (key == null || key.equals("")) {
+			// key==null 若しくは Key==""の時、例外がスローされる
+			throw new IllegalArgumentException();
 		}
+		ar.remove(key);
+		if (val == null) { //val==nullの場合は、""を保存する
+			val = "";
+		}
+		ar.put(key, val);
 	}
 }

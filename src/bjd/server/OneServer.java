@@ -54,11 +54,11 @@ public abstract class OneServer extends ThreadBase {
 	//ステータス表示用
 	@Override
 	public final String toString() {
-		String stat = kernel.getJp() ? "+ サービス中 " : "+ In execution ";
+		String stat = getJp() ? "+ サービス中 " : "+ In execution ";
 		if (!isRunnig()) {
-			stat = kernel.getJp() ? "- 停止 " : "- Initialization failure ";
+			stat = getJp() ? "- 停止 " : "- Initialization failure ";
 		}
-		return String.format("%s\t%20s\t[%s\t:%s %s]\tThread %d/%d", stat, nameTag, oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(),
+		return String.format("%s\t%20s\t[%s\t:%s %s]\tThread %d/%d", stat, getNameTag(), oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(),
 				(int) conf.get("port"), count(), multiple);
 	}
 
