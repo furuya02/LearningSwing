@@ -32,6 +32,7 @@ public abstract class ValidObj {
 		throw new IllegalArgumentException(String.format("[ValidObj] 引数が不正です。 \"%s\"", paramStr));
 	}
 
+	
 	/**
 	 * 初期化が失敗している場合は、実行時例外が発生する<br>
 	 * 全ての公開メソッドの最初に挿入する<br>
