@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import bjd.util.Util;
 
+/**
+ * バインドアドレスを表現するクラス
+ * 
+ * @author SIN
+ *
+ */
 public final class BindAddr {
 	private Ip ipV4;
 	private Ip ipV6;
