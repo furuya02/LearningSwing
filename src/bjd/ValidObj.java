@@ -5,7 +5,7 @@ import bjd.util.Util;
 /**
  * コンストラクタで文字列を受け取って初期化されるようなオブジェクトの「実行時例外」と「チェック例外」を処理する基底クラス<br>
  * 
- * 継承クラス  Ip Mac BindAddr　OneLog
+ * 継承クラス  Ip Mac BindAddr　OneLog　LocalAddress
  * @author SIN
  *
  */

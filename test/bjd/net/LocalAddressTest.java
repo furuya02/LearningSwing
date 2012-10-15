@@ -2,6 +2,7 @@ package bjd.net;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public final class LocalAddressTest {
 	public void a001() {
 
 		TestUtil.dispHeader("a001 remoteStr()で取得したテキストで、改めてLocalAddressを生成して、同じかどうかを確認"); //TESTヘッダ
-		
+
 		LocalAddress localAddress = new LocalAddress();
 		String remoteStr = localAddress.remoteStr();
 
@@ -27,4 +28,21 @@ public final class LocalAddressTest {
 		assertThat(remoteStr, is(localAddress.remoteStr()));
 	}
 
+	@Test
+	public void a002() {
+
+		TestUtil.dispHeader("a002 無効な文字列で初期化すると例外が発生するか"); //TESTヘッダ
+
+		String str = "XXX";
+		TestUtil.dispPrompt(this, String.format("new LocalAddress(\"%s\") => IllegalArgumentException", str));
+		try {
+			@SuppressWarnings("unused")
+			LocalAddress localAddress = new LocalAddress(str);
+			Assert.fail("この行が実行されたらエラー");
+		} catch (IllegalArgumentException ex) {
+			return;
+		}
+		Assert.fail("この行が実行されたらエラー");
+
+	}
 }
