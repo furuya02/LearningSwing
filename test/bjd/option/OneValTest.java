@@ -20,6 +20,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
@@ -37,6 +38,7 @@ import bjd.ctrl.CtrlType;
 import bjd.ctrl.OneCtrl;
 import bjd.net.BindAddr;
 import bjd.net.BindStyle;
+import bjd.net.InetKind;
 import bjd.net.Ip;
 import bjd.util.TestUtil;
 
@@ -68,7 +70,7 @@ public class OneValTest {
 				new Fixture(CtrlType.ADDRESSV4, "192.168.0.1", "192.168.0.1"),
 				new Fixture(CtrlType.DAT, new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.TEXTBOX }), ""), // CtrlDatはTESTBOX×2で初期化されている
 				new Fixture(CtrlType.BINDADDR, new BindAddr(), "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"),
-				new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip("0.0.0.1"), new Ip("::1")), "V4ONLY,0.0.0.1,::1"),
+				new Fixture(CtrlType.BINDADDR, new BindAddr(BindStyle.V4ONLY, new Ip(InetKind.V4), new Ip(InetKind.V6)), "V4ONLY,0.0.0.0,::0"),
 				new Fixture(CtrlType.COMBOBOX, 0, "0"), new Fixture(CtrlType.COMBOBOX, 1, "1"), };
 
 		static class Fixture {
@@ -262,6 +264,7 @@ public class OneValTest {
 	        TestUtil.dispHeader("createCtrl()->readCtrl(false)して、デフォルトの値に戻るかどうかのテスト");
 	    }
 
+	    
 	    @DataPoints
 	    public static Fixture[] datas = {
 	        new Fixture(CtrlType.CHECKBOX, true), 
@@ -275,7 +278,8 @@ public class OneValTest {
 			new Fixture(CtrlType.RADIO, 1),
 			new Fixture(CtrlType.FONT, new Font("Times New Roman", Font.ITALIC, 15)),
 			new Fixture(CtrlType.MEMO, "1\r\n2\r\n3\r\n"),
-			new Fixture(CtrlType.ADDRESSV4, new Ip("192.168.0.1")),
+			new Fixture(CtrlType.ADDRESSV4, new Ip(InetKind.V4)),
+			//new Fixture(CtrlType.ADDRESSV4, new Ip("192.168.0.1")),
 			//new Fixture(CtrlType.DAT, new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.TEXTBOX })),
 			new Fixture(CtrlType.BINDADDR, new BindAddr()),
 			new Fixture(CtrlType.COMBOBOX, 0),
@@ -391,8 +395,13 @@ public class OneValTest {
 						val = "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT";
 					}
 					ArrayList<Ip> list = new ArrayList<>();
-					list.add(new Ip("INADDR_ANY"));
-					list.add(new Ip("192.168.0.1"));
+					try {
+						list.add(new Ip("INADDR_ANY"));
+						list.add(new Ip("192.168.0.1"));
+					} catch (ValidObjException ex) {
+						Assert.fail(ex.getMessage());
+
+					}
 					oneCtrl = new CtrlBindAddr(help, list, list);
 					break;
 				case COMBOBOX:

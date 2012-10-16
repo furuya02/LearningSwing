@@ -1,6 +1,9 @@
 package bjd.acl;
 
+import bjd.ValidObj;
+import bjd.ValidObjException;
 import bjd.net.Ip;
+import bjd.util.Util;
 
 /**
  * ACLの基底クラス
@@ -11,7 +14,7 @@ import bjd.net.Ip;
  * @author SIN
  *
  */
-abstract class Acl {
+abstract class Acl extends ValidObj {
 	/**
 	 * １つのACLにつけられた名前<br>
 	 * 任意の文字列を指定できる
@@ -87,17 +90,4 @@ abstract class Acl {
 		start = end;
 		end = ip;
 	}
-
-	/**
-	 * コンストラクタで初期化に失敗した時に使用する
-	 * 内部変数は初期化され例外（IllegalArgumentException）がスローされる
-	 * @param ipStr 初期化文字列
-	 */
-	protected final void throwException(String ipStr) {
-		//TODO 無効オブジェクトで初期化する
-		start = new Ip("0.0.0.0");
-		end = new Ip("0.0.0.0");
-		throw new IllegalArgumentException(String.format("引数が不正です \"%s\"", ipStr));
-	}
-	
 }

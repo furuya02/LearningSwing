@@ -8,9 +8,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.option.Conf;
 import bjd.option.OptionLog;
 import bjd.util.FileSearch;
@@ -104,10 +107,13 @@ public final class LogFileTest {
 		TestUtil.dispPrompt(this, String.format("append(%s)", s1));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s2));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s3));
-
-		logFile.append(new OneLog(s1));
-		logFile.append(new OneLog(s2));
-		logFile.append(new OneLog(s3));
+		try {
+			logFile.append(new OneLog(s1));
+			logFile.append(new OneLog(s2));
+			logFile.append(new OneLog(s3));
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
 		logFile.dispose();
 
 		String fileName = "BlackJumboDog.Log";
@@ -154,13 +160,17 @@ public final class LogFileTest {
 		TestUtil.dispPrompt(this, String.format("append(%s)", s5));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s6));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s7));
-		logFile.append(new OneLog(s1));
-		logFile.append(new OneLog(s2));
-		logFile.append(new OneLog(s3));
-		logFile.append(new OneLog(s4));
-		logFile.append(new OneLog(s5));
-		logFile.append(new OneLog(s6));
-		logFile.append(new OneLog(s7));
+		try {
+			logFile.append(new OneLog(s1));
+			logFile.append(new OneLog(s2));
+			logFile.append(new OneLog(s3));
+			logFile.append(new OneLog(s4));
+			logFile.append(new OneLog(s5));
+			logFile.append(new OneLog(s6));
+			logFile.append(new OneLog(s7));
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
 
 		int saveDays = 2;
 		String fileName = "BlackJumboDog.Log";

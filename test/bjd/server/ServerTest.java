@@ -1,8 +1,11 @@
 package bjd.server;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
 import bjd.net.OneBind;
@@ -80,7 +83,13 @@ public final class ServerTest {
 	
 	@Test
 	public void a001() {
-		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+		Ip ip = null;
+		try {
+			ip = new Ip("127.0.0.1");
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
 		conf.set("protocolKind", 0); //TCP=0 UDP=1

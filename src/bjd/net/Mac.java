@@ -1,6 +1,7 @@
 package bjd.net;
 
 import bjd.ValidObj;
+import bjd.ValidObjException;
 
 /**
  * MACアドレスを表現するクラス<br>
@@ -25,8 +26,9 @@ public final class Mac extends ValidObj  {
 	 * 初期化に失敗したオブジェクトを使用すると「実行時例外」が発生するので、生成時に必ず例外処理しなければならない<br>
 	 * 
 	 * @param macStr
+	 * @throws ValidObjException 初期化失敗
 	 */
-	public Mac(String macStr) {
+	public Mac(String macStr) throws ValidObjException {
 		if (macStr.length() != 17) {
 			throwException("buf.length!=6"); //初期化失敗
 		}
@@ -44,8 +46,9 @@ public final class Mac extends ValidObj  {
 	/**
 	 * コンストラクタ (バイトオーダ)
 	 * @param buf[6]
+	 * @throws ValidObjException 初期化失敗
 	 */
-	public Mac(byte[] buf) {
+	public Mac(byte[] buf) throws ValidObjException {
 		if (buf.length != 6) {
 			throwException("buf.length!=6"); //初期化失敗
 		}

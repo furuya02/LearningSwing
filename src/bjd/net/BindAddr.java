@@ -3,6 +3,7 @@ package bjd.net;
 import java.util.ArrayList;
 
 import bjd.ValidObj;
+import bjd.ValidObjException;
 
 /**
  * バインドアドレスを表現するクラス<br>
@@ -52,8 +53,12 @@ public final class BindAddr extends ValidObj  {
 	@Override
 	protected void init() {
 		bindStyle = BindStyle.V4ONLY;
-		ipV4 = new Ip("INADDR_ANY");
-		ipV6 = new Ip("IN6ADDR_ANY_INIT");
+		try {
+			ipV4 = new Ip("INADDR_ANY");
+			ipV6 = new Ip("IN6ADDR_ANY_INIT");
+		} catch (ValidObjException ex) {
+			//上記の初期化が失敗した場合は、実行時例外
+		}
 	}
 
 	/**
@@ -82,8 +87,9 @@ public final class BindAddr extends ValidObj  {
 	 * 初期化に失敗したオブジェクトを使用すると「実行時例外」が発生するので、生成時に必ず例外処理しなければならない<br>
 	 * 
 	 * @param str　指定文字列
+	 * @throws ValidObjException 初期化失敗
 	 */
-	public BindAddr(String str) throws IllegalArgumentException {
+	public BindAddr(String str) throws ValidObjException {
 		if (str == null) {
 			throwException(str); //初期化失敗
 		}

@@ -6,6 +6,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 
+import bjd.ValidObjException;
 import bjd.net.Ip;
 
 public final class CtrlAddress extends OneCtrl implements DocumentListener {
@@ -137,7 +138,7 @@ public final class CtrlAddress extends OneCtrl implements DocumentListener {
 		try {
 			Ip ip = new Ip(s);
 			abstractWrite(ip);
-		} catch (IllegalArgumentException e) {
+		} catch (ValidObjException e) {
 			//TODO ここの例外処理が必要
 		}
 	}

@@ -1,7 +1,9 @@
 package bjd.acl;
 
+import bjd.ValidObjException;
 import bjd.net.InetKind;
 import bjd.net.Ip;
+import bjd.util.Util;
 
 /**
  * 
@@ -27,14 +29,15 @@ final class AclV4 extends Acl {
 	 * 
 	 * @param name 名前
 	 * @param ipStr IPアドレス範囲を示す初期化文字列
-	 * @throws パラメータが不正で初期化に失敗した場合 IllegalArgumentExceptionがスローされる
+	 * @throws ValidObjException パラメータが不正で初期化に失敗
 	 * 
 	 */
-	AclV4(String name, String ipStr) throws IllegalArgumentException {
+	AclV4(String name, String ipStr) throws ValidObjException {
 		super(name);
 
 		//「*」によるALL指定
 		if (ipStr.equals("*") || ipStr.equals("*.*.*.*")) {
+			
 			setStart(new Ip("0.0.0.0"));
 			setEnd(new Ip("255.255.255.255"));
 			//setStatus(true);
@@ -171,6 +174,7 @@ final class AclV4 extends Acl {
 
 	@Override
 	boolean isHit(Ip ip) {
+		checkInitialise();
 
 		long longIp = ip.getAddrV4() & 0xFFFFFFFFL;
 		long longStart = getStart().getAddrV4() & 0xFFFFFFFFL;
@@ -183,5 +187,15 @@ final class AclV4 extends Acl {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	protected void init() {
+		try {
+			setStart(new Ip("0.0.0.0"));
+			setEnd(new Ip("255.255.255.255"));
+		} catch (ValidObjException e) {
+			Util.runtimeError("AclV4 init()");
+		}
 	}
 }

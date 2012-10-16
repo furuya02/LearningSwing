@@ -9,6 +9,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import bjd.ValidObjException;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
 import bjd.util.TestUtil;
@@ -28,8 +29,14 @@ public final class SockServerTest {
 		public void startStop(String title, final ProtocolKind protocolKind) {
 
 			TestUtil.dispHeader(title);
-
-			final Ip bindIp = new Ip("127.0.0.1");
+			
+			Ip ip = null;
+			try {
+				ip = new Ip("127.0.0.1");
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			final Ip bindIp = ip;
 			final int port = 8881;
 			final int listenMax = 10;
 
@@ -72,10 +79,17 @@ public final class SockServerTest {
 		public void getLocalAddress(String title, final ProtocolKind protocolKind) {
 			TestUtil.dispHeader(title);
 
-			final Ip bindIp = new Ip("127.0.0.1");
-			//			Ip bindIp = new Ip("INADDR_ANY");
-			//			Ip bindIp = new Ip("0.0.0.0");
-			//			Ip bindIp = new Ip("::1");
+			Ip ip = null;
+			try {
+				ip = new Ip("127.0.0.1");
+				//	Ip bindIp = new Ip("INADDR_ANY");
+				//	Ip bindIp = new Ip("0.0.0.0");
+				//	Ip bindIp = new Ip("::1");
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			
+			final Ip bindIp = ip;
 			final int port = 9991;
 			final int listenMax = 10;
 

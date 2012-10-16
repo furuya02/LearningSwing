@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.ValidObjException;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
 import bjd.net.Ssl;
@@ -44,7 +45,13 @@ public final class UdpObjTest {
 
 		@Override
 		protected void onRunThread() {
-			if (sockServer.bind(new Ip(addr), port)) {
+			Ip ip = null;
+			try {
+				ip = new Ip(addr);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			if (sockServer.bind(ip, port)) {
 				System.out.println(String.format("EchoServer bind"));
 				while (isLife()) {
 					final SockUdp child = (SockUdp) sockServer.select(this);
@@ -185,9 +192,14 @@ public final class UdpObjTest {
 			tmp[i] = (byte) i;
 		}
 
+		Ip ip = null;
+		try {
+			ip = new Ip(addr);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}		
 		for (int i = 0; i < loop; i++) {
-
-			SockUdp sockUdp = new SockUdp(new Ip(addr), port, timeout, ssl, tmp);
+			SockUdp sockUdp = new SockUdp(ip, port, timeout, ssl, tmp);
 			TestUtil.dispPrompt(this, String.format("sockUdp = new SockUdp(%dbyte)", tmp.length));
 			int len = 0;
 			while (len == 0) {

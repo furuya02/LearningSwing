@@ -11,6 +11,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.ValidObjException;
 import bjd.net.Ip;
 import bjd.util.TestUtil;
 
@@ -51,10 +52,14 @@ public class AclV6Test {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			AclV6 aclV6 = new AclV6("test", fx.aclStr);
-			System.out.printf("new AclV6(%s) => start=%s end=%s\n", fx.aclStr, fx.startStr, fx.endStr);
-			assertThat(aclV6.getStart().toString(), is(fx.startStr));
-			assertThat(aclV6.getEnd().toString(), is(fx.endStr));
+			try {
+				AclV6 aclV6 = new AclV6("test", fx.aclStr);
+				System.out.printf("new AclV6(%s) => start=%s end=%s\n", fx.aclStr, fx.startStr, fx.endStr);
+				assertThat(aclV6.getStart().toString(), is(fx.startStr));
+				assertThat(aclV6.getEnd().toString(), is(fx.endStr));
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
+			}
 		}
 	}
 	
@@ -87,15 +92,19 @@ public class AclV6Test {
 		@Theory
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			AclV6 aclV6 = new AclV6("test", fx.aclStr);
-			System.out.printf("new AclV6(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expected);
-			
-			//Ip a = aclV6.getStart();
-			//Ip b = aclV6.getEnd();
-			//Ip c = new Ip(fx.ipStr);
-			aclV6.isHit(new Ip(fx.ipStr));
-			
-			assertThat(aclV6.isHit(new Ip(fx.ipStr)), is(fx.expected));
+
+			try {
+				AclV6 aclV6 = new AclV6("test", fx.aclStr);
+				System.out.printf("new AclV6(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expected);
+				//Ip a = aclV6.getStart();
+				//Ip b = aclV6.getEnd();
+				//Ip c = new Ip(fx.ipStr);
+				aclV6.isHit(new Ip(fx.ipStr));
+				assertThat(aclV6.isHit(new Ip(fx.ipStr)), is(fx.expected));
+
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
+			}
 		}
 	}
 	
@@ -126,11 +135,10 @@ public class AclV6Test {
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
 			try {
-				@SuppressWarnings("unused")
-				AclV6 aclV6 = new AclV6("test", fx.aclStr);
+				new AclV6("test", fx.aclStr);
 				Assert.fail("この行が実行されたらエラー");
-			} catch (IllegalArgumentException ex) {
-				System.out.printf("new AclV6(%s) => IllegalArgumentException\n", fx.aclStr);
+			} catch (ValidObjException ex) {
+				System.out.printf("new AclV6(%s) => ValidObjException\n", fx.aclStr);
 				return;
 			}
 			Assert.fail("この行が実行されたらエラー");

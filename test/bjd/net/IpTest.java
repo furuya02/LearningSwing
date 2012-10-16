@@ -17,6 +17,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.ValidObjException;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -63,8 +64,12 @@ public class IpTest {
 			
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\") toString()=\"%s\"\n", fx.actual, fx.expected);
-
-			Ip ip = new Ip(fx.actual);
+			Ip ip = null;
+			try {
+				ip = new Ip(fx.actual);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
 			assertThat(ip.toString(), is(fx.expected));
 		}
 	}
@@ -109,7 +114,13 @@ public class IpTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("new Ip(\"%s\") IP.getInetAddress().toString()=\"%s\"\n", fx.actual, fx.expected);
 
-			Ip ip = new Ip(fx.actual);
+			Ip ip = null;
+			try {
+				ip = new Ip(fx.actual);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+
+			}
 			try {
 				InetAddress inetAddress = ip.getInetAddress();
 				assertThat(inetAddress.toString(), is(fx.expected));
@@ -154,7 +165,14 @@ public class IpTest {
 		public void test(Fixture fx) {
 
 			String ipStr = String.format("%d.%d.%d.%d", fx.n1, fx.n2, fx.n3, fx.n4);
-			Ip ip = new Ip(ipStr);
+
+			Ip ip = null;
+			try{
+				ip = new Ip(ipStr);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			
 			byte[] ipV4 = ip.getIpV4();
 			
 			TestUtil.dispPrompt(this);
@@ -228,8 +246,13 @@ public class IpTest {
 
 		@Theory
 		public void test(Fixture fx) {
-
-			Ip ip = new Ip(fx.ipStr);
+			Ip ip = null;
+			try {
+				ip = new Ip(fx.ipStr);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			
 			byte[] ipV6 = ip.getIpV6();
 			
 			TestUtil.dispPrompt(this);
@@ -269,23 +292,27 @@ public class IpTest {
 		@DataPoints
 		public static Fixture[] datas = {
 			// IP1.IP2,==の判定
-			new Fixture(new Ip("192.168.0.1"), new Ip("192.168.0.1"), true),
-			new Fixture(new Ip("192.168.0.1"), new Ip("192.168.0.2"), false),
-			new Fixture(new Ip("192.168.0.1"), null, false),
-			new Fixture(new Ip("::1"), new Ip("::1"), true), 
-			new Fixture(new Ip("::1%1"), new Ip("::1%1"), true), 
-			new Fixture(new Ip("::1%1"), new Ip("::1"), false), 
-			new Fixture(new Ip("ff01::1"), new Ip("::1"), false),
-			new Fixture(new Ip("::1"), null, false),
+			new Fixture("192.168.0.1", "192.168.0.1", true),
+			new Fixture("192.168.0.1", "192.168.0.2", false),
+			new Fixture("192.168.0.1", null, false),
+			new Fixture("::1", "::1", true), 
+			new Fixture("::1%1", "::1%1", true), 
+			new Fixture("::1%1", "::1", false), 
+			new Fixture("ff01::1", "::1", false),
+			new Fixture("::1", null, false),
 		};
 		static class Fixture {
 			private Ip ip0;
 			private Ip ip1;
 			private boolean expected;
 
-			public Fixture(Ip ip0, Ip ip1, boolean expected) {
-				this.ip0 = ip0;
-				this.ip1 = ip1;
+			public Fixture(String ip0, String ip1, boolean expected) {
+				try {
+					this.ip0 = (ip0 == null) ? null : new Ip(ip0);
+					this.ip1 = (ip1 == null) ? null : new Ip(ip1);
+				} catch (ValidObjException ex) {
+					Assert.fail(ex.getMessage());
+				}
 				this.expected = expected;
 			}
 		}
@@ -342,13 +369,16 @@ public class IpTest {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this);
-			
-			Ip p1 = new Ip(fx.ipStr);
-			int i = p1.getAddrV4();
-			Ip p2 = new Ip(i);
-			System.out.printf("Ip(%s) => ip.getAddrV4()=0x%x(%d) => new Ip(0x%x) => %s \n", fx.ipStr, i, i, i, p2.toString());
+			try {
+				Ip p1 = new Ip(fx.ipStr);
+				int i = p1.getAddrV4();
+				Ip p2 = new Ip(i);
+				System.out.printf("Ip(%s) => ip.getAddrV4()=0x%x(%d) => new Ip(0x%x) => %s \n", fx.ipStr, i, i, i, p2.toString());
 
-			assertThat(p2.toString(), is(fx.ipStr));
+				assertThat(p2.toString(), is(fx.ipStr));
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}			
 			
 		}
 	}
@@ -381,14 +411,17 @@ public class IpTest {
 		public void test(Fixture fx) {
 
 			TestUtil.dispPrompt(this);
-			
-			Ip p1 = new Ip(fx.ipStr);
-			long h = p1.getAddrV6H();
-			long l = p1.getAddrV6L();
-			Ip p2 = new Ip(h, l);
-			System.out.printf("Ip(%s) => ip.getAddrV6H()=0x%x  ip.getAddrV6L()=0x%x => new Ip(0x%x,0x%x) => %s \n", fx.ipStr, h, l, h, l, p2.toString());
+			try {
+				Ip p1 = new Ip(fx.ipStr);
+				long h = p1.getAddrV6H();
+				long l = p1.getAddrV6L();
+				Ip p2 = new Ip(h, l);
+				System.out.printf("Ip(%s) => ip.getAddrV6H()=0x%x  ip.getAddrV6L()=0x%x => new Ip(0x%x,0x%x) => %s \n", fx.ipStr, h, l, h, l, p2.toString());
 
-			assertThat(p2.toString(), is(fx.ipStr));
+				assertThat(p2.toString(), is(fx.ipStr));
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
 			
 		}
 	}
@@ -424,13 +457,12 @@ public class IpTest {
 
 			TestUtil.dispPrompt(this);
 
-			System.out.printf("new Ip(%s) => throw IllegalArgumentException\n", fx.ipStr);
+			System.out.printf("new Ip(%s) => throw ValidObjException\n", fx.ipStr);
 			
 			try {
-				@SuppressWarnings("unused")
-				Ip p1 = new Ip(fx.ipStr);
+				new Ip(fx.ipStr);
 				Assert.fail("この行が実行されたらエラー");
-			} catch (IllegalArgumentException ex) {
+			} catch (ValidObjException ex) {
 				return;
 			}
 			Assert.fail("この行が実行されたらエラー");
@@ -467,9 +499,14 @@ public class IpTest {
 
 			System.out.printf("ip = new Ip(%s) => ip.getAddrV4()=%x\n", fx.ipStr, fx.addr);
 
-			Ip ip = new Ip(fx.ipStr);
-			int x1 = ip.getAddrV4();
-			Assert.assertEquals(x1, fx.addr);
+			try {
+				Ip ip = new Ip(fx.ipStr);
+				int x1 = ip.getAddrV4();
+				Assert.assertEquals(x1, fx.addr);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			
 		}
 	}
 
@@ -505,11 +542,15 @@ public class IpTest {
 
 			System.out.printf("ip = new Ip(%s) => ip.getAddrV6H()=%x ip.getAddrV6L()=%x\n", fx.ipStr, fx.h, fx.l);
 
-			Ip ip = new Ip(fx.ipStr);
-			long h = ip.getAddrV6H();
-			Assert.assertEquals(h, fx.h);
-			long l = ip.getAddrV6L();
-			Assert.assertEquals(l, fx.l);
+			try {
+				Ip ip = new Ip(fx.ipStr);
+				long h = ip.getAddrV6H();
+				Assert.assertEquals(h, fx.h);
+				long l = ip.getAddrV6L();
+				Assert.assertEquals(l, fx.l);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
 		}
 	}
 

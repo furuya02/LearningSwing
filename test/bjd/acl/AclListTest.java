@@ -10,6 +10,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlType;
 import bjd.log.Logger;
 import bjd.net.Ip;
@@ -60,7 +61,12 @@ public class AclListTest {
 
 			Logger logger = new Logger(new Kernel(), "TEST", true, null);
 
-			Ip ip = new Ip(fx.ip);
+			Ip ip = null;
+			try {
+				ip = new Ip(fx.ip);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
 			Dat dat = new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.ADDRESSV4 });
 			dat.add(true, String.format("NAME\t%s", fx.aclStr));
 

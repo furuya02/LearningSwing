@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlComboBox;
 import bjd.ctrl.CtrlDat;
 import bjd.ctrl.CtrlGroup;
@@ -300,7 +301,7 @@ public final class OneVal implements IDispose {
 			case BINDADDR:
 				try {
 					value = new BindAddr(str);
-				} catch (IllegalArgumentException ex) {
+				} catch (ValidObjException ex) {
 					value = 0;
 					return false;
 				}
@@ -308,7 +309,7 @@ public final class OneVal implements IDispose {
 			case ADDRESSV4:
 				try {
 					value = new Ip(str);
-				} catch (Exception ex) {
+				} catch (ValidObjException ex) {
 					value = null;
 					return false;
 				}

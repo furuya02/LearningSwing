@@ -9,6 +9,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import bjd.ValidObjException;
 import bjd.util.TestUtil;
 
 public final class OneLogTest {
@@ -21,10 +22,9 @@ public final class OneLogTest {
 		TestUtil.dispPrompt(this, String.format("new OneLog(\"xxx\") => IllegalArgumentException"));
 
 		try {
-			@SuppressWarnings("unused")
-			OneLog oneLog = new OneLog("xxx");
+			new OneLog("xxx");
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (ValidObjException ex) {
 			return;
 		}
 		Assert.fail("この行が実行されたらエラー");

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.ValidObjException;
 import bjd.net.Ip;
 import bjd.net.ProtocolKind;
 import bjd.net.Ssl;
@@ -44,7 +45,13 @@ public final class TcpObjTest {
 
 		@Override
 		protected void onRunThread() {
-			if (sockServer.bind(new Ip(addr), port, 1)) {
+			Ip ip = null;
+			try {
+				ip = new Ip(addr);
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
+			if (sockServer.bind(ip, port, 1)) {
 				//System.out.println(String.format("EchoServer bind"));
 				while (isLife()) {
 					final SockTcp child = (SockTcp) sockServer.select(this);
@@ -78,7 +85,13 @@ public final class TcpObjTest {
 
 		int timeout = 100;
 		Ssl ssl = null;
-		SockTcp sockTcp = new SockTcp(new Ip(addr), port, timeout, ssl);
+		Ip ip = null;
+		try {
+			ip = new Ip(addr);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		SockTcp sockTcp = new SockTcp(ip, port, timeout, ssl);
 		TestUtil.dispPrompt(this, "tcpObj = new TcpObj()");
 
 		int max = 1000;
@@ -118,7 +131,13 @@ public final class TcpObjTest {
 
 		int timeout = 100;
 		Ssl ssl = null;
-		SockTcp sockTcp = new SockTcp(new Ip(addr), port, timeout, ssl);
+		Ip ip = null;
+		try {
+			ip = new Ip(addr);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		SockTcp sockTcp = new SockTcp(ip, port, timeout, ssl);
 		TestUtil.dispPrompt(this, "tcpObj = new TcpObj()");
 
 		int max = 1000;

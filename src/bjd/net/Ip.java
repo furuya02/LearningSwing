@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import bjd.ValidObj;
+import bjd.ValidObjException;
 
 /**
  * Ipアドレスを表現するクラス<br>
@@ -95,13 +96,18 @@ public final class Ip extends ValidObj {
 	 */
 	@SuppressWarnings("unused")
 	private Ip() {
+		init(InetKind.V4);
+	}
+
+	public Ip(InetKind inetKind) {
+		init(inetKind);
 	}
 
 	// コンストラクタ
 	/**
 	 * コンストラクタ<br>
 	 * 初期化文字列でIPアドレスを初期化する<br>
-	 * 文字列が無効で初期化に失敗した場合は、例外(IllegalArgumentException)がスローされる<br>
+	 * 文字列が無効で初期化に失敗した場合は、例外(ValidObjException)がスローされる<br>
 	 * 初期化に失敗したオブジェクトを使用すると「実行時例外」が発生するので、生成時に必ず例外処理しなければならない<br>
 	 * 
 	 * <初期化例><br>
@@ -114,9 +120,9 @@ public final class Ip extends ValidObj {
 	 * Ip([12::78:90ab])  [括弧付きで指定された場合]<br>
 	 * 
 	 * @param ipStr　初期化文字列
-	 * @throws IllegalArgumentException 
+	 * @throws ValidObjException 初期化失敗
 	 */
-	public Ip(String ipStr) throws IllegalArgumentException {
+	public Ip(String ipStr) throws ValidObjException {
 		init(InetKind.V4);
 
 		if (ipStr == null) {

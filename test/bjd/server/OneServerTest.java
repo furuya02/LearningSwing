@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
 import bjd.net.OneBind;
@@ -30,14 +33,11 @@ public class OneServerTest {
 
 		@Override
 		public String getMsg(int messageNo) {
-			// TODO 自動生成されたメソッド・スタブ
 			return null;
 		}
 
 		@Override
 		protected void onStopServer() {
-			// TODO 自動生成されたメソッド・スタブ
-
 		}
 
 		@Override
@@ -109,7 +109,6 @@ public class OneServerTest {
 				s.shutdownOutput();
 				s.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			life = false;
@@ -128,8 +127,13 @@ public class OneServerTest {
 	public final void a001() {
 
 		TestUtil.dispHeader("a001 start() stop()　の繰り返し(負荷テスト)"); //TESTヘッダ
-
-		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+		Ip ip = null;
+		try {
+			ip = new Ip("127.0.0.1");
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
 		conf.set("port", 9990);
@@ -171,8 +175,13 @@ public class OneServerTest {
 	public final void a002() {
 
 		TestUtil.dispHeader("a002 new start() stop()　dispose の繰り返し(負荷テスト)"); //TESTヘッダ
-
-		OneBind oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+		Ip ip = null;
+		try {
+			ip = new Ip("127.0.0.1");
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
 		conf.set("port", 80);
@@ -208,8 +217,13 @@ public class OneServerTest {
 		int multiple = 2;
 		final int port = 8889;
 		final String address = "127.0.0.1";
-
-		OneBind oneBind = new OneBind(new Ip(address), ProtocolKind.Tcp);
+		Ip ip = null;
+		try {
+			ip = new Ip(address);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
 		conf.set("port", port);

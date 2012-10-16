@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import bjd.ValidObj;
+import bjd.ValidObjException;
 
 /**
  * ログ１行を表現するクラス<br>
@@ -136,8 +137,9 @@ public final class OneLog extends ValidObj {
 	 * １行の文字列(\t区切り)で指定される<br>
 	 * 
 	 * @param str
+	 * @throws ValidObjException 初期化失敗
 	 */
-	public OneLog(String str) {
+	public OneLog(String str) throws ValidObjException {
 		String[] tmp = str.split("\t");
 		if (tmp.length != 8) {
 			throwException(str); // 初期化失敗

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 
 import bjd.ValidObj;
+import bjd.ValidObjException;
 import bjd.util.Util;
-
 
 /**
  * 自端末インターフェースのアドレスを列挙するクラス
@@ -50,8 +50,13 @@ public final class LocalAddress extends ValidObj {
 	 */
 	public LocalAddress() {
 		init(); //初期化
-		v4.add(new Ip("INADDR_ANY"));
-		v6.add(new Ip("IN6ADDR_ANY_INIT"));
+		try {
+			v4.add(new Ip("INADDR_ANY"));
+			v6.add(new Ip("IN6ADDR_ANY_INIT"));
+		} catch (ValidObjException ex) {
+			//状息の初期化で例外となった場合は、実行時例外とする
+			Util.runtimeError("Ip(INADDR_ANY) Ip(IN6ADDR_ANY_INIT)"); //実行時例外
+		}
 
 		Enumeration<NetworkInterface> interfaceList;
 		try {
@@ -71,8 +76,9 @@ public final class LocalAddress extends ValidObj {
 							try {
 								Ip ip = new Ip(s);
 								v4.add(new Ip(s));
-							} catch (IllegalArgumentException e) {
-								Util.runtimeError(String.format("inetAddress=%s",s)); //実行時例外
+							} catch (ValidObjException e) {
+								//システムから返された文字列でIpを初期化して例外が出るという事は、実行時例外とするしかない
+								Util.runtimeError(String.format("inetAddress=%s", s)); //実行時例外
 							}
 						} else if (inetAddress instanceof Inet6Address) {
 							boolean linkLocal = inetAddress.isLinkLocalAddress();
@@ -83,8 +89,9 @@ public final class LocalAddress extends ValidObj {
 								try {
 									Ip ip = new Ip(s);
 									v6.add(new Ip(s));
-								} catch (IllegalArgumentException e) {
-									Util.runtimeError(String.format("inetAddress=%s",s)); //実行時例外
+								} catch (ValidObjException e) {
+									//システムから返された文字列でIpを初期化して例外が出るという事は、実行時例外とするしかない
+									Util.runtimeError(String.format("inetAddress=%s", s)); //実行時例外
 								}
 							}
 						}
@@ -101,9 +108,9 @@ public final class LocalAddress extends ValidObj {
 	 * remoteStr()で作成された文字列以外が挿入された場合、リスク回避のため、初期化失敗としてオブジェクトを利用を禁止する<br>
 	 * 
 	 * @param str　初期化文字列
-	 * @throws IllegalArgumentException
+	 * @throws ValidObjException 初期化失敗
 	 */
-	public LocalAddress(String str) throws IllegalArgumentException {
+	public LocalAddress(String str) throws ValidObjException  {
 		init(); //初期化
 
 		String[] tmp = str.split("\t");

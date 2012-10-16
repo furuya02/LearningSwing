@@ -11,6 +11,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.ValidObjException;
 import bjd.net.Ip;
 import bjd.util.TestUtil;
 
@@ -53,12 +54,15 @@ public class AclV4Test {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
 
-			AclV4 aclV4 = new AclV4("test", fx.aclStr);
-
-			System.out.printf("new AclV4(%s) => start=%s end=%s\n", fx.aclStr, fx.startStr, fx.endStr);
-
-			assertThat(aclV4.getStart().toString(), is(fx.startStr));
-			assertThat(aclV4.getEnd().toString(), is(fx.endStr));
+			try {
+				AclV4 aclV4 = new AclV4("test", fx.aclStr);
+				System.out.printf("new AclV4(%s) => start=%s end=%s\n", fx.aclStr, fx.startStr, fx.endStr);
+				assertThat(aclV4.getStart().toString(), is(fx.startStr));
+				assertThat(aclV4.getEnd().toString(), is(fx.endStr));
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
+			}
+			
 		}
 	}
 	
@@ -92,9 +96,13 @@ public class AclV4Test {
 		@Theory
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			AclV4 aclV4 = new AclV4("test", fx.aclStr);
-			System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expected);
-			assertThat(aclV4.isHit(new Ip(fx.ipStr)), is(fx.expected));
+			try {
+				AclV4 aclV4 = new AclV4("test", fx.aclStr);
+				System.out.printf("new AclV4(%s) => isHit(%s)=%s\n", fx.aclStr, fx.ipStr, fx.expected);
+				assertThat(aclV4.isHit(new Ip(fx.ipStr)), is(fx.expected));
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
+			}
 		}
 	}
 
@@ -126,11 +134,10 @@ public class AclV4Test {
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
 			try {
-				@SuppressWarnings("unused")
-				AclV4 aclV4 = new AclV4("test", fx.aclStr);
+				new AclV4("test", fx.aclStr);
 				Assert.fail("この行が実行されたらエラー");
-			} catch (IllegalArgumentException ex) {
-				System.out.printf("new AclV4(%s) => IllegalArgumentException\n", fx.aclStr);
+			} catch (ValidObjException ex) {
+				System.out.printf("new AclV4(%s) => ValidObjException\n", fx.aclStr);
 				return;
 			}
 			Assert.fail("この行が実行されたらエラー");

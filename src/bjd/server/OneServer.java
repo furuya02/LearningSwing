@@ -6,6 +6,7 @@ import java.util.Calendar;
 
 import bjd.Kernel;
 import bjd.ThreadBase;
+import bjd.ValidObjException;
 import bjd.acl.AclList;
 import bjd.ctrl.CtrlType;
 import bjd.log.LogKind;
@@ -24,6 +25,7 @@ import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.sock.SockTcp;
 import bjd.sock.SockUdp;
+import bjd.util.Util;
 
 //各サーバオブジェクトの基底クラス
 //****************************************************************
@@ -102,7 +104,14 @@ public abstract class OneServer extends ThreadBase {
 		}
 		//DEBUG用
 		if (this.oneBind == null) {
-			this.oneBind = new OneBind(new Ip("127.0.0.1"), ProtocolKind.Tcp);
+			Ip ip = null;
+			try {
+				ip = new Ip("127.0.0.1");
+			} catch (ValidObjException ex) {
+				//127.0.0.1で例外となるようなら実行時例外とするしかない
+				Util.runtimeError("new Ip(127.0.0.1)");
+			}
+			this.oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		}
 
 		this.logger = kernel.createLogger(nameTag, (boolean) this.conf.get("useDetailsLog"), this);

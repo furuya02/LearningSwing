@@ -11,6 +11,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.ValidObjException;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -57,8 +58,8 @@ public class BindAddrTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			new Fixture(BindStyle.V4ONLY, new Ip("192.168.0.1"), new Ip("::1"), "V4ONLY,192.168.0.1,::1"),
-			new Fixture(BindStyle.V46DUAL, new Ip("0.0.0.0"), new Ip("ffe0::1"), "V46DUAL,0.0.0.0,ffe0::1"),
+			new Fixture(BindStyle.V4ONLY, "192.168.0.1", "::1", "V4ONLY,192.168.0.1,::1"),
+			new Fixture(BindStyle.V46DUAL, "0.0.0.0", "ffe0::1", "V46DUAL,0.0.0.0,ffe0::1"),
 		};
 		static class Fixture {
 			private BindStyle bindStyle;
@@ -66,10 +67,14 @@ public class BindAddrTest {
 			private Ip ipV6;
 			private String expected;
 
-			public Fixture(BindStyle bindStyle, Ip ipV4, Ip ipV6, String expected) {
+			public Fixture(BindStyle bindStyle, String ipV4, String ipV6, String expected) {
 				this.bindStyle = bindStyle;
-				this.ipV4 = ipV4;
-				this.ipV6 = ipV6;
+				try {
+					this.ipV4 = new Ip(ipV4);
+					this.ipV6 = new Ip(ipV6);
+				} catch (ValidObjException e) {
+					Assert.fail(e.getMessage());
+				}
 				this.expected = expected;
 			}
 		}
@@ -113,8 +118,12 @@ public class BindAddrTest {
 			TestUtil.dispPrompt(this);
 			System.out.printf("new BindAddr(%s) toString()=\"%s\"\n", fx.actual, fx.expected);
 
-			BindAddr bindAddr = new BindAddr(fx.actual);
-			assertThat(bindAddr.toString(), is(fx.expected));
+			try {
+				BindAddr bindAddr = new BindAddr(fx.actual);
+				assertThat(bindAddr.toString(), is(fx.expected));
+			} catch (ValidObjException e) {
+				Assert.fail();
+			}
 		}
 	}
 
@@ -145,13 +154,12 @@ public class BindAddrTest {
 		public void test(Fixture fx) {
 			
 			TestUtil.dispPrompt(this);
-			System.out.printf("new BindAddr(%s) =>  throw IllegalArgumentException\n", fx.actual);
+			System.out.printf("new BindAddr(%s) =>  throw ValidObjException\n", fx.actual);
 			
 			try {
-				@SuppressWarnings("unused")
-				BindAddr bindAddr = new BindAddr(fx.actual);
+				new BindAddr(fx.actual);
 				Assert.fail("この行が実行されたらエラー");
-			} catch (IllegalArgumentException ex) {
+			} catch (ValidObjException ex) {
 				return;
 			}
 			Assert.fail("この行が実行されたらエラー");
@@ -168,20 +176,24 @@ public class BindAddrTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), new BindAddr("V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), true),
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), new BindAddr("V4ONLY,INADDR_ANY,::2"), false),			
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), null, false),
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), new BindAddr("V4ONLY,0.0.0.1,::1"), false),
-				new Fixture(new BindAddr("V6ONLY,0.0.0.1,::1"), new BindAddr("V4ONLY,0.0.0.1,::1"), false),
+				new Fixture("V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT", "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT", true),
+				new Fixture("V4ONLY,INADDR_ANY,::1", "V4ONLY,INADDR_ANY,::2", false),			
+				new Fixture("V4ONLY,INADDR_ANY,::1", null, false),
+				new Fixture("V4ONLY,INADDR_ANY,::1", "V4ONLY,0.0.0.1,::1", false),
+				new Fixture("V6ONLY,0.0.0.1,::1", "V4ONLY,0.0.0.1,::1", false),
 		};
 		static class Fixture {
 			private BindAddr b1;
 			private BindAddr b2;
 			private boolean expected;
 
-			public Fixture(BindAddr b1, BindAddr b2, boolean expected) {
-				this.b1 = b1;
-				this.b2 = b2;
+			public Fixture(String b1, String b2, boolean expected) {
+				try {
+					this.b1 = (b1 == null) ? null : new BindAddr(b1);
+					this.b2 = (b2 == null) ? null : new BindAddr(b2);
+				} catch (ValidObjException e) {
+					Assert.fail(e.getMessage());
+				}
 				this.expected = expected;
 			}
 		}
@@ -205,20 +217,24 @@ public class BindAddrTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), new BindAddr("V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), true),
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), new BindAddr("V4ONLY,INADDR_ANY,::2"), true),			
-				new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), new BindAddr("V4ONLY,0.0.0.1,::1"), true),
-				new Fixture(new BindAddr("V6ONLY,0.0.0.1,::1"), new BindAddr("V4ONLY,0.0.0.1,::1"), false),
-				new Fixture(new BindAddr("V46DUAL,0.0.0.1,::1"), new BindAddr("V4ONLY,0.0.0.1,::1"), true),
+				new Fixture("V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT", "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT", true),
+				new Fixture("V4ONLY,INADDR_ANY,::1", "V4ONLY,INADDR_ANY,::2", true),			
+				new Fixture("V4ONLY,INADDR_ANY,::1", "V4ONLY,0.0.0.1,::1", true),
+				new Fixture("V6ONLY,0.0.0.1,::1", "V4ONLY,0.0.0.1,::1", false),
+				new Fixture("V46DUAL,0.0.0.1,::1", "V4ONLY,0.0.0.1,::1", true),
 		};
 		static class Fixture {
 			private BindAddr b1;
 			private BindAddr b2;
 			private boolean expected;
 
-			public Fixture(BindAddr b1, BindAddr b2, boolean expected) {
-				this.b1 = b1;
-				this.b2 = b2;
+			public Fixture(String b1, String b2, boolean expected) {
+				try {
+					this.b1 = new BindAddr(b1);
+					this.b2 = new BindAddr(b2);
+				} catch (ValidObjException ex) {
+					Assert.fail(ex.getMessage());
+				}
 				this.expected = expected;
 			}
 		}
@@ -242,11 +258,11 @@ public class BindAddrTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), ProtocolKind.Tcp, 1, "INADDR_ANY-Tcp"),
-			new Fixture(new BindAddr("V4ONLY,INADDR_ANY,::1"), ProtocolKind.Udp, 1, "INADDR_ANY-Udp"),
-			new Fixture(new BindAddr("V4ONLY,0.0.0.1,::1"), ProtocolKind.Tcp, 1, "0.0.0.1-Tcp"),
-			new Fixture(new BindAddr("V6ONLY,0.0.0.1,::1"), ProtocolKind.Tcp, 1, "::1-Tcp"),
-			new Fixture(new BindAddr("V46DUAL,0.0.0.1,::1"), ProtocolKind.Tcp, 2, "::1-Tcp"),
+			new Fixture("V4ONLY,INADDR_ANY,::1", ProtocolKind.Tcp, 1, "INADDR_ANY-Tcp"),
+			new Fixture("V4ONLY,INADDR_ANY,::1", ProtocolKind.Udp, 1, "INADDR_ANY-Udp"),
+			new Fixture("V4ONLY,0.0.0.1,::1", ProtocolKind.Tcp, 1, "0.0.0.1-Tcp"),
+			new Fixture("V6ONLY,0.0.0.1,::1", ProtocolKind.Tcp, 1, "::1-Tcp"),
+			new Fixture("V46DUAL,0.0.0.1,::1", ProtocolKind.Tcp, 2, "::1-Tcp"),
 			
 		};
 		static class Fixture {
@@ -255,8 +271,12 @@ public class BindAddrTest {
 			private int count;
 			private String firstOneBind;
 
-			public Fixture(BindAddr bindAddr, ProtocolKind protocolKind, int count, String firstOneBind) {
-				this.bindAddr = bindAddr;
+			public Fixture(String bindAddr, ProtocolKind protocolKind, int count, String firstOneBind) {
+				try {
+					this.bindAddr = new BindAddr(bindAddr);
+				} catch (ValidObjException ex) {
+					Assert.fail(ex.getMessage());
+				}
 				this.protocolKind = protocolKind;
 				this.count = count;
 				this.firstOneBind = firstOneBind;

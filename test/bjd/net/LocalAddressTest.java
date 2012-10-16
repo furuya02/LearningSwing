@@ -6,6 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import bjd.ValidObjException;
 import bjd.util.TestUtil;
 
 public final class LocalAddressTest {
@@ -18,7 +19,11 @@ public final class LocalAddressTest {
 		LocalAddress localAddress = new LocalAddress();
 		String remoteStr = localAddress.remoteStr();
 
-		localAddress = new LocalAddress(remoteStr);
+		try {
+			localAddress = new LocalAddress(remoteStr);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
 
 		TestUtil.dispPrompt(this); //TESTプロンプト
 		System.out.println(String.format("%s", remoteStr));
@@ -34,12 +39,11 @@ public final class LocalAddressTest {
 		TestUtil.dispHeader("a002 無効な文字列で初期化すると例外が発生するか"); //TESTヘッダ
 
 		String str = "XXX";
-		TestUtil.dispPrompt(this, String.format("new LocalAddress(\"%s\") => IllegalArgumentException", str));
+		TestUtil.dispPrompt(this, String.format("new LocalAddress(\"%s\") => ValidObjException", str));
 		try {
-			@SuppressWarnings("unused")
-			LocalAddress localAddress = new LocalAddress(str);
+			new LocalAddress(str);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (ValidObjException ex) {
 			return;
 		}
 		Assert.fail("この行が実行されたらエラー");

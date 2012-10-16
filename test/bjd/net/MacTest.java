@@ -2,6 +2,7 @@ package bjd.net;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -10,6 +11,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.ValidObjException;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -39,10 +41,14 @@ public class MacTest {
 		@Theory
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
-			String actual = (new Mac(fx.macStr)).toString().toUpperCase();
-			
-			System.out.printf("mac=new Mac(%s) => mac.toString()==%s\n", fx.macStr, actual);
-			assertThat(actual, is(fx.macStr.toUpperCase()));
+			try {
+				String actual = (new Mac(fx.macStr)).toString().toUpperCase();
+
+				System.out.printf("mac=new Mac(%s) => mac.toString()==%s\n", fx.macStr, actual);
+				assertThat(actual, is(fx.macStr.toUpperCase()));
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
 		}
 	}
 	
@@ -76,13 +82,16 @@ public class MacTest {
 		public void test(Fixture fx) {
 			TestUtil.dispPrompt(this); //TESTプロンプト
             
-			Mac mac = new Mac("12-34-56-78-9A-BC");
-			
-			Mac dmy = (fx.macStr != null) ? new Mac(fx.macStr) : null;
-            boolean actual = mac.equals(dmy);
-			
-			System.out.printf("mac=new Mac(\"%s\") => mac.equals(%s)==%s\n", mac.toString(), fx.macStr, actual);
-			assertThat(actual, is(fx.expected));
+			try {
+				Mac mac = new Mac("12-34-56-78-9A-BC");
+				Mac dmy = (fx.macStr != null) ? new Mac(fx.macStr) : null;
+				boolean actual = mac.equals(dmy);
+
+				System.out.printf("mac=new Mac(\"%s\") => mac.equals(%s)==%s\n", mac.toString(), fx.macStr, actual);
+				assertThat(actual, is(fx.expected));
+			} catch (ValidObjException ex) {
+				Assert.fail(ex.getMessage());
+			}
 		}
 	}
 }

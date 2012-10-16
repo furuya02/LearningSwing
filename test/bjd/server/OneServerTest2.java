@@ -2,10 +2,12 @@ package bjd.server;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.Test;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlType;
 import bjd.net.Ip;
 import bjd.net.OneBind;
@@ -84,8 +86,13 @@ public class OneServerTest2 {
 		String addr = "127.0.0.1";
 		int port = 9999;
 		int timeout = 300;
-
-		OneBind oneBind = new OneBind(new Ip(addr), ProtocolKind.Tcp);
+		Ip ip = null;
+		try {
+			ip = new Ip(addr);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
 		conf.set("port", port);
@@ -102,9 +109,8 @@ public class OneServerTest2 {
 		int max = 10000;
 		byte[] buf = new byte[max];
 		buf[8] = 100; //CheckData
-
 		for (int i = 0; i < 3; i++) {
-			SockTcp sockTcp = new SockTcp(new Ip(addr), port, timeout, null);
+			SockTcp sockTcp = new SockTcp(ip, port, timeout, null);
 			TestUtil.dispPrompt(this, String.format("[%d] sockTcp = new SockTcp(%s,%d)", i, addr, port));
 
 			int len = sockTcp.send(buf);
@@ -143,8 +149,13 @@ public class OneServerTest2 {
 		String addr = "127.0.0.1";
 		int port = 9991;
 		int timeout = 300;
-
-		OneBind oneBind = new OneBind(new Ip(addr), ProtocolKind.Udp);
+		Ip ip = null;
+		try {
+			ip = new Ip(addr);
+		} catch (ValidObjException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		OneBind oneBind = new OneBind(ip, ProtocolKind.Udp);
 		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
 		Conf conf = new Conf(optionSample);
 		conf.set("port", port);
@@ -161,9 +172,9 @@ public class OneServerTest2 {
 		int max = 1600;
 		byte[] buf = new byte[max];
 		buf[8] = 100; //CheckData
-
+		
 		for (int i = 0; i < 3; i++) {
-			SockUdp sockUdp = new SockUdp(new Ip(addr), port, timeout, null, buf);
+			SockUdp sockUdp = new SockUdp(ip, port, timeout, null, buf);
 			TestUtil.dispPrompt(this, String.format("[%d] sockUdp = new SockUdp(%s,%d,%dbytes)", i, addr, port, buf.length));
 
 			while (sockUdp.length() == 0) {

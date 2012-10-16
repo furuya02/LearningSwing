@@ -3,6 +3,7 @@ package bjd.acl;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import bjd.ValidObjException;
 import bjd.log.LogKind;
 import bjd.log.Logger;
 import bjd.net.InetKind;
@@ -35,27 +36,27 @@ public final class AclList {
 					try {
 						Acl acl = new AclV4(name, ipStr);
 						arV4.add(acl);
-					} catch (IllegalArgumentException e) {
+					} catch (ValidObjException e) {
 						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 					try {
 						Acl acl = new AclV6(name, ipStr);
 						arV6.add(acl);
-					} catch (IllegalArgumentException e) {
+					} catch (ValidObjException e) {
 						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 				} else if (ipStr.indexOf('.') != -1) { //IPv4ルール
 					try {
 						Acl acl = new AclV4(name, ipStr);
 						arV4.add(acl);
-					} catch (IllegalArgumentException e) {
+					} catch (ValidObjException e) {
 						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 				} else { //IPv6ルール
 					try {
 						Acl acl = new AclV6(name, ipStr);
 						arV6.add(acl);
-					} catch (IllegalArgumentException e) {
+					} catch (ValidObjException e) {
 						logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ipStr));
 					}
 				}
@@ -95,14 +96,14 @@ public final class AclList {
 			try {
 				Acl acl = new AclV4(name, ip.toString());
 				arV4.add(acl);
-			} catch (IllegalArgumentException e) {
+			} catch (ValidObjException e) {
 				logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ip.toString()));
 			}
 		} else {
 			try {
 				Acl acl = new AclV6(String.format("AutoDeny-%s", c.toString()), ip.toString());
 				arV6.add(acl);
-			} catch (IllegalArgumentException e) {
+			} catch (ValidObjException e) {
 				logger.set(LogKind.Error, (SockObj) null, 9000034, String.format("Name:%s Address %s", name, ip.toString()));
 			}
 		}

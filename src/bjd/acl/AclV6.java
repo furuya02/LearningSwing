@@ -2,8 +2,10 @@ package bjd.acl;
 
 import java.math.BigInteger;
 
+import bjd.ValidObjException;
 import bjd.net.InetKind;
 import bjd.net.Ip;
+import bjd.util.Util;
 
 /**
  * 
@@ -31,7 +33,7 @@ final class AclV6 extends Acl {
 	 * @throws パラメータが不正で初期化に失敗した場合 IllegalArgumentExceptionががスローされる
 	 * 
 	 */
-	AclV6(String name, String ipStr) throws IllegalArgumentException {
+	AclV6(String name, String ipStr) throws ValidObjException {
 		super(name);
 
 		//「*」によるALL指定
@@ -154,6 +156,7 @@ final class AclV6 extends Acl {
 
 	@Override
 	boolean isHit(Ip ip) {
+		checkInitialise();
 
 		BigInteger bigIp = new BigInteger(ip.getIpV6());
 		BigInteger bigStart = new BigInteger(getStart().getIpV6());
@@ -166,5 +169,15 @@ final class AclV6 extends Acl {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	protected void init() {
+		try {
+			setStart(new Ip("::"));
+			setEnd(new Ip("FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF"));
+		} catch (ValidObjException e) {
+			Util.runtimeError("AclV6 init()");
+		}
 	}
 }

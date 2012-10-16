@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.io.File;
 import java.util.ArrayList;
 
+import junit.framework.Assert;
+
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
@@ -15,6 +17,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.Kernel;
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
@@ -30,6 +33,7 @@ import bjd.ctrl.CtrlRadio;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.CtrlType;
 import bjd.ctrl.OneCtrl;
+import bjd.net.InetKind;
 import bjd.net.Ip;
 import bjd.option.Crlf;
 import bjd.option.Dat;
@@ -58,7 +62,8 @@ public class IniDbTest {
 			new Fixture(CtrlType.HIDDEN, "123", "HIDE_STRING=Basic\bname=2d7ee3636680c1f6"),
 			new Fixture(CtrlType.MEMO, "123", "MEMO=Basic\bname=123"), 
 			new Fixture(CtrlType.RADIO, 1, "RADIO=Basic\bname=1"),
-			new Fixture(CtrlType.ADDRESSV4, new Ip("192.168.0.1"), "ADDRESS_V4=Basic\bname=192.168.0.1"),		
+			//new Fixture(CtrlType.ADDRESSV4,	new Ip("192.168.0.1"), "ADDRESS_V4=Basic\bname=192.168.0.1"),
+			new Fixture(CtrlType.ADDRESSV4,	new Ip(InetKind.V4), "ADDRESS_V4=Basic\bname=0.0.0.0"),
 		};
 
 		static class Fixture {
@@ -245,8 +250,12 @@ public class IniDbTest {
 						val = "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT";
 					}
 					ArrayList<Ip> list = new ArrayList<>();
-					list.add(new Ip("INADDR_ANY"));
-					list.add(new Ip("192.168.0.1"));
+					try {
+						list.add(new Ip("INADDR_ANY"));
+						list.add(new Ip("192.168.0.1"));
+					} catch (ValidObjException e) {
+						Assert.fail(e.getMessage());
+					}
 					oneCtrl = new CtrlBindAddr(help, list, list);
 					break;
 				case COMBOBOX:
