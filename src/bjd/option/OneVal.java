@@ -198,7 +198,8 @@ public final class OneVal implements IDispose {
 	}
 
 	/**
-	 * 出力ファイル(Option.ini)からの入力用
+	 * 出力ファイル(Option.ini)からの入力用<br>
+	 * 不正な文字列があった場合は、無効行として無視される<br>
 	 * 
 	 * @param str
 	 *            　読み込み行
@@ -214,7 +215,12 @@ public final class OneVal implements IDispose {
 			case DAT:
 				CtrlDat ctrlDat = (CtrlDat) oneCtrl;
 				Dat dat = new Dat(ctrlDat.getCtrlTypeList());
-				if (!dat.fromReg(str)) {
+				try {
+					if (!dat.fromReg(str)) {
+						value = null;
+						return false;
+					}
+				} catch (DatException e) {
 					value = null;
 					return false;
 				}

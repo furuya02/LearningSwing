@@ -3,6 +3,7 @@ package bjd.option;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -62,7 +63,12 @@ public class OneDatTest {
 			}
 			System.out.printf("new OneDat(%s,{%s}) toReg(%s)=\"%s\"\n", fx.enable, sb.toString(), fx.isSecret, fx.expected);
 
-			OneDat oneDat = new OneDat(fx.enable, fx.list, fx.isSecretList);
+			OneDat oneDat = null;
+			try {
+				oneDat = new OneDat(fx.enable, fx.list, fx.isSecretList);
+			} catch (DatException e) {
+				Assert.fail();
+			}
 			assertThat(oneDat.toReg(fx.isSecret), is(fx.expected));
 		}
 	}
@@ -102,7 +108,12 @@ public class OneDatTest {
 				list[i] = "";
 				isSecretList[i] = false;
 			}
-			OneDat oneDat = new OneDat(true, list, isSecretList);
+			OneDat oneDat = null;
+			try {
+				oneDat = new OneDat(true, list, isSecretList);
+			} catch (DatException e) {
+				Assert.fail();
+			}
 			oneDat.fromReg(fx.actual);
 			assertThat(oneDat.toReg(false), is(fx.expected));
 		}
@@ -143,7 +154,12 @@ public class OneDatTest {
 				list[i] = "";
 				isSecretList[i] = false;
 			}
-			OneDat oneDat = new OneDat(true, list, isSecretList);
+			OneDat oneDat = null;
+			try {
+				oneDat = new OneDat(true, list, isSecretList);
+			} catch (DatException e) {
+				Assert.fail();
+			}
 			assertSame(oneDat.fromReg(fx.str), false);
 		}
 	}

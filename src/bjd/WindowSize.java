@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import bjd.ctrl.ListView;
 import bjd.option.Conf;
 import bjd.util.IDispose;
+import bjd.util.Util;
 
 public final class WindowSize implements IDispose {
 
@@ -43,7 +44,7 @@ public final class WindowSize implements IDispose {
 		try {
 			w = reg.getInt(String.format("%s_width", n));
 			h = reg.getInt(String.format("%s_hight", n));
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 		}
 		if (h <= 0) {
 			h = 400;
@@ -63,7 +64,7 @@ public final class WindowSize implements IDispose {
 				x = 0;
 			}
 			frame.setLocation(x, y);
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 
 		}
 	}
@@ -90,7 +91,7 @@ public final class WindowSize implements IDispose {
 					width = 100; //最低100を確保する
 				}
 				listView.setColWidth(i, width);
-			} catch (IllegalArgumentException ex) {
+			} catch (RegException ex) {
 				listView.setColWidth(i, 100); //デフォルト値
 			}
 		}
@@ -106,11 +107,15 @@ public final class WindowSize implements IDispose {
 		int h = frame.getHeight();
 		int x = frame.getX();
 		int y = frame.getY();
-		reg.setInt(String.format("%s_width", n), w);
-		reg.setInt(String.format("%s_hight", n), h);
-		reg.setInt(String.format("%s_top", n), y);
-		reg.setInt(String.format("%s_left", n), x);
-
+		try {
+			reg.setInt(String.format("%s_width", n), w);
+			reg.setInt(String.format("%s_hight", n), h);
+			reg.setInt(String.format("%s_top", n), y);
+			reg.setInt(String.format("%s_left", n), x);
+		} catch (RegException e) {
+			Util.runtimeError("WindowSize.save()");
+		}
+		
 		//		if (form.WindowState == FormWindowState.Normal) {
 		//			reg.SetInt(String.format("%s_width", form.Text), form.Width);
 		//			reg.SetInt(String.format("%s_hight", form.Text), form.Height);
@@ -129,7 +134,11 @@ public final class WindowSize implements IDispose {
 		}
 		for (int i = 0; i < listView.getColumnCount(); i++) {
 			String key = String.format("%s_col-%03d", listView.getName(), i);
-			reg.setInt(key, listView.getColWidth(i));
+			try {
+				reg.setInt(key, listView.getColWidth(i));
+			} catch (RegException e) {
+				Util.runtimeError("WindowSaze.save()");
+			}
 		}
 	}
 }

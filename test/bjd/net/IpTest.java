@@ -167,7 +167,7 @@ public class IpTest {
 			String ipStr = String.format("%d.%d.%d.%d", fx.n1, fx.n2, fx.n3, fx.n4);
 
 			Ip ip = null;
-			try{
+			try {
 				ip = new Ip(ipStr);
 			} catch (ValidObjException ex) {
 				Assert.fail(ex.getMessage());

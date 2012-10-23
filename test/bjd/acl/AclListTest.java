@@ -15,6 +15,7 @@ import bjd.ctrl.CtrlType;
 import bjd.log.Logger;
 import bjd.net.Ip;
 import bjd.option.Dat;
+import bjd.option.DatException;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -68,7 +69,12 @@ public class AclListTest {
 				Assert.fail(ex.getMessage());
 			}
 			Dat dat = new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.ADDRESSV4 });
-			dat.add(true, String.format("NAME\t%s", fx.aclStr));
+
+			try {
+				dat.add(true, String.format("NAME\t%s", fx.aclStr));
+			} catch (DatException e) {
+				Assert.fail(e.getMessage());
+			}
 
 			int enableNum = 0; //enableNum=0 のみを許可する
 			AclList o = new AclList(dat, enableNum, logger);

@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import bjd.util.IDispose;
 import bjd.util.Util;
 
+/**
+ * オリジナルデータ型<br>
+ * 複数の文字列と有効無効のフラグを保持する<br>
+ * 
+ * @author SIN
+ *
+ */
 public final class OneDat implements IDispose {
 
 	private boolean enable;
@@ -15,7 +22,11 @@ public final class OneDat implements IDispose {
 	public void dispose() {
 
 	}
-
+	
+	/**
+	 * 有効・無効の取得
+	 * @return enable
+	 */
 	public boolean isEnable() {
 		return enable;
 	}
@@ -24,7 +35,10 @@ public final class OneDat implements IDispose {
 	// public void setEnable(boolean enable) {
 	// this.enable = enable;
 	// }
-
+	/**
+	 * 文字列リストの取得
+	 * @return 
+	 */
 	public ArrayList<String> getStrList() {
 		return strList;
 	}
@@ -34,10 +48,23 @@ public final class OneDat implements IDispose {
 		// デフォルトコンストラクタの隠蔽
 	}
 
-	public OneDat(boolean enable, String[] list, boolean[] isSecretList) {
+	/**
+	 * コンストラクタ
+	 * @param enable 有効・無効フラグ
+	 * @param list 文字列による値
+	 * @param isSecretList　秘匿カラムの指定
+	 * @throws DatException 初期化失敗
+	 */
+	public OneDat(boolean enable, String[] list, boolean[] isSecretList) throws DatException {
 
-		if (list == null || isSecretList == null || list.length != isSecretList.length) {
-			throw new IllegalArgumentException("引数に矛盾があります");
+		if (list == null) {
+			throw new DatException("引数に矛盾があります  list=null");
+		}
+		if (isSecretList == null) {
+			throw new DatException("引数に矛盾があります  isSecretList == null");
+		}
+		if (list.length != isSecretList.length) {
+			throw new DatException("引数に矛盾があります  list.length != isSecretList.length");
 		}
 
 		this.enable = enable;
@@ -48,7 +75,13 @@ public final class OneDat implements IDispose {
 		}
 	}
 
-	// 　コンストラクタで定義した型に一致していないときfalseを返す
+	/**
+	 * 文字列による初期化<br>
+	 * コンストラクタで定義した型に一致していないときfalseを返す<br>
+	 * 
+	 * @param str 初期化文字列
+	 * @return 成否
+	 */
 	public boolean fromReg(String str) {
 		
 		if (str == null) {
@@ -80,6 +113,11 @@ public final class OneDat implements IDispose {
 		return true;
 	}
 
+	/**
+	 * 文字列化
+	 * @param isSecret シークレットカラムを***で出力する
+	 * @return 出力文字列
+	 */
 	public String toReg(boolean isSecret) {
 		StringBuilder sb = new StringBuilder();
 		if (!enable) {
@@ -96,6 +134,9 @@ public final class OneDat implements IDispose {
 		return sb.toString();
 	}
 
+	/**
+	 * toRegと誤って使用しないように注意
+	 */
 	@Override
 	public String toString() {
 		Util.runtimeError("誤って使用されないように例外（未実装）とする");

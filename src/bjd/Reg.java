@@ -68,16 +68,15 @@ public final class Reg implements IDispose {
 	 * 
 	 * @param key キー
 	 * @return int値
-	 * @throws IllegalArgumentException
+	 * @throws RegException 取得失敗 
 	 */
-	public int getInt(String key) throws IllegalArgumentException {
-		//String s = getString(key);
+	public int getInt(String key) throws RegException {
 		try {
 			return Integer.valueOf(getString(key));
 		} catch (NumberFormatException ex) {
 
 		}
-		throw new IllegalArgumentException();
+		throw new RegException("getInt()");
 	}
 
 	/**
@@ -87,9 +86,9 @@ public final class Reg implements IDispose {
 	 * 
 	 * @param key
 	 * @param val
-	 * @throws IllegalArgumentException
+	 * @throws RegException 
 	 */
-	public void setInt(String key, int val) throws IllegalArgumentException {
+	public void setInt(String key, int val) throws RegException {
 		setString(key, String.valueOf(val));
 	}
 
@@ -99,17 +98,18 @@ public final class Reg implements IDispose {
 	 * 
 	 * @param key
 	 * @return String値
+	 * @throws RegException 
 	 * @throws IllegalArgumentException
 	 */
-	public String getString(String key) throws IllegalArgumentException {
+	public String getString(String key) throws RegException {
 		if (key == null || key.equals("")) {
 			// key==null 若しくは Key==""の時、例外がスローされる
-			throw new IllegalArgumentException();
+			throw new RegException("");
 		}
 		String ret = ar.get(key);
 		if (ret == null) {
 			//検索結果がヒットしなかった場合、例外がスローされる
-			throw new IllegalArgumentException();
+			throw new RegException("");
 		}
 		return ret;
 	}
@@ -120,12 +120,12 @@ public final class Reg implements IDispose {
 	 * 
 	 * @param key
 	 * @param val Strnig値
-	 * @throws IllegalArgumentException
+	 * @throws RegException  
 	 */
-	public void setString(String key, String val) throws IllegalArgumentException {
+	public void setString(String key, String val) throws RegException {
 		if (key == null || key.equals("")) {
 			// key==null 若しくは Key==""の時、例外がスローされる
-			throw new IllegalArgumentException();
+			throw new RegException("");
 		}
 		ar.remove(key);
 		if (val == null) { //val==nullの場合は、""を保存する

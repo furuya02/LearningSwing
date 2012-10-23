@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import bjd.Kernel;
 import bjd.option.Dat;
+import bjd.option.DatException;
 import bjd.option.ListVal;
 import bjd.option.OneDat;
 import bjd.option.OneVal;
@@ -357,7 +358,11 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		//チェックリストボックスの内容からDatオブジェクトを生成する
 		for (int i = 0; i < checkListBox.getItemCount(); i++) {
 			boolean enable = checkListBox.getItemChecked(i);
-			dat.add(enable, checkListBox.getItemText(i));
+			try {
+				dat.add(enable, checkListBox.getItemText(i));
+			} catch (DatException e) {
+				Util.runtimeError("CtrlDat abstractRead() 外部入力からの初期化ではないので、この例外は発生しないはず");
+			}
 		}
 		return dat;
 	}

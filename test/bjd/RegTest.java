@@ -22,8 +22,14 @@ public final class RegTest {
 		}
 		Reg reg = new Reg(file.getPath());
 		TestUtil.dispPrompt(this, String.format("reg=new Reg(%s) => setInt(key1,1) => setString(key2,\"2\") => dispose()", fileName));
-		reg.setInt("key1", 1);
-		reg.setString("key2", "2");
+		
+		try {
+			reg.setInt("key1", 1);
+			reg.setString("key2", "2");
+		} catch (RegException e) {
+			Assert.fail();
+			
+		}
 		reg.dispose();
 		return file;
 	}
@@ -42,7 +48,12 @@ public final class RegTest {
 
 		Reg reg = new Reg(file.getPath());
 		String key = "key1";
-		int actual = reg.getInt(key);
+		int actual = 0;
+		try {
+			actual = reg.getInt(key);
+		} catch (RegException e) {
+			Assert.fail();
+		}
 		TestUtil.dispPrompt(this, String.format("reg.getInt(\"%s\")= %d", key, actual));
 		assertThat(actual, is(1));
 		reg.dispose();
@@ -60,7 +71,12 @@ public final class RegTest {
 		
 		Reg reg = new Reg(file.getPath());
 		String key = "key2";
-		String actual = reg.getString(key);
+		String actual = "";
+		try {
+			actual = reg.getString(key);
+		} catch (RegException e) {
+			Assert.fail();
+		}
 		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")= \"%s\"", key, actual));
 		assertThat(actual, is("2"));
 		reg.dispose();
@@ -79,12 +95,12 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = "xxx";
 		
-		TestUtil.dispPrompt(this, String.format("reg.getInt(\"%s\") => IllegalArgumentException", key));
+		TestUtil.dispPrompt(this, String.format("reg.getInt(\"%s\") => RegException", key));
 		try {
 			@SuppressWarnings("unused")
 			int actual = reg.getInt(key);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 			reg.dispose();
 			after(file); //後始末
 			return;
@@ -103,12 +119,12 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = "xxx";
 		
-		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")  => IllegalArgumentException", key));
+		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")  => RegException", key));
 		try {
 			@SuppressWarnings("unused")
 			String actual = reg.getString(key);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 			reg.dispose();
 			after(file); //後始末
 			return;
@@ -128,12 +144,12 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = null;
 		
-		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")  => IllegalArgumentException", key));
+		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")  => RegException", key));
 		try {
 			@SuppressWarnings("unused")
 			int actual = reg.getInt(key);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 			reg.dispose();
 			after(file); //後始末
 			return;
@@ -153,12 +169,12 @@ public final class RegTest {
 		String key = null;
 
 		
-		TestUtil.dispPrompt(this, String.format("reg.getString(%s)  => IllegalArgumentException", key));
+		TestUtil.dispPrompt(this, String.format("reg.getString(%s)  => Regxception", key));
 		try {
 			@SuppressWarnings("unused")
 			String actual = reg.getString(key);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 			reg.dispose();
 			after(file); //後始末
 			return;
@@ -177,19 +193,28 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = "TEST";
 		int val = 123;
-		reg.setInt(key, val);
+		try {
+			reg.setInt(key, val);
+		} catch (RegException e) {
+			Assert.fail();
+		}
 		TestUtil.dispPrompt(this, String.format("reg.setInt(%s,%d)", key, val));
 
 		key = null;
-		TestUtil.dispPrompt(this, String.format("reg.getString(%s)  => IllegalArgumentException", key));
+		TestUtil.dispPrompt(this, String.format("reg.getString(%s)  => RegException", key));
 		try {
 			@SuppressWarnings("unused")
 			int actual = reg.getInt(key);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 
 			key = "TEST";
-			int actual = reg.getInt(key);
+			int actual = 0;
+			try {
+				actual = reg.getInt(key);
+			} catch (RegException e) {
+				Assert.fail();
+			}
 			assertThat(actual, is(val));
 			TestUtil.dispPrompt(this, String.format("reg.getInt(%s)=%d", key, actual));
 			
@@ -212,11 +237,11 @@ public final class RegTest {
 		String key = null;
 		String val = "123";
 		
-		TestUtil.dispPrompt(this, String.format("reg.setString(%s,\"%s\") => IllegalArgumentException", key, val));
+		TestUtil.dispPrompt(this, String.format("reg.setString(%s,\"%s\") => RegException", key, val));
 		try {
 			reg.setString(key, val);
 			Assert.fail("この行が実行されたらエラー");
-		} catch (IllegalArgumentException ex) {
+		} catch (RegException ex) {
 			reg.dispose();
 			after(file); //後始末
 			return;
@@ -234,12 +259,20 @@ public final class RegTest {
 		Reg reg = new Reg(file.getPath());
 		String key = "key2";
 		String val = null;
-		reg.setString(key, val);
-		TestUtil.dispPrompt(this, String.format("reg.setString(\"%s\",%s)", key, val));
+		
+		try {
 
-		String actual = reg.getString(key);
-		TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")= \"%s\"", key, actual));
-		assertThat(actual, is(""));
+			reg.setString(key, val);
+			TestUtil.dispPrompt(this, String.format("reg.setString(\"%s\",%s)", key, val));
+
+			String actual = reg.getString(key);
+			TestUtil.dispPrompt(this, String.format("reg.getString(\"%s\")= \"%s\"", key, actual));
+			assertThat(actual, is(""));
+
+		} catch (RegException e) {
+			Assert.fail();
+		}
+		
 		
 		reg.dispose();
 

@@ -3,6 +3,7 @@ package bjd.option;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
@@ -53,7 +54,11 @@ public class DatTest {
 			System.out.printf("fromReg(\"%s\") => toReg(\"%s\")\n", fx.colMax, fx.str);
 
 			Dat dat = new Dat(ctrlTypeList);
-			dat.fromReg(fx.str);
+			try {
+				dat.fromReg(fx.str);
+			} catch (DatException e) {
+				Assert.fail();
+			}
 			assertThat(dat.toReg(false), is(fx.str));
 		}
 	}
@@ -63,17 +68,17 @@ public class DatTest {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("fromReg()に無効な文字列を与えるとfalseが返る");
+			TestUtil.dispHeader("fromReg()に無効な文字列を与えると例外(DatException)が発生する");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
-			//new Fixture(3, "#\tn1\tn2\b\tn1\tn2"), //カラム数不一致		
-			//new Fixture(1, "#\tn1\b\tn1\tn2"), //カラム数不一致		
-			//new Fixture(1, "_\tn1"), //矛盾データ		
+			new Fixture(3, "#\tn1\tn2\b\tn1\tn2"), //カラム数不一致		
+			new Fixture(1, "#\tn1\b\tn1\tn2"), //カラム数不一致		
+			new Fixture(1, "_\tn1"), //矛盾データ		
 			new Fixture(1, "\b"), //矛盾データ		
-			//new Fixture(1, ""),		
-			//new Fixture(1, null),		
+			new Fixture(1, ""),		
+			new Fixture(1, null),		
 		};
 
 		static class Fixture {
@@ -95,10 +100,16 @@ public class DatTest {
 				ctrlTypeList[i] = CtrlType.INT;
 			}
 
-			System.out.printf("colMax=%d fromReg(\"%s\") => false\n", fx.colMax, fx.str);
+			System.out.printf("colMax=%d fromReg(\"%s\") => DatException\n", fx.colMax, fx.str);
 
 			Dat dat = new Dat(ctrlTypeList);
-			assertSame(dat.fromReg(fx.str), false);
+			try {
+				dat.fromReg(fx.str);
+				Assert.fail("この行が実行されたらエラー");
+			} catch (DatException e) {
+				return; //テスト成功f;
+			}
+			Assert.fail("この行が実行されたらエラー");
 		}
 	}
 

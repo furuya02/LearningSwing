@@ -6,9 +6,14 @@ import java.util.HashMap;
 import bjd.ctrl.CtrlType;
 import bjd.util.Util;
 
+/**
+ * Optionクラスへ結合を排除するためのクラス<br>
+ * Optionの値を個別に設定できる（テスト用）<br>
+ * 
+ * @author SIN
+ *
+ */
 public final class Conf {
-	//複雑なOptionクラスが結合するのを防ぐためのクラス
-	//単にOptionの値を取得（テストの際は設定）するだけのクラスは、このクラスを使用する
 	private HashMap<String, Object> ar = new HashMap<>();
 
 	public Conf(OneOption oneOption) {
@@ -42,6 +47,13 @@ public final class Conf {
 		}
 	}
 
+	/**
+	 * 値の取得<br>
+	 * 存在しないタグを指定すると実行事例がが発生する<br>
+	 * 
+	 * @param タグ名
+	 * @return 値 
+	 */
 	public Object get(String name) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
 			Util.runtimeError(String.format("未定義 %s", name));
@@ -49,6 +61,13 @@ public final class Conf {
 		return ar.get(name);
 	}
 
+	/**
+	 * 値の設定<br>
+	 * 存在しないタグを指定すると実行事例がが発生する<br>
+	 * 
+	 * @param タグ名
+	 * @param 値
+	 */
 	public void set(String name, Object value) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
 			Util.runtimeError(String.format("未定義 %s", name));

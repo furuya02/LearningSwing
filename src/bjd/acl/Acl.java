@@ -1,9 +1,7 @@
 package bjd.acl;
 
 import bjd.ValidObj;
-import bjd.ValidObjException;
 import bjd.net.Ip;
-import bjd.util.Util;
 
 /**
  * ACLの基底クラス
