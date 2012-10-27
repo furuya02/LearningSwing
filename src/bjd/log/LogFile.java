@@ -21,7 +21,12 @@ import bjd.util.IDispose;
 import bjd.util.Util;
 
 
-
+/**
+ * ログファイルを管理するクラス
+ * 
+ * @author SIN
+ *
+ */
 public final class LogFile implements IDispose {
 
 	private Logger logger;
@@ -40,8 +45,7 @@ public final class LogFile implements IDispose {
 	
 	private Object lock = new Object(); //排他制御用オブジェクト
 
-	public LogFile(Logger logger, Conf conf, LogView logView,
-			boolean useLog, OneServer remoteServer) {
+	public LogFile(Logger logger, Conf conf, LogView logView, boolean useLog, OneServer remoteServer) {
 		this.logger = logger;
 		this.conf = conf;
 		this.logView = logView;

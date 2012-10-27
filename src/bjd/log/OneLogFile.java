@@ -29,7 +29,7 @@ final class OneLogFile implements IDispose {
 			fw = new FileWriter(file, true);
 		} catch (IOException e) {
 			fw = null; //初期化失敗(事後使用不能)
-			throw new IOException();
+			throw e;
 		} 
     }
 

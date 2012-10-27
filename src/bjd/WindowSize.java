@@ -29,7 +29,7 @@ public final class WindowSize implements IDispose {
 			reg = new Reg(path);
 		} catch (IOException e) {
 			reg  = null; // reg=nullとし、事後、アクセス不能とする
-			throw new IOException();
+			throw e;
 		}
 	}
 
