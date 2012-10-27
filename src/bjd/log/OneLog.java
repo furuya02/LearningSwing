@@ -108,8 +108,6 @@ public final class OneLog extends ValidObj {
 	}
 
 	/**
-	 * すべて文字列で指定する<br>
-	 * 
 	 * @param calendar　日付
 	 * @param logKind　ログの種類
 	 * @param nameTag　名前タグ

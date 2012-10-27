@@ -127,7 +127,9 @@ public final class Logger {
 					case 9000032:
 						message = kernel.getJp() ? "ログ削除" : "Delete LogFile";
 						break;
-					//case 9000033: message = kernel.getJp() ?"メールボックスにメールが格納されました" : "An email was stored to a mailbox";break;
+					case 9000033:
+						message = kernel.getJp() ? "ファイル保存時にエラーが発生しました" : "An error occurred in a File save";
+						break;
 					case 9000034:
 						message = kernel.getJp() ? "ACL指定に問題があります" : "ACL configuration failure";
 						break;
@@ -209,6 +211,9 @@ public final class Logger {
 						break;
 					case 9000060:
 						message = kernel.getJp() ? "【例外】" : "[Exception]";
+						break;
+					case 9000061:
+						message = kernel.getJp() ? "ファイルの作成に失敗しました" : "Failed in making of a file";
 						break;
 					default:
 						break;

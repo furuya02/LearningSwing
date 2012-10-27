@@ -3,6 +3,7 @@ package bjd.log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -146,13 +147,25 @@ public final class LogFile implements IDispose {
 		synchronized (lock) {
 			// セキュリティログは、表示制限に関係なく書き込む
 			if (secureLog != null && oneLog.isSecure()) {
-				secureLog.set(oneLog.toString());
+				try {
+					secureLog.set(oneLog.toString());
+				} catch (IOException e) {
+					logger.set(LogKind.ERROR, null, 9000033, secureLog.getPath());
+					secureLog = null;
+				}
 			}
 			// 通常ログの場合
 			if (normalLog != null) {
 				// ルール適用除外　もしくは　表示対象になっている場合
 				if (!(boolean) conf.get("useLimitString") || isDisplay) {
-					normalLog.set(oneLog.toString());
+					
+					try {
+						normalLog.set(oneLog.toString());
+					} catch (IOException e) {
+						logger.set(LogKind.ERROR, null, 9000033, normalLog.getPath());
+						normalLog = null;
+					}
+					
 				}
 			}
 		}
@@ -177,7 +190,12 @@ public final class LogFile implements IDispose {
 			default:
 				Util.runtimeException(String.format("nomalFileName=%d", (int) conf.get("normalFileName")));
 		}
-		normalLog = new OneLogFile(fileName);
+		try {
+			normalLog = new OneLogFile(fileName);
+		} catch (IOException e) {
+			logger.set(LogKind.ERROR, null, 9000061, fileName);
+			normalLog = null;
+		}
 
 		switch ((int) conf.get("secureFileName")) {
 			case 0:// secure.yyyy.mm.dd.log
@@ -192,7 +210,13 @@ public final class LogFile implements IDispose {
 			default:
 				Util.runtimeException(String.format("secureFileName=%d", (int) conf.get("secureFileName")));
 		}
-		secureLog = new OneLogFile(fileName);
+		try {
+			secureLog = new OneLogFile(fileName);
+		} catch (IOException e) {
+			logger.set(LogKind.ERROR, null, 9000061, fileName);
+			secureLog = null;
+		}
+
 	}
 
 	private void logClose() {

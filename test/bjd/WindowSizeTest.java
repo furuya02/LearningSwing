@@ -19,30 +19,42 @@ import bjd.util.TestUtil;
 
 public final class WindowSizeTest {
 
-	private File createFile(String fileName) {
-		String currentDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
-		return new File(String.format("%s\\%s", currentDir, fileName));
-	}
-
-	private WindowSize createWindowSize(File file) {
+	//共通処理
+	private WindowSize create(File file) {
+		WindowSize windowSize = null;
 		Conf conf = new Conf(new OptionBasic(new Kernel(), "", "Basic"));
 		conf.set("useLastSize", true);
 		try {
-			return new WindowSize(conf, file.getPath());
+			windowSize = new WindowSize(conf, file.getPath());
 		} catch (IOException e) {
 			Assert.fail();
 		}
-		return null;
+		return windowSize;
 	}
 
+	// 前処理
+	private File before(String fileName) {
+		String currentDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
+		File file = new File(String.format("%s\\%s.windowsSizeTest", currentDir, fileName));
+		if (file.exists()) {
+			file.delete();
+		}
+		return file;
+	}
+
+	// 後処理
+	private void after(File file) {
+		file.delete();
+	}
+		
 	@Test
 	public void a001() {
 
 		TestUtil.dispHeader("a001 listViewのカラムの復元");
 
 		String tag = "a001";
-		File file = createFile(tag);
-		WindowSize windowSize = createWindowSize(file); //　生成
+		File file = before(tag);
+		WindowSize windowSize = create(file); //　生成
 
 		ListView listView = new ListView(tag);
 		listView.addColumn("col1");
@@ -75,7 +87,7 @@ public final class WindowSizeTest {
 		windowSize.dispose(); // 破棄
 		listView.dispose(); // 破棄
 
-		file.delete(); //後始末
+		after(file); //後始末
 
 	}
 
@@ -85,8 +97,8 @@ public final class WindowSizeTest {
 		TestUtil.dispHeader("a002 listViewのカラムの復元 保存データが無いとき最低値100を読み出す");
 
 		String tag = "a002";
-		File file = createFile(tag);
-		WindowSize windowSize = createWindowSize(file); //　生成
+		File file = before(tag);
+		WindowSize windowSize = create(file); //　生成
 
 		ListView listView = new ListView(tag);
 		listView.addColumn("col1");
@@ -107,7 +119,7 @@ public final class WindowSizeTest {
 		windowSize.dispose(); // 破棄
 		listView.dispose(); // 破棄
 
-		file.delete(); //後始末
+		after(file); //後始末
 
 	}
 	
@@ -117,8 +129,8 @@ public final class WindowSizeTest {
 		TestUtil.dispHeader("a003 JFrameのサイズの復元");
 
 		String tag = "a003";
-		File file = createFile(tag);
-		WindowSize windowSize = createWindowSize(file); //　生成
+		File file = before(tag);
+		WindowSize windowSize = create(file); //　生成
 
 		JFrame frame = new JFrame(tag);
 		frame.setSize(200, 100);
@@ -155,7 +167,7 @@ public final class WindowSizeTest {
 		windowSize.dispose(); // 破棄
 		frame.dispose(); // 破棄
 
-		file.delete(); //後始末
+		after(file); //後始末
 
 	}
 	
@@ -166,8 +178,8 @@ public final class WindowSizeTest {
 		TestUtil.dispHeader("a004 JFrameのサイズの復元 保存データが無いときデフォルト値を読み出す");
 
 		String tag = "a004";
-		File file = createFile(tag);
-		WindowSize windowSize = createWindowSize(file); //　生成
+		File file = before(tag);
+		WindowSize windowSize = create(file); //　生成
 
 		//		JFrame frame = new JFrame(tag);
 		//		windowSize.save(frame); // サイズ保存
@@ -202,7 +214,6 @@ public final class WindowSizeTest {
 		windowSize.dispose(); // 破棄
 		frame.dispose(); // 破棄
 
-		file.delete(); //後始末
-
+		after(file); //後始末
 	}
 }
