@@ -55,7 +55,7 @@ public final class LocalAddress extends ValidObj {
 			v6.add(new Ip("IN6ADDR_ANY_INIT"));
 		} catch (ValidObjException ex) {
 			//状息の初期化で例外となった場合は、実行時例外とする
-			Util.runtimeError("Ip(INADDR_ANY) Ip(IN6ADDR_ANY_INIT)"); //実行時例外
+			Util.runtimeException("Ip(INADDR_ANY) Ip(IN6ADDR_ANY_INIT)"); //実行時例外
 		}
 
 		Enumeration<NetworkInterface> interfaceList;
@@ -78,7 +78,7 @@ public final class LocalAddress extends ValidObj {
 								v4.add(new Ip(s));
 							} catch (ValidObjException e) {
 								//システムから返された文字列でIpを初期化して例外が出るという事は、実行時例外とするしかない
-								Util.runtimeError(String.format("inetAddress=%s", s)); //実行時例外
+								Util.runtimeException(String.format("inetAddress=%s", s)); //実行時例外
 							}
 						} else if (inetAddress instanceof Inet6Address) {
 							boolean linkLocal = inetAddress.isLinkLocalAddress();
@@ -91,7 +91,7 @@ public final class LocalAddress extends ValidObj {
 									v6.add(new Ip(s));
 								} catch (ValidObjException e) {
 									//システムから返された文字列でIpを初期化して例外が出るという事は、実行時例外とするしかない
-									Util.runtimeError(String.format("inetAddress=%s", s)); //実行時例外
+									Util.runtimeException(String.format("inetAddress=%s", s)); //実行時例外
 								}
 							}
 						}

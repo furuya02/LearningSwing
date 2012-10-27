@@ -42,7 +42,7 @@ public final class Conf {
 				case LABEL:
 					break;
 				default:
-					Util.runtimeError(String.format("未定義 %s", ctrlType));
+					Util.runtimeException(String.format("未定義 %s", ctrlType));
 			}
 		}
 	}
@@ -56,7 +56,7 @@ public final class Conf {
 	 */
 	public Object get(String name) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
-			Util.runtimeError(String.format("未定義 %s", name));
+			Util.runtimeException(String.format("未定義 %s", name));
 		}
 		return ar.get(name);
 	}
@@ -70,7 +70,7 @@ public final class Conf {
 	 */
 	public void set(String name, Object value) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
-			Util.runtimeError(String.format("未定義 %s", name));
+			Util.runtimeException(String.format("未定義 %s", name));
 		}
 		ar.put(name, value);
 	}

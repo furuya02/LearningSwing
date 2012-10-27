@@ -177,7 +177,7 @@ final class AclV6 extends Acl {
 			setStart(new Ip("::"));
 			setEnd(new Ip("FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF"));
 		} catch (ValidObjException e) {
-			Util.runtimeError("AclV6 init()");
+			Util.runtimeException("AclV6 init()");
 		}
 	}
 }

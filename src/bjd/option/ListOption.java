@@ -24,7 +24,7 @@ public final class ListOption extends ListBase<OneOption> {
 		if (nameTag.equals("Basic")) {
 			return new OptionBasic(kernel, "", "Basic");
 		}
-		Util.runtimeError(String.format("nameTag=%s", nameTag));
+		Util.runtimeException(String.format("nameTag=%s", nameTag));
 		return null;
 	}
 

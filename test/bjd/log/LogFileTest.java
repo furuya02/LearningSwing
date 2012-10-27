@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -116,16 +117,20 @@ public final class LogFileTest {
 		}
 		logFile.dispose();
 
-		String fileName = "BlackJumboDog.Log";
-		ArrayList<String> lines = Util.textFileRead(new File(String.format("%s\\%s", dir.getPath(), fileName)));
-		assertThat(lines.size(), is(3));
-		TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
+		try {
+			String fileName = "BlackJumboDog.Log";
+			ArrayList<String> lines = Util.textFileRead(new File(String.format("%s\\%s", dir.getPath(), fileName)));
+			assertThat(lines.size(), is(3));
+			TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
 
-		fileName = "secure.Log";
-		lines = Util.textFileRead(new File(String.format("%s\\%s", dir.getPath(), fileName)));
-		assertThat(lines.size(), is(1));
-		TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
-
+			fileName = "secure.Log";
+			lines = Util.textFileRead(new File(String.format("%s\\%s", dir.getPath(), fileName)));
+			assertThat(lines.size(), is(1));
+			TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
+		} catch (IOException e) {
+			//textFileRead()の例外をキャッチ
+			Assert.fail(e.getMessage()); 
+		}
 		after(dir);
 	}
 
@@ -177,7 +182,12 @@ public final class LogFileTest {
 		String path = String.format("%s\\%s", dir.getPath(), fileName);
 		File file = new File(path);
 
-		ArrayList<String> lines = Util.textFileRead(file);
+		ArrayList<String> lines = null;
+		try {
+			lines = Util.textFileRead(file);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		assertThat(lines.size(), is(7));
 		TestUtil.dispPrompt(this, String.format("%s には　%d行　追加されている", fileName, lines.size()));
 
@@ -195,7 +205,11 @@ public final class LogFileTest {
 
 		TestUtil.dispPrompt(this, String.format("tail(%s,%d) 保存日数=%d", fileName, saveDays, saveDays));
 
-		lines = Util.textFileRead(file);
+		try {
+			lines = Util.textFileRead(file);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		assertThat(lines.size(), is(2));
 
 		for (String s : lines) {

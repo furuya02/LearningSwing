@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -205,10 +206,11 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		} else if (cmd.equals(tagList[IMPORT])) {
 			File file = Util.fileChooser(null);
 			if (file != null) {
-				//TODO 形式の違うファイルを読み込んだ時の、適切なメッセージと途中でキャンセルできるようにする
-				if (file.exists()) {
+				try {
 					ArrayList<String> lines = Util.textFileRead(file);
 					importDat(lines);
+				} catch (IOException e) {
+					Msg.show(MsgKind.ERROR, String.format("ファイルの読み込みに失敗しました[%s]", file.getPath()));
 				}
 			}
 		} else if (cmd.equals(tagList[EXPORT])) {
@@ -358,7 +360,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		for (int i = 0; i < checkListBox.getItemCount(); i++) {
 			boolean enable = checkListBox.getItemChecked(i);
 			if(!dat.add(enable, checkListBox.getItemText(i))){
-				Util.runtimeError("CtrlDat abstractRead() 外部入力からの初期化ではないので、このエラーは発生しないはず");
+				Util.runtimeException("CtrlDat abstractRead() 外部入力からの初期化ではないので、このエラーは発生しないはず");
 			}
 		}
 		return dat;
@@ -409,23 +411,23 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	//***********************************************************************
 	@Override
 	protected boolean abstractIsComplete() {
-		Util.runtimeError("使用禁止");
+		Util.runtimeException("使用禁止");
 		return false;
 	}
 
 	@Override
 	protected String abstractToText() {
-		Util.runtimeError("使用禁止");
+		Util.runtimeException("使用禁止");
 		return "";
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		Util.runtimeError("使用禁止");
+		Util.runtimeException("使用禁止");
 	}
 
 	@Override
 	protected void abstractClear() {
-		Util.runtimeError("使用禁止");
+		Util.runtimeException("使用禁止");
 	}
 }

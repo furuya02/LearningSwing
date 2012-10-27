@@ -109,7 +109,7 @@ public abstract class OneServer extends ThreadBase {
 				ip = new Ip("127.0.0.1");
 			} catch (ValidObjException ex) {
 				//127.0.0.1で例外となるようなら実行時例外とするしかない
-				Util.runtimeError("new Ip(127.0.0.1)");
+				Util.runtimeException("new Ip(127.0.0.1)");
 			}
 			this.oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		}

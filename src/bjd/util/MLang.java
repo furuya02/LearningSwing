@@ -24,7 +24,7 @@ public final class MLang {
             fs.close();
     		return buf.length == 0 ? Charset.forName("ASCII") : getEncoding(buf);
         } catch (IOException e) {
-            Util.runtimeError(e.getMessage());
+            Util.runtimeException(e.getMessage());
         }
 		return null;
 	}

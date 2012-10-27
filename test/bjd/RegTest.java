@@ -14,6 +14,16 @@ import bjd.util.TestUtil;
 
 public final class RegTest {
 
+	//共通処理
+	private Reg create(File file){
+		Reg reg = null;
+		try {
+			reg = new Reg(file.getPath());
+		} catch (IOException e1) {
+			Assert.fail();
+		}
+		return reg;
+	}
 	// 前処理
 	private File before(String fileName) {
 		String currentDir = new File(".").getAbsoluteFile().getParent(); // カレントディレクトリ
@@ -22,7 +32,7 @@ public final class RegTest {
 			file.delete();
 		}
 
-		Reg reg  = new Reg(file.getPath());
+		Reg reg = create(file);
 		
 		if (reg != null) {
 			try {
@@ -45,6 +55,7 @@ public final class RegTest {
 	private void after(File file) {
 		file.delete();
 	}
+	
 
 	@Test
 	public void a001() {
@@ -52,7 +63,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a001 設定されている値を読み出す　getInt()");
 
 		File file = before("a001"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = "key1";
 		int actual = 0;
@@ -74,7 +85,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a002 設定されている値を読み出す　getString()");
 
 		File file = before("a002"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = "key2";
 		String actual = "";
@@ -96,7 +107,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a003 保存されていないKeyで読み出すと例外が発生する　getInt()");
 
 		File file = before("a003"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = "xxx";
 
@@ -119,7 +130,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a004 保存されていないKeyで読み出すと 例外が発生する　getString()");
 
 		File file = before("a004"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = "xxx";
 
@@ -143,7 +154,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a005 Key=null で読み出すと例外がが発生する　getInt()");
 
 		File file = before("a005"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = null;
 
@@ -166,7 +177,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a006 Key=null で読みだすと例外が発生する　getString()");
 
 		File file = before("a006"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = null;
 
@@ -190,7 +201,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a007 Key=null で値を設定すると例外が発生する　setInt()");
 
 		File file = before("a007"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = "TEST";
 		int val = 123;
@@ -233,7 +244,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a008 Key=null で値を設定すると例外が発生する　setString()");
 
 		File file = before("a008"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = null;
 		String val = "123";
@@ -256,7 +267,7 @@ public final class RegTest {
 		TestUtil.dispHeader("a009 val=null で値を設定すると\"\"が保存される　setString()");
 
 		File file = before("a009"); //前処理
-		Reg reg = new Reg(file.getPath());
+		Reg reg = create(file);
 
 		String key = "key2";
 		String val = null;

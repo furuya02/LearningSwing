@@ -15,20 +15,38 @@ public final class WindowSize implements IDispose {
 	private Conf conf;
 	private Reg reg; //記録する仮想レジストリ
 
-	public WindowSize(Conf conf, String path) {
+	/**
+	 * ウインドウサイズ及びGridViewのカラム幅を記憶するクラス
+	 * 
+	 * @param conf オプション設定
+	 * @param path 保存ファイル
+	 * @throws IOException 保存ファイルのIOエラー　(存在しない場合は新規作成されるので例外とはならない)
+	 */
+	public WindowSize(Conf conf, String path) throws IOException{
 		this.conf = conf;
 		//ウインドサイズ等を記録する仮想レジストリ
-		reg = new Reg(path);
+		try {
+			reg = new Reg(path);
+		} catch (IOException e) {
+			reg  = null; // reg=nullとし、事後、アクセス不能とする
+			throw new IOException();
+		}
 	}
 
 	@Override
 	public void dispose() {
+		if (reg == null) { //初期化に失敗している
+			return;
+		}
 		//明示的に呼ばないと、保存されない
 		reg.dispose(); //Regの保存
 	}
 
 	//ウインドウサイズの復元
 	public void read(JFrame frame) {
+		if (reg == null) { //初期化に失敗している
+			return;
+		}
 		if (frame == null) {
 			return;
 		}
@@ -74,10 +92,12 @@ public final class WindowSize implements IDispose {
 
 	//カラム幅の復元
 	public void read(ListView listView) {
+		if (reg == null) { //初期化に失敗している
+			return;
+		}
 		if (listView == null) {
 			return;
 		}
-
 		if (conf == null) {
 			return; //リモート操作の時、ここでオプション取得に失敗する
 		}
@@ -102,6 +122,9 @@ public final class WindowSize implements IDispose {
 
 	//ウインドウサイズの保存
 	public void save(JFrame frame) {
+		if (reg == null) { //初期化に失敗している
+			return;
+		}
 		if (frame == null) {
 			return;
 		}
@@ -116,7 +139,7 @@ public final class WindowSize implements IDispose {
 			reg.setInt(String.format("%s_top", n), y);
 			reg.setInt(String.format("%s_left", n), x);
 		} catch (RegException e) {
-			Util.runtimeError("WindowSize.save()");
+			Util.runtimeException("WindowSize.save()");
 		}
 
 		//		if (form.WindowState == FormWindowState.Normal) {
@@ -132,6 +155,9 @@ public final class WindowSize implements IDispose {
 
 	//カラム幅の保存
 	public void save(ListView listView) {
+		if (reg == null) { //初期化に失敗している
+			return;
+		}
 		if (listView == null) {
 			return;
 		}
@@ -140,7 +166,7 @@ public final class WindowSize implements IDispose {
 			try {
 				reg.setInt(key, listView.getColWidth(i));
 			} catch (RegException e) {
-				Util.runtimeError("WindowSaze.save()");
+				Util.runtimeException("WindowSaze.save()");
 			}
 		}
 	}

@@ -129,18 +129,18 @@ public final class CtrlTabPage extends OneCtrl implements ChangeListener {
 
 	@Override
 	protected String abstractToText() {
-		Util.runtimeError("未実装");
+		Util.runtimeException("未実装");
 		return "";
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		Util.runtimeError("未実装");
+		Util.runtimeException("未実装");
 	}
 
 	@Override
 	protected void abstractClear() {
-		Util.runtimeError("未実装");
+		Util.runtimeException("未実装");
 	}
 
 }

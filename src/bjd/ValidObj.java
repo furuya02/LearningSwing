@@ -50,7 +50,7 @@ public abstract class ValidObj {
 	 */
 	protected final void checkInitialise() {
 		if (initialiseFailed) {
-			Util.runtimeError("[ValidObj] このオブジェクトは、初期化に失敗しているため使用できません");
+			Util.runtimeException("[ValidObj] このオブジェクトは、初期化に失敗しているため使用できません");
 		}
 	}
 }

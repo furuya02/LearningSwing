@@ -195,7 +195,7 @@ final class AclV4 extends Acl {
 			setStart(new Ip("0.0.0.0"));
 			setEnd(new Ip("255.255.255.255"));
 		} catch (ValidObjException e) {
-			Util.runtimeError("AclV4 init()");
+			Util.runtimeException("AclV4 init()");
 		}
 	}
 }

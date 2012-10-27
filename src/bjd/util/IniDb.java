@@ -1,6 +1,7 @@
 package bjd.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import bjd.ctrl.CtrlType;
@@ -63,52 +64,50 @@ public final class IniDb {
 			case TABPAGE:
 				return "TAB_PAGE";
 			default:
-				throw new UnsupportedOperationException(
-						"IniDb.java CtrlType2Str() コントロールの型名が実装されていません OneVal::TypeStr()　"
-								+ ctrlType);
+				throw new UnsupportedOperationException("IniDb.java CtrlType2Str() コントロールの型名が実装されていません OneVal::TypeStr()　" + ctrlType);
 		}
 	}
 
-//	private CtrlType str2CtrlType(String str) {
-//		switch (str) {
-//			case "BOOL":
-//				return CtrlType.CHECKBOX;
-//			case "STRING":
-//				return CtrlType.TEXTBOX;
-//			case "HIDE_STRING":
-//				return CtrlType.HIDDEN;
-//			case "LIST":
-//				return CtrlType.COMBOBOX;
-//			case "FOLDER":
-//				return CtrlType.FOLDER;
-//			case "FILE":
-//				return CtrlType.FILE;
-//			case "DAT":
-//				return CtrlType.DAT;
-//			case "INT":
-//				return CtrlType.INT;
-//			case "ADDRESS_V4":
-//				return CtrlType.ADDRESSV4;
-//			case "BINDADDR":
-//				return CtrlType.BINDADDR;
-//			case "FONT":
-//				return CtrlType.FONT;
-//			case "GROUP":
-//				return CtrlType.GROUP;
-//			case "LABEL":
-//				return CtrlType.LABEL;
-//			case "MEMO":
-//				return CtrlType.MEMO;
-//			case "RADIO":
-//				return CtrlType.RADIO;
-//			case "TAB_PAGE":
-//				return CtrlType.TABPAGE;
-//			default:
-//				throw new UnsupportedOperationException(
-//						"IniDb.java str2CtrlType() コントロールの型名が実装されていません OneVal::TypeStr()　"
-//								+ str);
-//		}
-//	}
+	//	private CtrlType str2CtrlType(String str) {
+	//		switch (str) {
+	//			case "BOOL":
+	//				return CtrlType.CHECKBOX;
+	//			case "STRING":
+	//				return CtrlType.TEXTBOX;
+	//			case "HIDE_STRING":
+	//				return CtrlType.HIDDEN;
+	//			case "LIST":
+	//				return CtrlType.COMBOBOX;
+	//			case "FOLDER":
+	//				return CtrlType.FOLDER;
+	//			case "FILE":
+	//				return CtrlType.FILE;
+	//			case "DAT":
+	//				return CtrlType.DAT;
+	//			case "INT":
+	//				return CtrlType.INT;
+	//			case "ADDRESS_V4":
+	//				return CtrlType.ADDRESSV4;
+	//			case "BINDADDR":
+	//				return CtrlType.BINDADDR;
+	//			case "FONT":
+	//				return CtrlType.FONT;
+	//			case "GROUP":
+	//				return CtrlType.GROUP;
+	//			case "LABEL":
+	//				return CtrlType.LABEL;
+	//			case "MEMO":
+	//				return CtrlType.MEMO;
+	//			case "RADIO":
+	//				return CtrlType.RADIO;
+	//			case "TAB_PAGE":
+	//				return CtrlType.TABPAGE;
+	//			default:
+	//				throw new UnsupportedOperationException(
+	//						"IniDb.java str2CtrlType() コントロールの型名が実装されていません OneVal::TypeStr()　"
+	//								+ str);
+	//		}
+	//	}
 
 	// １行を読みこるためのオブジェクト
 	private class LineObject {
@@ -147,7 +146,7 @@ public final class IniDb {
 		if (index == -1) {
 			return null;
 		}
-//		CtrlType ctrlType = str2CtrlType(str.substring(0, index));
+		//		CtrlType ctrlType = str2CtrlType(str.substring(0, index));
 		str = str.substring(index + 1);
 		index = str.indexOf("=");
 		if (index == -1) {
@@ -168,7 +167,12 @@ public final class IniDb {
 		boolean isRead = false;
 		File file = new File(fileName);
 		if (file.exists()) {
-			ArrayList<String> lines = Util.textFileRead(file);
+			ArrayList<String> lines = null;
+			try {
+				lines = Util.textFileRead(file);
+			} catch (IOException e) {
+				Util.runtimeException(String.format("InitDb.read() IOException %s", e.getMessage()));
+			}
 			for (String s : lines) {
 				LineObject o = readLine(s);
 				if (o != null) {
@@ -229,7 +233,12 @@ public final class IniDb {
 			ArrayList<String> lines = new ArrayList<>();
 			File file = new File(target);
 			if (file.exists()) {
-				ArrayList<String> l = Util.textFileRead(file);
+				ArrayList<String> l = null;
+				try {
+					l = Util.textFileRead(file);
+				} catch (IOException e) {
+					Util.runtimeException(String.format("InitDb.save() IOException %s", e.getMessage()));
+				}
 				for (String s : l) {
 					LineObject o = readLine(s);
 					if (o != null) {

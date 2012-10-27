@@ -4,8 +4,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -24,7 +27,12 @@ public final class WindowSizeTest {
 	private WindowSize createWindowSize(File file) {
 		Conf conf = new Conf(new OptionBasic(new Kernel(), "", "Basic"));
 		conf.set("useLastSize", true);
-		return new WindowSize(conf, file.getPath());
+		try {
+			return new WindowSize(conf, file.getPath());
+		} catch (IOException e) {
+			Assert.fail();
+		}
+		return null;
 	}
 
 	@Test

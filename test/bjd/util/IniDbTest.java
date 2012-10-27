@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
@@ -98,7 +99,12 @@ public class IniDbTest {
 			iniDb.save("Basic", listVal); // nameTagは"Basic"で決め打ちされている
 
 			System.out.printf("%s\n", fx.expected);
-			assertThat(Util.textFileRead(new File(path)).get(0), is(fx.expected));
+			try {
+				ArrayList<String> lines = Util.textFileRead(new File(path));
+				assertThat(lines.get(0), is(fx.expected));
+			} catch (IOException e) {
+				Assert.fail();
+			}
 
 			iniDb.deleteIni();
 			iniDb.deleteTxt();

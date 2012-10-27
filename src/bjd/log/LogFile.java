@@ -175,7 +175,7 @@ public final class LogFile implements IDispose {
 				fileName = String.format("%s\\BlackJumboDog.Log", saveDirectory);
 				break;
 			default:
-				Util.runtimeError(String.format("nomalFileName=%d", (int) conf.get("normalFileName")));
+				Util.runtimeException(String.format("nomalFileName=%d", (int) conf.get("normalFileName")));
 		}
 		normalLog = new OneLogFile(fileName);
 
@@ -190,7 +190,7 @@ public final class LogFile implements IDispose {
 				fileName = String.format("%s\\secure.Log", saveDirectory);
 				break;
 			default:
-				Util.runtimeError(String.format("secureFileName=%d", (int) conf.get("secureFileName")));
+				Util.runtimeException(String.format("secureFileName=%d", (int) conf.get("secureFileName")));
 		}
 		secureLog = new OneLogFile(fileName);
 	}

@@ -40,7 +40,7 @@ public final class Bytes {
 					len += 1;
 					break;
 				default:
-					Util.runtimeError(o.getClass().getName());
+					Util.runtimeException(o.getClass().getName());
 					return new byte[0];
 			}
 		}
@@ -71,7 +71,7 @@ public final class Bytes {
 					data.put((byte) o);
 					break;
 				default:
-					Util.runtimeError(o.getClass().getName());
+					Util.runtimeException(o.getClass().getName());
 					return new byte[0];
 			}
 		}

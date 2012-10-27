@@ -100,7 +100,9 @@ public final class Logger {
 					case 9000021:
 						message = kernel.getJp() ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
 						break;
-					//case 9000022: message = kernel.getJp() ? "秘密鍵の読み込みに失敗しました" : "Reading of private key made a blunder"; break;
+					case 9000022: 
+						message = kernel.getJp() ? "ウインドウ情報保存ファイルにIOエラーが発生しました" : "An IO error occurred in a window information save file";
+						break;
 					case 9000023:
 						message = kernel.getJp() ? "証明書の読み込みに失敗しました" : "Reading of a certificate made a blunder";
 						break;

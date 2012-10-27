@@ -194,9 +194,9 @@ public final class Inet {
 			}
 			return sb.toString().toUpperCase();
 		} catch (Exception e) {
-			Util.runtimeError(e.getMessage());
+			Util.runtimeException(e.getMessage());
 		}
-		Util.runtimeError(String.format("md5str(\"%s\")", str));
+		Util.runtimeException(String.format("md5str(\"%s\")", str));
 		return null;
 	}
 

@@ -66,7 +66,7 @@ public class SockServer extends SockObj {
 
 	public final boolean bind(Ip bindIp, int port, int listenMax) {
 		if (protocolKind != ProtocolKind.Tcp) {
-			Util.runtimeError(String.format("this object is %s", protocolKind));
+			Util.runtimeException(String.format("this object is %s", protocolKind));
 		}
 		try {
 			//************************************************
@@ -89,7 +89,7 @@ public class SockServer extends SockObj {
 
 	public final boolean bind(Ip bindIp, int port) {
 		if (protocolKind != ProtocolKind.Udp) {
-			Util.runtimeError(String.format("this object is %s", protocolKind));
+			Util.runtimeException(String.format("this object is %s", protocolKind));
 		}
 		//InetSocketAddress l = new InetSocketAddress(bindIp.getInetAddress(), port);
 		try {

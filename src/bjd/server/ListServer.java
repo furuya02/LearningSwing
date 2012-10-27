@@ -16,7 +16,7 @@ public final class ListServer extends ListBase<OneServer> implements IDispose {
         if (nameTag.equals("RemoteServer")) {
             return null;
 		}
-		Util.runtimeError(String.format("nameTag=%s", nameTag));
+		Util.runtimeException(String.format("nameTag=%s", nameTag));
 		return null;
 	}
 }

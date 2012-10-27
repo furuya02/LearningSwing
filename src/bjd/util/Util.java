@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -32,8 +33,8 @@ public final class Util {
 		return btn;
 	}
 
-	public static void runtimeError(String msg) {
-		throw new RuntimeException("実行時例外" + msg);
+	public static void runtimeException(String msg) {
+		throw new RuntimeException("RuntimeException" + msg);
 	}
 
 	//２つの配列の結合
@@ -64,23 +65,27 @@ public final class Util {
 		}
 		return null;
 	}
-
-	public static ArrayList<String> textFileRead(File file) {
+	/**
+	 * テキストファイルを読み込んで、文字列リストに格納する<br>
+	 * このメソッドを使用する前に、ファイルの有効性を確認してあれば、(file.exists() && file.isFile() && file.canRead())<br>
+	 * 例外が発生時に、RuntailExceptionとして処理できる<br>
+	 * 
+	 * @param file 対象ファイル
+	 * @return　文字列リスト
+	 * @throws IOException ファイルが存在しない、読み込み失敗　など
+	 */
+	public static ArrayList<String> textFileRead(File file) throws IOException {
 		ArrayList<String> lines = new ArrayList<>();
-		try {
-			if (file.exists()) {
-				BufferedReader br = new BufferedReader(new FileReader(file));
-				while (true) {
-					String str = br.readLine();
-					if (str == null) {
-						break;
-					}
-					lines.add(str);
+		if (file.exists()) {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			while (true) {
+				String str = br.readLine();
+				if (str == null) {
+					break;
 				}
-				br.close();
+				lines.add(str);
 			}
-		} catch (Exception ex) {
-			System.out.println(ex);
+			br.close();
 		}
 		return lines;
 	}

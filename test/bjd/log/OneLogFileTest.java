@@ -5,7 +5,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -34,7 +37,12 @@ public final class OneLogFileTest {
         oneLogFile.set("3");
         oneLogFile.dispose();
 
-        ArrayList<String> lines = Util.textFileRead(new File(fileName));
+        ArrayList<String> lines = null;
+		try {
+			lines = Util.textFileRead(new File(fileName));
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
         assertThat(lines.get(0), is("1"));
         assertThat(lines.get(1), is("2"));
         assertThat(lines.get(2), is("3"));
@@ -54,7 +62,11 @@ public final class OneLogFileTest {
         oneLogFile.set("6");
         oneLogFile.dispose();
 
-        lines = Util.textFileRead(new File(fileName));
+        try {
+			lines = Util.textFileRead(new File(fileName));
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
         assertThat(lines.get(0), is("1"));
         assertThat(lines.get(1), is("2"));
         assertThat(lines.get(2), is("3"));

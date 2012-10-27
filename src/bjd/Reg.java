@@ -24,24 +24,26 @@ public final class Reg implements IDispose {
 	 * pathに指定したファイルが見つからない場合は、新規に作成される<br>
 	 * 
 	 * @param path 記憶ファイル名
+	 * @throws IOException ファイルが新規作成できない、読み込みできない
 	 */
-	public Reg(String path) {
+	public Reg(String path) throws IOException {
 		this.path = path;
 		File file = new File(path);
 
-		if (file.exists()) {
-			ArrayList<String> lines = Util.textFileRead(file);
-			for (String s : lines) {
-				int index = s.indexOf("=");
-				if (index < 1) {
-					break;
-				}
-				String key = s.substring(0, index);
-				String val = s.substring(index + 1);
-				ar.put(key, val);
-			}
+		if (!file.exists()) {
+			//ファイルが存在しない場合は、新規に作成する
+			file.createNewFile();
 		}
-
+		ArrayList<String> lines = Util.textFileRead(file);
+		for (String s : lines) {
+			int index = s.indexOf("=");
+			if (index < 1) {
+				break;
+			}
+			String key = s.substring(0, index);
+			String val = s.substring(index + 1);
+			ar.put(key, val);
+		}
 	}
 
 	/**

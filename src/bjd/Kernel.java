@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import bjd.ctrl.ListView;
 import bjd.log.ILogger;
 import bjd.log.LogFile;
+import bjd.log.LogKind;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.menu.Menu;
@@ -122,7 +123,13 @@ public final class Kernel implements IDispose {
 		listServer = new ListServer(); //サーバ管理
 
 		String path = String.format("%s\\BJD.ini", getProgDir());
-		windowSize = new WindowSize(new Conf(listOption.get("Basic")), path); //ウインドウの外観を保存・復元(Viewより前に初期化する)
+		try {
+			//ウインドウの外観を保存・復元(Viewより前に初期化する)
+			windowSize = new WindowSize(new Conf(listOption.get("Basic")), path);
+		} catch (IOException e) {
+			// 指定されたWindow情報保存ファイル(BJD.ini)にIOエラーが発生している
+			logger.set(LogKind.ERROR, null, 9000022, path);
+		} 
 		//
 		//        //ログ関連インスタンスの生成
 		logView = new LogView(listViewLog); //ログビュー
@@ -349,7 +356,7 @@ public final class Kernel implements IDispose {
 					//SetupService(); //サービスの設定
 					break;
 				default:
-					Util.runtimeError(String.format("cmd=%s", cmd));
+					Util.runtimeException(String.format("cmd=%s", cmd));
 					break;
 
 			}
@@ -384,7 +391,7 @@ public final class Kernel implements IDispose {
 					//Process.Start(Define.WebSupport());
 					break;
 				default:
-					Util.runtimeError(String.format("cmd=%s", cmd));
+					Util.runtimeException(String.format("cmd=%s", cmd));
 					break;
 			}
 		}
