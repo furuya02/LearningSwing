@@ -12,6 +12,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import bjd.ValidObjException;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -66,8 +67,8 @@ public class OneDatTest {
 			OneDat oneDat = null;
 			try {
 				oneDat = new OneDat(fx.enable, fx.list, fx.isSecretList);
-			} catch (DatException e) {
-				Assert.fail();
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
 			}
 			assertThat(oneDat.toReg(fx.isSecret), is(fx.expected));
 		}
@@ -111,8 +112,8 @@ public class OneDatTest {
 			OneDat oneDat = null;
 			try {
 				oneDat = new OneDat(true, list, isSecretList);
-			} catch (DatException e) {
-				Assert.fail();
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
 			}
 			oneDat.fromReg(fx.actual);
 			assertThat(oneDat.toReg(false), is(fx.expected));
@@ -157,8 +158,8 @@ public class OneDatTest {
 			OneDat oneDat = null;
 			try {
 				oneDat = new OneDat(true, list, isSecretList);
-			} catch (DatException e) {
-				Assert.fail();
+			} catch (ValidObjException e) {
+				Assert.fail(e.getMessage());
 			}
 			assertSame(oneDat.fromReg(fx.str), false);
 		}

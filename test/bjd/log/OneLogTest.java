@@ -46,7 +46,7 @@ public final class OneLogTest {
 		String detailInfomation = "DETAIL";
 		OneLog oneLog = new OneLog(calendar, logKind, nameTag, threadId, remoteHostname, messageId, message, detailInfomation);
 
-		String expected = "1970/01/01 09:00:00\tDebug\t100\tNAME\t127.0.0.1\t    200\tMSG\tDETAIL";
+		String expected = "1970/01/01 09:00:00\tDEBUG\t100\tNAME\t127.0.0.1\t    200\tMSG\tDETAIL";
 
 		TestUtil.dispPrompt(this, String.format("new OneLog() => toString()=%s", expected));
 		assertThat(oneLog.toString(), is(expected));

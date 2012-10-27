@@ -101,9 +101,9 @@ public final class LogFileTest {
 
 		LogFile logFile = new LogFile(null, conf, null, true, null);
 
-		String s1 = "2012/06/01 00:00:00\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s2 = "2012/06/02 00:00:00\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s3 = "2012/06/03 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s1 = "2012/06/01 00:00:00\tDETAIL\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s2 = "2012/06/02 00:00:00\tERROR\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s3 = "2012/06/03 00:00:00\tSECURE\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
 		TestUtil.dispPrompt(this, String.format("append(%s)", s1));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s2));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s3));
@@ -146,13 +146,13 @@ public final class LogFileTest {
 		LogFile logFile = new LogFile(null, conf, null, true, null);
 
 		//2012/09/01~7日分のログを準備
-		String s1 = "2012/09/01 00:00:00\tDetail\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s2 = "2012/09/02 00:00:00\tError\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s3 = "2012/09/03 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s4 = "2012/09/04 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s5 = "2012/09/05 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s6 = "2012/09/06 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
-		String s7 = "2012/09/07 00:00:00\tSecure\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s1 = "2012/09/01 00:00:00\tDETAIL\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s2 = "2012/09/02 00:00:00\tERROR\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s3 = "2012/09/03 00:00:00\tSECURE\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s4 = "2012/09/04 00:00:00\tSECURE\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s5 = "2012/09/05 00:00:00\tSECURE\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s6 = "2012/09/06 00:00:00\tSECURE\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
+		String s7 = "2012/09/07 00:00:00\tSECURE\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
 		TestUtil.dispPrompt(this, String.format("append(%s)", s1));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s2));
 		TestUtil.dispPrompt(this, String.format("append(%s)", s3));

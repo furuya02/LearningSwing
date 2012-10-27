@@ -215,12 +215,7 @@ public final class OneVal implements IDispose {
 			case DAT:
 				CtrlDat ctrlDat = (CtrlDat) oneCtrl;
 				Dat dat = new Dat(ctrlDat.getCtrlTypeList());
-				try {
-					if (!dat.fromReg(str)) {
-						value = null;
-						return false;
-					}
-				} catch (DatException e) {
+				if (!dat.fromReg(str)) {
 					value = null;
 					return false;
 				}

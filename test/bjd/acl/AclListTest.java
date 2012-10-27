@@ -15,7 +15,6 @@ import bjd.ctrl.CtrlType;
 import bjd.log.Logger;
 import bjd.net.Ip;
 import bjd.option.Dat;
-import bjd.option.DatException;
 import bjd.util.TestUtil;
 
 @RunWith(Enclosed.class)
@@ -35,12 +34,10 @@ public class AclListTest {
 				new Fixture("192.168.0.0/24", "192.168.0.1", AclKind.Allow),
 				new Fixture("192.168.1.0/24", "192.168.0.1", AclKind.Deny),
 				new Fixture("192.168.1.0/200", "192.168.1.0", AclKind.Deny), //無効リスト
-				new Fixture("192.168.0.0-192.168.0.100", "192.168.0.1", AclKind.Allow), new Fixture("192.168.0.2-192.168.0.100", "192.168.0.1", AclKind.Deny),
-				new Fixture("192.168.0.0-192.168.2.100", "192.168.0.1", AclKind.Allow), new Fixture("192.168.0.1-5", "192.168.0.1", AclKind.Allow),
-				new Fixture("192.168.0.2-5", "192.168.0.1", AclKind.Deny), new Fixture("192.168.0.*", "192.168.0.1", AclKind.Allow),
-				new Fixture("192.168.1.*", "192.168.0.1", AclKind.Deny), new Fixture("192.168.*.*", "192.168.0.1", AclKind.Allow),
-				new Fixture("192.*.*.*", "192.168.0.1", AclKind.Allow), new Fixture("*.*.*.*", "192.168.0.1", AclKind.Allow),
-				new Fixture("*", "192.168.0.1", AclKind.Allow), new Fixture("xxx", "192.168.0.1", AclKind.Deny), //無効リスト
+				new Fixture("192.168.0.0-192.168.0.100", "192.168.0.1", AclKind.Allow), new Fixture("192.168.0.2-192.168.0.100", "192.168.0.1", AclKind.Deny), new Fixture("192.168.0.0-192.168.2.100", "192.168.0.1", AclKind.Allow),
+				new Fixture("192.168.0.1-5", "192.168.0.1", AclKind.Allow), new Fixture("192.168.0.2-5", "192.168.0.1", AclKind.Deny), new Fixture("192.168.0.*", "192.168.0.1", AclKind.Allow), new Fixture("192.168.1.*", "192.168.0.1", AclKind.Deny),
+				new Fixture("192.168.*.*", "192.168.0.1", AclKind.Allow), new Fixture("192.*.*.*", "192.168.0.1", AclKind.Allow), new Fixture("*.*.*.*", "192.168.0.1", AclKind.Allow), new Fixture("*", "192.168.0.1", AclKind.Allow),
+				new Fixture("xxx", "192.168.0.1", AclKind.Deny), //無効リスト
 				new Fixture("172.*.*.*", "192.168.0.1", AclKind.Deny), };
 
 		static class Fixture {
@@ -70,10 +67,8 @@ public class AclListTest {
 			}
 			Dat dat = new Dat(new CtrlType[] { CtrlType.TEXTBOX, CtrlType.ADDRESSV4 });
 
-			try {
-				dat.add(true, String.format("NAME\t%s", fx.aclStr));
-			} catch (DatException e) {
-				Assert.fail(e.getMessage());
+			if (!dat.add(true, String.format("NAME\t%s", fx.aclStr))) {
+				Assert.fail("このエラーが発生したら、テストの実装に問題がある");
 			}
 
 			int enableNum = 0; //enableNum=0 のみを許可する

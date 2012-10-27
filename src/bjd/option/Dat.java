@@ -1,5 +1,6 @@
 package bjd.option;
 
+import bjd.ValidObjException;
 import bjd.ctrl.CtrlType;
 import bjd.util.ListBase;
 
@@ -44,22 +45,26 @@ public final class Dat extends ListBase<OneDat> {
 	 * 
 	 * @param enable 有効/無効
 	 * @param str OneDatを生成する文字列
-	 * @throws DatException 不正な文字列によってOneDatが生成できない
 	 * @return 成功・失敗
 	 */
-	public boolean add(boolean enable, String str) throws DatException {
+	public boolean add(boolean enable, String str) {
 		if (str == null) {
-			throw new DatException("引数にnullが渡されました");
+			return false; //引数にnullが渡されました
 		}
 		String[] list = str.split("\t");
 		if (list.length != colMax) {
-			throw new DatException("カラム数が一致しません");
+			return false; //カラム数が一致しません
 		}
-
-		if (!getAr().add(new OneDat(enable, list, isSecretList))) {
-			return false;
+		OneDat oneDat;
+		try {
+			oneDat = new OneDat(enable, list, isSecretList);
+		} catch (ValidObjException e) {
+			return false; // 初期化文字列が不正
 		}
-		return true;
+		if (getAr().add(oneDat)) {
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * 文字列化<br>
@@ -79,32 +84,34 @@ public final class Dat extends ListBase<OneDat> {
 
     /**
      * 文字列による初期化
-     * @param str　
+     * @param str　初期化文字列
      * @return　成否
-     * @throws DatException 初期化文字列が不正なためOneDatの初期化に失敗
      */
-	public boolean fromReg(String str) throws DatException {
+	public boolean fromReg(String str) {
  		getAr().clear();
-		if (str == null) {
-			throw new DatException("str == null");
-		}
-		if (str.equals("")) {
-			throw new DatException("str == \"\"");
+		if (str == null || str.equals("")) {
+			return false;
 		}
 		// 各行処理
 		String [] lines = str.split("\b");
 		if (lines.length <= 0) {
-			throw new DatException("lines.length <= 0");
+			return false; //"lines.length <= 0"
 		}
 		
 		for (String l : lines) { 
-			//ダミーのOneDatを作成
-			OneDat oneDat = new OneDat(true, new String[colMax], isSecretList);
-			
+			//OneDatの生成
+			OneDat oneDat;
+			try {
+				oneDat = new OneDat(true, new String[colMax], isSecretList);
+			} catch (ValidObjException e) {
+				return false;
+			}
 			if (l.split("\t").length != isSecretList.length + 1) { // +1はenableカラムの分
-				throw new DatException("col != isSecretList.length");
+				//カラム数の不一致
+				return false;
 			}
 			
+			//fromRegによる初期化
 			if (oneDat.fromReg(l)) {
 				if (getAr().add(oneDat)) {
 					continue; // 処理成功
@@ -112,7 +119,7 @@ public final class Dat extends ListBase<OneDat> {
 			}
 			//処理失敗
 			getAr().clear();
-			throw new DatException(String.format("oneDat.fromReg(%s)", l));
+			return false;
 		}
 		return true;
 	}

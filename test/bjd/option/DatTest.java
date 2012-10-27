@@ -54,9 +54,7 @@ public class DatTest {
 			System.out.printf("fromReg(\"%s\") => toReg(\"%s\")\n", fx.colMax, fx.str);
 
 			Dat dat = new Dat(ctrlTypeList);
-			try {
-				dat.fromReg(fx.str);
-			} catch (DatException e) {
+			if(!dat.fromReg(fx.str)){
 				Assert.fail();
 			}
 			assertThat(dat.toReg(false), is(fx.str));
@@ -100,13 +98,10 @@ public class DatTest {
 				ctrlTypeList[i] = CtrlType.INT;
 			}
 
-			System.out.printf("colMax=%d fromReg(\"%s\") => DatException\n", fx.colMax, fx.str);
+			System.out.printf("colMax=%d fromReg(\"%s\") => return false\n", fx.colMax, fx.str);
 
 			Dat dat = new Dat(ctrlTypeList);
-			try {
-				dat.fromReg(fx.str);
-				Assert.fail("この行が実行されたらエラー");
-			} catch (DatException e) {
+			if (!dat.fromReg(fx.str)) {
 				return; //テスト成功f;
 			}
 			Assert.fail("この行が実行されたらエラー");
