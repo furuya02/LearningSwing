@@ -37,7 +37,7 @@ public final class OneDat implements IDispose {
 	// }
 	/**
 	 * 文字列リストの取得
-	 * @return 
+	 * @return 文字列リスト
 	 */
 	public ArrayList<String> getStrList() {
 		return strList;

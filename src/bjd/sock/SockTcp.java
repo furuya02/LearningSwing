@@ -70,7 +70,7 @@ public final class SockTcp extends SockObj {
 		//************************************************
 		//ここまでくると接続が完了している
 		//************************************************
-		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
+		set(SockState.CONNECT, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
 
 		//************************************************
 		//read待機
@@ -107,7 +107,7 @@ public final class SockTcp extends SockObj {
 		//************************************************
 		//ここまでくると接続が完了している
 		//************************************************
-		set(SockState.Connect, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
+		set(SockState.CONNECT, (InetSocketAddress) channel.socket().getLocalSocketAddress(), (InetSocketAddress) channel.socket().getRemoteSocketAddress());
 
 		//************************************************
 		//read待機
@@ -130,7 +130,7 @@ public final class SockTcp extends SockObj {
 	private void selectLoop() {
 
 		//Acceptの場合は、Connectの間だけループする
-		while (getSockState() == SockState.Connect) {
+		while (getSockState() == SockState.CONNECT) {
 			try {
 				if (selector.select() <= 0) {
 					break;
@@ -205,7 +205,7 @@ public final class SockTcp extends SockObj {
 							break;
 						}
 					} else {
-						if (getSockState() != SockState.Connect) {
+						if (getSockState() != SockState.CONNECT) {
 							return null;
 						}
 						Thread.sleep(10);
@@ -229,7 +229,7 @@ public final class SockTcp extends SockObj {
 			if (oneSsl != null) {
 				//return oneSsl.Write(buffer, buffer.length);
 			}
-			if (getSockState() == SockState.Connect) {
+			if (getSockState() == SockState.CONNECT) {
 				ByteBuffer byteBuffer = ByteBuffer.allocate(buf.length);
 				byteBuffer.put(buf);
 				byteBuffer.flip();

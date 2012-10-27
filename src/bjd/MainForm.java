@@ -122,7 +122,7 @@ public final class MainForm implements WindowListener {
 		//プログラムの終了確認
 		//        if (_kernel.RunMode == RunMode.Normal || _kernel.RunMode == RunMode.NormalRegist) {
 		//            if ((bool)_kernel.ListOption.Get("Basic").GetValue("useExitDlg")) {
-		//                if (DialogResult.OK != Msg.Show(MsgKind.Question, _kernel.Jp ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
+		//                if (DialogResult.OK != Msg.Show(MsgKind.QUESTION, _kernel.Jp ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
 		//                    e.Cancel = true;//終了処理で中止された場合は、プログラムを終了しない
 		//                    return;
 		//                }
@@ -134,7 +134,7 @@ public final class MainForm implements WindowListener {
 		Conf conf = kernel.createConf("Basic");
 		boolean useExitDlg = (boolean) conf.get("useExitDlg");
 		if (useExitDlg) {
-			if (0 != Msg.show(MsgKind.Question, kernel.getJp() ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
+			if (0 != Msg.show(MsgKind.QUESTION, kernel.getJp() ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
 				return; //キャンセル
 			}
 		}
@@ -162,7 +162,7 @@ public final class MainForm implements WindowListener {
 
 	public void test2() {
 		//カレントフォルダ表示
-		Msg.show(MsgKind.Infomation, kernel.getProgDir());
+		Msg.show(MsgKind.INFOMATION, kernel.getProgDir());
 	}
 
 	@Override

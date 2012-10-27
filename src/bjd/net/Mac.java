@@ -45,7 +45,7 @@ public final class Mac extends ValidObj  {
 
 	/**
 	 * コンストラクタ (バイトオーダ)
-	 * @param buf[6]
+	 * @param buf 6バイトで表現されたMACアドレス
 	 * @throws ValidObjException 初期化失敗
 	 */
 	public Mac(byte[] buf) throws ValidObjException {

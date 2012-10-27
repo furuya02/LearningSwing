@@ -83,7 +83,7 @@ public abstract class OneCtrl {
 		}
 		panel = null;
 		if (controlCounter != 0) {
-			Msg.show(MsgKind.Error, String.format("生成したコントロールと破棄したコントロールの数が一致しません。 remove()に漏れが無いかを確認する必要があります。 %s", getCtrlType()));
+			Msg.show(MsgKind.ERROR, String.format("生成したコントロールと破棄したコントロールの数が一致しません。 remove()に漏れが無いかを確認する必要があります。 %s", getCtrlType()));
 		}
 	}
 

@@ -1,6 +1,7 @@
 package bjd;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,7 +21,7 @@ public final class Reg implements IDispose {
 	private HashMap<String, String> ar = new HashMap<>();
 
 	/**
-	 * コンストラクタ
+	 * pathに指定したファイルが見つからない場合は、新規に作成される<br>
 	 * 
 	 * @param path 記憶ファイル名
 	 */
@@ -28,7 +29,7 @@ public final class Reg implements IDispose {
 		this.path = path;
 		File file = new File(path);
 
-		if (file.exists()) { //ファイルが存在する場合は、保存されているデータを読み込む
+		if (file.exists()) {
 			ArrayList<String> lines = Util.textFileRead(file);
 			for (String s : lines) {
 				int index = s.indexOf("=");
@@ -40,6 +41,7 @@ public final class Reg implements IDispose {
 				ar.put(key, val);
 			}
 		}
+
 	}
 
 	/**
@@ -63,74 +65,76 @@ public final class Reg implements IDispose {
 	}
 
 	/**
-	 * int値を読み出す<br>
-	 * key==null若しくは、Key=="" の場合や、Keyの値がintでない場合、例外がスローされる
-	 * 
-	 * @param key キー
-	 * @return int値
-	 * @throws RegException 取得失敗 
-	 */
-	public int getInt(String key) throws RegException {
-		try {
-			return Integer.valueOf(getString(key));
-		} catch (NumberFormatException ex) {
-
-		}
-		throw new RegException("getInt()");
-	}
-
-	/**
-	 * int値を設定する<br>
-	 * 
-	 * key==null若しくはKey==""の場合、例外がスローされる
-	 * 
-	 * @param key
-	 * @param val
-	 * @throws RegException 
-	 */
-	public void setInt(String key, int val) throws RegException {
-		setString(key, String.valueOf(val));
-	}
-
-	/**
 	 * String値を読み出す<br>
-	 * key==nullの場合や、Key==""の場合、例外がスローされる
+	 * <br>
+	 * 指定したKeyが無効(（key==null、Key=="")の場合、例外(RegExceptionKind.InvalidKey)がスローされる<br>
+	 * 値が見つからなかった場合、例外(RegExceptionKind.ValueNotFound)がスローされる<br>
 	 * 
-	 * @param key
-	 * @return String値
+	 * @param key　Key指定
+	 * @return 取得した値
 	 * @throws RegException 
-	 * @throws IllegalArgumentException
 	 */
 	public String getString(String key) throws RegException {
 		if (key == null || key.equals("")) {
-			// key==null 若しくは Key==""の時、例外がスローされる
-			throw new RegException("");
+			throw new RegException("", RegExceptionKind.InvalidKey);
 		}
 		String ret = ar.get(key);
 		if (ret == null) {
 			//検索結果がヒットしなかった場合、例外がスローされる
-			throw new RegException("");
+			throw new RegException(String.format("key=%s", key), RegExceptionKind.ValueNotFound);
 		}
 		return ret;
 	}
 
 	/**
-	 * String値の設定<br>
-	 * key==nullの場合や、Key==""の場合、例外がスローされる
+	 * String値の設定(既に値が設定されている場合は、上書きとなる)<br>
+	 * 指定したKeyが無効(（key==null、Key=="")の場合、例外(RegExceptionKind.InvalidKey)がスローされる<br>
+	 * val==nullの場合は、val=""として保存される<br>
 	 * 
-	 * @param key
-	 * @param val Strnig値
+	 * @param key　Key指定
 	 * @throws RegException  
 	 */
 	public void setString(String key, String val) throws RegException {
 		if (key == null || key.equals("")) {
-			// key==null 若しくは Key==""の時、例外がスローされる
-			throw new RegException("");
+			throw new RegException("", RegExceptionKind.InvalidKey);
 		}
-		ar.remove(key);
 		if (val == null) { //val==nullの場合は、""を保存する
 			val = "";
 		}
+		ar.remove(key);
 		ar.put(key, val);
+	}
+
+	/**
+	 * int値を読み出す<br>
+	 * 指定したKeyが無効(（key==null、Key=="")の場合、例外(RegExceptionKind.InvalidKey)がスローされる<br>
+	 * 値が見つからなかった場合、例外(RegExceptionKind.ValueNotFound)がスローされる<br>
+	 * 読み出した値がｉｎｔ型でなかった場合、例外(RegExceptionKind.NotNumberFormat)がされる<br>
+	 * 
+	 * @param key キー指定
+	 * @return 読み出した値
+	 * @throws RegException 
+	 */
+	public int getInt(String key) throws RegException {
+		String str = getString(key);
+
+		try {
+			return Integer.valueOf(str);
+		} catch (NumberFormatException ex) {
+			throw new RegException(String.format("val=%s", str), RegExceptionKind.NotNumberFormat);
+		}
+	}
+
+	/**
+	 * int値を設定する(既に値が設定されている場合は、上書きとなる)<br>
+	 * 
+	 * 指定したKeyが無効(（key==null、Key=="")の場合、例外(RegExceptionKind.InvalidKey)がスローされる<br>
+	 * 
+	 * @param key キー指定
+	 * @param val 設定する値
+	 * @throws RegException 
+	 */
+	public void setInt(String key, int val) throws RegException {
+		setString(key, String.valueOf(val));
 	}
 }

@@ -1,5 +1,7 @@
 package bjd;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 import bjd.ctrl.ListView;
@@ -15,7 +17,8 @@ public final class WindowSize implements IDispose {
 
 	public WindowSize(Conf conf, String path) {
 		this.conf = conf;
-		reg = new Reg(path); //ウインドサイズ等を記録する仮想レジストリ
+		//ウインドサイズ等を記録する仮想レジストリ
+		reg = new Reg(path);
 	}
 
 	@Override
@@ -115,7 +118,7 @@ public final class WindowSize implements IDispose {
 		} catch (RegException e) {
 			Util.runtimeError("WindowSize.save()");
 		}
-		
+
 		//		if (form.WindowState == FormWindowState.Normal) {
 		//			reg.SetInt(String.format("%s_width", form.Text), form.Width);
 		//			reg.SetInt(String.format("%s_hight", form.Text), form.Height);

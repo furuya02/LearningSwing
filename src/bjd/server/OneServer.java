@@ -134,7 +134,7 @@ public abstract class OneServer extends ThreadBase {
 		super.start();
 
 		//bindが完了するまで待機する
-		while (sockServer == null || sockServer.getSockState() == SockState.Idle) {
+		while (sockServer == null || sockServer.getSockState() == SockState.IDLE) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -194,7 +194,7 @@ public abstract class OneServer extends ThreadBase {
 
 		int port = (int) conf.get("port");
 		String bindStr = String.format("%s:%d %s", oneBind.getAddr(), port, oneBind.getProtocol());
-		logger.set(LogKind.Normal, (SockObj) null, 9000000, bindStr);
+		logger.set(LogKind.NORMAL, (SockObj) null, 9000000, bindStr);
 
 		//DOSを受けた場合、multiple数まで連続アクセスまでは記憶してしまう
 		//DOSが終わった後も、その分だけ復帰に時間を要する
@@ -223,7 +223,7 @@ public abstract class OneServer extends ThreadBase {
 					break;
 				}
 				if (count() >= multiple) {
-					logger.set(LogKind.Secure, sockServer, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
+					logger.set(LogKind.SECURE, sockServer, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
 					//同時接続数を超えたのでリクエストをキャンセルします
 					child.close();
 					continue;
@@ -267,7 +267,7 @@ public abstract class OneServer extends ThreadBase {
 					break;
 				}
 				if (count() >= multiple) {
-					logger.set(LogKind.Secure, sockServer, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
+					logger.set(LogKind.SECURE, sockServer, 9000004, String.format("count:%d/multiple:%d", count(), multiple));
 					//同時接続数を超えたのでリクエストをキャンセルします
 					child.close();
 					continue;
@@ -311,17 +311,17 @@ public abstract class OneServer extends ThreadBase {
 			sockObj.resolve((boolean) conf.get("useResolve"), logger);
 
 			//_subThreadの中でSockObjは破棄する（ただしUDPの場合は、クローンなのでClose()してもsocketは破棄されない）
-			logger.set(LogKind.Detail, sockObj, 9000002,
+			logger.set(LogKind.DETAIL, sockObj, 9000002,
 					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
 
 			onSubThread(sockObj); //接続単位の処理
 			sockObj.close();
 
-			logger.set(LogKind.Detail, sockObj, 9000003,
+			logger.set(LogKind.DETAIL, sockObj, 9000003,
 					String.format("count=%d Local=%s Remote=%s", count(), sockObj.getLocalAddress().toString(), sockObj.getRemoteAddress().toString()));
 
 		} catch (Exception ex) {
-			logger.set(LogKind.Error, sockObj, 9000037, ex.getMessage());
+			logger.set(LogKind.ERROR, sockObj, 9000037, ex.getMessage());
 			logger.exception(ex);
 		}
 	}
@@ -355,7 +355,7 @@ public abstract class OneServer extends ThreadBase {
 
 	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
 	protected final Cmd recvCmd(SockTcp sockTcp) {
-		if (sockTcp.getSockState() != SockState.Connect) { //切断されている
+		if (sockTcp.getSockState() != SockState.CONNECT) { //切断されている
 			return null;
 		}
 		byte[] recvbuf = sockTcp.lineRecv(timeout, OperateCrlf.Yes, this);

@@ -17,20 +17,20 @@ public final class Msg {
 		int optionType = JOptionPane.DEFAULT_OPTION;
 		int messageType = JOptionPane.PLAIN_MESSAGE;
 		switch (msgKind) {
-			case Error:
+			case ERROR:
 				messageType = JOptionPane.ERROR_MESSAGE;
 				break;
-			case Stop:
+			case STOP:
 				messageType = JOptionPane.ERROR_MESSAGE;
 				break;
-			case Question:
+			case QUESTION:
 				messageType = JOptionPane.QUESTION_MESSAGE;
 				optionType = JOptionPane.YES_NO_CANCEL_OPTION;
 				break;
-			case Infomation:
+			case INFOMATION:
 				messageType = JOptionPane.INFORMATION_MESSAGE;
 				break;
-			case Warning:
+			case WARNING:
 				messageType = JOptionPane.WARNING_MESSAGE;
 				break;
 			default:

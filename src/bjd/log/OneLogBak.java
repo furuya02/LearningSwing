@@ -105,7 +105,7 @@ public final class OneLogBak {
 	 * @return セキュリティログの場合 true
 	 */
 	public boolean isSecure() {
-		if (logKind.equals((LogKind.Secure).toString())) {
+		if (logKind.equals((LogKind.SECURE).toString())) {
 			return true;
 		}
 		return false;

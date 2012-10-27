@@ -43,7 +43,7 @@ public final class SockServerTest {
 			final SockServer sockServer = new SockServer(protocolKind);
 			TestUtil.dispPrompt(this, String.format("s = new SockServer()"));
 
-			assertThat(sockServer.getSockState(), is(SockState.Idle));
+			assertThat(sockServer.getSockState(), is(SockState.IDLE));
 			TestUtil.dispPrompt(this, String.format("s.getSockState()=%s", sockServer.getSockState()));
 			Thread t = new Thread(new Runnable() {
 				@Override
@@ -59,7 +59,7 @@ public final class SockServerTest {
 
 			TestUtil.dispPrompt(this, String.format("s.bind()"));
 
-			while (sockServer.getSockState() == SockState.Idle) {
+			while (sockServer.getSockState() == SockState.IDLE) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -108,7 +108,7 @@ public final class SockServerTest {
 			});
 			t.start();
 
-			while (sockServer.getSockState() == SockState.Idle) {
+			while (sockServer.getSockState() == SockState.IDLE) {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {

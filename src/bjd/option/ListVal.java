@@ -21,7 +21,7 @@ public final class ListVal extends ListBase<OneVal> {
 
 		for (OneVal o : list) {
 			if (null != search(o.getName())) {
-				Msg.show(MsgKind.Error, String.format(
+				Msg.show(MsgKind.ERROR, String.format(
 						"ListVal.add(%s) 名前が重複しているため追加できませんでした", o.getName()));
 				return;
 			}

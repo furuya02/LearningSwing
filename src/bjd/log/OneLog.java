@@ -108,17 +108,16 @@ public final class OneLog extends ValidObj {
 	}
 
 	/**
-	 * コンストラクタ<br>
 	 * すべて文字列で指定する<br>
 	 * 
-	 * @param dateStr  日付
-	 * @param logKind  ログの種類
-	 * @param nameTag  名前タグ
-	 * @param threadId スレッドID
-	 * @param remoteAddr リモートアドレス
-	 * @param messageNo メッセージ番号
-	 * @param message メッセージ
-	 * @param detailInfomation 詳細情報
+	 * @param calendar　日付
+	 * @param logKind　ログの種類
+	 * @param nameTag　名前タグ
+	 * @param threadId　スレッドID
+	 * @param remoteHostname　リモートアドレス
+	 * @param messageNo　メッセージ番号
+	 * @param message　メッセージ
+	 * @param detailInfomation　詳細情報
 	 */
 	public OneLog(Calendar calendar, LogKind logKind, String nameTag, long threadId, String remoteHostname, int messageNo, String message, String detailInfomation) {
 		this.calendar = calendar;
@@ -167,7 +166,7 @@ public final class OneLog extends ValidObj {
 	protected void init() {
 		calendar = Calendar.getInstance();
 		calendar.setTime(new Date(0)); // 1970.1.1で初期化
-		logKind = LogKind.Normal;
+		logKind = LogKind.NORMAL;
 		threadId = 0;
 		nameTag = "UNKNOWN";
 		remoteHostname = "";
@@ -192,7 +191,7 @@ public final class OneLog extends ValidObj {
 	 */
 	public boolean isSecure() {
 		checkInitialise();
-		if (logKind == LogKind.Secure) {
+		if (logKind == LogKind.SECURE) {
 			return true;
 		}
 		return false;

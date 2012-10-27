@@ -57,7 +57,7 @@ public final class LogFile implements IDispose {
 
 		if (useLog) {
 			if (!(new File((String) conf.get("saveDirectory")).exists())) {
-				logger.set(LogKind.Error, null, 9000031, String.format("saveDirectory=%s", (String) conf.get("saveDirectory")));
+				logger.set(LogKind.ERROR, null, 9000031, String.format("saveDirectory=%s", (String) conf.get("saveDirectory")));
 				useLog = false;
 			}
 			logOpen();
@@ -283,12 +283,12 @@ public final class LogFile implements IDispose {
 			targetDt.add(Calendar.DAY_OF_MONTH, saveDays);
 
 			if (dt.getTimeInMillis() > targetDt.getTimeInMillis()) {
-				logger.set(LogKind.Detail, null, 9000032, fullName);
+				logger.set(LogKind.DETAIL, null, 9000032, fullName);
 				(new File(fullName)).delete();
 			}
 
 		} catch (Exception ex) {
-			logger.set(LogKind.Error, null, 9000045, String.format(
+			logger.set(LogKind.ERROR, null, 9000045, String.format(
 					"year=%d mont=%d day=%d %s", year, month, day, fullName));
 			(new File(fullName)).delete();
 		}

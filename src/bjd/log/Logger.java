@@ -19,7 +19,7 @@ public final class Logger {
 	}
 
 	public void set(LogKind logKind, SockObj sockBase, int messageNo, String detailInfomation) {
-		if (logKind == LogKind.Detail) {
+		if (logKind == LogKind.DETAIL) {
 			if (!useDetailsLog) {
 				return;
 			}
@@ -226,7 +226,7 @@ public final class Logger {
 
 	public void exception(Exception ex) {
 		int messageNo = 9000060;
-		set(LogKind.Error, null, messageNo, ex.getMessage());
+		set(LogKind.ERROR, null, messageNo, ex.getMessage());
 		//TODO Logger 例外メッセージが投かんされた時のスタックトレース　未実装
 		//        string[] tmp = ex.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 		//        for (String s : tmp) {
@@ -242,9 +242,9 @@ public final class Logger {
 		//            }
 		//            for (int i = 0; i < lines.Count; i++) {
 		//                if (i == 0) {
-		//                    Set(LogKind.Error, sockObj, messageNo, lines[i]);
+		//                    Set(LogKind.ERROR, sockObj, messageNo, lines[i]);
 		//                } else {
-		//                    Set(LogKind.Error, sockObj, messageNo, "   -" + lines[i]);
+		//                    Set(LogKind.ERROR, sockObj, messageNo, "   -" + lines[i]);
 		//                }
 		//            }
 		//        }

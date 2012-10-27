@@ -106,7 +106,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 				return i;
 			}
 		}
-		Msg.show(MsgKind.Error, "選択されているラジオボタンがありません");
+		Msg.show(MsgKind.ERROR, "選択されているラジオボタンがありません");
 		return 0;
 	}
 

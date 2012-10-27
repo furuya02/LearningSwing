@@ -48,12 +48,12 @@ public final class OneVal implements IDispose {
 		ArrayList<OneVal> list = getList(null);
 		for (OneVal o : list) {
 			if (0 <= tmp.indexOf(o.getName())) { //名前一覧に重複は無いか
-				Msg.show(MsgKind.Error, String.format("OneVal(OnePage)の名前に重複があります %s", o.getName()));
+				Msg.show(MsgKind.ERROR, String.format("OneVal(OnePage)の名前に重複があります %s", o.getName()));
 			}
 			tmp.add(o.getName()); //名前一覧への蓄積
 			//			if (o != this) { // 自分自身は検査対象外とする
 			//				if (name.equals(o.getName())) {
-			//					Msg.show(MsgKind.Error, String.format("OneVal(OnePage)の名前に重複があります %s", name));
+			//					Msg.show(MsgKind.ERROR, String.format("OneVal(OnePage)の名前に重複があります %s", name));
 			//				}
 			//			}
 		}
@@ -61,7 +61,7 @@ public final class OneVal implements IDispose {
 		if (oneCtrl.getCtrlType() == CtrlType.TABPAGE) {
 			for (OnePage onePage : ((CtrlTabPage) oneCtrl).getPageList()) {
 				if (0 <= tmp.indexOf(onePage.getName())) { //名前一覧に重複は無いか
-					Msg.show(MsgKind.Error, String.format("OneVal(OnePage)の名前に重複があります %s", onePage.getName()));
+					Msg.show(MsgKind.ERROR, String.format("OneVal(OnePage)の名前に重複があります %s", onePage.getName()));
 				}
 				tmp.add(onePage.getName());
 			}
@@ -134,7 +134,7 @@ public final class OneVal implements IDispose {
 		Object o = oneCtrl.read();
 		if (o == null) {
 			if (isConfirm) { // 確認だけの場合は、valueへの値セットは行わない
-				Msg.show(MsgKind.Error, String.format("データに誤りがあります 「%s」", oneCtrl.getHelp()));
+				Msg.show(MsgKind.ERROR, String.format("データに誤りがあります 「%s」", oneCtrl.getHelp()));
 			}
 			return false;
 		}
@@ -195,7 +195,7 @@ public final class OneVal implements IDispose {
 			default:
 				return ""; // "実装されていないCtrlTypeが指定されました OneVal.toReg()"
 		}
-	}
+	} 
 
 	/**
 	 * 出力ファイル(Option.ini)からの入力用<br>

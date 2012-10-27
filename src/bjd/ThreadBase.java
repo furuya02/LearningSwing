@@ -95,7 +95,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 			try {
 				onRunThread();
 			} catch (Exception ex) {
-				logger.set(LogKind.Error, null, 9000021, ex.getMessage());
+				logger.set(LogKind.ERROR, null, 9000021, ex.getMessage());
 				logger.exception(ex);
 			}
 			//	kernel.getView().setColor();

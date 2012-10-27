@@ -1,10 +1,19 @@
 package bjd.log;
 
+/**
+ * ログの種類
+ * @author SIN
+ *
+ */
 public enum LogKind {
-    //TODO enum LogKind 移植が終わってからリファクタリングで大文字化
-	Normal,
-    Detail,
-    Error,
-    Secure,
-    Debug,
+	/**通常*/
+	NORMAL,
+	/**詳細*/
+	DETAIL,
+	/**エラー*/
+	ERROR,
+	/**セキュリティ*/
+	SECURE,
+	/**デバッグ*/
+	DEBUG,
 }

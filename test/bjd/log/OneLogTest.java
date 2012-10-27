@@ -37,7 +37,7 @@ public final class OneLogTest {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date(0)); // 1970.1.1で初期化
-		LogKind logKind = LogKind.Debug;
+		LogKind logKind = LogKind.DEBUG;
 		String nameTag = "NAME";
 		long threadId = 100;
 		String remoteHostname = "127.0.0.1";
@@ -67,13 +67,13 @@ public final class OneLogTest {
 		String message = "MSG";
 		String detailInfomation = "DETAIL";
 
-		LogKind logKind = LogKind.Debug;
+		LogKind logKind = LogKind.DEBUG;
 		boolean expected = false;
 		TestUtil.dispPrompt(this, String.format("new OneLog(LogKind=%s) => isSecure()=%s", logKind, expected));
 		OneLog oneLog = new OneLog(calendar, logKind, nameTag, threadId, remoteHostname, messageId, message, detailInfomation);
 		assertThat(oneLog.isSecure(), is(expected));
 
-		logKind = LogKind.Secure;
+		logKind = LogKind.SECURE;
 		expected = true;
 		TestUtil.dispPrompt(this, String.format("new OneLog(LogKind=%s) => isSecure()=%s", logKind, expected));
 		oneLog = new OneLog(calendar, logKind, nameTag, threadId, remoteHostname, messageId, message, detailInfomation);

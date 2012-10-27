@@ -42,7 +42,7 @@ public final class ServerTest {
 //		@Override
 //		protected void onSubThread(SockAccept sockAccept) {
 //			for (int i = 3; i >= 0 && isLife(); i--) {
-//				if (sockAccept.getSockState() != SockState.Connect) {
+//				if (sockAccept.getSockState() != SockState.CONNECT) {
 //					TestUtil.dispPrompt(this, String.format("接続中...sockAccept.getSockState!=Connect"));
 //					break;
 //				}
@@ -65,7 +65,7 @@ public final class ServerTest {
 		@Override
 		protected void onSubThread(SockObj sockObj) {
 			for (int i = 3; i >= 0 && isLife(); i--) {
-				if (sockObj.getSockState() != SockState.Connect) {
+				if (sockObj.getSockState() != SockState.CONNECT) {
 					TestUtil.dispPrompt(this, String.format("接続中...sockAccept.getSockState!=Connect"));
 					break;
 				}

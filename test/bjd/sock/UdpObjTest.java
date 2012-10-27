@@ -59,7 +59,7 @@ public final class UdpObjTest {
 						break;
 					}
 					System.out.println(String.format("EchoServer child"));
-					while (isLife() && child.getSockState() == SockState.Connect) {
+					while (isLife() && child.getSockState() == SockState.CONNECT) {
 						int len = child.length();
 						if (len > 0) {
 							System.out.println(String.format("EchoServer len=%d", len));

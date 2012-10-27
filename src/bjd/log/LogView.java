@@ -151,7 +151,7 @@ public final class LogView implements IDispose {
 			for (OneLog oneLog : list) {
 				sb.append(String.format("%s %s\r\n", oneLog.getMessageNo(), oneLog.getMessage()));
 			}
-			Msg.show(MsgKind.Error, sb.toString());
+			Msg.show(MsgKind.ERROR, sb.toString());
 		}
 	}
 

@@ -22,7 +22,7 @@ public abstract class SockObj {
 	//****************************************************************
 	// SockState関連
 	//****************************************************************
-	private SockState sockState = SockState.Idle;
+	private SockState sockState = SockState.IDLE;
 
 	public final SockState getSockState() {
 		return sockState;
@@ -77,7 +77,7 @@ public abstract class SockObj {
 			try {
 				//remoteHost = kernel.DnsCache.Get(RemoteEndPoint.Address,logger);
 			} catch (Exception ex) {
-				logger.set(LogKind.Error, (SockObj) null, 9000053, ex.getMessage());
+				logger.set(LogKind.ERROR, (SockObj) null, 9000053, ex.getMessage());
 			}
 		} else {
 			remoteHostname = remoteAddress.getAddress().toString();

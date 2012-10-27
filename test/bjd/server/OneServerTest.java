@@ -54,8 +54,8 @@ public class OneServerTest {
 					e.printStackTrace();
 				}
 
-				if (sockObj.getSockState() != SockState.Connect) {
-					System.out.println(">>>>>sockAccept.getSockState()!=SockState.Connect");
+				if (sockObj.getSockState() != SockState.CONNECT) {
+					System.out.println(">>>>>sockAccept.getSockState()!=SockState.CONNECT");
 					break;
 				}
 			}

@@ -51,8 +51,8 @@ public final class Conf {
 	 * 値の取得<br>
 	 * 存在しないタグを指定すると実行事例がが発生する<br>
 	 * 
-	 * @param タグ名
-	 * @return 値 
+	 * @param name　タグ名
+	 * @return 取得した値 
 	 */
 	public Object get(String name) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認
@@ -65,8 +65,8 @@ public final class Conf {
 	 * 値の設定<br>
 	 * 存在しないタグを指定すると実行事例がが発生する<br>
 	 * 
-	 * @param タグ名
-	 * @param 値
+	 * @param name タグ名
+	 * @param value 値
 	 */
 	public void set(String name, Object value) {
 		if (!ar.containsKey(name)) { //HashMapの存在確認

@@ -55,7 +55,7 @@ public class OneServerTest2 {
 		}
 
 		private void tcp(SockTcp sockTcp) {
-			while (isLife() && sockTcp.getSockState() == SockState.Connect) {
+			while (isLife() && sockTcp.getSockState() == SockState.CONNECT) {
 				try {
 					Thread.sleep(0); //これが無いと、別スレッドでlifeをfalseにできない
 				} catch (InterruptedException e) {

@@ -2,13 +2,12 @@ package bjd;
 /**
  * トレースデータの送受方向<br>
  * 
- * Send<br>
- * Recv<br>
- * 
  * @author SIN
  *
  */
 public enum TraceKind {
+	/**送信データ*/
 	Send,
+	/**受信データ*/
     Recv,
 }

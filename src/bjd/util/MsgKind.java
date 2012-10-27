@@ -1,9 +1,14 @@
 package bjd.util;
 
+/**
+ * メッセージの種類
+ * @author user1
+ *
+ */
 public enum MsgKind {
-    Error,
-    Stop,
-    Question,
-    Infomation,
-    Warning,
+    ERROR,
+    STOP,
+    QUESTION,
+    INFOMATION,
+    WARNING,
 }

@@ -1,8 +1,6 @@
 package bjd.net;
 /**
- * プロトコル<br>
- * TCP<br>
- * UDP<br>
+ * プロトコルの種類<br>
  * @author SIN
  * 
  */
