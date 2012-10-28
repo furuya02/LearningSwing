@@ -12,38 +12,54 @@ import bjd.util.IDispose;
  *
  */
 public abstract class ThreadBase implements IDispose, ILogger {
-	private Kernel kernel;
+//	private Kernel kernel;
 	private MyThread myThread = null;
 	private boolean runnig = false;
 	private boolean life;
-	private String nameTag;
+//	private String nameTag;
 	private Logger logger;
 
-	protected ThreadBase(Kernel kernel, String nameTag) {
-		this.kernel = kernel;
-		this.nameTag = nameTag;
-		logger = kernel.createLogger(nameTag, true, this);
+	//protected ThreadBase(Kernel kernel, String nameTag) {
+	/**
+	 * 
+	 * @param logger　スレッド実行中に例外がスローされたとき表示するためのLogger(nullを設定可能)
+	 */
+	protected ThreadBase(Logger logger) {
+		this.logger = logger;
+//		this.kernel = kernel;
+//		this.nameTag = nameTag;
+//		logger = kernel.createLogger(nameTag, true, this);
 	}
 
-	protected final boolean getJp() {
-		return kernel.getJp();
-	}
+//	protected final boolean getJp() {
+//		return kernel.getJp();
+//	}
+//
+//	public final String getNameTag() {
+//		return nameTag;
+//	}
 
-	public final String getNameTag() {
-		return nameTag;
-	}
-
+	/**
+	 * スレッドが動作中かどうか
+	 * @return
+	 */
 	public final boolean isRunnig() {
 		return runnig;
 	}
 
-	//時間を要するループがある場合、ループ条件で値がtrueであることを確認する
-	//falseになったら直ちにループを中断する
+	/**
+	 * 時間を要するループがある場合、ループ条件で値がtrueであることを確認する<br>
+	 * falseになったら直ちにループを中断する
+	 * @return life
+	 */
 	public final boolean isLife() {
 		return life;
 	}
 
-	//Override可能
+	/**
+	 * 終了処理<br>
+	 * Override可能<br>
+	 */
 	public void dispose() {
 		stop();
 	}
@@ -51,7 +67,10 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	//【スレッド開始前処理】//return falseでスレッド起動をやめる
 	protected abstract boolean onStartThread();
 
-	//Override可能
+	/**
+	 * 	開始処理<br>
+	 * Override可能<br>
+	 */
 	public void start() {
 		if (isRunnig()) {
 			return;
@@ -72,10 +91,15 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		}
 	}
 
-	//【スレッド終了処理】
+	/**
+	 * 【スレッド終了処理】
+	 */
 	protected abstract void onStopThread();
 
-	//Override可能
+	/**
+	 * 	停止処理<br>
+	 * Override可能<br>
+	 */
 	public void stop() {
 		life = false; //スイッチを切るとLoop内の無限ループからbreakする
 		while (isRunnig()) { //stop()を抜けた時点でisRunnigがfalseになるように、処理が終了するまで待つ
@@ -89,18 +113,22 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		myThread = null;
 	}
 
-	//【スレッドループ】
+	/**
+	 * 【スレッドループ】
+	 */
 	protected abstract void onRunThread();
 
-	class MyThread extends Thread {
+	private class MyThread extends Thread {
 		@Override
 		public void run() {
 			runnig = true;
 			try {
 				onRunThread();
 			} catch (Exception ex) {
-				logger.set(LogKind.ERROR, null, 9000021, ex.getMessage());
-				logger.exception(ex);
+				if (logger != null) {
+					logger.set(LogKind.ERROR, null, 9000021, ex.getMessage());
+					logger.exception(ex);
+				}
 			}
 			//	kernel.getView().setColor();
 			runnig = false;

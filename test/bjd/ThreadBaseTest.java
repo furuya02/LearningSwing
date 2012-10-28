@@ -12,7 +12,7 @@ public class ThreadBaseTest {
 	class MyThread extends ThreadBase {
 
 		protected MyThread() {
-			super(new Kernel(), "TEST");
+			super(null);
 		}
 
 		@Override

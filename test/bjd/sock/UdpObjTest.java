@@ -22,7 +22,7 @@ public final class UdpObjTest {
 		private int port;
 
 		public EchoServer(String addr, int port) {
-			super(new Kernel(), "NAME");
+			super(null);
 			sockServer = new SockServer(ProtocolKind.Udp);
 			this.addr = addr;
 			this.port = port;

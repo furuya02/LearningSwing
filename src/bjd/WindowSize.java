@@ -28,7 +28,7 @@ public final class WindowSize implements IDispose {
 	 * @param path 保存ファイル
 	 * @throws IOException 保存ファイルのIOエラー　(存在しない場合は新規作成されるので例外とはならない)
 	 */
-	public WindowSize(Conf conf, String path) throws IOException{
+	public WindowSize(Conf conf, String path) throws IOException {
 		this.conf = conf;
 		//ウインドサイズ等を記録する仮想レジストリ
 		try {

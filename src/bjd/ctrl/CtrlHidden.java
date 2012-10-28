@@ -129,7 +129,7 @@ public final class CtrlHidden extends OneCtrl implements DocumentListener {
 
 	@Override
 	protected void abstractFromText(String s) {
-		String str="";
+		String str = "";
 		try {
 			str = Crypt.decrypt(s);
 		} catch (Exception e) {

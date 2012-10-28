@@ -54,7 +54,7 @@ public class DatTest {
 			System.out.printf("fromReg(\"%s\") => toReg(\"%s\")\n", fx.colMax, fx.str);
 
 			Dat dat = new Dat(ctrlTypeList);
-			if(!dat.fromReg(fx.str)){
+			if (!dat.fromReg(fx.str)) {
 				Assert.fail();
 			}
 			assertThat(dat.toReg(false), is(fx.str));

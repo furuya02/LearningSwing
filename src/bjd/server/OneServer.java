@@ -33,17 +33,27 @@ import bjd.util.Util;
 //****************************************************************
 public abstract class OneServer extends ThreadBase {
 
+	private String nameTag;
+	private Conf conf;
 	private OneBind oneBind;
 	private AclList aclList;
 	private Ssl ssl = null;
 	private Logger logger;
-	private Conf conf;
 	private SockServer sockServer = null;
 	private int timeout;
 
 	protected final Conf getConf() {
 		return conf;
 	}
+	protected final String getNameTag() {
+		return nameTag;
+	}
+
+	protected final boolean getJp() {
+		int n = (int) conf.get("lang");
+		return (n == 0) ? true : false;
+	}	
+	
 	
 	public abstract String getMsg(int messageNo);
 
@@ -88,8 +98,8 @@ public abstract class OneServer extends ThreadBase {
 
 	//コンストラクタ
 	protected OneServer(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
-		super(kernel, nameTag);
-
+		super(kernel.createLogger(nameTag, true, null));
+		this.nameTag = nameTag;
 		this.conf = conf;
 		this.oneBind = oneBind;
 		//DEBUG用

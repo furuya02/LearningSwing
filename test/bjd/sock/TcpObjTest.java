@@ -22,7 +22,7 @@ public final class TcpObjTest {
 		private int port;
 
 		public EchoServer(String addr, int port) {
-			super(new Kernel(), "NAME");
+			super(null);
 			sockServer = new SockServer(ProtocolKind.Tcp);
 			this.addr = addr;
 			this.port = port;

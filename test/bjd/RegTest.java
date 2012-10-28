@@ -15,7 +15,7 @@ import bjd.util.TestUtil;
 public final class RegTest {
 
 	//共通処理
-	private Reg create(File file){
+	private Reg create(File file) {
 		Reg reg = null;
 		try {
 			reg = new Reg(file.getPath());

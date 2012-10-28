@@ -359,7 +359,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		//チェックリストボックスの内容からDatオブジェクトを生成する
 		for (int i = 0; i < checkListBox.getItemCount(); i++) {
 			boolean enable = checkListBox.getItemChecked(i);
-			if(!dat.add(enable, checkListBox.getItemText(i))){
+			if (!dat.add(enable, checkListBox.getItemText(i))) {
 				Util.runtimeException("CtrlDat abstractRead() 外部入力からの初期化ではないので、このエラーは発生しないはず");
 			}
 		}

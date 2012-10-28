@@ -22,7 +22,7 @@ final class OneLogFile implements IDispose {
      * @param fileName 保存ファイル名
      * @throws IOException 
      */
-    public OneLogFile(String fileName) throws IOException{
+	public OneLogFile(String fileName) throws IOException {
         file = new File(fileName);
         try {
         	// 追加モード
@@ -54,7 +54,7 @@ final class OneLogFile implements IDispose {
 		fw.flush();
 	}
     
-    public String getPath(){
+	public String getPath() {
     	return file.getPath(); 
     }
 }
