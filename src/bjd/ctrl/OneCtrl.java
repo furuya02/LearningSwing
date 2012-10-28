@@ -12,32 +12,53 @@ import javax.swing.JTabbedPane;
 import bjd.OptionDlg;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
-
+/**
+ * すべてのコントロールの基底クラス
+ * @author SIN
+ *
+ */
 public abstract class OneCtrl {
 	private JPanel owner;
 	private int controlCounter = 0; // 生成したコントロールを全部はきしたかどうかを確認するためのカウンタ
 	private ArrayList<ICtrlEventListener> listenerList = new ArrayList<>();
 
 	private String name = "";
-	protected String help;
+	private String help;
 	protected JPanel panel = null;
 	protected final int margin = 3;
 	protected final int defaultHeight = 20;
 
+	
+	/**
+	 * 
+	 * @param help 表示テキスト
+	 */
 	public OneCtrl(String help) {
 		this.help = help;
 	}
 
-	//OneValのコンストラクタでnameの初期化に使用される
-	//OneValのコンストラクタ内以外で利用してはならない
+	/**
+	 * 名前の設定<br>
+	 * OneValのコンストラクタでnameの初期化に使用される<br>
+	 * OneValのコンストラクタ内以外で利用してはならない<br>
+	 * @param name
+	 */
 	public final void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * 名前の取得
+	 * @return
+	 */
 	public final String getName() {
 		return name;
 	}
 
+	/**
+	 * コントロールのサイズの取得
+	 * @return
+	 */
 	public final Dimension getCtrlSize() {
 		if (panel == null) {
 			return new Dimension(0, 0);
@@ -45,15 +66,33 @@ public abstract class OneCtrl {
 		return new Dimension(panel.getWidth(), panel.getHeight());
 	}
 
-	public final Object getHelp() {
+	/**
+	 * 表示テキストの取得
+	 * @return
+	 */
+	public final String getHelp() {
 		return help;
 	}
 
+	/**
+	 * コントロールの種類の取得（継承クラスで実装）
+	 * @return
+	 */
 	public abstract CtrlType getCtrlType();
 
-	// コントロールの生成
+	/**
+	 * コントロールの生成（継承クラスで実装）
+	 * @param value
+	 */
 	protected abstract void abstractCreate(Object value);
 
+	/**
+	 * コントロールの生成
+	 * @param owner 親パネル
+	 * @param x 
+	 * @param y
+	 * @param value 値
+	 */
 	public final void create(JPanel owner, int x, int y, Object value) {
 		this.owner = owner;
 
@@ -72,9 +111,14 @@ public abstract class OneCtrl {
 		}
 	}
 
-	// コントロールの破棄
+	/**
+	 * コントロールの破棄（継承クラスで実装）
+	 */
 	protected abstract void abstractDelete();
 
+	/**
+	 * コントロールの破棄
+	 */
 	public final void delete() {
 		abstractDelete();
 
@@ -87,34 +131,61 @@ public abstract class OneCtrl {
 		}
 	}
 
-	// フィールドテキストに合わせてサイズを自動調整する
+	/**
+	 * フィールドテキストに合わせてサイズを自動調整する
+	 * @param component
+	 */
 	protected final void setAutoSize(JComponent component) {
 		Dimension dimension = component.getPreferredSize(); // 適切サイズを取得
 		dimension.width += 8; // 微調整
 		component.setSize(dimension);
 	}
 
+	/**
+	 * ダイアログのサイズ取得
+	 * @return
+	 */
 	public static int getDlgWidth() {
 		return OptionDlg.width();
 	}
 
+	/**
+	 * ダイアログのサイズ取得
+	 * @return
+	 */
 	public static int getDlgHeight() {
 		return OptionDlg.height();
 	}
 
 	// ***********************************************************************
 	// コントロールの値の読み書き
-	// ***********************************************************************
 	// データが無効なときnullが返る
-	// TODO abstractRead() nullを返す際に、コントロールを赤色表示にする
+	// ***********************************************************************
+	/**
+	 * コントロールの値の取得(継承クラスで実装)<br>
+	 * TODO abstractRead() nullを返す際に、コントロールを赤色表示にする
+	 * @param value
+	 */
 	protected abstract Object abstractRead();
 
+	/**
+	 * コントロールの値の取得
+	 * @return
+	 */
 	public final Object read() {
 		return abstractRead();
 	}
 
+	/**
+	 * コントロールの値の設定(継承クラスで実装)
+	 * @param value
+	 */
 	protected abstract void abstractWrite(Object value);
 
+	/**
+	 * コントロールの値の設定
+	 * @param value
+	 */
 	public final void write(Object value) {
 		abstractWrite(value);
 	}
@@ -122,8 +193,16 @@ public abstract class OneCtrl {
 	// ***********************************************************************
 	// コントロールへの有効・無効
 	// ***********************************************************************
+	/**
+	 * 有効・無効の設定(継承クラスで実装)
+	 * @param enabled
+	 */
 	protected abstract void abstractSetEnable(boolean enabled);
 
+	/**
+	 * 有効・無効の設定
+	 * @param enabled
+	 */
 	public final void setEnable(boolean enabled) {
 		if (panel != null) {
 			abstractSetEnable(enabled);
@@ -177,7 +256,6 @@ public abstract class OneCtrl {
 			listenerList.remove(0);
 		}
 	}
-
 	protected final void setOnChange() {
 		for (ICtrlEventListener listener : listenerList) {
 			listener.onChange(this);
@@ -187,10 +265,11 @@ public abstract class OneCtrl {
 	// ***********************************************************************
 	// CtrlDat関連　(Add/Del/Edit)の状態の変更、チェックリストボックスとのテキストの読み書き
 	// ***********************************************************************
-	// CtrlDatで入力が入っているかどうかでボタン
 	protected abstract boolean abstractIsComplete();
-
-	//CtrlDatでOverrideされている
+	/**
+	 * CtrlDatで入力が入っているかどうかでボタン
+	 * @return
+	 */
 	public final boolean isComplete() {
 		if (panel != null) {
 			return abstractIsComplete();
@@ -198,9 +277,12 @@ public abstract class OneCtrl {
 		return false;
 	}
 
-	// CtrlDatでリストボックスに追加するため使用される
 	protected abstract String abstractToText();
 
+	/**
+	 * CtrlDatでリストボックスに追加するため使用される
+	 * @return
+	 */
 	public final String toText() {
 		if (panel != null) {
 			return abstractToText();
@@ -208,18 +290,21 @@ public abstract class OneCtrl {
 		return "";
 	}
 
-	// CtrlDatでリストボックスから値を戻す時、使用される
 	protected abstract void abstractFromText(String s);
-
+	/**
+	 * CtrlDatでリストボックスから値を戻す時、使用される
+	 * @param s
+	 */
 	public final void fromText(String s) {
 		if (panel != null) {
 			abstractFromText(s);
 		}
 	}
 
-	// CtrlDatでDelDelボタンを押したときに使用される
 	protected abstract void abstractClear();
-
+	/**
+	 * CtrlDatでDelDelボタンを押したときに使用される
+	 */
 	public final void clear() {
 		if (panel != null) {
 			abstractClear();

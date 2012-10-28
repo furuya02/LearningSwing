@@ -53,7 +53,7 @@ public final class CtrlRadio extends OneCtrl implements ActionListener {
 
 		// ラジオボタンを囲むボーダライン（groupPanel）の生成
 		groupPanel = (JPanel) create(panel, new JPanel(new GridLayout(0, 1)), left, top);
-		groupPanel.setBorder(BorderFactory.createTitledBorder(help));
+		groupPanel.setBorder(BorderFactory.createTitledBorder(getHelp()));
 		groupPanel.setSize(width, height);
 
 		// ラジオボタンの生成

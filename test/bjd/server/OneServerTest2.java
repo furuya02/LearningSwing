@@ -47,7 +47,7 @@ public class OneServerTest2 {
 
 		@Override
 		protected void onSubThread(SockObj sockObj) {
-			if (protocolKind == protocolKind.Tcp) {
+			if (protocolKind == ProtocolKind.Tcp) {
 				tcp((SockTcp) sockObj);
 			} else {
 				udp((SockUdp) sockObj);

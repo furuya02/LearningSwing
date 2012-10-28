@@ -28,7 +28,7 @@ public final class CtrlTextBox extends OneCtrl implements DocumentListener {
 		int top = margin;
 
 		// ラベルの作成 top+3 は後のテキストボックスとの整合のため
-		label = (JLabel) create(panel, new JLabel(help), left, top + 3);
+		label = (JLabel) create(panel, new JLabel(getHelp()), left, top + 3);
 		// label.setBorder(new LineBorder(Color.RED, 2, true)); //Debug 赤枠
 		left += label.getWidth() + margin; // オフセット移動
 

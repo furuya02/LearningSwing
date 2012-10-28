@@ -47,6 +47,7 @@ public class CtrlDatTest {
 			importDat.setAccessible(true);
 
 			importDat.invoke(ctrlDat, in);
+			@SuppressWarnings("unchecked")
 			ArrayList<String> out = (ArrayList<String>) exportDat.invoke(ctrlDat);
 
 			for (int i = 0; i < in.size(); i++) {

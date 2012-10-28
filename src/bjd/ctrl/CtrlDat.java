@@ -74,7 +74,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 
 		// ボーダライン（groupPanel）の生成
 		border = (JPanel) create(panel, new JPanel(new GridLayout()), left, top);
-		border.setBorder(BorderFactory.createTitledBorder(help));
+		border.setBorder(BorderFactory.createTitledBorder(getHelp()));
 		border.setSize(getDlgWidth() - 32, height); // サイズは、コンストラクタで指定されている
 
 		//Datに含まれるコントロールを配置

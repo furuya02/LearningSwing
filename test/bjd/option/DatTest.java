@@ -1,7 +1,6 @@
 package bjd.option;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import junit.framework.Assert;
 

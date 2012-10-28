@@ -1,7 +1,5 @@
 package bjd.option;
 
-import java.util.ArrayList;
-
 import javax.swing.JPanel;
 
 import bjd.Kernel;

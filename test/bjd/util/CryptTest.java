@@ -5,27 +5,16 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.mail.MessagingException;
 
 import junit.framework.Assert;
 
-import org.apache.commons.codec.DecoderException;
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
-
-import bjd.ValidObjException;
-import bjd.net.Ip;
 
 @RunWith(Enclosed.class)
 public class CryptTest {

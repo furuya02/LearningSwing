@@ -4,7 +4,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import bjd.Kernel;
 import bjd.ThreadBase;
 import bjd.ValidObjException;
 import bjd.net.Ip;

@@ -37,7 +37,7 @@ public final class CtrlGroup extends OneCtrl {
 
 		// ボーダライン（groupPanel）の生成
 		border = (JPanel) create(panel, new JPanel(new GridLayout(0, 1)), left, top);
-		border.setBorder(BorderFactory.createTitledBorder(help));
+		border.setBorder(BorderFactory.createTitledBorder(getHelp()));
 
 		//グループに含まれるコントロールを描画する
 		int x = left + 8;

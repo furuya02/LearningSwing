@@ -74,7 +74,6 @@ public final class LocalAddress extends ValidObj {
 						if (inetAddress instanceof Inet4Address) {
 							String s = inetAddress.getHostAddress();
 							try {
-								Ip ip = new Ip(s);
 								v4.add(new Ip(s));
 							} catch (ValidObjException e) {
 								//システムから返された文字列でIpを初期化して例外が出るという事は、実行時例外とするしかない
@@ -87,7 +86,6 @@ public final class LocalAddress extends ValidObj {
 							if (!linkLocal && !multicast && !siteLocal) {
 								String s = inetAddress.getHostAddress();
 								try {
-									Ip ip = new Ip(s);
 									v6.add(new Ip(s));
 								} catch (ValidObjException e) {
 									//システムから返された文字列でIpを初期化して例外が出るという事は、実行時例外とするしかない
@@ -128,7 +126,6 @@ public final class LocalAddress extends ValidObj {
 		}
 		for (String s : tmp[1].split("\b", 0)) {
 			try {
-				Ip ip = new Ip(s);
 				v6.add(new Ip(s));
 			} catch (IllegalArgumentException e) {
 				throwException(str); //例外終了

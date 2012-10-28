@@ -45,6 +45,14 @@ public final class LogFile implements IDispose {
 	
 	private Object lock = new Object(); //排他制御用オブジェクト
 
+	/**
+	 * 
+	 * @param logger ロガー
+	 * @param conf オプション設定
+	 * @param logView ビューコントロール
+	 * @param useLog　ログを保存するかどうか
+	 * @param remoteServer　リモートサーバ
+	 */
 	public LogFile(Logger logger, Conf conf, LogView logView, boolean useLog, OneServer remoteServer) {
 		this.logger = logger;
 		this.conf = conf;
@@ -73,6 +81,10 @@ public final class LogFile implements IDispose {
 		}
 	}
 
+	/**
+	 * 終了処理<br>
+	 * 過去ログの自動削除が行われる
+	 */
 	public void dispose() {
 		if (timer != null) {
 			timer.cancel();
@@ -113,7 +125,10 @@ public final class LogFile implements IDispose {
 	}
 
 
-	// ログファイルへの追加
+	/**
+	 * ログファイルへの追加
+	 * @param oneLog
+	 */
 	public void append(OneLog oneLog) {
 
 		//TODO 表示制限の所が怪しいので、再設計してテストを作成する必要がある
@@ -235,7 +250,9 @@ public final class LogFile implements IDispose {
 		}
 	}
 
-	// 過去ログの自動削除
+	/**
+	 * 過去ログの自動削除
+	 */
 	private void logDelete() {
 
 		// 自動ログ削除が無効な場合は、処理なし

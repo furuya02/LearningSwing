@@ -1,18 +1,9 @@
 package bjd.ctrl;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import org.apache.commons.codec.DecoderException;
 
 import bjd.util.Crypt;
 
@@ -39,7 +30,7 @@ public final class CtrlHidden extends OneCtrl implements DocumentListener {
 		int top = margin;
 
 		// ラベルの作成 top+3 は後のテキストボックスとの整合のため
-		label = (JLabel) create(panel, new JLabel(help), left, top + 3);
+		label = (JLabel) create(panel, new JLabel(getHelp()), left, top + 3);
 		left += label.getWidth() + margin; // オフセット移動
 
 		// テキストボックスの配置

@@ -173,7 +173,7 @@ public final class MLang {
 		for (int i = 0; i < len; i++) {
 			int b1 = bytes[i] & 0xFF; //byte b1 = bytes[i];
 			if (b1 <= 0x7F) { //ASCII
-				;
+				
 			} else if (i < len - 1) {
 				int b2 = bytes[i + 1] & 0xFF; //byte b2 = bytes[i + 1];
 				if ((0xC0 <= b1 && b1 <= 0xDF) && (0x80 <= b2 && b2 <= 0xBF)) { // 2 バイト 文字

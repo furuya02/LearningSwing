@@ -2,7 +2,6 @@ package bjd.ctrl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
@@ -24,6 +23,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 	private JLabel label = null;
 	private JRadioButton[] radioButtonList = new JRadioButton[3];
 	private JLabel[] labelList = new JLabel[2];
+	@SuppressWarnings("rawtypes")
 	private JComboBox[] comboBoxList = new JComboBox[2];
 	private Ip[] listV4;
 	private Ip[] listV6;
@@ -48,6 +48,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 		return CtrlType.BINDADDR;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void abstractCreate(Object value) {
 
@@ -55,7 +56,7 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 		int top = margin;
 
 		// ラベルの作成 top+3 は後のテキストボックスとの整合のため
-		label = (JLabel) create(panel, new JLabel(help), left, top + 3);
+		label = (JLabel) create(panel, new JLabel(getHelp()), left, top + 3);
 		// label.setBorder(new LineBorder(Color.RED, 2, true)); //Debug 赤枠
 		left += label.getWidth() + margin; // オフセット移動
 

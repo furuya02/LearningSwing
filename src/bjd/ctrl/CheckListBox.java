@@ -19,9 +19,10 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * 
- * CheckListBox
  * クラス内でJListを保持する
  * JListのマウスボタン及び選択等のイベントをクラス内で処理して、外部にはActionEventを発生させる
+ * @author SIN
+ *
  */
 @SuppressWarnings("serial")
 public final class CheckListBox extends JScrollPane implements MouseListener, ListSelectionListener {
@@ -30,6 +31,7 @@ public final class CheckListBox extends JScrollPane implements MouseListener, Li
 
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 
+	@SuppressWarnings("unchecked")
 	public CheckListBox() {
 
 		defaultListModel = new DefaultListModel<JCheckBox>();
@@ -275,7 +277,7 @@ public final class CheckListBox extends JScrollPane implements MouseListener, Li
 
 }
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "rawtypes" })
 class MyCellRenderer extends JCheckBox implements ListCellRenderer {
 
 	public MyCellRenderer() {

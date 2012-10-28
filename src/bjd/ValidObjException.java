@@ -6,6 +6,7 @@ package bjd;
  * @author SIN
  *
  */
+@SuppressWarnings("serial")
 public class ValidObjException extends Exception {
 	public ValidObjException(String msg) {
 		super(msg);

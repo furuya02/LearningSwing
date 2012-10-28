@@ -2,17 +2,9 @@ package bjd.option;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.swing.JPanel;
-
-import org.apache.commons.codec.DecoderException;
 
 import bjd.ValidObjException;
 import bjd.ctrl.CtrlComboBox;

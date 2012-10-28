@@ -25,7 +25,7 @@ public final class CtrlCheckBox extends OneCtrl implements ActionListener {
 		int top = margin;
 
 		// チェックボックス作成
-		checkBox = (JCheckBox) create(panel, new JCheckBox(help), left, top);
+		checkBox = (JCheckBox) create(panel, new JCheckBox(getHelp()), left, top);
 		checkBox.addActionListener(this);
 		left += checkBox.getWidth() + margin; // オフセット移動
 

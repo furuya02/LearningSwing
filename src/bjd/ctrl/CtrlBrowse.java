@@ -36,7 +36,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		int top = margin;
 
 		// ラベルの作成(topの+3は、後のテキストボックスとの高さ調整)
-		label = (JLabel) create(panel, new JLabel(help), left, top + 3);
+		label = (JLabel) create(panel, new JLabel(getHelp()), left, top + 3);
 		left += label.getWidth() + margin; // オフセット移動
 
 		// テキストボックスの配置

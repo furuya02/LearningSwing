@@ -7,6 +7,11 @@ import java.awt.SystemColor;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * ステータスバー　コントロール
+ * @author SIN
+ *
+ */
 @SuppressWarnings("serial")
 public final class StatusBar extends JPanel {
 

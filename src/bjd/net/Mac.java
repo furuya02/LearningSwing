@@ -13,12 +13,7 @@ import bjd.ValidObjException;
 public final class Mac extends ValidObj  {
 
 	private byte[] m = new byte[6];
-	/**
-	 * 所為化に失敗するとtrueに設定される
-	 * trueの時に、このオブジェクトを使用すると実行時例外が発生する
-	 */
-	private boolean initialiseFailed = false; //初期化失敗
-
+	
 	/**
 	 * コンストラクタ(文字列)
 	 * 初期化文字列でMACアドレスを初期化する<br>
