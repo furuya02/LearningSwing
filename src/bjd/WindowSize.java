@@ -79,6 +79,8 @@ public final class WindowSize implements IDispose {
 			w = reg.getInt(String.format("%s_width", n));
 			h = reg.getInt(String.format("%s_hight", n));
 		} catch (RegException ex) {
+			w = -1;
+			h = -1;
 		}
 		if (h <= 0) {
 			h = 400;
@@ -99,6 +101,7 @@ public final class WindowSize implements IDispose {
 			}
 			frame.setLocation(x, y);
 		} catch (RegException ex) {
+			// 読み込めない場合は、何も処理しない
 
 		}
 	}

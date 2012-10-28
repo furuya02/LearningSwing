@@ -12,39 +12,25 @@ import bjd.util.IDispose;
  *
  */
 public abstract class ThreadBase implements IDispose, ILogger {
-//	private Kernel kernel;
 	private MyThread myThread = null;
-	private boolean runnig = false;
+	private boolean isRunnig = false;
 	private boolean life;
-//	private String nameTag;
 	private Logger logger;
 
-	//protected ThreadBase(Kernel kernel, String nameTag) {
 	/**
 	 * 
 	 * @param logger　スレッド実行中に例外がスローされたとき表示するためのLogger(nullを設定可能)
 	 */
 	protected ThreadBase(Logger logger) {
 		this.logger = logger;
-//		this.kernel = kernel;
-//		this.nameTag = nameTag;
-//		logger = kernel.createLogger(nameTag, true, this);
 	}
-
-//	protected final boolean getJp() {
-//		return kernel.getJp();
-//	}
-//
-//	public final String getNameTag() {
-//		return nameTag;
-//	}
 
 	/**
 	 * スレッドが動作中かどうか
 	 * @return
 	 */
 	public final boolean isRunnig() {
-		return runnig;
+		return isRunnig;
 	}
 
 	/**
@@ -64,7 +50,10 @@ public abstract class ThreadBase implements IDispose, ILogger {
 		stop();
 	}
 
-	//【スレッド開始前処理】//return falseでスレッド起動をやめる
+	/**
+	 * 【スレッド開始前処理】
+	 * @return falseでスレッド起動をやめる
+	 */
 	protected abstract boolean onStartThread();
 
 	/**
@@ -121,7 +110,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	private class MyThread extends Thread {
 		@Override
 		public void run() {
-			runnig = true;
+			isRunnig = true;
 			try {
 				onRunThread();
 			} catch (Exception ex) {
@@ -131,7 +120,7 @@ public abstract class ThreadBase implements IDispose, ILogger {
 				}
 			}
 			//	kernel.getView().setColor();
-			runnig = false;
+			isRunnig = false;
 		}
 	}
 }

@@ -24,6 +24,12 @@ public final class AclList {
 	private boolean enable; //許可:0 不許可:1
 	private Logger logger;
 
+	/**
+	 * 
+	 * @param dat
+	 * @param enableNum 
+	 * @param logger
+	 */
 	public AclList(Dat dat, int enableNum, Logger logger) {
 		this.enable = (enableNum == 1);
 		this.logger = logger;
