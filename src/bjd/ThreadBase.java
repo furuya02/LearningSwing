@@ -5,7 +5,12 @@ import bjd.log.LogKind;
 import bjd.log.Logger;
 import bjd.util.IDispose;
 
-//スレッドの起動停止機能を持った基本クラス
+/**
+ * スレッドの起動停止機能を持った基本クラス
+ * 
+ * @author SIN
+ *
+ */
 public abstract class ThreadBase implements IDispose, ILogger {
 	private Kernel kernel;
 	private MyThread myThread = null;
@@ -14,7 +19,6 @@ public abstract class ThreadBase implements IDispose, ILogger {
 	private String nameTag;
 	private Logger logger;
 
-	//コンストラクタ
 	protected ThreadBase(Kernel kernel, String nameTag) {
 		this.kernel = kernel;
 		this.nameTag = nameTag;

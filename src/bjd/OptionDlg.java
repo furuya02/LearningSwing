@@ -6,18 +6,28 @@ import javax.swing.JFrame;
 
 import bjd.option.OneOption;
 
+/**
+ * オプション設定用ダイアログ
+ * 
+ * @author SIN
+ *
+ */
 @SuppressWarnings("serial")
 public final class OptionDlg extends Dlg {
 
 	private OneOption oneOption;
 
+	/**
+	 * @param frame　親フレーム
+	 * @param oneOption 対象オプション
+	 */
 	public OptionDlg(JFrame frame, OneOption oneOption) {
 		super(frame, width(), height());
 
 		this.oneOption = oneOption;
 
 		//ダイアログ作成時の処理
-		oneOption.createDlg(mainPanel);
+		oneOption.createDlg(getMainPanel());
 
 		//		JList listBox = new JList(new String[]{"1","2","3","4","5","6","7","8","9","10"});
 		//		JScrollPane srl = new JScrollPane(listBox);
@@ -39,30 +49,40 @@ public final class OptionDlg extends Dlg {
 		 */
 	}
 
-	//オプションダイアログのサイズ（定数）
+	/**
+	 * オプションダイアログのサイズ（定数）
+	 * @return 幅
+	 */
 	public static int width() {
 		return 600;
 	}
 
-	//オプションダイアログのサイズ（定数）
+	/**
+	 * オプションダイアログのサイズ（定数）
+	 * @return 高さ
+	 */
 	public static int height() {
 		return 500;
 	}
 
+	/**
+	 * ダイアログ破棄時の処理<br>
+	 * WindowListenerから継承<br>
+	 */
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		//ダイアログ破棄時の処理
 		oneOption.deleteDlg();
 	}
 
-	//ダイアログでOKボタンが押された時の処理
+	/**
+	 * ダイアログでOKボタンが押された時の処理
+	 */
 	@Override
 	protected boolean onOk() {
 		boolean isComfirm = true; // コントロールのデータが全て正常に読めるかどうかの確認(エラーの場合は、ポップアップ表示)
 		if (!oneOption.onOk(isComfirm)) {
 			return false;
 		}
-		oneOption.onOk(false); //値の読み込み
-		return true;
+		return oneOption.onOk(false); //値の読み込み
 	}
 }

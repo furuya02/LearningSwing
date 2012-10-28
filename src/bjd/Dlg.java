@@ -19,13 +19,25 @@ import javax.swing.KeyStroke;
 
 import bjd.util.Util;
 
+/**
+ * 下部パネルに「OK」及び「キャンセル」を表示するダイアログボックスの基底クラス<br>
+ * 
+ * @author SIN
+ *
+ */
 @SuppressWarnings("serial")
 public abstract class Dlg extends JDialog implements WindowListener, ActionListener {
 
 	// ダイアログの戻り値（OKボタンで閉じたかどうか）
 	private boolean isOk = false;
-	protected JPanel mainPanel = new JPanel();
+	private JPanel mainPanel = new JPanel();
 
+	/**
+	 * 
+	 * @param frame　親フレーム
+	 * @param width 幅
+	 * @param height　高さ
+	 */
 	public Dlg(JFrame frame, int width, int height) {
 		super(frame);
 		setSize(width, height);
@@ -44,9 +56,7 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 			}
 		});
 
-		// JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(null);
-		// mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -63,38 +73,68 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 		Util.createButton(buttonPanel, "Cancel", "CANCEL", this, 75);
 	}
 
+	/**
+	 * ダイログボックスのパネル
+	 * @return
+	 */
+	protected final JPanel getMainPanel() {
+		return mainPanel;
+	}
+
+	/**
+	 * モーダル表示
+	 * 
+	 * @return OKボタンで終了した場合trueが返る
+	 */
 	public final boolean showDialog() {
 		setModal(true);
 		setVisible(true);
 		return isOk;
 	}
 
+	/**
+	 * OKボタンが押された時のアクション
+	 * 
+	 * @return falseが返された場合、ダイアログのクローズはキャンセルされる
+	 */
 	protected abstract boolean onOk();
 
+	/**
+	 * ActionListenerからの継承
+	 */
 	@Override
 	public final void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("OK")) {
-			isOk = true;
 			if (!onOk()) {
 				return;
 			}
+			isOk = true;
 		}
 		dispose();
 
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public final void windowActivated(WindowEvent arg0) {
 		// System.out.println("windowActivated");
 
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		// System.out.println("windowClosed");
 
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public final void windowClosing(WindowEvent arg0) {
 		// System.out.println("windowClosing");
@@ -102,24 +142,36 @@ public abstract class Dlg extends JDialog implements WindowListener, ActionListe
 		dispose();
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public final void windowDeactivated(WindowEvent arg0) {
 		// System.out.println("windowDeactivated");
 
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public final void windowDeiconified(WindowEvent arg0) {
 		// System.out.println("windowDeiconified");
 
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public final void windowIconified(WindowEvent arg0) {
 		// System.out.println("windowIconified");
 
 	}
 
+	/**
+	 * WindowListenerからの継承
+	 */
 	@Override
 	public final void windowOpened(WindowEvent arg0) {
 		// System.out.println("windowOpened");
