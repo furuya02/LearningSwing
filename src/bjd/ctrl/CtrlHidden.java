@@ -1,9 +1,18 @@
 package bjd.ctrl;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.apache.commons.codec.DecoderException;
 
 import bjd.util.Crypt;
 
@@ -109,12 +118,24 @@ public final class CtrlHidden extends OneCtrl implements DocumentListener {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected String abstractToText() {
-		return Crypt.encrypt(passwordField.getText());
+		String str = "";
+		try {
+			str = Crypt.encrypt(passwordField.getText());
+		} catch (Exception e) {
+			str = "ERROR";
+		}
+		return str;
 	}
 
 	@Override
 	protected void abstractFromText(String s) {
-		passwordField.setText(Crypt.decrypt(s));
+		String str="";
+		try {
+			str = Crypt.decrypt(s);
+		} catch (Exception e) {
+			str = "ERROR";
+		}
+		passwordField.setText(str);
 	}
 
 	@Override

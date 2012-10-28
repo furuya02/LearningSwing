@@ -1,12 +1,28 @@
 package bjd.util;
 
+import java.io.IOError;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
+/**
+ * 文字列を暗号化するクラス
+ * 
+ * @author SIN
+ *
+ */
 public final class Crypt {
 
 	private Crypt() {
@@ -14,38 +30,47 @@ public final class Crypt {
 	}
 
 	private static String key = "ABCDEFGHIJKLMNOPQRSTUVWX"; //キー(24バイト)
-	
-	public static String encrypt(String str) {
-		try {
-			SecretKeyFactory keyFac = SecretKeyFactory.getInstance("DESede");
-			DESedeKeySpec keySpec = new DESedeKeySpec(key.getBytes());
-			SecretKey secKey = keyFac.generateSecret(keySpec);
 
-			Cipher encoder = Cipher.getInstance("DESede");
-			encoder.init(Cipher.ENCRYPT_MODE, secKey);
-			byte[] b = encoder.doFinal(str.getBytes());
-			return Hex.encodeHexString(b);
-		} catch (Exception ex) {
-			return "ERROR";
+	/**
+	 * 暗号化
+	 * @param str　平文
+	 * @return　暗号化された文字列
+	 * @throws Exception 
+	 */
+	public static String encrypt(String str) throws Exception {
+		//if (str == null || str.equals("")) {
+		if (str == null) {
+			throw new Exception();
 		}
+		SecretKeyFactory keyFac = SecretKeyFactory.getInstance("DESede");
+		DESedeKeySpec keySpec = new DESedeKeySpec(key.getBytes());
+		SecretKey secKey = keyFac.generateSecret(keySpec);
+
+		Cipher encoder = Cipher.getInstance("DESede");
+		encoder.init(Cipher.ENCRYPT_MODE, secKey);
+		byte[] b = encoder.doFinal(str.getBytes());
+		return Hex.encodeHexString(b);
 	}
 
-	public static String decrypt(String str) {
-		if (str == null || str.equals("")) {
-			return "ERROR";
+	/**
+	 * 複合化
+	 * @param str　暗号化された文字列
+	 * @return　平文
+	 * @throws Exception 
+	 */
+	public static String decrypt(String str) throws Exception{ 
+		//if (str == null || str.equals("")) {
+		if (str == null) {
+			throw new Exception("");
 		}
-		try {
-			SecretKeyFactory keyFac = SecretKeyFactory.getInstance("DESede");
-			DESedeKeySpec keySpec = new DESedeKeySpec(key.getBytes());
-			SecretKey secKey = keyFac.generateSecret(keySpec);
+		SecretKeyFactory keyFac = SecretKeyFactory.getInstance("DESede");
+		DESedeKeySpec keySpec = new DESedeKeySpec(key.getBytes());
+		SecretKey secKey = keyFac.generateSecret(keySpec);
 
-			Cipher decoder = Cipher.getInstance("DESede");
-			decoder.init(Cipher.DECRYPT_MODE, secKey);
+		Cipher decoder = Cipher.getInstance("DESede");
+		decoder.init(Cipher.DECRYPT_MODE, secKey);
 
-			byte[] b = Hex.decodeHex(str.toCharArray());
-			return new String(decoder.doFinal(b));
-		} catch (Exception ex) {
-			return "ERROR";
-		}
+		byte[] b = Hex.decodeHex(str.toCharArray());
+		return new String(decoder.doFinal(b));
 	}
 }

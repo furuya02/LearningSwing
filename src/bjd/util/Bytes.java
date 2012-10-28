@@ -3,17 +3,27 @@ package bjd.util;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-//byte[]配列の操作クラス
+/**
+ * byte[]配列の操作クラス
+ * 
+ * @author SIN
+ *
+ */
 public final class Bytes {
 	private Bytes() {
 		//インスタンスの生成を禁止する
 	}
 
-	//*********************************************************
-	// byte[] の生成
-	//*********************************************************
-	//複数のオブジェクトを並べて、byte[]に変換する
-	//null指定可能 / Stringは、Encoding.ASCCでバイト化される
+	/**
+	 * byte[] の生成<br>
+	 * 複数のオブジェクトを並べて、byte[]に変換する<br>
+	 * null指定可能 0バイトに変換される<br>
+	 * Stringは、Encoding.ASCCでバイト化される<br>
+	 * 未対応のオブジェクトを指定するとRuntimeExceptionがスローされる<br>
+	 * 
+	 * @param list 複数のオブジェクトを列挙できる
+	 * @return 生成された　byte　配列
+	 */
 	public static byte[] create(Object ... list) {
 		int len = 0;
 		for (Object o : list) {
@@ -78,11 +88,15 @@ public final class Bytes {
 		return data.array();
 	}
 
-	//*********************************************************
-	// 検索
-	//*********************************************************
-	//bufferの中でtargetが始まる位置を検索する
-	//int off 検索開始位置
+	/**
+	 * 検索<br>
+	 * bufferのoff以降で、targetが始まる位置を返す<br>
+	 * 
+	 * @param buffer 検索されるのバッファ
+	 * @param off 検索開始位置
+	 * @param target　検索ターゲット
+	 * @return　開始位置(0..)　見つからない時(-1)
+	 */
 	public static int indexOf(byte[] buffer, int off, byte[] target) {
 		for (int i = off; i + target.length < buffer.length; i++) {
 			boolean any = false;

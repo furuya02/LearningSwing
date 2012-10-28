@@ -9,6 +9,14 @@ import bjd.option.Conf;
 import bjd.util.IDispose;
 import bjd.util.Util;
 
+/**
+ * ウインドウサイズ及びGridViewのカラム幅を記憶するクラス<br>
+ * 存在しないファイルを指定した場合は新規作成される<br>
+ * 保存ファイルのIOエラーが発生した場合は、例外（IOException）が発生する<br>
+ * 例外発生以後は、このオブジェクトを使用しても、何も処理されない
+ * 
+ * @author SIN
+s */
 public final class WindowSize implements IDispose {
 
 	//Windowの外観を保存・復元する
@@ -16,8 +24,6 @@ public final class WindowSize implements IDispose {
 	private Reg reg; //記録する仮想レジストリ
 
 	/**
-	 * ウインドウサイズ及びGridViewのカラム幅を記憶するクラス
-	 * 
 	 * @param conf オプション設定
 	 * @param path 保存ファイル
 	 * @throws IOException 保存ファイルのIOエラー　(存在しない場合は新規作成されるので例外とはならない)
@@ -33,6 +39,10 @@ public final class WindowSize implements IDispose {
 		}
 	}
 
+	/**
+	 * 終了処理<br>
+	 * Regが保存される<br>
+	 */
 	@Override
 	public void dispose() {
 		if (reg == null) { //初期化に失敗している
@@ -42,7 +52,10 @@ public final class WindowSize implements IDispose {
 		reg.dispose(); //Regの保存
 	}
 
-	//ウインドウサイズの復元
+	/**
+	 * ウインドウサイズの復元
+	 * @param frame 対象フレーム
+	 */
 	public void read(JFrame frame) {
 		if (reg == null) { //初期化に失敗している
 			return;
@@ -90,7 +103,10 @@ public final class WindowSize implements IDispose {
 		}
 	}
 
-	//カラム幅の復元
+	/**
+	 * カラム幅の復元
+	 * @param listView 対象ListView
+	 */
 	public void read(ListView listView) {
 		if (reg == null) { //初期化に失敗している
 			return;
@@ -120,7 +136,11 @@ public final class WindowSize implements IDispose {
 		}
 	}
 
-	//ウインドウサイズの保存
+
+	/**
+	 * ウインドウサイズの保存
+	 * @param frame 対象フレーム
+	 */
 	public void save(JFrame frame) {
 		if (reg == null) { //初期化に失敗している
 			return;
@@ -153,7 +173,11 @@ public final class WindowSize implements IDispose {
 
 	}
 
-	//カラム幅の保存
+	/**
+	 * カラム幅の保存
+	 * 
+	 * @param listView　対象ListView
+	 */
 	public void save(ListView listView) {
 		if (reg == null) { //初期化に失敗している
 			return;

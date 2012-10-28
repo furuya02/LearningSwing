@@ -5,15 +5,27 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.mail.MessagingException;
 
+import junit.framework.Assert;
+
+import org.apache.commons.codec.DecoderException;
 import org.junit.BeforeClass;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+
+import bjd.ValidObjException;
+import bjd.net.Ip;
 
 @RunWith(Enclosed.class)
 public class CryptTest {
@@ -28,12 +40,12 @@ public class CryptTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			// 入力文字列
-			new Fixture("本日は晴天なり"),
-			new Fixture("123"),
-			new Fixture(""),
-			new Fixture("1\r\n2"),
-		};
+				// 入力文字列
+				new Fixture("本日は晴天なり"),
+				new Fixture("123"),
+				new Fixture("xxxx"),
+				new Fixture("1\r\n2"), 
+			};
 
 		static class Fixture {
 			private String actual;
@@ -46,27 +58,33 @@ public class CryptTest {
 		@Theory
 		public void test(Fixture fx) throws MessagingException, IOException {
 			TestUtil.dispPrompt(this);
-			
-			String s = Crypt.encrypt(fx.actual);
-			String expected = Crypt.decrypt(s);
+
+			String s = "";
+			String expected = "";
+			try {
+				s = Crypt.encrypt(fx.actual);
+				expected = Crypt.decrypt(s);
+			} catch (Exception e) {
+				Assert.fail();
+			}
 			System.out.printf("encrypt(%s)=%s  decrypt(%s)=%s\n", fx.actual, s, s, expected);
 			assertThat(expected, is(not("ERROR"))); //ERRORが出力された場合は、テスト失敗
 			assertThat(expected, is(expected));
 		}
 	}
-	
+
 	@RunWith(Theories.class)
 	public static final class A002 {
 
 		@BeforeClass
 		public static void before() {
-			TestUtil.dispHeader("encryptのエラー発生");
+			TestUtil.dispHeader("encryptの例外発生");
 		}
 
 		@DataPoints
 		public static Fixture[] datas = {
 			// 入力文字列
-			new Fixture(null),
+			new Fixture(null), 
 		};
 
 		static class Fixture {
@@ -80,10 +98,15 @@ public class CryptTest {
 		@Theory
 		public void test(Fixture fx) throws MessagingException, IOException {
 			TestUtil.dispPrompt(this);
-			
-			String expected = Crypt.encrypt(fx.actual);
-			System.out.printf("encrypt(%s)=%s\n", fx.actual, expected);
-			assertThat(expected, is("ERROR")); //ERRORが出力された場合は、テスト成功
+			try {
+				Crypt.encrypt(fx.actual);
+				Assert.fail("この行が実行されたらエラー");
+			} catch (Exception e) {
+				//ここへ来ればテスト成功
+				System.out.printf("encrypt(%s) => %s\n", fx.actual, e.getClass());
+				return;
+			}
+			Assert.fail("この行が実行されたらエラー");
 		}
 	}
 
@@ -97,11 +120,10 @@ public class CryptTest {
 
 		@DataPoints
 		public static Fixture[] datas = {
-			// 入力文字列
-			new Fixture(null),
-			new Fixture(""),
-			new Fixture("123"),
-			new Fixture("本日は晴天なり"),
+				// 入力文字列
+				new Fixture(null),
+				new Fixture("123"), 
+				new Fixture("本日は晴天なり"), 
 		};
 
 		static class Fixture {
@@ -115,10 +137,15 @@ public class CryptTest {
 		@Theory
 		public void test(Fixture fx) throws MessagingException, IOException {
 			TestUtil.dispPrompt(this);
-			
-			String expected = Crypt.decrypt(fx.actual);
-			System.out.printf("encrypt(%s)=%s\n", fx.actual, expected);
-			assertThat(expected, is("ERROR")); //ERRORが出力された場合は、テスト成功
+
+			try {
+				Crypt.decrypt(fx.actual);
+				Assert.fail("この行が実行されたらエラー");
+			} catch (Exception e) {
+				System.out.printf("encrypt(%s) => %s\n", fx.actual, e.getClass());
+				return;
+			}
+			Assert.fail("この行が実行されたらエラー");
 		}
 	}
 

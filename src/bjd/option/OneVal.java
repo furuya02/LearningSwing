@@ -2,9 +2,17 @@ package bjd.option;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.JPanel;
+
+import org.apache.commons.codec.DecoderException;
 
 import bjd.ValidObjException;
 import bjd.ctrl.CtrlComboBox;
@@ -178,7 +186,12 @@ public final class OneVal implements IDispose {
 				if (isSecret) {
 					return "***";
 				}
-				return Crypt.encrypt((String) value);
+				try {
+					return Crypt.encrypt((String) value);
+				} catch (Exception e) {
+					return "ERROR";
+				}
+				
 			case MEMO:
 				return ((String) value).replaceAll("\r\n", "\t");
 			case RADIO:
@@ -258,12 +271,12 @@ public final class OneVal implements IDispose {
 				value = str;
 				break;
 			case HIDDEN:
-				String s = Crypt.decrypt(str);
-				if (s.equals("ERROR")) {
+				try {
+					value = Crypt.decrypt(str);
+				} catch (Exception e1) {
 					value = "";
 					return false;
 				}
-				value = s;
 				break;
 			case RADIO:
 				try {

@@ -114,7 +114,6 @@ public class OneValTest {
 				new Fixture(CtrlType.FONT, "Times New Roman,2,15"), new Fixture(CtrlType.FONT, "Serif,1,8"), new Fixture(CtrlType.MEMO, "1\t2\t3\t"),
 				new Fixture(CtrlType.HIDDEN, "2d7ee3636680c1f6"),
 				new Fixture(CtrlType.HIDDEN, "60392a0d922b9077"),
-				//new Fixture(CtrlType.HIDDEN, "4abdba16713af9b64bd917d2cd073e457632a9da9148e27e966df5b0135e997b"), 
 				new Fixture(CtrlType.ADDRESSV4, "192.168.0.1"), new Fixture(CtrlType.DAT, "\tn1\tn2"), new Fixture(CtrlType.DAT, "\tn1\tn2\b\tn1#\tn2"),
 				new Fixture(CtrlType.BINDADDR, "V4ONLY,INADDR_ANY,IN6ADDR_ANY_INIT"), new Fixture(CtrlType.BINDADDR, "V6ONLY,198.168.0.1,ffe0::1"),
 				new Fixture(CtrlType.COMBOBOX, "1"),
