@@ -12,7 +12,6 @@ import java.util.Iterator;
 import bjd.net.Ip;
 import bjd.net.OperateCrlf;
 import bjd.net.Ssl;
-import bjd.net.TcpQueue;
 import bjd.server.OneServer;
 import bjd.util.Bytes;
 import bjd.util.Util;
@@ -22,8 +21,8 @@ public final class SockTcp extends SockObj {
 	private Selector selector = null;
 	private SocketChannel channel = null; //ACCEPTの場合は、コンストラクタでコピーされる
 	private Object oneSsl;
-	private TcpQueue tcpQueue = new TcpQueue();
-	private ByteBuffer recvBuf = ByteBuffer.allocate(TcpQueue.MAX());
+	private SockQueue sockQueue = new SockQueue();
+	private ByteBuffer recvBuf = ByteBuffer.allocate(sockQueue.getMax());
 
 	@SuppressWarnings("unused")
 	private SockTcp() {
@@ -150,7 +149,7 @@ public final class SockTcp extends SockObj {
 	}
 
 	private void doRead(SocketChannel channel) {
-		recvBuf.limit(tcpQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
+		recvBuf.limit(sockQueue.getSpace()); //受信できるのは、TcpQueueの空きサイズ分だけ
 		try {
 			recvBuf.clear();
 			if (channel.read(recvBuf) < 0) {
@@ -163,7 +162,7 @@ public final class SockTcp extends SockObj {
 			recvBuf.flip();
 			recvBuf.get(buf);
 
-			tcpQueue.enqueue(buf, buf.length);
+			sockQueue.enqueue(buf, buf.length);
 
 		} catch (Exception ex) {
 			setException(ex);
@@ -177,7 +176,7 @@ public final class SockTcp extends SockObj {
 			ex.printStackTrace();
 			return 0;
 		}
-		return tcpQueue.length();
+		return sockQueue.length();
 	}
 
 	public byte[] recv(int len, int timeout) {
@@ -186,20 +185,20 @@ public final class SockTcp extends SockObj {
 
 		byte[] buffer = new byte[0];
 		try {
-			if (len <= tcpQueue.length()) {
+			if (len <= sockQueue.length()) {
 				// キューから取得する
-				buffer = tcpQueue.dequeue(len);
+				buffer = sockQueue.dequeue(len);
 			} else {
 				while (true) {
 					Thread.sleep(0);
-					if (0 < tcpQueue.length()) {
+					if (0 < sockQueue.length()) {
 						//size=受信が必要なバイト数
 						int size = len - buffer.length;
 						//受信に必要なバイト数がバッファにない場合
-						if (size > tcpQueue.length()) {
-							size = tcpQueue.length(); //とりあえずバッファサイズ分だけ受信する
+						if (size > sockQueue.length()) {
+							size = sockQueue.length(); //とりあえずバッファサイズ分だけ受信する
 						}
-						byte[] tmp = tcpQueue.dequeue(size);
+						byte[] tmp = sockQueue.dequeue(size);
 						buffer = Bytes.create(buffer, tmp);
 						if (len <= buffer.length) {
 							break;
@@ -211,7 +210,7 @@ public final class SockTcp extends SockObj {
 						Thread.sleep(10);
 					}
 					if (c.compareTo(Calendar.getInstance()) < 0) {
-						buffer = tcpQueue.dequeue(len); //タイムアウト
+						buffer = sockQueue.dequeue(len); //タイムアウト
 						break;
 					}
 				}
