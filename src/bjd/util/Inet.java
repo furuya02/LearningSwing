@@ -31,6 +31,7 @@ public final class Inet {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		//TODO return null （要）設計の見直し
 		return null;
 	}
 
@@ -197,6 +198,7 @@ public final class Inet {
 			Util.runtimeException(e.getMessage());
 		}
 		Util.runtimeException(String.format("md5str(\"%s\")", str));
+		//TODO return null (要)設計見直し
 		return null;
 	}
 

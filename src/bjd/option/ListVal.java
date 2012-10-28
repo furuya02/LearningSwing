@@ -9,6 +9,7 @@ import bjd.ctrl.ICtrlEventListener;
 import bjd.util.ListBase;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
+import bjd.util.Util;
 
 public final class ListVal extends ListBase<OneVal> {
 
@@ -20,11 +21,18 @@ public final class ListVal extends ListBase<OneVal> {
 		ArrayList<OneVal> list = oneVal.getList(null);
 
 		for (OneVal o : list) {
-			if (null != search(o.getName())) {
-				Msg.show(MsgKind.ERROR, String.format(
-						"ListVal.add(%s) 名前が重複しているため追加できませんでした", o.getName()));
+			try {
+				search(o.getName());
+				Msg.show(MsgKind.ERROR, String.format("ListVal.add(%s) 名前が重複しているため追加できませんでした", o.getName()));
 				return;
+			} catch (Exception e) {
+				// search()で例外が発生すれば、重複は無いことにある
 			}
+//			if (null != search(o.getName())) {
+//				Msg.show(MsgKind.ERROR, String.format(
+//						"ListVal.add(%s) 名前が重複しているため追加できませんでした", o.getName()));
+//				return;
+//			}
 		}
 		// 重複が無いので追加する
 		getAr().add(oneVal);
@@ -41,13 +49,13 @@ public final class ListVal extends ListBase<OneVal> {
 		return list;
 	}
 
-	public OneVal search(String name) {
+	public OneVal search(String name) throws Exception {
 		for (OneVal o : getList(null)) {
 			if (o.getName().equals(name)) {
 				return o;
 			}
 		}
-		return null;
+		throw new Exception();
 	}
 
 	// コントロール生成

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import junit.framework.Assert;
+
 import bjd.ctrl.CtrlType;
 import bjd.option.ListVal;
 import bjd.option.OneVal;
@@ -141,21 +143,21 @@ public final class IniDb {
 		}
 	}
 
-	private LineObject readLine(String str) {
+	private LineObject readLine(String str) throws Exception {
 		int index = str.indexOf("=");
 		if (index == -1) {
-			return null;
+			throw new Exception();
 		}
 		//		CtrlType ctrlType = str2CtrlType(str.substring(0, index));
 		str = str.substring(index + 1);
 		index = str.indexOf("=");
 		if (index == -1) {
-			return null;
+			throw new Exception();
 		}
 		String buf = str.substring(0, index);
 		String[] tmp = buf.split("\b");
 		if (tmp.length != 2) {
-			return null;
+			throw new Exception();
 		}
 		String nameTag = tmp[0];
 		String name = tmp[1];
@@ -174,15 +176,20 @@ public final class IniDb {
 				Util.runtimeException(String.format("InitDb.read() IOException %s", e.getMessage()));
 			}
 			for (String s : lines) {
-				LineObject o = readLine(s);
-				if (o != null) {
+				try {
+					LineObject o = readLine(s);
 					if (o.getNameTag().equals(nameTag)) {
 						isRead = true; // 1件でもデータを読み込んだ場合にtrue
-						OneVal oneVal = listVal.search(o.getName());
-						if (oneVal != null) {
+						OneVal oneVal = null;
+						try {
+							oneVal = listVal.search(o.getName());
 							oneVal.fromReg(o.getValStr());
+						} catch (Exception e) {
+							//TODO エラー処理未実装
 						}
 					}
+				} catch (Exception e1) {
+					//TODO エラー処理未実装
 				}
 			}
 		}
@@ -240,11 +247,14 @@ public final class IniDb {
 					Util.runtimeException(String.format("InitDb.save() IOException %s", e.getMessage()));
 				}
 				for (String s : l) {
-					LineObject o = readLine(s);
-					if (o != null) {
+					LineObject o;
+					try {
+						o = readLine(s);
 						if (!o.getNameTag().equals(nameTag)) { // nameTagが違う場合、listに追加
 							lines.add(s);
 						}
+					} catch (Exception e) {
+						//TODO エラー処理未処理
 					}
 				}
 			}

@@ -38,11 +38,13 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	}
 
 	public final boolean getUseServer() {
-		OneVal oneVal = listVal.search("useServer");
-		if (oneVal != null) {
-			return (boolean) oneVal.getValue();
+		OneVal oneVal;
+		try {
+			oneVal = listVal.search("useServer");
+		} catch (Exception e) {
+			return false;
 		}
-		return false;
+		return (boolean) oneVal.getValue();
 	}
 	
     public abstract String getJpMenu();
@@ -121,15 +123,16 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 
 	//値の設定
 	public final void setValue(String name, Object value) {
-		OneVal oneVal = listVal.search(name);
-		if (oneVal != null) {
-			//コントロールの値を変更
-			oneVal.getOneCtrl().write(value);
-			//レジストリへ保存
-			save();
-			return;
+		OneVal oneVal = null;
+		try {
+			oneVal = listVal.search(name);
+		} catch (Exception e) {
+			Util.runtimeException(String.format("名前が見つかりません name=%s", name));
 		}
-		Util.runtimeException(String.format("名前が見つかりません name=%s", name));
+		//コントロールの値を変更
+		oneVal.getOneCtrl().write(value);
+		//レジストリへ保存
+		save();
 	}
 
 	//値の取得
@@ -140,26 +143,32 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 			return false;
 		}
 
-		OneVal oneVal = listVal.search(name);
-		if (oneVal != null) {
-			return oneVal.getValue();
+		OneVal oneVal = null;
+		try {
+			oneVal = listVal.search(name);
+		} catch (Exception e) {
+			Util.runtimeException(String.format("名前が見つかりません name=%s", name));
+			return null;
 		}
-		Util.runtimeException(String.format("名前が見つかりません name=%s", name));
-		return null;
+		return oneVal.getValue();
 	}
 
 	protected final OneCtrl getCtrl(String name) {
-		OneVal oneVal = listVal.search(name);
-		if (oneVal != null) {
+		try {
+			OneVal oneVal = listVal.search(name);
 			return oneVal.getOneCtrl();
+		
+		} catch (Exception e) {
+			Util.runtimeException(String.format("getCtrl(%s)", name));
 		}
-		return null;
+		return null; // 実行時例外のため、このnullが返される事はない
 	}
 
 	protected abstract void abstractOnChange(OneCtrl oneCtrl);
 
 	@Override
 	public final void onChange(OneCtrl oneCtrl) {
+		
 		try {
 			OneCtrl o = getCtrl("protocolKind");
 			if (o != null) {

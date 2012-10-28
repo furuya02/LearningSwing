@@ -25,7 +25,7 @@ public final class ListOption extends ListBase<OneOption> {
 			return new OptionBasic(kernel, "", "Basic");
 		}
 		Util.runtimeException(String.format("nameTag=%s", nameTag));
-		return null;
+		return null; //ランタイム例外が発生するので、このnullが返されることはない
 	}
 
 	//null追加を回避するために、getAr().add()は、このファンクションを使用する
