@@ -28,9 +28,9 @@ public final class LocalAddress extends ValidObj {
 	 * 
 	 * @return IPv4リスト
 	 */
-	public ArrayList<Ip> getV4() {
+	public Ip[] getV4() {
 		checkInitialise();
-		return v4;
+		return v4.toArray(new Ip[]{});
 	}
 
 	/**
@@ -38,9 +38,9 @@ public final class LocalAddress extends ValidObj {
 	 * 
 	 * @return IPv6リスト
 	 */
-	public ArrayList<Ip> getV6() {
+	public Ip[] getV6() {
 		checkInitialise();
-		return v6;
+		return v6.toArray(new Ip[]{});
 	}
 
 	/**

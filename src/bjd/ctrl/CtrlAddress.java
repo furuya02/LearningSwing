@@ -9,15 +9,27 @@ import javax.swing.text.AbstractDocument;
 import bjd.ValidObjException;
 import bjd.net.Ip;
 
+/**
+ * IPv4アドレス　コントロール
+ * @author SIN
+ *
+ */
 public final class CtrlAddress extends OneCtrl implements DocumentListener {
 
 	private JLabel label = null;
 	private JTextField[] textFieldList = null;
 
+	/**
+	 * 
+	 * @param help 表示テキスト
+	 */
 	public CtrlAddress(String help) {
 		super(help);
 	}
-
+	
+	/**
+	 * コントロールのタイプ取得
+	 */
 	@Override
 	public CtrlType getCtrlType() {
 		return CtrlType.ADDRESSV4;

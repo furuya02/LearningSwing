@@ -401,7 +401,7 @@ public class OneValTest {
 						Assert.fail(ex.getMessage());
 
 					}
-					oneCtrl = new CtrlBindAddr(help, list, list);
+					oneCtrl = new CtrlBindAddr(help, list.toArray(new Ip[]{}), list.toArray(new Ip[]{}));
 					break;
 				case COMBOBOX:
 					//listを{"1","2"}で決め打ち

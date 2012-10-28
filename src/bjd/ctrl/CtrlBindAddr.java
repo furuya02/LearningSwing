@@ -14,21 +14,35 @@ import bjd.net.BindStyle;
 import bjd.net.Ip;
 import bjd.util.Util;
 
+/**
+ *　バインドアドレス コントロール
+ * @author SIN
+ *
+ */
 public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 
 	private JLabel label = null;
 	private JRadioButton[] radioButtonList = new JRadioButton[3];
 	private JLabel[] labelList = new JLabel[2];
 	private JComboBox[] comboBoxList = new JComboBox[2];
-	private ArrayList<Ip> listV4;
-	private ArrayList<Ip> listV6;
+	private Ip[] listV4;
+	private Ip[] listV6;
 
-	public CtrlBindAddr(String help, ArrayList<Ip> listV4, ArrayList<Ip> listV6) {
+	/**
+	 * 
+	 * @param help 表示テキスト
+	 * @param listV4　IPv4アドレスのリスト
+	 * @param listV6　IPv6アドレスのリスト
+	 */
+	public CtrlBindAddr(String help, Ip[] listV4, Ip[] listV6) {
 		super(help);
 		this.listV4 = listV4;
 		this.listV6 = listV6;
 	}
 
+	/**
+	 * コントロールのタイプ取得
+	 */
 	@Override
 	public CtrlType getCtrlType() {
 		return CtrlType.BINDADDR;
@@ -120,8 +134,8 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 		} else if (radioButtonList[1].isSelected()) {
 			byndStyle = BindStyle.V6ONLY;
 		}
-		Ip ipV4 = listV4.get(comboBoxList[0].getSelectedIndex());
-		Ip ipV6 = listV6.get(comboBoxList[1].getSelectedIndex());
+		Ip ipV4 = listV4[comboBoxList[0].getSelectedIndex()];
+		Ip ipV6 = listV6[comboBoxList[1].getSelectedIndex()];
 
 		return new BindAddr(byndStyle, ipV4, ipV6);
 	}
@@ -146,15 +160,20 @@ public final class CtrlBindAddr extends OneCtrl implements ActionListener {
 				Util.runtimeException(String.format("bindAddr.getBindStyle()=%s", bindAddr.getBindStyle()));
 		}
 		for (int i = 0; i < 2; i++) {
-			ArrayList<Ip> list = (i == 0) ? listV4 : listV6;
+			Ip[] list = (i == 0) ? listV4 : listV6;
 			Ip ip = (i == 0) ? bindAddr.getIpV4() : bindAddr.getIpV6();
-			int index = list.indexOf(ip);
+			int index = -1;
+			for (int n = 0; n < list.length; n++) {
+				if (list[n].equals(ip)) {
+					index = n;
+					break;
+				}
+			}
 			if (index == -1) {
 				index = 0;
 			}
 			comboBoxList[i].setSelectedIndex(index);
 		}
-
 		setDisable(); //無効なオプションの表示
 
 	}

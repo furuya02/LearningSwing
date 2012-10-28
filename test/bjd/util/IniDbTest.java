@@ -262,7 +262,7 @@ public class IniDbTest {
 					} catch (ValidObjException e) {
 						Assert.fail(e.getMessage());
 					}
-					oneCtrl = new CtrlBindAddr(help, list, list);
+					oneCtrl = new CtrlBindAddr(help, list.toArray(new Ip[]{}), list.toArray(new Ip[]{}));
 					break;
 				case COMBOBOX:
 					//listを{"1","2"}で決め打ち

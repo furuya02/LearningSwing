@@ -105,8 +105,10 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		ListVal list = new ListVal();
 		list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(kernel.getJp() ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
 		list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "クライアントから見たポート" : "Port (from client side)", 5)));
-		ArrayList<Ip> v4 = null;
-		ArrayList<Ip> v6 = null;
+		//ArrayList<Ip> v4 = null;
+		//ArrayList<Ip> v6 = null;
+		Ip[] v4 = null;
+		Ip[] v6 = null;
 		if (kernel.getLocalAddress() != null) {
 			v4 = kernel.getLocalAddress().getV4();
 			v6 = kernel.getLocalAddress().getV6();

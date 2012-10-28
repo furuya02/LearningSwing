@@ -6,17 +6,30 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 
+/**
+ * 数値コントロール
+ * @author SIN
+ *
+ */
 public final class CtrlInt extends OneCtrl implements DocumentListener {
 
 	private int digits;
 	private JLabel label = null;
 	private JTextField textField = null;
 
+	/**
+	 * 
+	 * @param help 表示テキスト
+	 * @param digits 桁数
+	 */
 	public CtrlInt(String help, int digits) {
 		super(help);
 		this.digits = digits;
 	}
 
+	/**
+	 * コントロールのタイプ取得
+	 */
 	@Override
 	public CtrlType getCtrlType() {
 		return CtrlType.INT;
