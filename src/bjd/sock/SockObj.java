@@ -5,16 +5,21 @@ import java.net.InetSocketAddress;
 import bjd.log.LogKind;
 import bjd.log.Logger;
 
-//*******************************************************
-// TcpObj UdpObj の基底クラス
-//*******************************************************
+/**
+ * SockTcp 及び SockUdp の基底クラス
+ * @author SIN
+ *
+ */
 public abstract class SockObj {
 
 	//****************************************************************
 	// LastError関連
 	//****************************************************************
 	private String lastError = "";
-
+	/**
+	 * LastErrorの取得
+	 * @return
+	 */
 	public final String getLastEror() {
 		return lastError;
 	}
@@ -23,14 +28,21 @@ public abstract class SockObj {
 	// SockState関連
 	//****************************************************************
 	private SockState sockState = SockState.IDLE;
-
+	/**
+	 * ステータスの取得
+	 * @return
+	 */
 	public final SockState getSockState() {
 		return sockState;
 	}
 
-	//****************************************************************
-	//ステータスの変化  Connect/bindで使用する
-	//****************************************************************
+	/**
+	 * ステータスの設定<br>
+	 * Connect/bindで使用する
+	 * @param sockState
+	 * @param localAddress
+	 * @param remoteAddress
+	 */
 	protected final void set(SockState sockState, InetSocketAddress localAddress, InetSocketAddress remoteAddress) {
 		this.sockState = sockState;
 		this.localAddress = localAddress;

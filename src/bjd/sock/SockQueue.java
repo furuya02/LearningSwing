@@ -17,18 +17,28 @@ public final class SockQueue {
 		return max;
 	}
 
-	//空いているスペース
+	/**
+	 * 空いているスペース
+	 * @return
+	 */
 	public int getSpace() {
 		return max - db.length;
 	}
 
-	//現在のキューに溜まっているデータ量
+	/**
+	 * 現在のキューに溜まっているデータ量
+	 * @return
+	 */
 	public int length() {
 		return db.length;
 	}
 
-	//キューへの追加
-	//return 追加したバイト数
+	/**
+	 * キューへの追加
+	 * @param buf
+	 * @param len
+	 * @return 追加したバイト数
+	 */
 	public int enqueue(byte[] buf, int len) {
 		if (getSpace() == 0) {
 			return 0;
@@ -48,7 +58,11 @@ public final class SockQueue {
 		}
 	}
 
-	//キューからのデータ取得
+	/**
+	 * キューからのデータ取得
+	 * @param len
+	 * @return
+	 */
 	public byte[] dequeue(int len) {
 		if (db.length == 0 || len == 0 || !modify) {
 			return new byte[0];
@@ -73,7 +87,10 @@ public final class SockQueue {
 		}
 	}
 
-	//キューからの１行取り出し(\r\nを削除しない)
+	/**
+	 * キューからの１行取り出し(\r\nを削除しない)
+	 * @return
+	 */
 	public byte[] dequeueLine() {
 		if (!modify) {
 			return new byte[0];
