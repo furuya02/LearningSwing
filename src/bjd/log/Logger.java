@@ -5,19 +5,59 @@ import java.util.Calendar;
 import bjd.Kernel;
 import bjd.sock.SockObj;
 
+/**
+ * ログ出力用のクラス<br>
+ * ファイルとディスプレイの両方を統括する<br>
+ * テスト用に、Logger.create()でログ出力を処理を一切行わないインスタンスが作成される<br>
+ * @author SIN
+ */
 public final class Logger {
 	private Kernel kernel;
 	private String nameTag;
 	private boolean useDetailsLog;
 	private ILogger logger;
 
-	public Logger(Kernel kernel, String nameTag, boolean useDetailsLog, ILogger logger) {
+	/**
+	 * 非公開のコンストラクタ
+	 * @param kernel
+	 * @param nameTag
+	 * @param useDetailsLog
+	 * @param logger
+	 */
+	private Logger(Kernel kernel, String nameTag, boolean useDetailsLog, ILogger logger) {
 		this.kernel = kernel;
 		this.nameTag = nameTag;
 		this.useDetailsLog = useDetailsLog;
 		this.logger = logger;
 	}
+	
+	/**
+	 * インスタンス作成（デバッグ用）
+	 * @return Logger
+	 */
+	public static Logger create(){
+		return new Logger(null,"nameTag",false,null);
+	}
+	
+	/**
+	 * インスタンス作成
+	 * @param kernel
+	 * @param nameTag
+	 * @param useDetailsLog
+	 * @param logger
+	 * @return
+	 */
+	public static Logger create(Kernel kernel, String nameTag, boolean useDetailsLog, ILogger logger) {
+		return new Logger(kernel, nameTag, useDetailsLog, logger);
+	}
 
+	/**
+	 * ログ出力
+	 * @param logKind
+	 * @param sockBase
+	 * @param messageNo
+	 * @param detailInfomation
+	 */
 	public void set(LogKind logKind, SockObj sockBase, int messageNo, String detailInfomation) {
 		if (logKind == LogKind.DETAIL) {
 			if (!useDetailsLog) {

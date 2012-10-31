@@ -147,7 +147,7 @@ public final class Kernel implements IDispose {
 		traceDlg = new TraceDlg(this, (mainForm != null) ? mainForm.getFrame() : null); //トレース表示
 		dnsCache = new DnsCache();
 		//
-		logger = createLogger("kernel", true, null);
+		logger = Logger.create(this, "kernel", true, null);
 		//
 		//        switch (RunMode){
 		//            case RunMode.Remote:
@@ -213,9 +213,9 @@ public final class Kernel implements IDispose {
 		return null;
 	}
 
-	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
-		return new Logger(this, nameTag, useDetailsLog, logger);
-	}
+	//public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
+	//	return new Logger(this, nameTag, useDetailsLog, logger);
+	//}
 
 	//各管理リストの初期化
 	void initList() {
@@ -238,7 +238,7 @@ public final class Kernel implements IDispose {
 			logFile.dispose();
 		}
 
-		Logger logger = createLogger("Log", true, null);
+		Logger logger = Logger.create(this, "Log", true, null);
 		remoteServer = listServer.get("RemoteServer");
 		Conf conf = new Conf(listOption.get("Log"));
 		boolean useLog = true;

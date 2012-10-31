@@ -57,7 +57,7 @@ public class AclListTest {
 
 			TestUtil.dispPrompt(this); //TESTプロンプト
 
-			Logger logger = new Logger(new Kernel(), "TEST", true, null);
+			Logger logger = Logger.create(); //テスト用のLogger
 
 			Ip ip = null;
 			try {

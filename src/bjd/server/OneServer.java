@@ -98,7 +98,7 @@ public abstract class OneServer extends ThreadBase {
 
 	//コンストラクタ
 	protected OneServer(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
-		super(kernel.createLogger(nameTag, true, null));
+		super(Logger.create(kernel,nameTag, true, null));
 		this.nameTag = nameTag;
 		this.conf = conf;
 		this.oneBind = oneBind;
@@ -124,7 +124,7 @@ public abstract class OneServer extends ThreadBase {
 			this.oneBind = new OneBind(ip, ProtocolKind.Tcp);
 		}
 
-		this.logger = kernel.createLogger(nameTag, (boolean) this.conf.get("useDetailsLog"), this);
+		this.logger = Logger.create(kernel, nameTag, (boolean) this.conf.get("useDetailsLog"), this);
 		multiple = (int) this.conf.get("multiple");
 
 		//ACLリスト

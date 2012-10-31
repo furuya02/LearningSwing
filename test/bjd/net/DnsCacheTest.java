@@ -30,7 +30,7 @@ public class DnsCacheTest {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		String hostName = dnsCache.getHostName(inetAddress, new Logger(null, "", false, null));
+		String hostName = dnsCache.getHostName(inetAddress, Logger.create());
 		TestUtil.dispPrompt(this, String.format("getHostName(%s) = %s", addr, expected));
 		assertThat(hostName, is(expected));
 	}
@@ -97,7 +97,7 @@ public class DnsCacheTest {
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		String hostName = dnsCache.getHostName(inetAddress, new Logger(null, "", false, null));
+		String hostName = dnsCache.getHostName(inetAddress, Logger.create());
 		TestUtil.dispPrompt(this, String.format("hostName=dnsCache.getHostName(%s) hostName=%s", addr, hostName));
 		assertThat(hostName, is(addr));
 
