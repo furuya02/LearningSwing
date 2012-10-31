@@ -24,7 +24,7 @@ public final class DnsCache {
 	/**
 	 * IPアドレスからホスト名を検索する（逆引き）
 	 * @param hostName ホスト名
-	 * @return 取得したIPアドレスの配列 検索に失敗した場合、""が返される
+	 * @return 取得したIPアドレスの配列 検索に失敗した場合、検索した文字列がそのまま返される
 	 */
 	public String getHostName(InetAddress inetAddress, Logger logger) {
 		synchronized (lock) {
