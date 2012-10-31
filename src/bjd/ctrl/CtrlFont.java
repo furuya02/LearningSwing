@@ -9,18 +9,19 @@ import javax.swing.JLabel;
 
 import say.swing.JFontChooser;
 import bjd.Kernel;
+import bjd.Lang;
 import bjd.util.Util;
 
 public final class CtrlFont extends OneCtrl implements ActionListener {
 
-	private Kernel kernel;
+	private boolean isJp;
 	private JLabel label;
 	private JButton button;
 	private Font font = null;
 
-	public CtrlFont(String help, Kernel kernel) {
+	public CtrlFont(String help, boolean isJp) {
 		super(help);
-		this.kernel = kernel;
+		this.isJp = isJp;
 	}
 
 	@Override
@@ -40,7 +41,7 @@ public final class CtrlFont extends OneCtrl implements ActionListener {
 		}
 
 		// ボタンの配置(topの-2は、前のテキストボックスとの高さ調整)
-		String buttonText = kernel.getJp() ? "フォント" : "Font";
+		String buttonText = isJp ? "フォント" : "Font";
 		button = (JButton) create(panel, new JButton(buttonText), left, top - 3);
 		
 		button.addActionListener(this);

@@ -134,7 +134,7 @@ public final class MainForm implements WindowListener {
 		Conf conf = kernel.createConf("Basic");
 		boolean useExitDlg = (boolean) conf.get("useExitDlg");
 		if (useExitDlg) {
-			if (0 != Msg.show(MsgKind.QUESTION, kernel.getJp() ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
+			if (0 != Msg.show(MsgKind.QUESTION, kernel.isJp() ? "プログラムを終了してよろしいですか" : "May I finish a program?")) {
 				return; //キャンセル
 			}
 		}

@@ -28,8 +28,8 @@ import bjd.util.Util;
 public final class Kernel implements IDispose {
 
 	private RunMode runMode;
-	private boolean jp = true;
 	private LocalAddress localAddress;
+	private Lang lang = Lang.JP;
 	private ListOption listOption;
 	private ListServer listServer;
 	private LogView logView;
@@ -70,9 +70,9 @@ public final class Kernel implements IDispose {
 	public ListServer getListServer() {
 		return listServer;
 	}
-
-	public boolean getJp() {
-		return jp;
+	
+	public boolean isJp() {
+		return (lang == Lang.JP) ? true : false;
 	}
 
 	public RunMode getRunMode() {

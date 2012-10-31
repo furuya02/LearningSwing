@@ -24,13 +24,14 @@ public class CtrlDatTest {
 		TestUtil.dispPrompt(this);
 
 		Kernel kernel = new Kernel();
+		boolean isJp = true;
 
 		ListVal list = new ListVal();
 		list.add(new OneVal("combo", 0, Crlf.NEXTLINE, new CtrlComboBox("コンボボックス", new String[] { "DOWN", "PU", "FULL" }, 200)));
 		list.add(new OneVal("fileName2", "c:\\work", Crlf.NEXTLINE, new CtrlFolder("フォルダ", 30, kernel)));
 		list.add(new OneVal("text", "user1", Crlf.NEXTLINE, new CtrlTextBox("テキスト入力", 30)));
 		list.add(new OneVal("hidden", "123", Crlf.NEXTLINE, new CtrlHidden("パスワード", 30)));
-		CtrlDat ctrlDat = new CtrlDat("help", list, 100, kernel);
+		CtrlDat ctrlDat = new CtrlDat("help", list, 100, isJp);
 		ctrlDat.create(null, 0, 0, null);
 
 		ArrayList<String> in = new ArrayList<>();

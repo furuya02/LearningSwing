@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import bjd.Kernel;
+import bjd.Lang;
 import bjd.util.IDispose;
 
 public final class Menu implements ActionListener, IDispose {
@@ -116,7 +117,7 @@ public final class Menu implements ActionListener, IDispose {
 			return null;
 		}
 		
-		JMenuItem menuItem = new JMenuItem(oneMenu.getTitle(kernel.getJp()));
+		JMenuItem menuItem = new JMenuItem(oneMenu.getTitle(kernel.isJp()));
 		menuItem.setActionCommand(oneMenu.getName());
 		menuItem.setMnemonic(oneMenu.getMnemonic());
 		if (oneMenu.getStrAccelerator() != null) {
@@ -125,7 +126,7 @@ public final class Menu implements ActionListener, IDispose {
 			menuItem.setAccelerator(KeyStroke.getKeyStroke(oneMenu.getStrAccelerator()));
         }
 		menuItem.addActionListener(this);
-		menuItem.setName(oneMenu.getTitle(kernel.getJp()));
+		menuItem.setName(oneMenu.getTitle(kernel.isJp()));
 
 		
 		JMenuItem item = owner.add(menuItem);
@@ -136,7 +137,7 @@ public final class Menu implements ActionListener, IDispose {
 	}
 	
 	JMenu addOneMenu(OneMenu oneMenu) {
-		JMenu menu = new JMenu(oneMenu.getTitle(kernel.getJp()));
+		JMenu menu = new JMenu(oneMenu.getTitle(kernel.isJp()));
 		menu.setMnemonic(oneMenu.getMnemonic());
 		menuBar.add(menu);
 		return menu;

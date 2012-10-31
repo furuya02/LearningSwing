@@ -12,6 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import bjd.Kernel;
+import bjd.Lang;
 import bjd.RunMode;
 import bjd.option.Conf;
 
@@ -52,7 +53,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		left += textField.getWidth() + margin; // オフセット移動
 
 		// ボタンの配置(topの-2は、前のテキストボックスとの高さ調整)
-		String buttonText = kernel.getJp() ? "参照" : "Browse";
+		String buttonText = kernel.isJp() ? "参照" : "Browse";
 		button = (JButton) create(panel, new JButton(buttonText), left, top - 3);
 
 		final CtrlType ctrlType = this.getCtrlType();

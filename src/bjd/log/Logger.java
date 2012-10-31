@@ -3,6 +3,7 @@ package bjd.log;
 import java.util.Calendar;
 
 import bjd.Kernel;
+import bjd.Lang;
 import bjd.sock.SockObj;
 
 /**
@@ -30,15 +31,15 @@ public final class Logger {
 		this.useDetailsLog = useDetailsLog;
 		this.logger = logger;
 	}
-	
+
 	/**
 	 * インスタンス作成（デバッグ用）
 	 * @return Logger
 	 */
-	public static Logger create(){
-		return new Logger(null,"nameTag",false,null);
+	public static Logger create() {
+		return new Logger(null, "nameTag", false, null);
 	}
-	
+
 	/**
 	 * インスタンス作成
 	 * @param kernel
@@ -70,17 +71,17 @@ public final class Logger {
 		}
 
 		long threadId = Thread.currentThread().getId(); //TODO DEBUG GetCurrentThreadId();
-		String message = kernel.getJp() ? "定義されていません" : "Message is not defined";
+		String message = kernel.isJp() ? "定義されていません" : "Message is not defined";
 		if (messageNo < 9000000) {
 			if (logger != null) {
 				message = logger.getMsg(messageNo); //デリゲートを使用した継承によるメッセージ取得
 			} else { //(9000000以上)共通番号の場合の処理
 				switch (messageNo) {
 					case 9000000:
-						message = kernel.getJp() ? "サーバ開始" : "Server started it";
+						message = kernel.isJp() ? "サーバ開始" : "Server started it";
 						break;
 					case 9000001:
-						message = kernel.getJp() ? "サーバ停止" : "Server stopped";
+						message = kernel.isJp() ? "サーバ停止" : "Server stopped";
 						break;
 					case 9000002:
 						message = "_subThread() started.";
@@ -89,27 +90,25 @@ public final class Logger {
 						message = "_subThread() stopped.";
 						break;
 					case 9000004:
-						message = kernel.getJp() ? "同時接続数を超えたのでリクエストをキャンセルします"
-								: "Because the number of connection exceeded it at the same time, the request was canceled.";
+						message = kernel.isJp() ? "同時接続数を超えたのでリクエストをキャンセルします" : "Because the number of connection exceeded it at the same time, the request was canceled.";
 						break;
 					case 9000005:
-						message = kernel.getJp() ? "受信文字列が長すぎます（不正なリクエストの可能性があるため切断しました)"
-								: "Reception character string is too long (cut off so that there was possibility of an unjust request in it)";
+						message = kernel.isJp() ? "受信文字列が長すぎます（不正なリクエストの可能性があるため切断しました)" : "Reception character string is too long (cut off so that there was possibility of an unjust request in it)";
 						break;
 					case 9000006:
-						message = kernel.getJp() ? "Socket.Bind()でエラーが発生しました。[UDP]" : "An error occurred in Socket.Bind() [UDP]";
+						message = kernel.isJp() ? "Socket.Bind()でエラーが発生しました。[UDP]" : "An error occurred in Socket.Bind() [UDP]";
 						break;
 					case 9000007:
-						message = kernel.getJp() ? "callBack関数が指定されていません[UDP]" : "It is not appointed in callback function [UDP]";
+						message = kernel.isJp() ? "callBack関数が指定されていません[UDP]" : "It is not appointed in callback function [UDP]";
 						break;
 					case 9000008:
-						message = kernel.getJp() ? "BeginReceiveFrom()でエラーが発生しました[UDP]" : "An error occurred in BeginReceiveFrom() [UDP]";
+						message = kernel.isJp() ? "BeginReceiveFrom()でエラーが発生しました[UDP]" : "An error occurred in BeginReceiveFrom() [UDP]";
 						break;
 					case 9000009:
-						message = kernel.getJp() ? "Socket.Bind()でエラーが発生しました。[TCP]" : "An error occurred in Socket.Bind() [TCP]";
+						message = kernel.isJp() ? "Socket.Bind()でエラーが発生しました。[TCP]" : "An error occurred in Socket.Bind() [TCP]";
 						break;
 					case 9000010:
-						message = kernel.getJp() ? "Socket.Listen()でエラーが発生しました。[TCP]" : "An error occurred in Socket..Listen() [TCP]";
+						message = kernel.isJp() ? "Socket.Listen()でエラーが発生しました。[TCP]" : "An error occurred in Socket..Listen() [TCP]";
 						break;
 					case 9000011:
 						message = "tcpQueue().Dequeue()=null";
@@ -127,137 +126,136 @@ public final class Logger {
 						message = "SendBinaryFile(string fileName,long rangeFrom,long rangeTo) socket.Send()";
 						break;
 					case 9000016:
-						message = kernel.getJp() ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
+						message = kernel.isJp() ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
 						break;
 					case 9000017:
-						message = kernel.getJp() ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
+						message = kernel.isJp() ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
 						break;
 					case 9000018:
-						message = kernel.getJp() ? "この利用者のアクセスは許可されていません(ACL)" : "Access of this user is not admitted (ACL)";
+						message = kernel.isJp() ? "この利用者のアクセスは許可されていません(ACL)" : "Access of this user is not admitted (ACL)";
 						break;
 					case 9000019:
-						message = kernel.getJp() ? "アイドルタイムアウト" : "Timeout of an idle";
+						message = kernel.isJp() ? "アイドルタイムアウト" : "Timeout of an idle";
 						break;
 					case 9000020:
-						message = kernel.getJp() ? "送信に失敗しました" : "Transmission of a message failure";
+						message = kernel.isJp() ? "送信に失敗しました" : "Transmission of a message failure";
 						break;
 					case 9000021:
-						message = kernel.getJp() ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
+						message = kernel.isJp() ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
 						break;
-					case 9000022: 
-						message = kernel.getJp() ? "ウインドウ情報保存ファイルにIOエラーが発生しました" : "An IO error occurred in a window information save file";
+					case 9000022:
+						message = kernel.isJp() ? "ウインドウ情報保存ファイルにIOエラーが発生しました" : "An IO error occurred in a window information save file";
 						break;
 					case 9000023:
-						message = kernel.getJp() ? "証明書の読み込みに失敗しました" : "Reading of a certificate made a blunder";
+						message = kernel.isJp() ? "証明書の読み込みに失敗しました" : "Reading of a certificate made a blunder";
 						break;
-					//case 9000024: message = kernel.getJp() ? "SSLネゴシエーションに失敗しました" : "SSL connection procedure makes a blunder"; break;
-					//case 9000025: message = kernel.getJp() ? "ファイル（秘密鍵）が見つかりません" : "Private key is not found"; break;
+					//case 9000024: message = kernel.isJp() ? "SSLネゴシエーションに失敗しました" : "SSL connection procedure makes a blunder"; break;
+					//case 9000025: message = kernel.isJp() ? "ファイル（秘密鍵）が見つかりません" : "Private key is not found"; break;
 					case 9000026:
-						message = kernel.getJp() ? "ファイル（証明書）が見つかりません" : "A certificate is not found";
+						message = kernel.isJp() ? "ファイル（証明書）が見つかりません" : "A certificate is not found";
 						break;
-					//case 9000027: message = kernel.getJp() ? "OpenSSLのライブラリ(ssleay32.dll,libeay32.dll)が見つかりません" : "OpenSSL library (ssleay32.dll,libeay32.dll) is not found"; break;
+					//case 9000027: message = kernel.isJp() ? "OpenSSLのライブラリ(ssleay32.dll,libeay32.dll)が見つかりません" : "OpenSSL library (ssleay32.dll,libeay32.dll) is not found"; break;
 					case 9000028:
-						message = kernel.getJp() ? "SSLの初期化に失敗しています" : "Initialization of SSL made a blunder";
+						message = kernel.isJp() ? "SSLの初期化に失敗しています" : "Initialization of SSL made a blunder";
 						break;
 					case 9000029:
-						message = kernel.getJp() ? "指定された作業ディレクトリが存在しません" : "A work directory is not found";
+						message = kernel.isJp() ? "指定された作業ディレクトリが存在しません" : "A work directory is not found";
 						break;
 					case 9000030:
-						message = kernel.getJp() ? "起動するサーバが見つかりません" : "A starting server is not found";
+						message = kernel.isJp() ? "起動するサーバが見つかりません" : "A starting server is not found";
 						break;
 					case 9000031:
-						message = kernel.getJp() ? "「ログの保存場所」が見つかりません" : "Log Save place(directory) is not found";
+						message = kernel.isJp() ? "「ログの保存場所」が見つかりません" : "Log Save place(directory) is not found";
 						break;
 					case 9000032:
-						message = kernel.getJp() ? "ログ削除" : "Delete LogFile";
+						message = kernel.isJp() ? "ログ削除" : "Delete LogFile";
 						break;
 					case 9000033:
-						message = kernel.getJp() ? "ファイル保存時にエラーが発生しました" : "An error occurred in a File save";
+						message = kernel.isJp() ? "ファイル保存時にエラーが発生しました" : "An error occurred in a File save";
 						break;
 					case 9000034:
-						message = kernel.getJp() ? "ACL指定に問題があります" : "ACL configuration failure";
+						message = kernel.isJp() ? "ACL指定に問題があります" : "ACL configuration failure";
 						break;
 					case 9000035:
-						message = kernel.getJp() ? "Socket()でエラーが発生しました。[TCP]" : "An error occurred in Socket() [TCP]";
+						message = kernel.isJp() ? "Socket()でエラーが発生しました。[TCP]" : "An error occurred in Socket() [TCP]";
 						break;
 					case 9000036:
-						message = kernel.getJp() ? "Socket()でエラーが発生しました。[UDP]" : "An error occurred in Socket() [UDP]";
+						message = kernel.isJp() ? "Socket()でエラーが発生しました。[UDP]" : "An error occurred in Socket() [UDP]";
 						break;
 					case 9000037:
-						message = kernel.getJp() ? "_subThread()で例外が発生しました" : "An exception occurred in _subThread()";
+						message = kernel.isJp() ? "_subThread()で例外が発生しました" : "An exception occurred in _subThread()";
 						break;
 					case 9000038:
-						message = kernel.getJp() ? "【例外】" : "[Exception]";
+						message = kernel.isJp() ? "【例外】" : "[Exception]";
 						break;
 					case 9000039:
-						message = kernel.getJp() ? "【STDOUT】" : "[STDOUT]";
+						message = kernel.isJp() ? "【STDOUT】" : "[STDOUT]";
 						break;
 					case 9000040:
-						message = kernel.getJp() ? "拡張SMTP適用範囲の指定に問題があります" : "ESMTP range configuration failure";
+						message = kernel.isJp() ? "拡張SMTP適用範囲の指定に問題があります" : "ESMTP range configuration failure";
 						break;
 					case 9000041:
-						message = kernel.getJp() ? "disp2()で例外が発生しました" : "An exception occurred in disp2()";
+						message = kernel.isJp() ? "disp2()で例外が発生しました" : "An exception occurred in disp2()";
 						break;
 					case 9000042:
-						message = kernel.getJp() ? "初期化に失敗しているためサーバを開始できません" : "Can't start a server in order to fail in initialization";
+						message = kernel.isJp() ? "初期化に失敗しているためサーバを開始できません" : "Can't start a server in order to fail in initialization";
 						break;
 					case 9000043:
-						message = kernel.getJp() ? "クライアント側が切断されました" : "The client side was cut off";
+						message = kernel.isJp() ? "クライアント側が切断されました" : "The client side was cut off";
 						break;
 					case 9000044:
-						message = kernel.getJp() ? "サーバ側が切断されました" : "The server side was cut off";
+						message = kernel.isJp() ? "サーバ側が切断されました" : "The server side was cut off";
 						break;
 					case 9000045:
-						message = kernel.getJp() ? "ログ削除処理で日付変換に例外が発生しました" : "An exception occurred in date conversion by log elimination processing";
+						message = kernel.isJp() ? "ログ削除処理で日付変換に例外が発生しました" : "An exception occurred in date conversion by log elimination processing";
 						break;
 					case 9000046:
-						message = kernel.getJp() ? "socket.send()でエラーが発生しました" : "socket.send()";
+						message = kernel.isJp() ? "socket.send()でエラーが発生しました" : "socket.send()";
 						break;
 					case 9000047:
-						message = kernel.getJp() ? "ユーザ名が無効です" : "A user name is null and void";
+						message = kernel.isJp() ? "ユーザ名が無効です" : "A user name is null and void";
 						break;
 					case 9000048:
-						message = kernel.getJp() ? "ThreadBase::Loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
+						message = kernel.isJp() ? "ThreadBase::Loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
 						break;
 					case 9000049:
-						message = kernel.getJp() ? "【例外】" : "[Exception]";
+						message = kernel.isJp() ? "【例外】" : "[Exception]";
 						break;
 					case 9000050:
-						message = kernel.getJp() ? "ファイルにアクセスできませんでした" : "Can't open a file";
+						message = kernel.isJp() ? "ファイルにアクセスできませんでした" : "Can't open a file";
 						break;
 					case 9000051:
-						message = kernel.getJp() ? "インスタンスの生成に失敗しました" : "Can't create instance";
+						message = kernel.isJp() ? "インスタンスの生成に失敗しました" : "Can't create instance";
 						break;
 					case 9000052:
-						message = kernel.getJp() ? "名前解決に失敗しました" : "Non-existent domain";
+						message = kernel.isJp() ? "名前解決に失敗しました" : "Non-existent domain";
 						break;
 					case 9000053:
-						message = kernel.getJp() ? "【例外】SockObj.Resolve()" : "[Exception] SockObj.Resolve()";
+						message = kernel.isJp() ? "【例外】SockObj.Resolve()" : "[Exception] SockObj.Resolve()";
 						break;
 					case 9000054:
-						message = kernel.getJp() ? "Apache Killerによる攻撃の可能性があります" : "There is possibility of attack by Apache Killer in it";
+						message = kernel.isJp() ? "Apache Killerによる攻撃の可能性があります" : "There is possibility of attack by Apache Killer in it";
 						break;
 					case 9000055:
-						message = kernel.getJp() ? "【自動拒否】「ACL」の禁止する利用者（アドレス）に追加しました" : "Add it to a deny list automatically";
+						message = kernel.isJp() ? "【自動拒否】「ACL」の禁止する利用者（アドレス）に追加しました" : "Add it to a deny list automatically";
 						break;
 					case 9000056:
-						message = kernel.getJp() ? "不正アクセスを検出しましたが、ACL「拒否」リストは追加されませんでした"
-								: "I detected possibility of Attack, but the ACL [Deny] list was not added";
+						message = kernel.isJp() ? "不正アクセスを検出しましたが、ACL「拒否」リストは追加されませんでした" : "I detected possibility of Attack, but the ACL [Deny] list was not added";
 						break;
 					case 9000057:
-						message = kernel.getJp() ? "【例外】" : "[Exception]";
+						message = kernel.isJp() ? "【例外】" : "[Exception]";
 						break;
 					case 9000058:
-						message = kernel.getJp() ? "メールの送信に失敗しました" : "Failed in the transmission of a message of an email";
+						message = kernel.isJp() ? "メールの送信に失敗しました" : "Failed in the transmission of a message of an email";
 						break;
 					case 9000059:
-						message = kernel.getJp() ? "メールの保存に失敗しました" : "Failed in a save of an email";
+						message = kernel.isJp() ? "メールの保存に失敗しました" : "Failed in a save of an email";
 						break;
 					case 9000060:
-						message = kernel.getJp() ? "【例外】" : "[Exception]";
+						message = kernel.isJp() ? "【例外】" : "[Exception]";
 						break;
 					case 9000061:
-						message = kernel.getJp() ? "ファイルの作成に失敗しました" : "Failed in making of a file";
+						message = kernel.isJp() ? "ファイルの作成に失敗しました" : "Failed in making of a file";
 						break;
 					default:
 						break;

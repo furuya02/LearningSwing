@@ -369,7 +369,7 @@ public class OneValTest {
 					if (val == null) {
 						val = new Font("Default", Font.PLAIN, 9);
 					}
-					oneCtrl = new CtrlFont(help, kernel);
+					oneCtrl = new CtrlFont(help, true);
 					break;
 				case MEMO:
 					if (val == null) {
@@ -421,7 +421,7 @@ public class OneValTest {
 						val = (Dat) new Dat(new CtrlType[] { CtrlType.CHECKBOX, CtrlType.CHECKBOX });
 					}
 
-					oneCtrl = new CtrlDat(help, listVal, 300, kernel);
+					oneCtrl = new CtrlDat(help, listVal, 300, true);
 					break;
 				default:
 					// not implement.

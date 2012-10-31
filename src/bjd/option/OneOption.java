@@ -65,12 +65,12 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 
 	protected final OnePage pageAcl() {
 		OnePage onePage = new OnePage("ACL", "ACL");
-		onePage.add(new OneVal("enableAcl", 0, Crlf.NEXTLINE, new CtrlRadio(kernel.getJp() ? "指定したアドレスからのアクセスのみを" : "Access of ths user who appoint it", new String[] { kernel.getJp() ? "許可する" : "Allow", kernel.getJp() ? "禁止する" : "Deny" }, 550, 2)));
+		onePage.add(new OneVal("enableAcl", 0, Crlf.NEXTLINE, new CtrlRadio(kernel.isJp() ? "指定したアドレスからのアクセスのみを" : "Access of ths user who appoint it", new String[] { kernel.isJp() ? "許可する" : "Allow", kernel.isJp() ? "禁止する" : "Deny" }, 550, 2)));
 
 		ListVal list = new ListVal();
-		list.add(new OneVal("aclName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "名前（表示名）" : "Name(Display)", 20)));
-		list.add(new OneVal("aclAddress", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "アドレス" : "Address", 20)));
-		onePage.add(new OneVal("acl", null, Crlf.NEXTLINE, new CtrlDat(kernel.getJp() ? "利用者（アドレス）の指定" : "Access Control List", list, 320, kernel)));
+		list.add(new OneVal("aclName", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.isJp() ? "名前（表示名）" : "Name(Display)", 20)));
+		list.add(new OneVal("aclAddress", "", Crlf.NEXTLINE, new CtrlTextBox(kernel.isJp() ? "アドレス" : "Address", 20)));
+		onePage.add(new OneVal("acl", null, Crlf.NEXTLINE, new CtrlDat(kernel.isJp() ? "利用者（アドレス）の指定" : "Access Control List", list, 320, kernel.isJp())));
 		return onePage;
 	}
 
@@ -103,8 +103,8 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	//OneValとしてサーバ基本設定を作成する
 	protected final OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
 		ListVal list = new ListVal();
-		list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(kernel.getJp() ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
-		list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "クライアントから見たポート" : "Port (from client side)", 5)));
+		list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(kernel.isJp() ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
+		list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(kernel.isJp() ? "クライアントから見たポート" : "Port (from client side)", 5)));
 		//ArrayList<Ip> v4 = null;
 		//ArrayList<Ip> v6 = null;
 		Ip[] v4 = null;
@@ -113,12 +113,12 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 			v4 = kernel.getLocalAddress().getV4();
 			v6 = kernel.getLocalAddress().getV6();
 		}
-		list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.NEXTLINE, new CtrlBindAddr(kernel.getJp() ? "待ち受けるネットワーク" : "Bind Address", v4, v6)));
-		list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((kernel.getJp() ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address"))));
-		list.add(new OneVal("useDetailsLog", true, Crlf.CONTONIE, new CtrlCheckBox(kernel.getJp() ? "詳細ログを出力する" : "Use Details Log")));
-		list.add(new OneVal("multiple", multiple, Crlf.CONTONIE, new CtrlInt(kernel.getJp() ? "同時接続数" : "A repetition thread", 5)));
-		list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(kernel.getJp() ? "タイムアウト(秒)" : "Timeout", 6)));
-		return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(kernel.getJp() ? "サーバ基本設定" : "Server Basic Option", list));
+		list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.NEXTLINE, new CtrlBindAddr(kernel.isJp() ? "待ち受けるネットワーク" : "Bind Address", v4, v6)));
+		list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((kernel.isJp() ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address"))));
+		list.add(new OneVal("useDetailsLog", true, Crlf.CONTONIE, new CtrlCheckBox(kernel.isJp() ? "詳細ログを出力する" : "Use Details Log")));
+		list.add(new OneVal("multiple", multiple, Crlf.CONTONIE, new CtrlInt(kernel.isJp() ? "同時接続数" : "A repetition thread", 5)));
+		list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(kernel.isJp() ? "タイムアウト(秒)" : "Timeout", 6)));
+		return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(kernel.isJp() ? "サーバ基本設定" : "Server Basic Option", list));
 	}
 
 	//値の設定

@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bjd.Kernel;
+import bjd.Lang;
 import bjd.option.Dat;
 import bjd.option.ListVal;
 import bjd.option.OneDat;
@@ -30,8 +31,8 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	private ListVal listVal;
 
 	private int height;
-	private Kernel kernel;
-
+	//private Kernel kernel;
+	private boolean isJp;
 	private static final int ADD = 0;
 	private static final int EDIT = 1;
 	private static final int DEL = 2;
@@ -50,11 +51,11 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		return ctrlTypeList;
 	}
 
-	public CtrlDat(String help, ListVal listVal, int height, Kernel kernel) {
+	public CtrlDat(String help, ListVal listVal, int height, boolean isJp) {
 		super(help);
 		this.listVal = listVal;
 		this.height = height;
-		this.kernel = kernel;
+		this.isJp = isJp;
 	}
 
 	//OnePage(CtrlTabPage.pageList) CtrlGroup CtrlDatにのみ存在する
@@ -93,7 +94,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 		buttonList = new JButton[tagList.length];
 
 		for (int i = 0; i < tagList.length; i++) {
-			String btnText = kernel.getJp() ? strList[i] : tagList[i];
+			String btnText = isJp ? strList[i] : tagList[i];
 			buttonList[i] = (JButton) create(border, new JButton(btnText), left + (i * 86), top);
 			buttonList[i].setActionCommand(tagList[i]);
 			buttonList[i].addActionListener(this);
@@ -172,7 +173,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 			}
 			//同一のデータがあるかどうかを確認する
 			if (checkListBox.indexOf(s) != -1) {
-				Msg.show(MsgKind.ERROR, kernel.getJp() ? "既に同一内容のデータが存在します。" : "There is already the same data");
+				Msg.show(MsgKind.ERROR, isJp ? "既に同一内容のデータが存在します。" : "There is already the same data");
 				return;
 			}
 			//チェックリストボックスへの追加
@@ -186,12 +187,12 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 				return;
 			}
 			if (checkListBox.getItemText(selectedIndex).equals(str)) {
-				Msg.show(MsgKind.ERROR, kernel.getJp() ? "変更内容はありません" : "There is not a change");
+				Msg.show(MsgKind.ERROR, isJp ? "変更内容はありません" : "There is not a change");
 				return;
 			}
 			//同一のデータがあるかどうかを確認する
 			if (checkListBox.indexOf(str) != -1) {
-				Msg.show(MsgKind.ERROR, kernel.getJp() ? "既に同一内容のデータが存在します" : "There is already the same data");
+				Msg.show(MsgKind.ERROR, isJp ? "既に同一内容のデータが存在します" : "There is already the same data");
 				return;
 			}
 			checkListBox.setItemText(selectedIndex, str);
@@ -218,7 +219,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 			if (file != null) {
 				boolean isExecute = true;
 				if (file.exists()) {
-					if (0 != Msg.show(MsgKind.QUESTION, kernel.getJp() ? "上書きして宜しいですか?" : "May I overwrite?")) {
+					if (0 != Msg.show(MsgKind.QUESTION, isJp ? "上書きして宜しいですか?" : "May I overwrite?")) {
 						isExecute = false; //キャンセル
 					}
 				}
@@ -229,7 +230,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 				}
 			}
 		} else if (cmd.equals(tagList[CLEAR])) {
-			int n = Msg.show(MsgKind.QUESTION, kernel.getJp() ? "すべてのデータを削除してよろしいですか" : "May I eliminate all data?");
+			int n = Msg.show(MsgKind.QUESTION, isJp ? "すべてのデータを削除してよろしいですか" : "May I eliminate all data?");
 			if (n == 0) {
 				checkListBox.removeAll();
 			}
@@ -243,7 +244,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 	private void textToControl(String str) {
 		String[] tmp = str.split("\t");
 		if (listVal.size() != tmp.length) {
-			Msg.show(MsgKind.ERROR, (kernel.getJp()) ? "項目数が一致しません" : "The number of column does not agree");
+			Msg.show(MsgKind.ERROR, (isJp) ? "項目数が一致しません" : "The number of column does not agree");
 			return;
 		}
 		int i = 0;
@@ -301,7 +302,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 			//カラム数の確認
 			String[] tmp = str.split("\t");
 			if (listVal.size() != tmp.length) {
-				Msg.show(MsgKind.ERROR, String.format("%s [ %s ] ", kernel.getJp() ? "カラム数が一致しません。この行はインポートできません。"
+				Msg.show(MsgKind.ERROR, String.format("%s [ %s ] ", isJp ? "カラム数が一致しません。この行はインポートできません。"
 						: "The number of column does not agree and cannot import this line.", str));
 				continue;
 			}
@@ -319,7 +320,7 @@ public final class CtrlDat extends OneCtrl implements ActionListener, ICtrlEvent
 			}
 			//同一のデータがあるかどうかを確認する
 			if (checkListBox.indexOf(str) != -1) {
-				Msg.show(MsgKind.ERROR, String.format("%s [ %s ] ", kernel.getJp() ? "データ重複があります。この行はインポートできません。"
+				Msg.show(MsgKind.ERROR, String.format("%s [ %s ] ", isJp ? "データ重複があります。この行はインポートできません。"
 						: "There is data repetition and cannot import this line.", str));
 				continue;
 			}
