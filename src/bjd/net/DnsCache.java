@@ -46,9 +46,8 @@ public final class DnsCache {
 
 			//DNSに問い合わせる
 			String hostName = inetAddress.getHostName();
-			if (hostName.equals("")) {
+			if (hostName.equals(ipStr)) {
 				logger.set(LogKind.NORMAL, null, 9000052, String.format("IP=%s", ipStr));
-				return "";
 			}
 			
 			//データベースへの追加
@@ -64,6 +63,12 @@ public final class DnsCache {
 		}
 	}
 	
+	/*
+	 * キャッシュの件数取得(デバッグ用)
+	 */
+	public int size(){
+		return ar.size();
+	}
 	//キャッシュの容量制限
 	private void removeOldCache() {
 		if (ar.size() > 200) {

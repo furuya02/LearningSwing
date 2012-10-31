@@ -24,6 +24,10 @@ public final class Logger {
 				return;
 			}
 		}
+		//デバッグ等でkernelが初期化されていないとき、処理しない
+		if (kernel == null) {
+			return;
+		}
 
 		long threadId = Thread.currentThread().getId(); //TODO DEBUG GetCurrentThreadId();
 		String message = kernel.getJp() ? "定義されていません" : "Message is not defined";
