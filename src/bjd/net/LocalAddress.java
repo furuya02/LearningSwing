@@ -44,11 +44,22 @@ public final class LocalAddress extends ValidObj {
 	}
 
 	/**
-	 * コンストラクタ
+	 * インスタンスは、プログラムで１つだけ生成される
+	 */
+	private static LocalAddress localAddress = null;
+	public static LocalAddress create() {
+		if (localAddress == null) {
+			localAddress = new LocalAddress();
+		}
+		return localAddress;
+	}
+
+	/**
+	 * (隠蔽)コンストラクタ
 	 * 
 	 * インターフェース状態を読み込んでリストを初期化する
 	 */
-	public LocalAddress() {
+	private LocalAddress() {
 		init(); //初期化
 		try {
 			v4.add(new Ip("INADDR_ANY"));

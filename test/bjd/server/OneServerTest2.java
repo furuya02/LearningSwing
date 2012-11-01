@@ -93,8 +93,7 @@ public class OneServerTest2 {
 			Assert.fail(ex.getMessage());
 		}
 		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
-		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
-		Conf conf = new Conf(optionSample);
+		Conf conf = TestUtil.createConf("OptionSample");
 		conf.set("port", port);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));
@@ -156,8 +155,7 @@ public class OneServerTest2 {
 			Assert.fail(ex.getMessage());
 		}
 		OneBind oneBind = new OneBind(ip, ProtocolKind.Udp);
-		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
-		Conf conf = new Conf(optionSample);
+		Conf conf = TestUtil.createConf("OptionSample");
 		conf.set("port", port);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));

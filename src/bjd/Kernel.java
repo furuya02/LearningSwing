@@ -23,12 +23,13 @@ import bjd.option.OneOption;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
 import bjd.util.IDispose;
+import bjd.util.IniDb;
 import bjd.util.Util;
 
 public final class Kernel implements IDispose {
 
 	private RunMode runMode;
-	private LocalAddress localAddress;
+	//private LocalAddress localAddress;
 	private Lang lang = Lang.JP;
 	private ListOption listOption;
 	private ListServer listServer;
@@ -42,6 +43,7 @@ public final class Kernel implements IDispose {
 	private OneServer remoteServer = null;
 	private TraceDlg traceDlg;
 	private DnsCache dnsCache;
+	private IniDb optionIni = null;
 
 	public View getView() {
 		return view;
@@ -59,9 +61,9 @@ public final class Kernel implements IDispose {
 		return logFile;
 	}
 
-	public LocalAddress getLocalAddress() {
-		return localAddress;
-	}
+//	public LocalAddress getLocalAddress() {
+//		return localAddress;
+//	}
 
 	public ListOption getListOption() {
 		return listOption;
@@ -101,6 +103,8 @@ public final class Kernel implements IDispose {
 		remoteServer = null; //クライアントへ接続中のみオブジェクトが存在する
 		//        RemoteClient = null;//リモートクライアント
 		//
+		
+		optionIni = new IniDb(getProgDir(), "Option");
 		//動作モードの初期化
 		runMode = RunMode.Normal; //通常起動
 		//		if (mainForm == null) {
@@ -139,7 +143,7 @@ public final class Kernel implements IDispose {
 		//        //リモートクライアントでは、以下のオブジェクトは接続されてから初期化される
 		//        if (RunMode != RunMode.Remote) {
 		//            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
-		localAddress = new LocalAddress();
+		//localAddress = new LocalAddress();
 		initList(); //各管理クラスの初期化
 		menu.initialize(); //メニュー構築（内部テーブルの初期化）
 		//            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
@@ -266,6 +270,10 @@ public final class Kernel implements IDispose {
 		return getProgName();
 		//File file = new File(getProgName());
 		//return file.getParent();
+	}
+
+	public IniDb getOptionIni() {
+		return optionIni;
 	}
 
 	//プログラム本体のパス取得

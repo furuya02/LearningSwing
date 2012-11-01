@@ -185,11 +185,11 @@ public final class IniDb {
 							oneVal = listVal.search(o.getName());
 							oneVal.fromReg(o.getValStr());
 						} catch (Exception e) {
-							//TODO エラー処理未実装
+							Util.runtimeException("");
 						}
 					}
 				} catch (Exception e1) {
-					//TODO エラー処理未実装
+					Util.runtimeException("");
 				}
 			}
 		}

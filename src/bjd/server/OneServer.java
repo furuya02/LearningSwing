@@ -25,6 +25,7 @@ import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.sock.SockTcp;
 import bjd.sock.SockUdp;
+import bjd.util.IniDb;
 import bjd.util.Util;
 
 //各サーバオブジェクトの基底クラス
@@ -98,13 +99,13 @@ public abstract class OneServer extends ThreadBase {
 
 	//コンストラクタ
 	protected OneServer(Kernel kernel, String nameTag, Conf conf, OneBind oneBind) {
-		super(Logger.create(kernel,nameTag, true, null));
+		super(Logger.create(kernel, nameTag, true, null));
 		this.nameTag = nameTag;
 		this.conf = conf;
 		this.oneBind = oneBind;
 		//DEBUG用
 		if (this.conf == null) {
-			OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
+			OptionSample optionSample = new OptionSample(kernel, "");
 			this.conf = new Conf(optionSample);
 			this.conf.set("port", 9990);
 			this.conf.set("multiple", 10);

@@ -7,6 +7,7 @@ import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 import bjd.net.ProtocolKind;
+import bjd.util.IniDb;
 
 public final class OptionSample extends OneOption {
 	@Override
@@ -24,12 +25,11 @@ public final class OptionSample extends OneOption {
 		return 'O';
 	}
 
-	public OptionSample(Kernel kernel, String path, String nameTag) {
-		super(kernel, path, nameTag);
-
+	public OptionSample(Kernel kernel, String path) {
+		super(kernel.isJp(), path, "Sample", kernel.getOptionIni());
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
-		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
+		pageList.add(page1("Basic", isJp() ? "基本設定" : "Basic"));
 		pageList.add(pageAcl());
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 

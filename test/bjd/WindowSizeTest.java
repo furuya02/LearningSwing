@@ -15,6 +15,7 @@ import org.junit.Test;
 import bjd.ctrl.ListView;
 import bjd.option.Conf;
 import bjd.option.OptionBasic;
+import bjd.util.IniDb;
 import bjd.util.TestUtil;
 
 public final class WindowSizeTest {
@@ -22,7 +23,7 @@ public final class WindowSizeTest {
 	//共通処理
 	private WindowSize create(File file) {
 		WindowSize windowSize = null;
-		Conf conf = new Conf(new OptionBasic(new Kernel(), "", "Basic"));
+		Conf conf = TestUtil.createConf("OptionBasic");
 		conf.set("useLastSize", true);
 		try {
 			windowSize = new WindowSize(conf, file.getPath());

@@ -18,6 +18,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import bjd.Kernel;
+import bjd.RunMode;
 import bjd.ValidObjException;
 import bjd.ctrl.CtrlAddress;
 import bjd.ctrl.CtrlBindAddr;
@@ -63,8 +64,8 @@ public class IniDbTest {
 			new Fixture(CtrlType.HIDDEN, "123", "HIDE_STRING=Basic\bname=2d7ee3636680c1f6"),
 			new Fixture(CtrlType.MEMO, "123", "MEMO=Basic\bname=123"), 
 			new Fixture(CtrlType.RADIO, 1, "RADIO=Basic\bname=1"),
-			//new Fixture(CtrlType.ADDRESSV4,	new Ip("192.168.0.1"), "ADDRESS_V4=Basic\bname=192.168.0.1"),
 			new Fixture(CtrlType.ADDRESSV4,	new Ip(InetKind.V4), "ADDRESS_V4=Basic\bname=0.0.0.0"),
+			//new Fixture(CtrlType.ADDRESSV4,	new Ip("192.168.0.1"), "ADDRESS_V4=Basic\bname=192.168.0.1"),
 		};
 
 		static class Fixture {
@@ -195,6 +196,7 @@ public class IniDbTest {
 			Kernel kernel = new Kernel();
 			final String help = "help";
 			OneCtrl oneCtrl = null;
+			boolean editBrowse = false;
 			switch (ctrlType) {
 				case CHECKBOX:
 					if (val == null) {
@@ -212,13 +214,13 @@ public class IniDbTest {
 					if (val == null) {
 						val = "1.txt";
 					}
-					oneCtrl = new CtrlFile(help, 200, kernel);
+					oneCtrl = new CtrlFile(kernel.isJp(), help, 200, kernel.getRunMode(), editBrowse);
 					break;
 				case FOLDER:
 					if (val == null) {
 						val = "c:\temp";
 					}
-					oneCtrl = new CtrlFolder(help, 200, kernel);
+					oneCtrl = new CtrlFolder(kernel.isJp(), help, 200, kernel.getRunMode(), editBrowse);
 					break;
 				case TEXTBOX:
 					if (val == null) {

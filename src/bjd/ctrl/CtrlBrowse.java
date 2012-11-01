@@ -23,12 +23,16 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 	private JTextField textField = null;
 	private JButton button = null;
 	private int digits;
-	private Kernel kernel;
+	private RunMode runMode;
+	private boolean isJp;
+	private boolean editBrowse;
 
-	public CtrlBrowse(String help, int digits, Kernel kernel) {
+	public CtrlBrowse(boolean isJp, String help, int digits, RunMode runMode, boolean editBrowse) {
 		super(help);
+		this.isJp = isJp;
 		this.digits = digits;
-		this.kernel = kernel;
+		this.runMode = runMode;
+		this.editBrowse = editBrowse;
 	}
 
 	@Override
@@ -43,8 +47,6 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		// テキストボックスの配置
 		textField = (JTextField) create(panel, new JTextField(digits), left, top);
 		textField.getDocument().addDocumentListener(this);
-		Conf conf = kernel.createConf("Basic");
-		boolean editBrowse = (boolean) conf.get("editBrowse");
 		if (!editBrowse) {
 			textField.setEditable(false); // 読み取り専用
 			textField.setFocusable(false);
@@ -53,7 +55,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		left += textField.getWidth() + margin; // オフセット移動
 
 		// ボタンの配置(topの-2は、前のテキストボックスとの高さ調整)
-		String buttonText = kernel.isJp() ? "参照" : "Browse";
+		String buttonText = isJp ? "参照" : "Browse";
 		button = (JButton) create(panel, new JButton(buttonText), left, top - 3);
 
 		final CtrlType ctrlType = this.getCtrlType();
@@ -61,7 +63,7 @@ public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (kernel.getRunMode() == RunMode.Remote) {
+				if (runMode == RunMode.Remote) {
 					// TODO　リモート制御（CtrlBrowseでのボタンを押したときの処理）
 					// String resultStr =
 					// _kernel.RemoteClient.ShowBrowseDlg(_browseType);

@@ -1,8 +1,31 @@
 package bjd.util;
 
+import bjd.Kernel;
+import bjd.option.Conf;
+import bjd.option.OptionBasic;
+import bjd.option.OptionLog;
+import bjd.option.OptionSample;
+
 public final class TestUtil {
 	private TestUtil() {
 		//デフォルトコンストラクタの隠蔽
+	}
+	
+	/**
+	 * テスト用のダミーのConf生成
+	 * @return Conf
+	 */
+	public static Conf createConf(String optionName) {
+		Kernel kernel = new Kernel();
+		if (optionName.equals("OptionSample")) {
+			return new Conf(new OptionSample(kernel, ""));
+		} else if (optionName.equals("OptionLog")) {
+			return new Conf(new OptionLog(kernel, ""));
+		} else if (optionName.equals("OptionBasic")) {
+			return new Conf(new OptionBasic(kernel, ""));
+		}
+		Util.runtimeException(String.format("%s not found", optionName));
+		return null; //k実行時例外により、ここは実行されない
 	}
 
 	public static void dispHeader(String msg) {

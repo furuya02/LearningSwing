@@ -22,6 +22,7 @@ import bjd.option.Dat;
 import bjd.option.OptionSample;
 import bjd.sock.SockObj;
 import bjd.sock.SockState;
+import bjd.util.IniDb;
 import bjd.util.TestUtil;
 
 public class OneServerTest {
@@ -123,6 +124,7 @@ public class OneServerTest {
 		}
 	}
 
+	
 	@Test
 	public final void a001() {
 
@@ -134,8 +136,7 @@ public class OneServerTest {
 			Assert.fail(ex.getMessage());
 		}
 		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
-		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
-		Conf conf = new Conf(optionSample);
+		Conf conf = TestUtil.createConf("OptionSample");
 		conf.set("port", 9990);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));
@@ -182,8 +183,7 @@ public class OneServerTest {
 			Assert.fail(ex.getMessage());
 		}
 		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
-		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
-		Conf conf = new Conf(optionSample);
+		Conf conf = TestUtil.createConf("OptionSample");
 		conf.set("port", 80);
 		conf.set("multiple", 10);
 		conf.set("acl", new Dat(new CtrlType[0]));
@@ -224,8 +224,7 @@ public class OneServerTest {
 			Assert.fail(ex.getMessage());
 		}
 		OneBind oneBind = new OneBind(ip, ProtocolKind.Tcp);
-		OptionSample optionSample = new OptionSample(new Kernel(), "", "Sample");
-		Conf conf = new Conf(optionSample);
+		Conf conf = TestUtil.createConf("OptionSample");
 		conf.set("port", port);
 		conf.set("multiple", multiple);
 		conf.set("acl", new Dat(new CtrlType[0]));

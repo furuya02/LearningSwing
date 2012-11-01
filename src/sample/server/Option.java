@@ -12,6 +12,7 @@ import bjd.net.ProtocolKind;
 import bjd.option.Crlf;
 import bjd.option.OneOption;
 import bjd.option.OneVal;
+import bjd.util.IniDb;
 
 public final class Option extends OneOption {
 	
@@ -27,14 +28,15 @@ public final class Option extends OneOption {
 	public char getMnemonic() {
 		return 'Z';
 	}
-	public Option(Kernel kernel, String path, String nameTag) {
-		super(kernel, path, nameTag);
+
+	public Option(boolean isJp, Kernel kernel, String path, String nameTag, IniDb iniDb) {
+		super(isJp, path, nameTag, iniDb);
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 
-		add(new OneVal("useServer", false, Crlf.NEXTLINE, new CtrlCheckBox(kernel.getJp() ? "SAMPLEサーバを使用する" : "Use Sample Server")));
+		add(new OneVal("useServer", false, Crlf.NEXTLINE, new CtrlCheckBox(isJp() ? "SAMPLEサーバを使用する" : "Use Sample Server")));
 
-		pageList.add(page1("Basic", kernel.getJp() ? "基本設定" : "Basic"));
+		pageList.add(page1("Basic", isJp() ? "基本設定" : "Basic"));
 		pageList.add(pageAcl());
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
@@ -43,7 +45,7 @@ public final class Option extends OneOption {
 	private OnePage page1(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
 		onePage.add(createServerOption(ProtocolKind.Tcp, 9999, 30, 10)); //サーバ基本設定
-		onePage.add(new OneVal("sampleText", "Sample Server", Crlf.NEXTLINE, new CtrlTextBox(kernel.getJp() ? "サンプルメッセージ" : "SampleMessage", 30)));
+		onePage.add(new OneVal("sampleText", "Sample Server", Crlf.NEXTLINE, new CtrlTextBox(isJp() ? "サンプルメッセージ" : "SampleMessage", 30)));
 		return onePage;
 	}
 	@Override

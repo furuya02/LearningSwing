@@ -22,7 +22,7 @@ public final class ListOption extends ListBase<OneOption> {
 		}
 		//TODO DEBUGのためにとりあえずnullを返す
 		if (nameTag.equals("Basic")) {
-			return new OptionBasic(kernel, "", "Basic");
+			return new OptionBasic(kernel, "");
 		}
 		Util.runtimeException(String.format("nameTag=%s", nameTag));
 		return null; //ランタイム例外が発生するので、このnullが返されることはない
@@ -62,7 +62,7 @@ public final class ListOption extends ListBase<OneOption> {
 
 		//固定的にBasicとLogを生成する
 		String executePath = ""; // Application.ExecutablePath
-		add(new OptionBasic(kernel, executePath, "Basic")); //「基本」オプション
+		add(new OptionBasic(kernel, executePath)); //「基本」オプション
 		add(new OptionLog(kernel, executePath)); //「ログ」オプション
 
 		/*

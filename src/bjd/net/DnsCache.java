@@ -66,9 +66,10 @@ public final class DnsCache {
 	/*
 	 * キャッシュの件数取得(デバッグ用)
 	 */
-	public int size(){
+	public int size() {
 		return ar.size();
 	}
+
 	//キャッシュの容量制限
 	private void removeOldCache() {
 		if (ar.size() > 200) {
