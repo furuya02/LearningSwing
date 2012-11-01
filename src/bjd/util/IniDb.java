@@ -15,7 +15,7 @@ public final class IniDb {
 	private String fileDef;
 	private String fileTxt;
 	private String fileBak;
-
+	
 	public IniDb(String progDir, String fileName) {
 		this.fileIni = progDir + "\\" + fileName + ".ini";
 		this.fileDef = progDir + "\\" + fileName + ".def";

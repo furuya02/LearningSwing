@@ -12,6 +12,11 @@ import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 import bjd.net.ProtocolKind;
 
+/**
+ * 基本オプション 
+ * @author SIN
+ *
+ */
 public final class OptionBasic extends OneOption {
 	
 	@Override
