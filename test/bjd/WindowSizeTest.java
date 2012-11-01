@@ -14,8 +14,6 @@ import org.junit.Test;
 
 import bjd.ctrl.ListView;
 import bjd.option.Conf;
-import bjd.option.OptionBasic;
-import bjd.util.IniDb;
 import bjd.util.TestUtil;
 
 public final class WindowSizeTest {

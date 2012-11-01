@@ -8,8 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import say.swing.JFontChooser;
-import bjd.Kernel;
-import bjd.Lang;
 import bjd.util.Util;
 
 public final class CtrlFont extends OneCtrl implements ActionListener {

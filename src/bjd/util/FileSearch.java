@@ -3,15 +3,29 @@ package bjd.util;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * ワイルドカードを使用してファイルを列挙するクラ
+ * @author SIN
+ *
+ */
 public final class FileSearch {
 	
 	private String path;
 	private ArrayList<File> ar;
 
+	/**
+	 * コンストラクタ
+	 * @param path 対象パス
+	 */
 	public FileSearch(String path) {
 		this.path = path;
 	}
 
+	/**
+	 * ワイルドカードでパターンを指定して一覧を取得
+	 * @param pattern パターン指定（*.txtなど）
+	 * @return Fileの一覧
+	 */
 	public File[] listFiles(String pattern) {
 		ar = new ArrayList<>();
 		if (pattern != null) {

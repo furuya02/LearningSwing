@@ -1,7 +1,6 @@
 package bjd.net;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
 import java.net.InetAddress;
@@ -12,7 +11,7 @@ import org.junit.Test;
 import bjd.log.Logger;
 import bjd.util.TestUtil;
 
-public class DnsCacheTest {
+public final class DnsCacheTest {
 
 	@Test
 	public void a001() {

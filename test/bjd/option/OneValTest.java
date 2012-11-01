@@ -19,7 +19,6 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import bjd.Kernel;
 import bjd.RunMode;
 import bjd.ValidObjException;
 import bjd.ctrl.CtrlAddress;

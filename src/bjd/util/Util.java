@@ -17,12 +17,26 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
+/**
+ * 各種ユーティリティ
+ * @author SIN
+ *
+ */
 public final class Util {
 
 	private Util() {
 		// コンストラクタの隠蔽
 	}
 
+	/**
+	 * ボタンコントロールの生成
+	 * @param owner
+	 * @param text
+	 * @param actionCommand
+	 * @param actionListener
+	 * @param width
+	 * @return
+	 */
 	public static JButton createButton(JComponent owner, String text, String actionCommand, ActionListener actionListener, int width) {
 		JButton btn = new JButton(text);
 		btn.setActionCommand(actionCommand);
@@ -32,13 +46,22 @@ public final class Util {
 		return btn;
 	}
 
+	/**
+	 * 設計上の問題によりプログラム停止
+	 * @param msg
+	 */
 	public static void runtimeException(String msg) {
 		Msg.show(MsgKind.ERROR, msg);
 		System.exit(-1);
 		throw new RuntimeException("RuntimeException" + msg);
 	}
 
-	//２つの配列の結合
+	/**
+	 * ２つの配列の結合
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	public static <T> ArrayList<T> merge(T[] a, T[] b) {
 		ArrayList<T> ar = new ArrayList<>();
 		for (T o : a) {
@@ -50,8 +73,11 @@ public final class Util {
 		return ar;
 	}
 
+	/**
+	 * ファイル選択ダイログの表示<br>
+	 * 前回の選択を記憶している
+	 */
 	private static File selectedFile = null; //前回選択したファイル
-
 	public static File fileChooser(File file) {
 		JFileChooser dlg = new JFileChooser();
 		//初期化
@@ -91,6 +117,12 @@ public final class Util {
 		return lines;
 	}
 
+	/**
+	 * テキストファイルの保存
+	 * @param file
+	 * @param lines
+	 * @return
+	 */
 	public static boolean textFileSave(File file, ArrayList<String> lines) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -106,7 +138,10 @@ public final class Util {
 		return true;
 	}
 
-	// ディレクトリを指定した場合、内部のファイルもすべて削除する
+	/**
+	 * ディレクトリを指定した場合、内部のファイルもすべて削除する
+	 * @param file
+	 */
 	public static void fileDelete(File file) {
 		if (!file.exists()) {
 			return;
@@ -124,6 +159,11 @@ public final class Util {
 		}
 	}
 
+	/**
+	 * ファイルのコピー
+	 * @param src
+	 * @param dest
+	 */
 	public static void fileCopy(File src, File dest) {
 
 		FileChannel rs = null;

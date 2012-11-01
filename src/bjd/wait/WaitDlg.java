@@ -12,24 +12,29 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-//使用方法
-//public void test() {
-//	final WaitDlg waitDlg = new WaitDlg(frame, "暫くお待ちください", 500);
-//	waitDlg.start(new IWaitDlg() {
-//		public boolean loop(int i) {
-//			String msg = String.format("i=%d", i);
-//			System.out.println(msg);
-//			waitDlg.setLabel(msg);//ラベル表示(この他にもWaitDlgのpublicメソッドにアクセス可能)
-//			try {
-//				Thread.sleep(10);
-//			} catch (InterruptedException ie) {
-//				System.out.println(String.format("Interrupted"));
-//			}
-//			return true; // return falseで直ちに終了
-//		}
-//	});
-//}
-
+/**
+ * 「しばらくお待ちください」のプログレスバー付きのダイアログを表示する
+ * 
+ * 使用方法
+ * public void test() {
+ *   final WaitDlg waitDlg = new WaitDlg(frame, "暫くお待ちください", 500);
+ *   waitDlg.start(new IWaitDlg() {
+ * 		public boolean loop(int i) {
+ * 			String msg = String.format("i=%d", i);
+ * 			System.out.println(msg);
+ * 			waitDlg.setLabel(msg);//ラベル表示(この他にもWaitDlgのpublicメソッドにアクセス可能)
+ * 			try {
+ * 				Thread.sleep(10);
+ * 			} catch (InterruptedException ie) {
+ * 				System.out.println(String.format("Interrupted"));
+ * 			}
+ * 			return true; // return falseで直ちに終了
+ * 		}
+ * });
+ * 
+ * @author SIN
+ *
+ */
 @SuppressWarnings("serial")
 public final class WaitDlg extends JDialog implements WindowListener {
 
@@ -42,10 +47,22 @@ public final class WaitDlg extends JDialog implements WindowListener {
 	private int max;
 	private JFrame frame;
 
+	/**
+	 * 表示中のダイアログから使用される<br>
+	 * 利用者が使用することはない
+	 * 
+	 * @return
+	 */
 	public boolean getLife() {
 		return life;
 	}
 
+	/**
+	 * コンストラクタ
+	 * @param frame 親フレーム
+	 * @param title タイトル
+	 * @param max ループが呼び出される回数
+	 */
 	public WaitDlg(JFrame frame, String title, int max) {
 		super(frame);
 		
@@ -76,13 +93,20 @@ public final class WaitDlg extends JDialog implements WindowListener {
 		label.setBounds(12, 10, 50, 13);
 		getContentPane().add(label);
 	}
-	
+	/**
+	 * ラベルの変更
+	 * @param msg
+	 */
 	public void setLabel(String msg) {
 		label.setText(msg);
 	}
 	
 	private SwingWorker<Void, Integer> worker = null;
 
+	/**
+	 * 開始
+	 * @param waitDlg
+	 */
 	public void start(final IWaitDlg waitDlg) {
 		frame.setEnabled(false); // 親ウインドウの無効化
 		setVisible(true);
@@ -107,6 +131,9 @@ public final class WaitDlg extends JDialog implements WindowListener {
         worker.execute();
 	}
 
+	/**
+	 * 停止
+	 */
 	@SuppressWarnings("deprecation")
 	public void stop() {
 		life = false;

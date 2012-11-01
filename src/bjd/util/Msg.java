@@ -1,11 +1,12 @@
 package bjd.util;
 
-import java.awt.Component;
-import java.awt.Font;
-
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+/**
+ * メッセージダイログを表示するクラス
+ * @author user1
+ *
+ */
 public final class Msg {
 
 	private Msg() {
@@ -41,13 +42,13 @@ public final class Msg {
 		return JOptionPane.showConfirmDialog(null, msg, title, optionType, messageType);
 	}
 
-	static void setFont(Component[] components, Font font) {
-		if (components == null) {
-			return;
-		}
-		for (int i = 0; i < components.length; i++) {
-			components[i].setFont(font);
-			setFont(((JComponent) components[i]).getComponents(), font);
-		}
-	}
+//	static void setFont(Component[] components, Font font) {
+//		if (components == null) {
+//			return;
+//		}
+//		for (int i = 0; i < components.length; i++) {
+//			components[i].setFont(font);
+//			setFont(((JComponent) components[i]).getComponents(), font);
+//		}
+//	}
 }

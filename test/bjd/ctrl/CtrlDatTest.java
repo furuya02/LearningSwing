@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import bjd.Kernel;
 import bjd.RunMode;
 import bjd.option.Crlf;
 import bjd.option.ListVal;

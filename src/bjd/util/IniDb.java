@@ -4,12 +4,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import junit.framework.Assert;
-
 import bjd.ctrl.CtrlType;
 import bjd.option.ListVal;
 import bjd.option.OneVal;
 
+/**
+ * ファイルを使用した設定情報の保存<br>
+ * <br>
+ * 1つのデフォルト値ファイルを使用して2つのファイルを出力する<br>
+ * <br>
+ * name.def　デフォルト設定<br>
+ * name.ini 保存DB<br>
+ * name.txt　秘匿情報を***表示したデバッグ用設定情報<br>
+ * 
+ * @author SIN
+ *
+ */
 public final class IniDb {
 	private String fileIni;
 	private String fileDef;
@@ -111,7 +121,11 @@ public final class IniDb {
 	//		}
 	//	}
 
-	// １行を読みこるためのオブジェクト
+	/**
+	 * １行を読み込むためのオブジェクト
+	 * @author user1
+	 *
+	 */
 	private class LineObject {
 		// private CtrlType ctrlType;
 		private String nameTag;
@@ -203,7 +217,9 @@ public final class IniDb {
 		}
 	}
 
-	// bakファイルの削除
+	/**
+	 * bakファイルの削除
+	 */
 	public void deleteBak() {
 		File file = new File(fileBak);
 		if (file.exists()) {
@@ -211,7 +227,9 @@ public final class IniDb {
 		}
 	}
 
-	// txtファイルの削除
+	/**
+	 * txtファイルの削除
+	 */
 	public void deleteTxt() {
 		File file = new File(fileTxt);
 		if (file.exists()) {
@@ -219,6 +237,11 @@ public final class IniDb {
 		}
 	}
 
+	/**
+	 * 読込み
+	 * @param nameTag
+	 * @param listVal
+	 */
 	public void read(String nameTag, ListVal listVal) {
 		boolean isRead = read(fileIni, nameTag, listVal);
 		if (!isRead) { // １件も読み込まなかった場合
@@ -228,6 +251,11 @@ public final class IniDb {
 		}
 	}
 
+	/**
+	 * 保存
+	 * @param nameTag
+	 * @param listVal
+	 */
 	public void save(String nameTag, ListVal listVal) {
 		// Ver5.0.1 デバッグファイルに対象のValListを書き込む
 		for (int i = 0; i < 2; i++) {

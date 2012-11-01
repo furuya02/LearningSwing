@@ -11,10 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import bjd.Kernel;
-import bjd.Lang;
 import bjd.RunMode;
-import bjd.option.Conf;
 
 //CtrlFile及びCtrlFolderの親クラス
 public abstract class CtrlBrowse extends OneCtrl implements DocumentListener {

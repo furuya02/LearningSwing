@@ -9,14 +9,12 @@ import java.net.URISyntaxException;
 import javax.swing.JMenuBar;
 
 import bjd.ctrl.ListView;
-import bjd.log.ILogger;
 import bjd.log.LogFile;
 import bjd.log.LogKind;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.menu.Menu;
 import bjd.net.DnsCache;
-import bjd.net.LocalAddress;
 import bjd.option.Conf;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
@@ -24,7 +22,6 @@ import bjd.option.OptionIni;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
 import bjd.util.IDispose;
-import bjd.util.IniDb;
 import bjd.util.Util;
 
 public final class Kernel implements IDispose {

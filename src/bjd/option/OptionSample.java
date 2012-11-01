@@ -7,7 +7,6 @@ import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
 import bjd.net.ProtocolKind;
-import bjd.util.IniDb;
 
 public final class OptionSample extends OneOption {
 	@Override

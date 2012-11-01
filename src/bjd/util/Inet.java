@@ -7,6 +7,11 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * インターネットに関する各種のユーティリティ
+ * @author SIN
+ *
+ */
 public final class Inet {
 
 	private Inet() {
@@ -15,6 +20,11 @@ public final class Inet {
 	//**************************************************************************
 	//バイナリ-文字列変換(バイナリデータをテキスト化して送受信するため使用する)
 	//**************************************************************************
+	/**
+	 * バイナリ-文字列変換(バイナリデータをテキスト化して送受信するため使用する)
+	 * @param str
+	 * @return
+	 */
 	public static byte[] toBytes(String str) {
 		if (str == null) {
 			str = "";
@@ -22,6 +32,11 @@ public final class Inet {
 		return str.getBytes(Charset.forName("UTF-16"));
 	}
 
+	/**
+	 * バイナリ-文字列変換(バイナリデータをテキスト化して送受信するため使用する)
+	 * @param buf　変換前のバイナリ
+	 * @return　変換した文字列
+	 */
 	public static String fromBytes(byte[] buf) {
 		try {
 			if (buf == null) {
@@ -38,7 +53,12 @@ public final class Inet {
 	//**************************************************************************
 	//行単位での切り出し
 	//**************************************************************************
-	//テキストバージョン
+	/**
+	 * 行単位での切り出し<br>
+	 * テキストバージョン
+	 * @param str 取り出し元の文字列
+	 * @return 切り出した文字列の配列
+	 */
 	public static ArrayList<String> getLines(String str) {
 		if (str.equals("")) {
 			return new ArrayList<String>();
@@ -50,7 +70,12 @@ public final class Inet {
 		return new ArrayList<>(Arrays.asList(lines));
 	}
 
-	// バイナリバージョン　(\r\nは削除しない)
+	/**
+	 * 行単位での切り出し<br>
+	 * バイナリバージョン　(\r\nは削除しない)
+	 * @param buf 取り出し元のバッファ
+	 * @return バイト配列のリスト
+	 */
 	public static ArrayList<byte[]> getLines(byte[] buf) {
 		ArrayList<byte[]> lines = new ArrayList<>();
 		if (buf == null || buf.length == 0) {
@@ -92,7 +117,12 @@ public final class Inet {
 	//**************************************************************************
 	//\r\nの削除
 	//**************************************************************************
-	//テキストバージョン
+	/**
+	 * \r\nの削除<br>
+	 * テキストバージョン
+	 * @param buf
+	 * @return
+	 */
 	public static byte[] trimCrlf(byte[] buf) {
 		if (buf.length >= 1 && buf[buf.length - 1] == '\n') {
 			int count = 1;
@@ -107,7 +137,12 @@ public final class Inet {
 		return buf;
 	}
 
-	// バイナリバージョン
+	/**
+	 * \r\nの削除<br>
+	 * バイナリバージョン
+	 * @param str
+	 * @return
+	 */
 	public static String trimCrlf(String str) {
 		if (str.length() >= 1 && str.charAt(str.length() - 1) == '\n') {
 			int count = 1;
@@ -119,9 +154,11 @@ public final class Inet {
 		return str;
 	}
 
-	//**************************************************************************
-	//サニタイズ処理(１行対応)
-	//**************************************************************************
+	/**
+	 * サニタイズ処理(１行対応)
+	 * @param str
+	 * @return
+	 */
 	public static String sanitize(String str) {
 		str = str.replaceAll("&", "&amp;");
 		str = str.replaceAll("<", "&lt;");
@@ -160,9 +197,11 @@ public final class Inet {
 	//            return null;
 	//        }
 
-	//**************************************************************************
-	//指定した長さのランダム文字列を取得する（チャレンジ文字列用）
-	//**************************************************************************
+	/**
+	 * 指定した長さのランダム文字列を取得する（チャレンジ文字列用）
+	 * @param len 長さ
+	 * @return 文字列
+	 */
 	public static String challengeStr(int len) {
 		//return RandomStringUtils.random(len,"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 		SecureRandom sr = new SecureRandom();
@@ -174,9 +213,11 @@ public final class Inet {
 		return sb.toString();
 	}
 
-	//**************************************************************************
-	//ハッシュ文字列の作成（MD5）
-	//**************************************************************************
+	/**
+	 * ハッシュ文字列の作成（MD5）
+	 * @param str 対象文字列
+	 * @return　ハッシュ文字列
+	 */
 	public static String md5Str(String str) {
 		if (str == null) {
 			return "";
@@ -202,10 +243,13 @@ public final class Inet {
 		return null;
 	}
 
-	//**************************************************************************
-	//リクエスト行がURLエンコード(%31%42など)されている場合は、その文字コードを取得する
 	//TODO InetgetUrlEncoding(String str) 設計上思わしくないのでWebサーバ実装時に再度検討する
-	//**************************************************************************
+	/**
+	 * リクエスト行がURLエンコード(%31%42など)されている場合は、その文字コードを取得する<br>
+	 * 
+	 * @param str
+	 * @return
+	 */
 	public static Charset getUrlEncoding(String str) {
 		String[] tmp = str.split(" ");
 		if (tmp.length >= 3) {

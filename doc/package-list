@@ -10,5 +10,5 @@ bjd.server
 bjd.sock
 bjd.util
 bjd.wait
-sampleServer
-webServer
+sample.server
+web.server

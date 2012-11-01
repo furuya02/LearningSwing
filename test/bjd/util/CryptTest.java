@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+
 import javax.mail.MessagingException;
 
 import junit.framework.Assert;

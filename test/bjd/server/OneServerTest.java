@@ -19,10 +19,8 @@ import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.option.Conf;
 import bjd.option.Dat;
-import bjd.option.OptionSample;
 import bjd.sock.SockObj;
 import bjd.sock.SockState;
-import bjd.util.IniDb;
 import bjd.util.TestUtil;
 
 public class OneServerTest {

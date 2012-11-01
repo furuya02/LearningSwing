@@ -13,7 +13,6 @@ import bjd.option.Crlf;
 import bjd.option.OneOption;
 import bjd.option.OneVal;
 import bjd.option.OptionIni;
-import bjd.util.IniDb;
 
 public final class Option extends OneOption {
 	

@@ -9,7 +9,6 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import bjd.Kernel;
-import bjd.Lang;
 import bjd.util.IDispose;
 
 public final class Menu implements ActionListener, IDispose {

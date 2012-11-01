@@ -9,7 +9,6 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import bjd.Kernel;
 import bjd.ValidObjException;
 import bjd.ctrl.CtrlType;
 import bjd.log.Logger;

@@ -5,12 +5,22 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+/**
+ * エンコードの種類(Charset)を処理するクラス
+ * @author SIN
+ *
+ */
 public final class MLang {
 
 	private MLang() {
 		//デフォルトコンストラクタの隠蔽
 	}
 	
+	/**
+	 * エンコードの種類を取得
+	 * @param fileName
+	 * @return
+	 */
 	public static Charset getEncoding(String fileName) {
 		try {
 			File f = new File(fileName);
@@ -29,6 +39,11 @@ public final class MLang {
 		return null;
 	}
 
+	/**
+	 * エンコードの種類を検出してStringへ変換する
+	 * @param buf
+	 * @return
+	 */
 	public static String getString(byte[] buf) {
 
 		int len = buf.length;
@@ -40,9 +55,14 @@ public final class MLang {
 
 	}
 
-	//雅階凡の C# プログラミング
-	//文字コードの判定 を参考にさせて頂きました。
-	//http://www.geocities.jp/gakaibon/tips/csharp2008/charset-check.html
+	/**
+	 * エンコード種類の取得
+	 * 雅階凡の C# プログラミング<br>
+	 * 文字コードの判定 を参考にさせて頂きました。<br>
+	 * http://www.geocities.jp/gakaibon/tips/csharp2008/charset-check.html<br>
+	 * @param bytes
+	 * @return
+	 */
 	public static Charset getEncoding(byte[] bytes) {
 
 		int len = bytes.length;

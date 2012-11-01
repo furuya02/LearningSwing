@@ -25,13 +25,15 @@ import bjd.sock.SockServer;
 import bjd.sock.SockState;
 import bjd.sock.SockTcp;
 import bjd.sock.SockUdp;
-import bjd.util.IniDb;
 import bjd.util.Util;
 
-//各サーバオブジェクトの基底クラス
-//****************************************************************
-// OneServer １つのバインドアドレス：ポートごとにサーバを表現するクラス
-//****************************************************************
+/**
+ * 
+ * OneServer １つのバインドアドレス：ポートごとにサーバを表現するクラス<br>
+ * 各サーバオブジェクトの基底クラス<br>
+ * @author user1
+ *
+ */
 public abstract class OneServer extends ThreadBase {
 
 	private String nameTag;
@@ -313,7 +315,10 @@ public abstract class OneServer extends ThreadBase {
 
 	private String denyAddress = ""; //Ver5.3.5 DoS対処
 
-	//１リクエストに対する子スレッドとして起動される
+	/**
+	 * １リクエストに対する子スレッドとして起動される
+	 * @param sockObj
+	 */
 	public final void subThread(SockObj sockObj) {
 
 		try {
@@ -340,6 +345,12 @@ public abstract class OneServer extends ThreadBase {
 	//RemoteServerでのみ使用される
 	//public virtual void Append(OneLog oneLog){}
 
+	/**
+	 * 1行読込待機
+	 * 
+	 * @param sockTcp
+	 * @return
+	 */
 	public final Cmd waitLine(SockTcp sockTcp) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.SECOND, timeout);
@@ -365,6 +376,11 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	//TODO RecvCmdのパラメータ形式を変更するが、これは、後ほど、Web,Ftp,SmtpのServerで使用されているため影響がでる予定
+	/**
+	 * コマンド取得
+	 * @param sockTcp
+	 * @return
+	 */
 	protected final Cmd recvCmd(SockTcp sockTcp) {
 		if (sockTcp.getSockState() != SockState.CONNECT) { //切断されている
 			return null;
@@ -398,7 +414,11 @@ public abstract class OneServer extends ThreadBase {
 		return new Cmd(str, cmdStr, paramStr);
 	}
 
-	//受信したコマンドを表現するクラス
+	/**
+	 * 受信したコマンドを表現するクラス
+	 * @author SIN
+	 *
+	 */
 	class Cmd {
 		private String str;
 		private String cmdStr;
@@ -424,7 +444,7 @@ public abstract class OneServer extends ThreadBase {
 	}
 
 	//未実装
-	public void append(OneLog oneLog) {
-
+	public final void append(OneLog oneLog) {
+		Util.runtimeException("OneServer.append(OneLog) 未実装");
 	}
 }

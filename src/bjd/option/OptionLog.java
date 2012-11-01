@@ -16,8 +16,12 @@ import bjd.ctrl.CtrlTabPage;
 import bjd.ctrl.CtrlTextBox;
 import bjd.ctrl.OneCtrl;
 import bjd.ctrl.OnePage;
-import bjd.util.IniDb;
 
+/**
+ * ログオプション
+ * @author SIN
+ *
+ */
 public final class OptionLog extends OneOption {
 
 	@Override

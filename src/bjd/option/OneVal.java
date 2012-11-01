@@ -22,6 +22,13 @@ import bjd.util.IDispose;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
 
+/**
+ * 1つの値を表現するクラス<br>
+ * ListValと共に再帰処理が可能になっている<br>
+ * 
+ * @author SIN
+ *
+ */
 public final class OneVal implements IDispose {
 
 	private String name;
@@ -29,6 +36,13 @@ public final class OneVal implements IDispose {
 	private Crlf crlf;
 	private OneCtrl oneCtrl;
 
+	/**
+	 * コンストラクタ
+	 * @param name 名前
+	 * @param value 値
+	 * @param oneCtrl コントロール
+	 * @param crlf 改行指示
+	 */
 	public OneVal(String name, Object value, Crlf crlf, OneCtrl oneCtrl) {
 		this.name = name;
 		this.value = value;
@@ -68,7 +82,9 @@ public final class OneVal implements IDispose {
 		}
 	}
 
-	// 階層下のOneValを一覧する
+	/**
+	 * 階層下のOneValを一覧する
+	 */
 	public ArrayList<OneVal> getList(ArrayList<OneVal> list) {
 		if (list == null) {
 			list = new ArrayList<>();
@@ -88,6 +104,10 @@ public final class OneVal implements IDispose {
 		return list;
 	}
 
+	/**
+	 * 入力を完了しているかどうか
+	 * @return
+	 */
 	public boolean isComplete() {
 		for (OneVal oneVal : getList(null)) {
 			if (oneVal != this) { // 自分自身はループになるので対象外とする
@@ -119,17 +139,28 @@ public final class OneVal implements IDispose {
 		return name;
 	}
 
-	// コントロール生成
+	/**
+	 * コントロール生成
+	 * @param mainPanel
+	 * @param baseX
+	 * @param baseY
+	 */
 	public void createCtrl(JPanel mainPanel, int baseX, int baseY) {
 		oneCtrl.create(mainPanel, baseX, baseY, value);
 	}
 
-	// コントロール破棄
+	/**
+	 * コントロール破棄
+	 */
 	public void deleteCtrl() {
 		oneCtrl.delete();
 	}
 
-	// コントロールからの値のコピー (isComfirm==true 確認のみ)
+	/**
+	 * コントロールからの値のコピー (isComfirm==true 確認のみ)
+	 * @param isConfirm
+	 * @return
+	 */
 	public boolean readCtrl(boolean isConfirm) {
 		Object o = oneCtrl.read();
 		if (o == null) {

@@ -1,6 +1,5 @@
 package bjd.ctrl;
 
-import bjd.Kernel;
 import bjd.RunMode;
 
 public final class CtrlFolder extends CtrlBrowse {

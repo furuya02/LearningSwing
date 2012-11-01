@@ -2,7 +2,7 @@ package bjd.util;
 
 /**
  * メッセージの種類
- * @author user1
+ * @author SIN
  *
  */
 public enum MsgKind {

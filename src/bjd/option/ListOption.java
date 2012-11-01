@@ -6,6 +6,12 @@ import bjd.menu.OneMenu;
 import bjd.util.ListBase;
 import bjd.util.Util;
 
+/**
+ * オプションのリストを表現するクラス<br>
+ * Kernelの中で使用される<br>
+ * @author SIN
+ *
+ */
 public final class ListOption extends ListBase<OneOption> {
 
 	private Kernel kernel;
@@ -28,7 +34,11 @@ public final class ListOption extends ListBase<OneOption> {
 		return null; //ランタイム例外が発生するので、このnullが返されることはない
 	}
 
-	//null追加を回避するために、getAr().add()は、このファンクションを使用する
+	/**
+	 * null追加を回避するために、getAr().add()は、このファンクションを使用する
+	 * @param o
+	 * @return
+	 */
 	private boolean add(OneOption o) {
 		if (o == null) {
 			return false;
@@ -37,25 +47,18 @@ public final class ListOption extends ListBase<OneOption> {
 		return true;
 	}
 
-	//Kernel.Dispose()で、有効なオプションだけを出力するために使用する
+	/**
+	 * Kernel.Dispose()で、有効なオプションだけを出力するために使用する
+	 */
 	public void save() {
 		for (OneOption o : getAr()) {
 			o.save(OptionIni.getInstance());
 		}
 	}
 
-	//オプションの読み込み
-	//    public boolean read2(String nameTag) {
-	//        for(OneOption o : ar) {
-	//            if (o.getNameTag().equals(nameTag)) {
-	//                o..read2(nameTag);
-	//                return true;
-	//            }
-	//        }
-	//        return false;
-	//    }	
-
-	//オプションリストの初期化
+	/**
+	 * オプションリストの初期化
+	 */
 	public void initialize() {
 
 		getAr().clear();
@@ -151,7 +154,10 @@ public final class ListOption extends ListBase<OneOption> {
 		*/
 	}
 	
-	//メニュー取得
+	/**
+	 * メニュー取得
+	 * @return
+	 */
     public ListMenu getListMenu() {
 
         ListMenu mainMenu = new ListMenu();

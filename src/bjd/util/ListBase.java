@@ -3,10 +3,14 @@ package bjd.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-//****************************************************************
-// オリジナルのListクラスを生成する場合の基底クラス
-// Tの指定するクラスは IDisposableの制約がある
-//****************************************************************
+/**
+ * オリジナルのListクラスを生成する場合の基底クラス<br>
+ * Tの指定するクラスは IDisposableの制約がある<br>
+ * 
+ * @author user1
+ *
+ * @param <T>
+ */
 public abstract class ListBase<T extends IDispose> implements Iterable<T>,
         Iterator<T> {
     private ArrayList<T> ar = new ArrayList<T>();

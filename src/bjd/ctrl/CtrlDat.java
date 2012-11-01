@@ -12,8 +12,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import bjd.Kernel;
-import bjd.Lang;
 import bjd.option.Dat;
 import bjd.option.ListVal;
 import bjd.option.OneDat;

@@ -9,8 +9,13 @@ import bjd.ctrl.ICtrlEventListener;
 import bjd.util.ListBase;
 import bjd.util.Msg;
 import bjd.util.MsgKind;
-import bjd.util.Util;
 
+/**
+ * OneValのリストを表現するクラス<br>
+ * OneValと共に再帰処理が可能になっている<br>
+ * @author SIN
+ *
+ */
 public final class ListVal extends ListBase<OneVal> {
 
 	private Dimension dimension = null;
@@ -29,7 +34,12 @@ public final class ListVal extends ListBase<OneVal> {
 		getAr().add(oneVal);
 	}
 
-	// 階層下のOneValを一覧する
+	/**
+	 * 階層下のOneValを一覧する<br>
+	 * 
+	 * @param list
+	 * @return
+	 */
 	public ArrayList<OneVal> getList(ArrayList<OneVal> list) {
 		if (list == null) {
 			list = new ArrayList<>();
@@ -40,6 +50,14 @@ public final class ListVal extends ListBase<OneVal> {
 		return list;
 	}
 
+	/**
+	 * 階層下のOneValを検索する<br>
+	 * 見つからないときnullが返る<br>
+	 * この処理は多用されるため、スピードアップのため、例外を外してnullを返すようにした<br>
+	 * 
+	 * @param name
+	 * @return 
+	 */
 	public OneVal search(String name) {
 		for (OneVal o : getList(null)) {
 			if (o.getName().equals(name)) {
