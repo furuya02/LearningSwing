@@ -24,30 +24,10 @@ public final class LocalAddress extends ValidObj {
 	private ArrayList<Ip> v6 = new ArrayList<Ip>();
 
 	/**
-	 * IPv4アドレスの一覧
-	 * 
-	 * @return IPv4リスト
-	 */
-	public Ip[] getV4() {
-		checkInitialise();
-		return v4.toArray(new Ip[]{});
-	}
-
-	/**
-	 * IPv6アドレスの一覧
-	 * 
-	 * @return IPv6リスト
-	 */
-	public Ip[] getV6() {
-		checkInitialise();
-		return v6.toArray(new Ip[]{});
-	}
-
-	/**
-	 * インスタンスは、プログラムで１つだけ生成される
+	 * プログラムで唯一のインスタンスを返す
 	 */
 	private static LocalAddress localAddress = null;
-	public static LocalAddress create() {
+	public static LocalAddress getInstance() {
 		if (localAddress == null) {
 			localAddress = new LocalAddress();
 		}
@@ -167,5 +147,25 @@ public final class LocalAddress extends ValidObj {
 	protected void init() {
 		v4 = new ArrayList<Ip>();
 		v6 = new ArrayList<Ip>();
+	}
+
+	/**
+	 * IPv4アドレスの一覧
+	 * 
+	 * @return IPv4リスト
+	 */
+	public Ip[] getV4() {
+		checkInitialise();
+		return v4.toArray(new Ip[]{});
+	}
+
+	/**
+	 * IPv6アドレスの一覧
+	 * 
+	 * @return IPv6リスト
+	 */
+	public Ip[] getV6() {
+		checkInitialise();
+		return v6.toArray(new Ip[]{});
 	}
 }

@@ -16,7 +16,7 @@ public final class LocalAddressTest {
 
 		TestUtil.dispHeader("a001 remoteStr()で取得したテキストで、改めてLocalAddressを生成して、同じかどうかを確認"); //TESTヘッダ
 
-		LocalAddress localAddress = LocalAddress.create();
+		LocalAddress localAddress = LocalAddress.getInstance();
 		String remoteStr = localAddress.remoteStr();
 
 		try {
