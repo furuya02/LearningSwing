@@ -35,7 +35,7 @@ public final class OptionBasic extends OneOption {
 	}
 
 	public OptionBasic(Kernel kernel, String path) {
-		super(kernel.isJp(), path, "Basic", kernel.getOptionIni());
+		super(kernel.isJp(), path, "Basic");
 
 		// 基本オプションの場合、この時点でkernelのJapanは、まだ読込まれていないので、強制的に初期化する
 		// var iniDb = new IniDb(kernel.ProgDir(), "Option");
@@ -51,7 +51,7 @@ public final class OptionBasic extends OneOption {
 		pageList.add(pageAcl());
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
-		read(); //　レジストリからの読み込み
+		read(OptionIni.getInstance()); //　レジストリからの読み込み
 
 	}
 

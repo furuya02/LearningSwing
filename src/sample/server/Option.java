@@ -12,6 +12,7 @@ import bjd.net.ProtocolKind;
 import bjd.option.Crlf;
 import bjd.option.OneOption;
 import bjd.option.OneVal;
+import bjd.option.OptionIni;
 import bjd.util.IniDb;
 
 public final class Option extends OneOption {
@@ -29,8 +30,8 @@ public final class Option extends OneOption {
 		return 'Z';
 	}
 
-	public Option(boolean isJp, Kernel kernel, String path, String nameTag, IniDb iniDb) {
-		super(isJp, path, nameTag, iniDb);
+	public Option(boolean isJp, Kernel kernel, String path, String nameTag) {
+		super(isJp, path, nameTag);
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 
@@ -40,7 +41,7 @@ public final class Option extends OneOption {
 		pageList.add(pageAcl());
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
-		read(); //　レジストリからの読み込み
+		read(OptionIni.getInstance()); //　レジストリからの読み込み
 	}
 	private OnePage page1(String name, String title) {
 		OnePage onePage = new OnePage(name, title);

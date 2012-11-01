@@ -26,14 +26,14 @@ public final class OptionSample extends OneOption {
 	}
 
 	public OptionSample(Kernel kernel, String path) {
-		super(kernel.isJp(), path, "Sample", kernel.getOptionIni());
+		super(kernel.isJp(), path, "Sample");
 
 		ArrayList<OnePage> pageList = new ArrayList<>();
 		pageList.add(page1("Basic", isJp() ? "基本設定" : "Basic"));
 		pageList.add(pageAcl());
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 
-		read(); //　レジストリからの読み込み
+		read(OptionIni.getInstance()); //　レジストリからの読み込み
 
 	}
 

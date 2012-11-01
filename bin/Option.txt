@@ -16,7 +16,7 @@ INT=BasictimeOut=30
 RADIO=BasicenableAcl=0
 STRING=BasicaclName=
 STRING=BasicaclAddress=
-DAT=Basicacl=	11	11	33	22	33	222
+DAT=Basicacl=	33	222
 LIST=LognormalFileName=2
 LIST=LogsecureFileName=2
 FOLDER=LogsaveDirectory=
@@ -25,7 +25,7 @@ BOOL=LoguseLogClear=false
 INT=LogsaveDays=31
 INT=LoglinesMax=3000
 INT=LoglinesDelete=1000
-RADIO=LogisDisplay=0
+RADIO=LogisDisplay=1
 STRING=LogCharacter=
-DAT=LoglimitString=	1234	ssss
+DAT=LoglimitString=	1	4	5	3
 BOOL=LoguseLimitString=false

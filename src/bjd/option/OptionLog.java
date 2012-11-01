@@ -36,7 +36,7 @@ public final class OptionLog extends OneOption {
 	}
     
 	public OptionLog(Kernel kernel, String path) {
-		super(kernel.isJp(), path, "Log", kernel.getOptionIni());
+		super(kernel.isJp(), path, "Log");
 
 		
 		ArrayList<OnePage> pageList = new ArrayList<>();
@@ -45,7 +45,7 @@ public final class OptionLog extends OneOption {
 		pageList.add(page2("Limit", isJp() ? "表示制限" : "Limit Display"));
 		add(new OneVal("tab", null, Crlf.NEXTLINE, new CtrlTabPage("tabPage", pageList)));
 		
-		read(); //　レジストリからの読み込み
+		read(OptionIni.getInstance()); //　レジストリからの読み込み
 
 	}
 

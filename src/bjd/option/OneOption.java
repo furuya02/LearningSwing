@@ -32,7 +32,6 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	private boolean isJp;
 	private String path; //実態が格納されているモジュール(DLL)のフルパス
 	private String nameTag;
-	private IniDb iniDb;
 	
 	/**
 	 * OneValのリストを返す
@@ -73,22 +72,21 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
      * @param nameTag　名前
      * @param iniDb Option.ini
      */
-	public OneOption(boolean isJp, String path, String nameTag, IniDb iniDb) {
-		//this.kernel = kernel;
+	public OneOption(boolean isJp, String path, String nameTag) {
 		this.isJp = isJp;
 		this.path = path;
 		this.nameTag = nameTag;
-		this.iniDb = iniDb; //new IniDb(progDir, "Option");
 	}
 
-	protected boolean isJp() {
+	protected final boolean isJp() {
 		return isJp;
 	}
 	
 	/**
 	 * レジストリからの読み込み
 	 */
-	protected final void read() {
+	protected final void read(IniDb iniDb) {
+	//protected final void read() {
 		iniDb.read(nameTag, listVal);
 	}
 
@@ -179,7 +177,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		//コントロールの値を変更
 		oneVal.getOneCtrl().write(value);
 		//レジストリへ保存
-		save();
+		save(OptionIni.getInstance());
 	}
 
 	/**
@@ -253,7 +251,8 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	/**
 	 * レジストリへ保存
 	 */
-	public final void save() {
+	public final void save(IniDb iniDb) {
+	//public final void save() {
 		iniDb.save(nameTag, listVal);
 	}
 }

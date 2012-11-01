@@ -20,6 +20,7 @@ import bjd.net.LocalAddress;
 import bjd.option.Conf;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
+import bjd.option.OptionIni;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
 import bjd.util.IDispose;
@@ -43,7 +44,7 @@ public final class Kernel implements IDispose {
 	private OneServer remoteServer = null;
 	private TraceDlg traceDlg;
 	private DnsCache dnsCache;
-	private IniDb optionIni = null;
+	//private IniDb optionIni = null;
 
 	public View getView() {
 		return view;
@@ -104,7 +105,9 @@ public final class Kernel implements IDispose {
 		//        RemoteClient = null;//リモートクライアント
 		//
 		
-		optionIni = new IniDb(getProgDir(), "Option");
+		OptionIni.create(this); //インスタンスの初期化
+		
+		//optionIni = new IniDb(getProgDir(), "Option");
 		//動作モードの初期化
 		runMode = RunMode.Normal; //通常起動
 		//		if (mainForm == null) {
@@ -272,9 +275,9 @@ public final class Kernel implements IDispose {
 		//return file.getParent();
 	}
 
-	public IniDb getOptionIni() {
-		return optionIni;
-	}
+	//public IniDb getOptionIni() {
+	//	return optionIni;
+	//}
 
 	//プログラム本体のパス取得
 	private String getProgName() {
@@ -326,7 +329,7 @@ public final class Kernel implements IDispose {
 			if (oneOption != null) {
 				OptionDlg dlg = new OptionDlg(mainForm.getFrame(), oneOption);
 				if (dlg.showDialog()) {
-					oneOption.save();
+					oneOption.save(OptionIni.getInstance());
 					//Menu.EnqueueMenu("StartStop_Reload",true/*synchro*/);
 				}
 			}
