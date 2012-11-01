@@ -21,18 +21,9 @@ public final class ListVal extends ListBase<OneVal> {
 		ArrayList<OneVal> list = oneVal.getList(null);
 
 		for (OneVal o : list) {
-			try {
-				search(o.getName());
+			if (null != search(o.getName())) {
 				Msg.show(MsgKind.ERROR, String.format("ListVal.add(%s) 名前が重複しているため追加できませんでした", o.getName()));
-				return;
-			} catch (Exception e) {
-				// search()で例外が発生すれば、重複は無いことにある
 			}
-//			if (null != search(o.getName())) {
-//				Msg.show(MsgKind.ERROR, String.format(
-//						"ListVal.add(%s) 名前が重複しているため追加できませんでした", o.getName()));
-//				return;
-//			}
 		}
 		// 重複が無いので追加する
 		getAr().add(oneVal);
@@ -49,13 +40,15 @@ public final class ListVal extends ListBase<OneVal> {
 		return list;
 	}
 
-	public OneVal search(String name) throws Exception {
+	public OneVal search(String name) {
 		for (OneVal o : getList(null)) {
 			if (o.getName().equals(name)) {
 				return o;
 			}
 		}
-		throw new Exception();
+		//例外では、処理が重いので、nullを返す
+		return null;
+		//throw new Exception();
 	}
 
 	// コントロール生成

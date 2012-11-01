@@ -33,6 +33,8 @@ public final class Util {
 	}
 
 	public static void runtimeException(String msg) {
+		Msg.show(MsgKind.ERROR, msg);
+		System.exit(-1);
 		throw new RuntimeException("RuntimeException" + msg);
 	}
 

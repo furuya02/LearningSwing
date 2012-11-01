@@ -180,13 +180,11 @@ public final class IniDb {
 					LineObject o = readLine(s);
 					if (o.getNameTag().equals(nameTag)) {
 						isRead = true; // 1件でもデータを読み込んだ場合にtrue
-						OneVal oneVal = null;
-						try {
-							oneVal = listVal.search(o.getName());
-							oneVal.fromReg(o.getValStr());
-						} catch (Exception e) {
+						OneVal oneVal = listVal.search(o.getName());
+						if (oneVal == null) {
 							Util.runtimeException("");
 						}
+						oneVal.fromReg(o.getValStr());
 					}
 				} catch (Exception e1) {
 					Util.runtimeException("");

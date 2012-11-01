@@ -2,7 +2,6 @@ package bjd.option;
 
 import javax.swing.JPanel;
 
-import bjd.Kernel;
 import bjd.ctrl.CtrlBindAddr;
 import bjd.ctrl.CtrlCheckBox;
 import bjd.ctrl.CtrlComboBox;
@@ -41,10 +40,8 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	}
 
 	public final boolean getUseServer() {
-		OneVal oneVal;
-		try {
-			oneVal = listVal.search("useServer");
-		} catch (Exception e) {
+		OneVal oneVal = listVal.search("useServer");
+		if (oneVal == null) {
 			return false;
 		}
 		return (boolean) oneVal.getValue();
@@ -92,7 +89,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		listVal.setListener(this);
 
 		// コントロールの状態を初期化するために、ダミーのイベントを発生させる
-		onChange(null);
+		//onChange(null);
 	}
 
 	// ダイアログ破棄時の処理
@@ -132,10 +129,8 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 
 	//値の設定
 	public final void setValue(String name, Object value) {
-		OneVal oneVal = null;
-		try {
-			oneVal = listVal.search(name);
-		} catch (Exception e) {
+		OneVal oneVal = listVal.search(name);
+		if (oneVal == null) {
 			Util.runtimeException(String.format("名前が見つかりません name=%s", name));
 		}
 		//コントロールの値を変更
@@ -152,25 +147,32 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 			return false;
 		}
 
-		OneVal oneVal = null;
-		try {
-			oneVal = listVal.search(name);
-		} catch (Exception e) {
+		OneVal oneVal = listVal.search(name);
+		if (oneVal == null) {
 			Util.runtimeException(String.format("名前が見つかりません name=%s", name));
 			return null;
 		}
 		return oneVal.getValue();
 	}
 
+	/**
+	 * 処理だと処理が重くなるので、該当が無い場合nullを返す
+	 * @param name
+	 * @return
+	 */
 	protected final OneCtrl getCtrl(String name) {
-		try {
-			OneVal oneVal = listVal.search(name);
-			return oneVal.getOneCtrl();
-		
-		} catch (Exception e) {
-			Util.runtimeException(String.format("getCtrl(%s)", name));
+		OneVal oneVal = listVal.search(name);
+		if(oneVal==null){
+			return null;
 		}
-		return null; // 実行時例外のため、このnullが返される事はない
+		return oneVal.getOneCtrl();
+//		try {
+//			OneVal oneVal = listVal.search(name);
+//			return oneVal.getOneCtrl();
+//		} catch (Exception e) {
+//			Util.runtimeException(String.format("getCtrl(%s)", name));
+//		}
+//		return null; // 実行時例外のため、このnullが返される事はない
 	}
 
 	protected abstract void abstractOnChange(OneCtrl oneCtrl);
@@ -179,6 +181,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	public final void onChange(OneCtrl oneCtrl) {
 		
 		try {
+
 			OneCtrl o = getCtrl("protocolKind");
 			if (o != null) {
 				o.setEnable(false); // プロトコル 変更不可

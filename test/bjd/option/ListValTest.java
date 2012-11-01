@@ -58,27 +58,19 @@ public class ListValTest {
 		//テスト用のListVal作成(パターン１)
 		ListVal listVal = createListVal1();
 		System.out.printf("listVal.search(n1)!=null \n");
-		try {
-			assertNotNull(listVal.search("n1"));
-		} catch (Exception e) {
-			Assert.fail();
-		}
+		assertNotNull(listVal.search("n1"));
 	}
 
 	@Test
 	public final void a004() {
-		TestUtil.dispHeader("a004 search（)で検索に失敗すると例外がスローされる");
+		TestUtil.dispHeader("a004 search（)で検索に失敗するとnullが返される");
 		TestUtil.dispPrompt(this);
 
 		//テスト用のListVal作成(パターン１)
 		ListVal listVal = createListVal1();
-		try {
-			listVal.search("xxx");
-			Assert.fail("この行が実行されたらエラー");
-		} catch (Exception e) {
-			TestUtil.dispPrompt(this, String.format("listVal.search(xxx) = %s ", e.getClass()));
-
-		}
+		OneVal  oneVal = listVal.search("xxx");
+		assertNull(oneVal);
+		TestUtil.dispPrompt(this, String.format("listVal.search(xxx) = %s ", oneVal));
 	}
 
 	//テスト用のListVal作成(パターン１)

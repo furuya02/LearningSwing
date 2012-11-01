@@ -167,12 +167,7 @@ public class IniDbTest {
 			listVal.add(Assistance.createOneVal(fx.ctrlType, null));
 			iniDb.read("Basic", listVal); // nameTagは"Basic"で決め打ちされている
 			
-			OneVal oneVal = null;
-			try {
-				oneVal = listVal.search("name");
-			} catch (Exception e) {
-				Assert.fail();
-			}
+			OneVal oneVal = listVal.search("name");
 
 			System.out.printf("%s\n", fx.expected);
 			assertThat(fx.value, is(oneVal.toReg(false)));
