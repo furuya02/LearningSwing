@@ -1,4 +1,4 @@
-package sample.server;
+package sampleServer;
 
 import bjd.Kernel;
 import bjd.net.OneBind;

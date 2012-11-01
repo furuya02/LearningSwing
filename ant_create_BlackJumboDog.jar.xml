@@ -9,6 +9,9 @@
 	<target name="create_run_jar">
 
 		<!-- 再構築 -->
+		<mkdir dir="${output_dir}"/>
+		<mkdir dir="${output_dir}/plugins"/>
+		
 		<delete verbose="true">
 			<fileset dir="${project_dir}/bin" />
 			<fileset dir="${output_dir}" />
@@ -19,7 +22,7 @@
 
 		<!-- SampleServer.jar -->      	
 		<jar destfile="${output_dir}/plugins/SampleServer.jar">
-            <fileset dir="${project_dir}/bin/SampleServer/"/>
+            <fileset dir="${project_dir}/bin/sampleServer/"/>
         </jar>
 		
 		<delete verbose="true">
