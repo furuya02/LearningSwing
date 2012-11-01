@@ -52,7 +52,6 @@ public final class OptionBasic extends OneOption {
 
 	private OnePage page1(String name, String title) {
 		OnePage onePage = new OnePage(name, title);
-
 		onePage.add(new OneVal("useExitDlg", false, Crlf.NEXTLINE, new CtrlCheckBox(isJp() ? "終了確認のメッセージを表示する" : "Display a message of end confirmation")));
 		onePage.add(new OneVal("useLastSize", true, Crlf.NEXTLINE, new CtrlCheckBox(isJp() ? "前回起動時のウインドウサイズを記憶する" : "Memorize size of a wind in last time start")));
 		onePage.add(new OneVal("isWindowOpen", true, Crlf.NEXTLINE, new CtrlCheckBox(isJp() ? "起動時にウインドウを開く" : "Open a window in start")));
@@ -75,6 +74,4 @@ public final class OptionBasic extends OneOption {
 		boolean b = (boolean) getCtrl("useAdminPassword").read();
 		getCtrl("password").setEnable(b);
 	}
-
-
 }

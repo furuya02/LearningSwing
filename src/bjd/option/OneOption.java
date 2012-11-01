@@ -88,8 +88,8 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		listVal.createCtrl(mainPanel, x, y);
 		listVal.setListener(this);
 
-		// コントロールの状態を初期化するために、ダミーのイベントを発生させる
-		//onChange(null);
+		// 基底クラスのセットアップされる「サーバ設定」などのコントロールの状態を初期化するため、このダミーのイベントを発生させる
+		onChange(null);
 	}
 
 	// ダイアログ破棄時の処理

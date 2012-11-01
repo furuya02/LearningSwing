@@ -79,7 +79,7 @@ public final class CtrlComboBox extends OneCtrl implements ActionListener {
 	//***********************************************************************
 	protected void abstractSetEnable(boolean enabled) {
 		if (comboBox != null) {
-			comboBox.setEditable(enabled);
+			comboBox.setEnabled(enabled);
 		}
 	}
 
