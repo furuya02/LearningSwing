@@ -24,7 +24,6 @@ public final class LogFileTest {
 	//多重スレッドでテストが走ると、同一ファイルにアクセスしてしまうので、テストごとにテンポラリディレクトリを用意するようにする
 	private File before(String tmpDir) {
 		File dir; // 作業ディレクトリ
-		//Conf conf = null;
 		String path = String.format("%s\\%s", new File(".").getAbsoluteFile().getParent(), tmpDir);
 		dir = new File(path);
 		// 作業ディレクトリの生成
@@ -46,16 +45,17 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a001 LogFileの生成時に、オプションで指定したログファイルが生成されているか");
 
 		File dir = before("a001");
-
-		Conf conf = TestUtil.createConf("OptionLog");
-		conf.set("saveDirectory", dir.getPath());
-		
+		String saveDirectory = dir.getPath();
+		int saveDays = 0; //自動削除しない
 
 		for (int n = 0; n <= 2; n++) {
-			conf.set("normalFileName", n);
-			conf.set("secureFileName", n);
 
-			LogFile logFile = new LogFile(null, conf, null, true, null);
+			LogFile logFile = null;
+			try {
+				logFile = new LogFile(saveDirectory, n, n, saveDays);
+			} catch (IOException e) {
+				Assert.fail(e.getMessage());
+			}
 
 			// ログの種類に応じた２つのファイルが生成されていることを確認する
 			FileSearch fs = new FileSearch(dir.getPath());
@@ -89,17 +89,15 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a002 append(OneLog)して、それぞれのファイルに当該行数が追加されているかどうか");
 
 		File dir = before("a002");
-
-		Conf conf = TestUtil.createConf("OptionLog");
-		conf.set("saveDirectory", dir.getPath());
-		conf.set("normalFileName", 2); // BlackJumboDog
-		conf.set("secureFileName", 2); // Secure.Log
-		conf.set("useLogFile", true);
-		//conf.setTestValue("saveDays",100);
-		//conf.setTestValue("useLogClear",false);
+		String saveDirectory = dir.getPath();
+		int saveDays = 0; 
+		LogFile logFile = null;
+		try {
+			logFile = new LogFile(saveDirectory, 2, 2, saveDays);
+		} catch (IOException e1) {
+			Assert.fail(e1.getMessage());
+		}		
 		
-
-		LogFile logFile = new LogFile(null, conf, null, true, null);
 
 		String s1 = "2012/06/01 00:00:00\tDETAIL\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
 		String s2 = "2012/06/02 00:00:00\tERROR\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
@@ -139,14 +137,14 @@ public final class LogFileTest {
 		TestUtil.dispHeader("a003 tail() 2012/09/01~7日分のログを準備して9/7(本日)からsaveDays=2でtailする");
 
 		File dir = before("a003");
-		Conf conf = TestUtil.createConf("OptionLog");
-		conf.set("saveDirectory", dir.getPath());
-		conf.set("normalFileName", 2); // BlackJumboDog
-		conf.set("secureFileName", 2); // Secure.Log
-		conf.set("useLogFile", true);
-		conf.set("saveDays", 30);
-
-		LogFile logFile = new LogFile(null, conf, null, true, null);
+		String saveDirectory = dir.getPath();
+		int saveDays = 2; 
+		LogFile logFile = null;
+		try {
+			logFile = new LogFile(saveDirectory, 2, 2, saveDays);
+		} catch (IOException e1) {
+			Assert.fail(e1.getMessage());
+		}
 
 		//2012/09/01~7日分のログを準備
 		String s1 = "2012/09/01 00:00:00\tDETAIL\t3208\tWeb-localhost:88\t127.0.0.1\t0000018\texecute\tramapater";
@@ -175,7 +173,6 @@ public final class LogFileTest {
 			Assert.fail(ex.getMessage());
 		}
 
-		int saveDays = 2;
 		String fileName = "BlackJumboDog.Log";
 		String path = String.format("%s\\%s", dir.getPath(), fileName);
 		File file = new File(path);
@@ -219,9 +216,5 @@ public final class LogFileTest {
 
 		after(dir);
 	}
-
-
-	// TODO LogFileTest deleteLog 未実装
-
 
 }

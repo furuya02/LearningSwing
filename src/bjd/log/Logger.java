@@ -12,43 +12,51 @@ import bjd.sock.SockObj;
  * @author SIN
  */
 public final class Logger {
-	private Kernel kernel;
+	//private Kernel kernel2;
+	private LogLimit logLimit;
+	private LogFile logFile;
+	private LogView logView;
+	private boolean isJp;
 	private String nameTag;
 	private boolean useDetailsLog;
+	private boolean useLimitString;
 	private ILogger logger;
-
+	
 	/**
-	 * 非公開のコンストラクタ
-	 * @param kernel
-	 * @param nameTag
-	 * @param useDetailsLog
-	 * @param logger
+	 * コンストラクタ<br>
+	 * kernelの中でCreateLogger()を定義して使用する<br>
+	 * @param logLimit 表示制限
+	 * @param logFile ファイルへの保存クラス
+	 * @param logView　ビューへの表示クラス
+	 * @param isJp 日本語表示
+	 * @param nameTag 名前
+	 * @param useDetailsLog 詳細ログを表示するかどうか
+	 * @param useLimitString 表示制限の結果をファイル保存に適用するかどうか
+	 * @param logger ILoggerクラス
 	 */
-	private Logger(Kernel kernel, String nameTag, boolean useDetailsLog, ILogger logger) {
-		this.kernel = kernel;
+	public Logger(LogLimit logLimit, LogFile logFile, LogView logView, boolean isJp, String nameTag, boolean useDetailsLog, boolean useLimitString, ILogger logger) {
+		this.logLimit = logLimit;
+		this.logFile = logFile;
+		this.logView = logView;
+		this.isJp = isJp;
 		this.nameTag = nameTag;
 		this.useDetailsLog = useDetailsLog;
+		this.useLimitString = useLimitString;
 		this.logger = logger;
 	}
-
+	
 	/**
-	 * インスタンス作成（デバッグ用）
-	 * @return Logger
+	 * テスト用
 	 */
-	public static Logger create() {
-		return new Logger(null, "nameTag", false, null);
-	}
-
-	/**
-	 * インスタンス作成
-	 * @param kernel
-	 * @param nameTag
-	 * @param useDetailsLog
-	 * @param logger
-	 * @return
-	 */
-	public static Logger create(Kernel kernel, String nameTag, boolean useDetailsLog, ILogger logger) {
-		return new Logger(kernel, nameTag, useDetailsLog, logger);
+	public Logger() {
+		this.logLimit = null;
+		this.logFile = null;
+		this.logView = null;
+		this.isJp = true;
+		this.nameTag = "";
+		this.useDetailsLog = false;
+		this.useLimitString = false;
+		this.logger = null;
 	}
 
 	/**
@@ -59,28 +67,28 @@ public final class Logger {
 	 * @param detailInfomation
 	 */
 	public void set(LogKind logKind, SockObj sockBase, int messageNo, String detailInfomation) {
+		//デバッグ等でkernelが初期化されていない場合、処理なし
+		if (logFile == null && logView == null) {
+			return;
+		}
+		//詳細ログが対象外の場合、処理なし
 		if (logKind == LogKind.DETAIL) {
 			if (!useDetailsLog) {
 				return;
 			}
 		}
-		//デバッグ等でkernelが初期化されていないとき、処理しない
-		if (kernel == null) {
-			return;
-		}
-
 		long threadId = Thread.currentThread().getId(); //TODO DEBUG GetCurrentThreadId();
-		String message = kernel.isJp() ? "定義されていません" : "Message is not defined";
+		String message = isJp ? "定義されていません" : "Message is not defined";
 		if (messageNo < 9000000) {
 			if (logger != null) {
 				message = logger.getMsg(messageNo); //デリゲートを使用した継承によるメッセージ取得
 			} else { //(9000000以上)共通番号の場合の処理
 				switch (messageNo) {
 					case 9000000:
-						message = kernel.isJp() ? "サーバ開始" : "Server started it";
+						message = isJp ? "サーバ開始" : "Server started it";
 						break;
 					case 9000001:
-						message = kernel.isJp() ? "サーバ停止" : "Server stopped";
+						message = isJp ? "サーバ停止" : "Server stopped";
 						break;
 					case 9000002:
 						message = "_subThread() started.";
@@ -89,25 +97,25 @@ public final class Logger {
 						message = "_subThread() stopped.";
 						break;
 					case 9000004:
-						message = kernel.isJp() ? "同時接続数を超えたのでリクエストをキャンセルします" : "Because the number of connection exceeded it at the same time, the request was canceled.";
+						message = isJp ? "同時接続数を超えたのでリクエストをキャンセルします" : "Because the number of connection exceeded it at the same time, the request was canceled.";
 						break;
 					case 9000005:
-						message = kernel.isJp() ? "受信文字列が長すぎます（不正なリクエストの可能性があるため切断しました)" : "Reception character string is too long (cut off so that there was possibility of an unjust request in it)";
+						message = isJp ? "受信文字列が長すぎます（不正なリクエストの可能性があるため切断しました)" : "Reception character string is too long (cut off so that there was possibility of an unjust request in it)";
 						break;
 					case 9000006:
-						message = kernel.isJp() ? "Socket.Bind()でエラーが発生しました。[UDP]" : "An error occurred in Socket.Bind() [UDP]";
+						message = isJp ? "Socket.Bind()でエラーが発生しました。[UDP]" : "An error occurred in Socket.Bind() [UDP]";
 						break;
 					case 9000007:
-						message = kernel.isJp() ? "callBack関数が指定されていません[UDP]" : "It is not appointed in callback function [UDP]";
+						message = isJp ? "callBack関数が指定されていません[UDP]" : "It is not appointed in callback function [UDP]";
 						break;
 					case 9000008:
-						message = kernel.isJp() ? "BeginReceiveFrom()でエラーが発生しました[UDP]" : "An error occurred in BeginReceiveFrom() [UDP]";
+						message = isJp ? "BeginReceiveFrom()でエラーが発生しました[UDP]" : "An error occurred in BeginReceiveFrom() [UDP]";
 						break;
 					case 9000009:
-						message = kernel.isJp() ? "Socket.Bind()でエラーが発生しました。[TCP]" : "An error occurred in Socket.Bind() [TCP]";
+						message = isJp ? "Socket.Bind()でエラーが発生しました。[TCP]" : "An error occurred in Socket.Bind() [TCP]";
 						break;
 					case 9000010:
-						message = kernel.isJp() ? "Socket.Listen()でエラーが発生しました。[TCP]" : "An error occurred in Socket..Listen() [TCP]";
+						message = isJp ? "Socket.Listen()でエラーが発生しました。[TCP]" : "An error occurred in Socket..Listen() [TCP]";
 						break;
 					case 9000011:
 						message = "tcpQueue().Dequeue()=null";
@@ -125,137 +133,137 @@ public final class Logger {
 						message = "SendBinaryFile(string fileName,long rangeFrom,long rangeTo) socket.Send()";
 						break;
 					case 9000016:
-						message = kernel.isJp() ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
+						message = isJp ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
 						break;
 					case 9000017:
-						message = kernel.isJp() ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
+						message = isJp ? "このアドレスからの接続は許可されていません(ACL)" : "Connection from this address is not admitted.(ACL)";
 						break;
 					case 9000018:
-						message = kernel.isJp() ? "この利用者のアクセスは許可されていません(ACL)" : "Access of this user is not admitted (ACL)";
+						message = isJp ? "この利用者のアクセスは許可されていません(ACL)" : "Access of this user is not admitted (ACL)";
 						break;
 					case 9000019:
-						message = kernel.isJp() ? "アイドルタイムアウト" : "Timeout of an idle";
+						message = isJp ? "アイドルタイムアウト" : "Timeout of an idle";
 						break;
 					case 9000020:
-						message = kernel.isJp() ? "送信に失敗しました" : "Transmission of a message failure";
+						message = isJp ? "送信に失敗しました" : "Transmission of a message failure";
 						break;
 					case 9000021:
-						message = kernel.isJp() ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
+						message = isJp ? "ThreadBase::loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
 						break;
 					case 9000022:
-						message = kernel.isJp() ? "ウインドウ情報保存ファイルにIOエラーが発生しました" : "An IO error occurred in a window information save file";
+						message = isJp ? "ウインドウ情報保存ファイルにIOエラーが発生しました" : "An IO error occurred in a window information save file";
 						break;
 					case 9000023:
-						message = kernel.isJp() ? "証明書の読み込みに失敗しました" : "Reading of a certificate made a blunder";
+						message = isJp ? "証明書の読み込みに失敗しました" : "Reading of a certificate made a blunder";
 						break;
-					//case 9000024: message = kernel.isJp() ? "SSLネゴシエーションに失敗しました" : "SSL connection procedure makes a blunder"; break;
-					//case 9000025: message = kernel.isJp() ? "ファイル（秘密鍵）が見つかりません" : "Private key is not found"; break;
+					//case 9000024: message = isJp ? "SSLネゴシエーションに失敗しました" : "SSL connection procedure makes a blunder"; break;
+					//case 9000025: message = isJp ? "ファイル（秘密鍵）が見つかりません" : "Private key is not found"; break;
 					case 9000026:
-						message = kernel.isJp() ? "ファイル（証明書）が見つかりません" : "A certificate is not found";
+						message = isJp ? "ファイル（証明書）が見つかりません" : "A certificate is not found";
 						break;
-					//case 9000027: message = kernel.isJp() ? "OpenSSLのライブラリ(ssleay32.dll,libeay32.dll)が見つかりません" : "OpenSSL library (ssleay32.dll,libeay32.dll) is not found"; break;
+					//case 9000027: message = isJp ? "OpenSSLのライブラリ(ssleay32.dll,libeay32.dll)が見つかりません" : "OpenSSL library (ssleay32.dll,libeay32.dll) is not found"; break;
 					case 9000028:
-						message = kernel.isJp() ? "SSLの初期化に失敗しています" : "Initialization of SSL made a blunder";
+						message = isJp ? "SSLの初期化に失敗しています" : "Initialization of SSL made a blunder";
 						break;
 					case 9000029:
-						message = kernel.isJp() ? "指定された作業ディレクトリが存在しません" : "A work directory is not found";
+						message = isJp ? "指定された作業ディレクトリが存在しません" : "A work directory is not found";
 						break;
 					case 9000030:
-						message = kernel.isJp() ? "起動するサーバが見つかりません" : "A starting server is not found";
+						message = isJp ? "起動するサーバが見つかりません" : "A starting server is not found";
 						break;
 					case 9000031:
-						message = kernel.isJp() ? "「ログの保存場所」が見つかりません" : "Log Save place(directory) is not found";
+						message = isJp ? "ログファイルの初期化に失敗しました" : "Failed in initialization of logfile";
 						break;
-					case 9000032:
-						message = kernel.isJp() ? "ログ削除" : "Delete LogFile";
-						break;
+					//case 9000032:
+					//	message = isJp ? "ログ削除" : "Delete LogFile";
+					//	break;
 					case 9000033:
-						message = kernel.isJp() ? "ファイル保存時にエラーが発生しました" : "An error occurred in a File save";
+						message = isJp ? "ファイル保存時にエラーが発生しました" : "An error occurred in a File save";
 						break;
 					case 9000034:
-						message = kernel.isJp() ? "ACL指定に問題があります" : "ACL configuration failure";
+						message = isJp ? "ACL指定に問題があります" : "ACL configuration failure";
 						break;
 					case 9000035:
-						message = kernel.isJp() ? "Socket()でエラーが発生しました。[TCP]" : "An error occurred in Socket() [TCP]";
+						message = isJp ? "Socket()でエラーが発生しました。[TCP]" : "An error occurred in Socket() [TCP]";
 						break;
 					case 9000036:
-						message = kernel.isJp() ? "Socket()でエラーが発生しました。[UDP]" : "An error occurred in Socket() [UDP]";
+						message = isJp ? "Socket()でエラーが発生しました。[UDP]" : "An error occurred in Socket() [UDP]";
 						break;
 					case 9000037:
-						message = kernel.isJp() ? "_subThread()で例外が発生しました" : "An exception occurred in _subThread()";
+						message = isJp ? "_subThread()で例外が発生しました" : "An exception occurred in _subThread()";
 						break;
 					case 9000038:
-						message = kernel.isJp() ? "【例外】" : "[Exception]";
+						message = isJp ? "【例外】" : "[Exception]";
 						break;
 					case 9000039:
-						message = kernel.isJp() ? "【STDOUT】" : "[STDOUT]";
+						message = isJp ? "【STDOUT】" : "[STDOUT]";
 						break;
 					case 9000040:
-						message = kernel.isJp() ? "拡張SMTP適用範囲の指定に問題があります" : "ESMTP range configuration failure";
+						message = isJp ? "拡張SMTP適用範囲の指定に問題があります" : "ESMTP range configuration failure";
 						break;
 					case 9000041:
-						message = kernel.isJp() ? "disp2()で例外が発生しました" : "An exception occurred in disp2()";
+						message = isJp ? "disp2()で例外が発生しました" : "An exception occurred in disp2()";
 						break;
 					case 9000042:
-						message = kernel.isJp() ? "初期化に失敗しているためサーバを開始できません" : "Can't start a server in order to fail in initialization";
+						message = isJp ? "初期化に失敗しているためサーバを開始できません" : "Can't start a server in order to fail in initialization";
 						break;
 					case 9000043:
-						message = kernel.isJp() ? "クライアント側が切断されました" : "The client side was cut off";
+						message = isJp ? "クライアント側が切断されました" : "The client side was cut off";
 						break;
 					case 9000044:
-						message = kernel.isJp() ? "サーバ側が切断されました" : "The server side was cut off";
+						message = isJp ? "サーバ側が切断されました" : "The server side was cut off";
 						break;
-					case 9000045:
-						message = kernel.isJp() ? "ログ削除処理で日付変換に例外が発生しました" : "An exception occurred in date conversion by log elimination processing";
-						break;
+					//case 9000045:
+					//	message = isJp ? "ログ削除処理で日付変換に例外が発生しました" : "An exception occurred in date conversion by log elimination processing";
+					//	break;
 					case 9000046:
-						message = kernel.isJp() ? "socket.send()でエラーが発生しました" : "socket.send()";
+						message = isJp ? "socket.send()でエラーが発生しました" : "socket.send()";
 						break;
 					case 9000047:
-						message = kernel.isJp() ? "ユーザ名が無効です" : "A user name is null and void";
+						message = isJp ? "ユーザ名が無効です" : "A user name is null and void";
 						break;
 					case 9000048:
-						message = kernel.isJp() ? "ThreadBase::Loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
+						message = isJp ? "ThreadBase::Loop()で例外が発生しました" : "An exception occurred in ThreadBase::Loop()";
 						break;
 					case 9000049:
-						message = kernel.isJp() ? "【例外】" : "[Exception]";
+						message = isJp ? "【例外】" : "[Exception]";
 						break;
 					case 9000050:
-						message = kernel.isJp() ? "ファイルにアクセスできませんでした" : "Can't open a file";
+						message = isJp ? "ファイルにアクセスできませんでした" : "Can't open a file";
 						break;
 					case 9000051:
-						message = kernel.isJp() ? "インスタンスの生成に失敗しました" : "Can't create instance";
+						message = isJp ? "インスタンスの生成に失敗しました" : "Can't create instance";
 						break;
 					case 9000052:
-						message = kernel.isJp() ? "名前解決に失敗しました" : "Non-existent domain";
+						message = isJp ? "名前解決に失敗しました" : "Non-existent domain";
 						break;
 					case 9000053:
-						message = kernel.isJp() ? "【例外】SockObj.Resolve()" : "[Exception] SockObj.Resolve()";
+						message = isJp ? "【例外】SockObj.Resolve()" : "[Exception] SockObj.Resolve()";
 						break;
 					case 9000054:
-						message = kernel.isJp() ? "Apache Killerによる攻撃の可能性があります" : "There is possibility of attack by Apache Killer in it";
+						message = isJp ? "Apache Killerによる攻撃の可能性があります" : "There is possibility of attack by Apache Killer in it";
 						break;
 					case 9000055:
-						message = kernel.isJp() ? "【自動拒否】「ACL」の禁止する利用者（アドレス）に追加しました" : "Add it to a deny list automatically";
+						message = isJp ? "【自動拒否】「ACL」の禁止する利用者（アドレス）に追加しました" : "Add it to a deny list automatically";
 						break;
 					case 9000056:
-						message = kernel.isJp() ? "不正アクセスを検出しましたが、ACL「拒否」リストは追加されませんでした" : "I detected possibility of Attack, but the ACL [Deny] list was not added";
+						message = isJp ? "不正アクセスを検出しましたが、ACL「拒否」リストは追加されませんでした" : "I detected possibility of Attack, but the ACL [Deny] list was not added";
 						break;
 					case 9000057:
-						message = kernel.isJp() ? "【例外】" : "[Exception]";
+						message = isJp ? "【例外】" : "[Exception]";
 						break;
 					case 9000058:
-						message = kernel.isJp() ? "メールの送信に失敗しました" : "Failed in the transmission of a message of an email";
+						message = isJp ? "メールの送信に失敗しました" : "Failed in the transmission of a message of an email";
 						break;
 					case 9000059:
-						message = kernel.isJp() ? "メールの保存に失敗しました" : "Failed in a save of an email";
+						message = isJp ? "メールの保存に失敗しました" : "Failed in a save of an email";
 						break;
 					case 9000060:
-						message = kernel.isJp() ? "【例外】" : "[Exception]";
+						message = isJp ? "【例外】" : "[Exception]";
 						break;
-					case 9000061:
-						message = kernel.isJp() ? "ファイルの作成に失敗しました" : "Failed in making of a file";
-						break;
+					//case 9000061:
+					//	message = isJp ? "ファイルの作成に失敗しました" : "Failed in making of a file";
+					//	break;
 					default:
 						break;
 				}
@@ -265,16 +273,32 @@ public final class Logger {
 		String remoteHostname = (sockBase == null) ? "-" : sockBase.getRemoteHostname();
 		OneLog oneLog = new OneLog(calendar, logKind, nameTag, threadId, remoteHostname, messageNo, message, detailInfomation);
 
-		//ログファイルへの追加
-		if (kernel.getLogFile() != null) {
-			kernel.getLogFile().append(oneLog);
-		}
 
+		// 表示制限にヒットするかどうかの確認
+		boolean isDisplay = true;
+		if (!oneLog.isSecure()) { //セキュリティログは表示制限の対象外
+			if (logLimit != null) {
+				isDisplay = logLimit.isDisplay(oneLog.toString());
+			}
+		}
+		if (logView != null && isDisplay) {
+			//isDisplayの結果に従う
+			logView.append(oneLog);
+		}
+		if (logFile != null) {
+			if (useLimitString) { //表示制限が有効な場合
+				if (isDisplay) { //isDisplayの結果に従う
+					logFile.append(oneLog);
+				}
+			} else { //表示制限が無効な場合は、すべて保存される
+				logFile.append(oneLog);
+			}
+		}
 	}
 
-	public void exception(Exception ex) {
-		int messageNo = 9000060;
-		set(LogKind.ERROR, null, messageNo, ex.getMessage());
+	//public void exception(Exception ex) {
+	//	int messageNo = 9000060;
+	//	set(LogKind.ERROR, null, messageNo, ex.getMessage());
 		//TODO Logger 例外メッセージが投かんされた時のスタックトレース　未実装
 		//        string[] tmp = ex.StackTrace.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 		//        for (String s : tmp) {
@@ -296,5 +320,5 @@ public final class Logger {
 		//                }
 		//            }
 		//        }
-	}
+	//}
 }

@@ -15,8 +15,8 @@ import bjd.util.MsgKind;
 
 public final class LogView implements IDispose {
 
-	private ListView listView;
-	private Timer timer;
+	private ListView listView = null;
+	private Timer timer = null;
 	private ArrayList<OneLog> ar = new ArrayList<OneLog>();
 	private Object lock = new Object();
 
@@ -24,14 +24,10 @@ public final class LogView implements IDispose {
 		if (listView == null) {
 			return;
 		}
-
 		this.listView = listView;
-
 		//タイマー（表示）イベント処理
 		timer = new Timer();
 		timer.schedule(new MyTimer(), 0, 100);
-		// timer = new Timer{Enabled = true, Interval = 100};
-		// timer.Tick += TimerTick;
 	}
 
 	//タイマー(表示)イベント
@@ -66,8 +62,10 @@ public final class LogView implements IDispose {
 	}
 
 	public void dispose() {
-		timer.cancel();
-		timer = null;
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 		if (listView != null) {
 			listView.dispose();
 		}

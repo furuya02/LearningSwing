@@ -55,11 +55,11 @@ public final class OptionLog extends OneOption {
 
 	private OnePage page1(String name, String title , RunMode runMode, boolean editBrowse) {
 		OnePage onePage = new OnePage(name, title);
-		onePage.add(new OneVal("normalFileName", 2, Crlf.NEXTLINE, new CtrlComboBox(isJp() ? "通常ログ ファイル名" : "Nomal Log", new String[]{
+		onePage.add(new OneVal("normalLogKind", 2, Crlf.NEXTLINE, new CtrlComboBox(isJp() ? "通常ログ ファイル名" : "Nomal Log", new String[]{
 			isJp() ? "日ごと ( bjd.yyyy.mm.dd.log )" : "daily （bjd.yyyy.mm.dd.log）",
 			isJp() ? "月ごと ( bjd.yyyy.mm.log )" : "monthly （bjd.yyyy.mm.log）",
 			isJp() ? "一定 ( BlackJumboDog.Log )" : "Uniformity (BlackJumboDog.Log)"	}, 200)));
-		onePage.add(new OneVal("secureFileName", 2, Crlf.NEXTLINE, new CtrlComboBox(isJp() ? "セキュリティログ ファイル名" : "Secure Log", new String[]{
+		onePage.add(new OneVal("secureLogKind", 2, Crlf.NEXTLINE, new CtrlComboBox(isJp() ? "セキュリティログ ファイル名" : "Secure Log", new String[]{
 			isJp() ? "日ごと ( secure.yyyy.mm.dd.log )" : "dayiy （secure.yyyy.mm.dd.log）",
 			isJp() ? "月ごと ( secure.yyyy.mm.log )" : "monthly （secure.yyyy.mm.log）",
 			isJp() ? "一定 ( Secure.Log )" : "Uniformity (secure.Log)"	}, 200)));

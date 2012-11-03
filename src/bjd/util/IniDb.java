@@ -193,15 +193,14 @@ public final class IniDb {
 				try {
 					LineObject o = readLine(s);
 					if (o.getNameTag().equals(nameTag)) {
-						isRead = true; // 1件でもデータを読み込んだ場合にtrue
 						OneVal oneVal = listVal.search(o.getName());
-						if (oneVal == null) {
-							Util.runtimeException("");
+						if (oneVal != null) {
+							oneVal.fromReg(o.getValStr());
+							isRead = true; // 1件でもデータを読み込んだ場合にtrue
 						}
-						oneVal.fromReg(o.getValStr());
 					}
 				} catch (Exception e1) {
-					Util.runtimeException("");
+					Util.runtimeException(e1.getMessage());
 				}
 			}
 		}

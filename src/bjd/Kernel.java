@@ -9,19 +9,24 @@ import java.net.URISyntaxException;
 import javax.swing.JMenuBar;
 
 import bjd.ctrl.ListView;
+import bjd.log.ILogger;
 import bjd.log.LogFile;
 import bjd.log.LogKind;
+import bjd.log.LogLimit;
 import bjd.log.LogView;
 import bjd.log.Logger;
 import bjd.menu.Menu;
 import bjd.net.DnsCache;
 import bjd.option.Conf;
+import bjd.option.Dat;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
 import bjd.option.OptionIni;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
 import bjd.util.IDispose;
+import bjd.util.Msg;
+import bjd.util.MsgKind;
 import bjd.util.Util;
 
 public final class Kernel implements IDispose {
@@ -31,8 +36,10 @@ public final class Kernel implements IDispose {
 	private Lang lang = Lang.JP;
 	private ListOption listOption;
 	private ListServer listServer;
-	private LogView logView;
+
 	private LogFile logFile = null;
+	private LogView logView = null;
+	
 	private View view;
 	private Logger logger = null;
 	private WindowSize windowSize;
@@ -55,10 +62,6 @@ public final class Kernel implements IDispose {
 		return remoteServer;
 	}
 
-	public LogFile getLogFile() {
-		return logFile;
-	}
-
 //	public LocalAddress getLocalAddress() {
 //		return localAddress;
 //	}
@@ -77,10 +80,6 @@ public final class Kernel implements IDispose {
 
 	public RunMode getRunMode() {
 		return runMode;
-	}
-
-	public LogView getLogView() {
-		return logView;
 	}
 
 	//テスト用コンストラクタ
@@ -136,7 +135,6 @@ public final class Kernel implements IDispose {
 		} 
 		//
 		//        //ログ関連インスタンスの生成
-		logView = new LogView(listViewLog); //ログビュー
 		//view = new View(this, mainForm, listViewLog, notifyIcon);
 		view = new View(this, mainForm, listViewLog);
 		//
@@ -144,6 +142,10 @@ public final class Kernel implements IDispose {
 		//        if (RunMode != RunMode.Remote) {
 		//            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
 		//localAddress = new LocalAddress();
+
+		//LogViewの初期化
+		logView = new LogView(listViewLog);
+
 		initList(); //各管理クラスの初期化
 		menu.initialize(); //メニュー構築（内部テーブルの初期化）
 		//            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
@@ -151,7 +153,28 @@ public final class Kernel implements IDispose {
 		traceDlg = new TraceDlg(this, (mainForm != null) ? mainForm.getFrame() : null); //トレース表示
 		dnsCache = new DnsCache();
 		//
-		logger = Logger.create(this, "kernel", true, null);
+		Conf conf = new Conf(listOption.get("Log"));
+		if (conf != null) {
+
+			//LogFileの初期化
+			String saveDirectory = (String) conf.get("saveDirectory");
+			int normalLogKind = (int) conf.get("normalLogKind");
+			int secureLogKind = (int) conf.get("secureLogKind");
+			int saveDays = (int) conf.get("saveDays");
+			boolean useLogClear = (boolean) conf.get("useLogClear");
+			if (!useLogClear) {
+				saveDays = 0; //ログの自動削除が無効な場合、saveDaysに0をセットする
+			}
+			try {
+				logFile = new LogFile(saveDirectory, normalLogKind, secureLogKind, saveDays);
+			} catch (IOException e) {
+				Msg.show(MsgKind.ERROR, e.getMessage());
+				logFile = null;
+			}
+			
+		}
+		logger = createLogger("kernel", true, null);
+		
 		//
 		//        switch (RunMode){
 		//            case RunMode.Remote:
@@ -163,6 +186,20 @@ public final class Kernel implements IDispose {
 		//                break;
 		//        }
 
+	}
+	
+	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
+		Conf conf = new Conf(listOption.get("Log"));
+		if (conf == null) {
+			//createLoggerを使用する際に、OptionLogが検索できないのは、設計上の問題がある
+			Util.runtimeException("createLogger() conf==null");
+		}
+		Dat dat = (Dat) conf.get("limitString");
+		boolean isDisplay = ((int) conf.get("isDisplay")) == 0 ? true : false;
+		LogLimit logLimit = new LogLimit(dat, isDisplay);
+
+		boolean useLimitString = (boolean) conf.get("useLimitString");
+		return new Logger(logLimit, logFile, logView, isJp(), nameTag, useDetailsLog, useLimitString, logger);
 	}
 
 	@Override
@@ -242,14 +279,19 @@ public final class Kernel implements IDispose {
 			logFile.dispose();
 		}
 
-		Logger logger = Logger.create(this, "Log", true, null);
+		Logger logger = createLogger("Log", true, null);
 		remoteServer = listServer.get("RemoteServer");
 		Conf conf = new Conf(listOption.get("Log"));
 		boolean useLog = true;
 		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
 			useLog = false;
 		}
-		logFile = new LogFile(logger, conf, logView, useLog, remoteServer);
+		
+		try {
+			logFile = new LogFile((String) conf.get("saveDirectory"), (int) conf.get("normalLogKind"), (int) conf.get("secureLogKind"), (int) conf.get("saveDays"));
+		} catch (IOException e) {
+			logger.set(LogKind.ERROR, null, 9000031, e.getMessage());
+		}
 		logView.setFont((Font) conf.get("font")); //logView.initFont();
 		//
 		//        foreach (var o in ListOption) {
