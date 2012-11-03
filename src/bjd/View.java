@@ -10,9 +10,11 @@ public final class View implements IDispose {
 	private ListView listView;
 	//private NotifyIcon notifyIcon;
 
-	//TODO DEBUG用 　View.getListView()
 	public ListView getListView() {
 		return listView;
+	}
+	public MainForm getMainForm(){
+		return mainForm;
 	}
 
 	//    public View(Kernel kernel, MainForm mainForm, ListView listView, NotifyIcon notifyIcon) {

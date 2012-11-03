@@ -18,6 +18,7 @@ public final class ListOption extends ListBase<OneOption> {
 
 	public ListOption(Kernel kernel) {
 		this.kernel = kernel;
+		initialize();
 	}
 
 	public OneOption get(String nameTag) {
@@ -59,7 +60,7 @@ public final class ListOption extends ListBase<OneOption> {
 	/**
 	 * オプションリストの初期化
 	 */
-	public void initialize() {
+	private void initialize() {
 
 		getAr().clear();
 

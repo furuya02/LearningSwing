@@ -11,7 +11,7 @@ import bjd.sock.SockObj;
  * テスト用に、Logger.create()でログ出力を処理を一切行わないインスタンスが作成される<br>
  * @author SIN
  */
-public final class Logger {
+public class Logger {
 	//private Kernel kernel2;
 	private LogLimit logLimit;
 	private LogFile logFile;

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import javax.swing.JMenuBar;
 
 import bjd.ctrl.ListView;
@@ -15,6 +14,7 @@ import bjd.log.LogKind;
 import bjd.log.LogLimit;
 import bjd.log.LogView;
 import bjd.log.Logger;
+import bjd.log.TmpLogger;
 import bjd.menu.Menu;
 import bjd.net.DnsCache;
 import bjd.option.Conf;
@@ -25,30 +25,28 @@ import bjd.option.OptionIni;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
 import bjd.util.IDispose;
-import bjd.util.Msg;
-import bjd.util.MsgKind;
 import bjd.util.Util;
 
 public final class Kernel implements IDispose {
 
-	private RunMode runMode;
-	//private LocalAddress localAddress;
-	private Lang lang = Lang.JP;
-	private ListOption listOption;
-	private ListServer listServer;
-
-	private LogFile logFile = null;
-	private LogView logView = null;
-	
-	private View view;
-	private Logger logger = null;
-	private WindowSize windowSize;
-	private Menu menu;
-	private MainForm mainForm;
-	private OneServer remoteServer = null;
-	private TraceDlg traceDlg;
+	//プロセス起動時に初期化される変数
+	private RunMode runMode = RunMode.Normal; //通常起動;
+	private OneServer remoteServer = null; //クライアントへ接続中のみオブジェクトが存在する
+	private TraceDlg traceDlg = null; //トレース表示
 	private DnsCache dnsCache;
-	//private IniDb optionIni = null;
+	//private Ver ver=null;
+	private View view = null;
+	private LogView logView = null;
+	private WindowSize windowSize = null;
+	private Menu menu = null;
+
+	//サーバ起動時に最初期化さえる変数
+	private ListOption listOption = null;
+	private ListServer listServer = null;
+	private LogFile logFile = null;
+	private Lang lang = Lang.JP;
+	private Logger logger = null;
+	//private MailBox mailBox = null; //実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
 
 	public View getView() {
 		return view;
@@ -62,10 +60,6 @@ public final class Kernel implements IDispose {
 		return remoteServer;
 	}
 
-//	public LocalAddress getLocalAddress() {
-//		return localAddress;
-//	}
-
 	public ListOption getListOption() {
 		return listOption;
 	}
@@ -73,7 +67,7 @@ public final class Kernel implements IDispose {
 	public ListServer getListServer() {
 		return listServer;
 	}
-	
+
 	public boolean isJp() {
 		return (lang == Lang.JP) ? true : false;
 	}
@@ -82,49 +76,67 @@ public final class Kernel implements IDispose {
 		return runMode;
 	}
 
-	//テスト用コンストラクタ
+	public DnsCache getDnsCache() {
+		return dnsCache;
+	}
+
+	/**
+	 * テスト用コンストラクタ
+	 */
 	public Kernel() {
-		init(null, null, null);
+		defaultInitialize(null, null, null);
 	}
 
+	/**
+	 * 通常使用されるコンストラクタ
+	 * @param mainForm メインフォーム
+	 * @param listViewLog ログ表示ビュー
+	 * @param menuBar メニューバー
+	 */
 	public Kernel(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
-		init(mainForm, listViewLog, menuBar);
+		defaultInitialize(mainForm, listViewLog, menuBar);
 	}
 
-	public void init(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
-		this.mainForm = mainForm;
-		//        MailBox = null;//実際に必要になった時に生成される(SMTPサーバ若しくはPOP3サーバの起動時)
-		traceDlg = null; //トレース表示
-		//        Ver = null;//バージョン管理
-		this.menu = null; //メニュー管理クラス
-		remoteServer = null; //クライアントへ接続中のみオブジェクトが存在する
-		//        RemoteClient = null;//リモートクライアント
-		//
-		
+	/**
+	 * 起動時に、コンストラクタから呼び出される初期化<br>
+	 * <br>
+	 * @param mainForm メインフォーム
+	 * @param listViewLog ログ表示用のビュー
+	 * @param menuBar メニューバー
+	 */
+	private void defaultInitialize(MainForm mainForm, ListView listViewLog, JMenuBar menuBar) {
+
+		//loggerが生成されるまでのログを一時的に保管する
+		//ArrayList<LogTemporary> tmpLogger = new ArrayList<>();
+
+		//プロセス起動時に初期化される
+		view = new View(this, mainForm, listViewLog);
+		logView = new LogView(listViewLog);
+		traceDlg = new TraceDlg(this, (mainForm != null) ? mainForm.getFrame() : null); //トレース表示
+		menu = new Menu(this, menuBar); //ここでは、オブジェクトの生成のみ、menu.Initialize()は、listInitialize()の中で呼び出される
+		dnsCache = new DnsCache();
+		//ver = new Ver();//バージョン管理
+
 		OptionIni.create(this); //インスタンスの初期化
-		
-		//optionIni = new IniDb(getProgDir(), "Option");
-		//動作モードの初期化
-		runMode = RunMode.Normal; //通常起動
-		//		if (mainForm == null) {
-		//            RunMode = RunMode.Service;//サービス起動
-		//        } else {
-		//            if (Environment.GetCommandLineArgs().Length > 1) {
-		//                RunMode = RunMode.Remote;//リモートクライアント
-		//            } else {
-		//                //サービス登録の状態を取得する
-		//                var setupService = new SetupService(this);
-		//                if (setupService.IsRegist)
-		//                    RunMode = RunMode.NormalRegist;//サービス登録完了状態
-		//            }
-		//        }
 
-		//        Ver = new Ver();//バージョン管理
-		menu = new Menu(this, menuBar);
-		listOption = new ListOption(this); //オプション管理
-		//        ListTool = new ListTool();//ツール管理
-		listServer = new ListServer(); //サーバ管理
+		//RunModeの初期化
+		//if (mainForm == null) {
+		//	RunMode = RunMode.Service;//サービス起動
+		//} else {
+		//	if (Environment.GetCommandLineArgs().Length > 1) {
+		//  	RunMode = RunMode.Remote;//リモートクライアント
+		//	} else {
+		//		//サービス登録の状態を取得する
+		//      var setupService = new SetupService(this);
+		//      if (setupService.IsRegist)
+		//  	    RunMode = RunMode.NormalRegist;//サービス登録完了状態
+		//      }
+		//  }
+		//}
 
+		listInitialize(); //サーバ再起動で、再度実行される初期化 
+
+		//ウインドサイズの復元
 		String path = String.format("%s\\BJD.ini", getProgDir());
 		try {
 			//ウインドウの外観を保存・復元(Viewより前に初期化する)
@@ -132,50 +144,8 @@ public final class Kernel implements IDispose {
 		} catch (IOException e) {
 			// 指定されたWindow情報保存ファイル(BJD.ini)にIOエラーが発生している
 			logger.set(LogKind.ERROR, null, 9000022, path);
-		} 
-		//
-		//        //ログ関連インスタンスの生成
-		//view = new View(this, mainForm, listViewLog, notifyIcon);
-		view = new View(this, mainForm, listViewLog);
-		//
-		//        //リモートクライアントでは、以下のオブジェクトは接続されてから初期化される
-		//        if (RunMode != RunMode.Remote) {
-		//            //ローカルアドレスの一覧(ListOption初期化時にインスタンスが必要)
-		//localAddress = new LocalAddress();
-
-		//LogViewの初期化
-		logView = new LogView(listViewLog);
-
-		initList(); //各管理クラスの初期化
-		menu.initialize(); //メニュー構築（内部テーブルの初期化）
-		//            Menu.OnClick += Menu_OnClick;//メニュー選択時の処理
-		//        }
-		traceDlg = new TraceDlg(this, (mainForm != null) ? mainForm.getFrame() : null); //トレース表示
-		dnsCache = new DnsCache();
-		//
-		Conf conf = new Conf(listOption.get("Log"));
-		if (conf != null) {
-
-			//LogFileの初期化
-			String saveDirectory = (String) conf.get("saveDirectory");
-			int normalLogKind = (int) conf.get("normalLogKind");
-			int secureLogKind = (int) conf.get("secureLogKind");
-			int saveDays = (int) conf.get("saveDays");
-			boolean useLogClear = (boolean) conf.get("useLogClear");
-			if (!useLogClear) {
-				saveDays = 0; //ログの自動削除が無効な場合、saveDaysに0をセットする
-			}
-			try {
-				logFile = new LogFile(saveDirectory, normalLogKind, secureLogKind, saveDays);
-			} catch (IOException e) {
-				Msg.show(MsgKind.ERROR, e.getMessage());
-				logFile = null;
-			}
-			
 		}
-		logger = createLogger("kernel", true, null);
-		
-		//
+
 		//        switch (RunMode){
 		//            case RunMode.Remote:
 		//                RemoteClient = new RemoteClient(this);
@@ -185,11 +155,121 @@ public final class Kernel implements IDispose {
 		//                Menu.EnqueueMenu("StartStop_Start",true);//synchro
 		//                break;
 		//        }
-
 	}
-	
-	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
+
+	/**
+	 * サーバ再起動で、再度実行される初期化
+	 */
+	void listInitialize() {
+		//Loggerが使用できない間のログは、こちらに保存して、後でLoggerに送る
+		TmpLogger tmpLogger = new TmpLogger();
+
+		//************************************************************
+		// 破棄
+		//************************************************************
+		if (logFile != null) {
+			logFile.dispose();
+			logFile = null;
+		}
+		if (listOption != null) {
+			listOption.dispose();
+			listOption = null;
+		}
+		//		if(listTool!=null){
+		//			listTool.Dispose();
+		//			listTool = null;
+		//		}
+		if (listServer != null) {
+			listServer.dispose();
+			listServer = null;
+		}
+		//		if(mailBox!=null){
+		//			mailBox = null;
+		//		}
+
+		//************************************************************
+		// 初期化
+		//************************************************************
+		listOption = new ListOption(this);
+
+		//OptionLog
 		Conf conf = new Conf(listOption.get("Log"));
+		if (conf != null) {
+
+			logView.setFont((Font) conf.get("font"));
+
+			if (runMode == RunMode.Normal || runMode == RunMode.Service) {
+				//LogFileの初期化
+				String saveDirectory = (String) conf.get("saveDirectory");
+				int normalLogKind = (int) conf.get("normalLogKind");
+				int secureLogKind = (int) conf.get("secureLogKind");
+				int saveDays = (int) conf.get("saveDays");
+				boolean useLogClear = (boolean) conf.get("useLogClear");
+				if (!useLogClear) {
+					saveDays = 0; //ログの自動削除が無効な場合、saveDaysに0をセットする
+				}
+				try {
+					logFile = new LogFile(saveDirectory, normalLogKind, secureLogKind, saveDays);
+				} catch (IOException e) {
+					logFile = null;
+					tmpLogger.set(LogKind.ERROR, null, 9000031, e.getMessage());
+				}
+			}
+		}
+		logger = createLogger("kernel", true, null);
+		
+		listServer = new ListServer(listOption);
+		//listTool = new ListTool(this);
+		
+		//mailBox初期化
+		//        foreach (var o in ListOption) {
+		//            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                
+		//            if (o.NameTag == "SmtpServer" || o.NameTag == "Pop3Server") {
+		//                if (o.UseServer) {
+		//                    MailBox = new MailBox(this, ListOption.Get("MailBox"));
+		//                    break;
+		//                }
+		//            }
+		//        }
+		remoteServer = listServer.get("RemoteServer");
+
+		view.setLang();
+		menu.initialize(); //メニュー構築（内部テーブルの初期化）
+		
+	}
+
+	/**
+	 * Confの生成<br>
+	 * 事前にlistOptionが初期化されている必要がある<br>
+	 * 
+	 * @param nameTag
+	 * @return
+	 */
+	public Conf createConf(String nameTag) {
+		if (listOption == null) {
+			Util.runtimeException("createConf() listOption==null");
+		}
+		OneOption oneOption = listOption.get(nameTag);
+		if (oneOption != null) {
+			return new Conf(oneOption);
+		}
+		return null;
+	}
+
+	/**
+	 * Loggerの生成<br>
+	 * 事前にlistOption,logFileが初期化されている必要がある
+	 * 
+	 * @param nameTag 名前
+	 * @param useDetailsLog　詳細ログを表示するかどうか
+	 * @param logger　メソッドMsg()を保持するILoggerクラス
+	 * @return Loggerオブジェクト
+	 */
+	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
+		if (listOption == null || logFile == null) {
+			Util.runtimeException("createLogger() listOption==null || logFile==null");
+		}
+		Conf conf = createConf("Log");
 		if (conf == null) {
 			//createLoggerを使用する際に、OptionLogが検索できないのは、設計上の問題がある
 			Util.runtimeException("createLogger() conf==null");
@@ -202,6 +282,9 @@ public final class Kernel implements IDispose {
 		return new Logger(logLimit, logFile, logView, isJp(), nameTag, useDetailsLog, useLimitString, logger);
 	}
 
+	/**
+	 * 終了処理
+	 */
 	@Override
 	public void dispose() {
 		//	        if (RunMode != RunMode.Service && RunMode != RunMode.Remote) {
@@ -227,7 +310,7 @@ public final class Kernel implements IDispose {
 		//
 		view.dispose();
 		if (traceDlg != null) {
-			//	            traceDlg.Dispose();
+			// traceDlg.Dispose();
 		}
 		if (menu != null) {
 			menu.dispose();
@@ -236,90 +319,13 @@ public final class Kernel implements IDispose {
 		windowSize.dispose(); //DisposeしないとReg.Dispose(保存)されない
 	}
 
-	//オプションの値取得
-	//	public Object getOptionVal(String nameTag, String name) {
-	//		OneOption oneOption = listOption.get(nameTag);
-	//		if (oneOption != null) {
-	//			return oneOption.getValue(name);
-	//		}
-	//		Util.runtimeError(String.format("nameTag=%s name=%s", nameTag, name));
-	//		return null;
-	//	}
-
-	public Conf createConf(String nameTag) {
-		OneOption oneOption = listOption.get(nameTag);
-		if (oneOption != null) {
-			return new Conf(oneOption);
-		}
-		return null;
-	}
-
-	//public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
-	//	return new Logger(this, nameTag, useDetailsLog, logger);
-	//}
-
-	//各管理リストの初期化
-	void initList() {
-
-		//************************************************************
-		// 破棄
-		//************************************************************
-		listOption.dispose();
-		//        ListTool.Dispose();
-		listServer.dispose();
-		//        MailBox = null;
-
-		//************************************************************
-		// 初期化
-		//************************************************************
-		listOption.initialize(); // dllからのリスト初期化
-
-		//        //オプションの読み直し
-		if (logFile != null) {
-			logFile.dispose();
-		}
-
-		Logger logger = createLogger("Log", true, null);
-		remoteServer = listServer.get("RemoteServer");
-		Conf conf = new Conf(listOption.get("Log"));
-		boolean useLog = true;
-		if (runMode != RunMode.Normal && runMode != RunMode.Service) {
-			useLog = false;
-		}
-		
-		try {
-			logFile = new LogFile((String) conf.get("saveDirectory"), (int) conf.get("normalLogKind"), (int) conf.get("secureLogKind"), (int) conf.get("saveDays"));
-		} catch (IOException e) {
-			logger.set(LogKind.ERROR, null, 9000031, e.getMessage());
-		}
-		logView.setFont((Font) conf.get("font")); //logView.initFont();
-		//
-		//        foreach (var o in ListOption) {
-		//            //SmtpServer若しくは、Pop3Serverが使用される場合のみメールボックスを初期化する                
-		//            if (o.NameTag == "SmtpServer" || o.NameTag == "Pop3Server") {
-		//                if (o.UseServer) {
-		//                    MailBox = new MailBox(this, ListOption.Get("MailBox"));
-		//                    break;
-		//                }
-		//            }
-		//        }
-		//        ListTool.Initialize(this);
-		//        ListServer.Initialize(this, ListOption);
-
-	}
-
+	/**
+	 * プログラム本体のパス取得<br>
+	 * jarファイルの場合と、classファイルの場合に対応している<br>
+	 * 
+	 * @return 起動ディレクトリ
+	 */
 	public String getProgDir() {
-		return getProgName();
-		//File file = new File(getProgName());
-		//return file.getParent();
-	}
-
-	//public IniDb getOptionIni() {
-	//	return optionIni;
-	//}
-
-	//プログラム本体のパス取得
-	private String getProgName() {
 		java.net.URL url = this.getClass().getResource("Kernel.class");
 		if (url.getProtocol().equals("file")) { //Jar化されていない場合
 			try {
@@ -359,14 +365,18 @@ public final class Kernel implements IDispose {
 		return str.replaceAll("%ExecutablePath%", getProgDir());
 	}
 
-	//メニュー選択時の処理
-	//RemoteClientの場合は、このファンクションはフックされない
+	/**
+	 * メニュー選択時の処理<br>
+	 * RemoteClientの場合は、このファンクションはフックされない<br>
+	 * 
+	 * @param cmd コマンド
+	 */
 	public void menuOnClick(String cmd) {
 
 		if (cmd.indexOf("Option_") == 0) {
 			OneOption oneOption = listOption.get(cmd.substring(7));
 			if (oneOption != null) {
-				OptionDlg dlg = new OptionDlg(mainForm.getFrame(), oneOption);
+				OptionDlg dlg = new OptionDlg(view.getMainForm().getFrame(), oneOption);
 				if (dlg.showDialog()) {
 					oneOption.save(OptionIni.getInstance());
 					//Menu.EnqueueMenu("StartStop_Reload",true/*synchro*/);
@@ -397,9 +407,7 @@ public final class Kernel implements IDispose {
 					break;
 				case "StartStop_Reload":
 					//Stop();
-					initList();
-					view.setLang();
-					menu.initialize();
+					listInitialize();
 					//Start();
 					break;
 				case "StartStop_Service":
@@ -424,14 +432,14 @@ public final class Kernel implements IDispose {
 					traceDlg.open();
 					break;
 				case "File_Exit":
-					mainForm.exit();
+					view.getMainForm().exit();
 					break;
 				case "Help_Version":
 
-					mainForm.test();
+					view.getMainForm().test();
 					break;
 				case "Help_Homepage":
-					mainForm.test2();
+					view.getMainForm().test2();
 					//Process.Start(Define.WebHome());
 					break;
 				case "Help_Document":
@@ -447,9 +455,4 @@ public final class Kernel implements IDispose {
 		}
 
 	}
-
-	public DnsCache getDnsCache() {
-		return dnsCache;
-	}
-
 }
