@@ -258,7 +258,7 @@ public final class Kernel implements IDispose {
 
 	/**
 	 * Loggerの生成<br>
-	 * 事前にlistOption,logFileが初期化されている必要がある
+	 * 事前にlistOptionが初期化されている必要がある
 	 * 
 	 * @param nameTag 名前
 	 * @param useDetailsLog　詳細ログを表示するかどうか
@@ -266,7 +266,7 @@ public final class Kernel implements IDispose {
 	 * @return Loggerオブジェクト
 	 */
 	public Logger createLogger(String nameTag, boolean useDetailsLog, ILogger logger) {
-		if (listOption == null || logFile == null) {
+		if (listOption == null) {
 			Util.runtimeException("createLogger() listOption==null || logFile==null");
 		}
 		Conf conf = createConf("Log");
