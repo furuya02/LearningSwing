@@ -25,6 +25,9 @@ public final class AclList {
 	private Logger logger;
 
 	/**
+	 * Dat dat==null　で初期化された場合、全てenableNumで指定したものになる<br>
+	 * dat=null enableNum=0(不許可) => All Deny<br>
+	 * dat=null enableNum=1(許可) => All Allow<br>
 	 * 
 	 * @param dat
 	 * @param enableNum 
@@ -33,6 +36,9 @@ public final class AclList {
 	public AclList(Dat dat, int enableNum, Logger logger) {
 		this.enable = (enableNum == 1);
 		this.logger = logger;
+		if (dat == null) {
+			return;
+		}
 		for (OneDat o : dat) {
 			if (o.isEnable()) { //有効なデータだけを対象にする
 				String name = o.getStrList().get(0);

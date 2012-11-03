@@ -8,12 +8,14 @@ public final class View implements IDispose {
 	private Kernel kernel;
 	private MainForm mainForm;
 	private ListView listView;
+
 	//private NotifyIcon notifyIcon;
 
 	public ListView getListView() {
 		return listView;
 	}
-	public MainForm getMainForm(){
+
+	public MainForm getMainForm() {
 		return mainForm;
 	}
 

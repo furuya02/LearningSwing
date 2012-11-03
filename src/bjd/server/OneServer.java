@@ -44,6 +44,7 @@ public abstract class OneServer extends ThreadBase {
 	private Logger logger;
 	private SockServer sockServer = null;
 	private int timeout;
+	private boolean isJp;
 
 	protected final Conf getConf() {
 		return conf;
@@ -52,9 +53,8 @@ public abstract class OneServer extends ThreadBase {
 		return nameTag;
 	}
 
-	protected final boolean getJp() {
-		int n = (int) conf.get("lang");
-		return (n == 0) ? true : false;
+	protected final boolean isJp() {
+		return isJp;
 	}	
 	
 	
@@ -69,9 +69,9 @@ public abstract class OneServer extends ThreadBase {
 	//ステータス表示用
 	@Override
 	public final String toString() {
-		String stat = getJp() ? "+ サービス中 " : "+ In execution ";
+		String stat = isJp() ? "+ サービス中 " : "+ In execution ";
 		if (!isRunnig()) {
-			stat = getJp() ? "- 停止 " : "- Initialization failure ";
+			stat = isJp() ? "- 停止 " : "- Initialization failure ";
 		}
 		return String.format("%s\t%20s\t[%s\t:%s %s]\tThread %d/%d", stat, getNameTag(), oneBind.getAddr(), oneBind.getProtocol().toString().toUpperCase(),
 				(int) conf.get("port"), count(), multiple);
@@ -106,6 +106,8 @@ public abstract class OneServer extends ThreadBase {
 		this.nameTag = nameTag;
 		this.conf = conf;
 		this.oneBind = oneBind;
+		this.isJp = kernel.isJp();
+		
 		//DEBUG用
 		if (this.conf == null) {
 			OptionSample optionSample = new OptionSample(kernel, "");
@@ -131,14 +133,9 @@ public abstract class OneServer extends ThreadBase {
 		this.logger = kernel.createLogger(nameTag, (boolean) this.conf.get("useDetailsLog"), this);
 		multiple = (int) this.conf.get("multiple");
 
-		//ACLリスト
-		try {
-			//定義が存在するかどうかのチェック
-			Dat acl = (Dat) this.conf.get("acl");
-			aclList = new AclList(acl, (int) this.conf.get("enableAcl"), logger);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		//ACLリスト 定義が無い場合は、aclListを生成しない
+		Dat acl = (Dat) this.conf.get("acl");
+		aclList = new AclList(acl, (int) this.conf.get("enableAcl"), logger);
 		timeout = (int) this.conf.get("timeOut");
 	}
 

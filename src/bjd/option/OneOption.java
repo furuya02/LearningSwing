@@ -98,6 +98,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		list.add(new OneVal("aclName", "", Crlf.NEXTLINE, new CtrlTextBox(isJp ? "名前（表示名）" : "Name(Display)", 20)));
 		list.add(new OneVal("aclAddress", "", Crlf.NEXTLINE, new CtrlTextBox(isJp ? "アドレス" : "Address", 20)));
 		onePage.add(new OneVal("acl", null, Crlf.NEXTLINE, new CtrlDat(isJp ? "利用者（アドレス）の指定" : "Access Control List", list, 320, isJp)));
+
 		return onePage;
 	}
 
@@ -150,7 +151,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	 */
 	protected final OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
 		ListVal list = new ListVal();
-		list.add(new OneVal("protocolKind", 0, Crlf.CONTONIE, new CtrlComboBox(isJp ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
+		list.add(new OneVal("protocolKind", (protocolKind == protocolKind.Tcp) ? 0 : 1, Crlf.CONTONIE, new CtrlComboBox(isJp ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
 		list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(isJp ? "クライアントから見たポート" : "Port (from client side)", 5)));
 		LocalAddress localAddress = LocalAddress.getInstance();
 		Ip[] v4 = localAddress.getV4();
