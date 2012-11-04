@@ -21,6 +21,7 @@ import bjd.option.Conf;
 import bjd.option.Dat;
 import bjd.option.ListOption;
 import bjd.option.OneOption;
+import bjd.option.OptionBasic;
 import bjd.option.OptionIni;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
@@ -74,6 +75,14 @@ public final class Kernel implements IDispose {
 
 	public RunMode getRunMode() {
 		return runMode;
+	}
+	
+	public boolean getEditBrowse() {
+		Conf conf = createConf("Basic");
+		if (conf != null) {
+			return (boolean) conf.get("editBrowse");
+		}
+		return false;
 	}
 
 	public DnsCache getDnsCache() {

@@ -11,18 +11,16 @@ public final class Server extends OneServer {
 	public Server(Kernel kernel, Conf conf, OneBind oneBind) {
 		super(kernel, "Sample", conf, oneBind);
 		
-		check(conf,"sampleText");
-	}
-	
-	void check(Conf conf,String tag){
-		//TODO Debug Print
-		System.out.println(String.format("■CHECK => conf.get(%s)=%s",tag,conf.get(tag)));
-	}
-	
-	private Server() {
-		super(null, "Sample", null, null);
+		//Option.javaで定義したものが、読み込めているかどうかのチェック
+		String tag = "sampleText";
+		System.out.println(String.format("■CHECK => conf.get(%s)=%s", tag, conf.get(tag)));
 	}
 
+	//private Server() {
+	//	super(null, "Sample", null, null);
+	//}
+
+	
 	//	//リモート操作（データの取得）Toolダイログとのデータ送受
 	//	override public String Cmd(String cmdStr) { return ""; }
 	

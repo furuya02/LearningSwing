@@ -11,5 +11,5 @@ public enum Crlf {
 	 /** コンテキスト */
     NEXTLINE,
     /** コンテキスト２ */
-    CONTONIE
+    CONTINUE
 }

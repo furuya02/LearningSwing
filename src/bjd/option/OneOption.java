@@ -151,7 +151,7 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 	 */
 	protected final OneVal createServerOption(ProtocolKind protocolKind, int port, int timeout, int multiple) {
 		ListVal list = new ListVal();
-		list.add(new OneVal("protocolKind", (protocolKind == protocolKind.Tcp) ? 0 : 1, Crlf.CONTONIE, new CtrlComboBox(isJp ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
+		list.add(new OneVal("protocolKind", (protocolKind == protocolKind.Tcp) ? 0 : 1, Crlf.CONTINUE, new CtrlComboBox(isJp ? "プロトコル" : "Protocol", new String[] { "TCP", "UDP" }, 80)));
 		list.add(new OneVal("port", port, Crlf.NEXTLINE, new CtrlInt(isJp ? "クライアントから見たポート" : "Port (from client side)", 5)));
 		LocalAddress localAddress = LocalAddress.getInstance();
 		Ip[] v4 = localAddress.getV4();
@@ -159,8 +159,8 @@ public abstract class OneOption implements ICtrlEventListener, IDispose {
 		
 		list.add(new OneVal("bindAddress2", new BindAddr(), Crlf.NEXTLINE, new CtrlBindAddr(isJp ? "待ち受けるネットワーク" : "Bind Address", v4, v6)));
 		list.add(new OneVal("useResolve", false, Crlf.NEXTLINE, new CtrlCheckBox((isJp ? "クライアントのホスト名を逆引きする" : "Reverse pull of host name from IP address"))));
-		list.add(new OneVal("useDetailsLog", true, Crlf.CONTONIE, new CtrlCheckBox(isJp ? "詳細ログを出力する" : "Use Details Log")));
-		list.add(new OneVal("multiple", multiple, Crlf.CONTONIE, new CtrlInt(isJp ? "同時接続数" : "A repetition thread", 5)));
+		list.add(new OneVal("useDetailsLog", true, Crlf.CONTINUE, new CtrlCheckBox(isJp ? "詳細ログを出力する" : "Use Details Log")));
+		list.add(new OneVal("multiple", multiple, Crlf.CONTINUE, new CtrlInt(isJp ? "同時接続数" : "A repetition thread", 5)));
 		list.add(new OneVal("timeOut", timeout, Crlf.NEXTLINE, new CtrlInt(isJp ? "タイムアウト(秒)" : "Timeout", 6)));
 		return new OneVal("GroupServer", null, Crlf.NEXTLINE, new CtrlGroup(isJp ? "サーバ基本設定" : "Server Basic Option", list));
 	}
