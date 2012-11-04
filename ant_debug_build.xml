@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
   <project name="debug_build" default="makejar" basedir="./">
 
-  <!--<property name="compile" value="bin"/>-->
-  <!--<property name="compiler" value="c:\Program Files\Java\jdk1.7.0_04\bin\javac.exe" />-->
   <property name="pulgins_dir" value="C:/tmp2/LearningSwing/bin/plugins"/>
   <property name="class_dir" value="C:/tmp2/LearningSwing/bin/bjd/plugins"/>
 
@@ -13,9 +11,11 @@
 
   <target name="makejar" depends="directory">
 	<!-- web.jar -->      	
+  	<!--
   	<jar destfile="${pulgins_dir}/web.jar">
         <fileset dir="${class_dir}/web/"/>
     </jar>
+    -->
 	<!-- sample.jar -->      	
   	<jar destfile="${pulgins_dir}/sample.jar">
         <fileset dir="${class_dir}/sample/"/>

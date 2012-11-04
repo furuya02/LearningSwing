@@ -17,7 +17,12 @@
 			<fileset dir="${output_dir}" />
 	    </delete>
 		<javac fork="true" encoding="utf-8" srcdir="${project_dir}/src" 
-				destdir="${project_dir}/bin" includeantruntime="false" classpath="${project_dir}/lib/*"/>
+				destdir="${project_dir}/bin" includeantruntime="false">
+			<classpath>
+				<pathelement path="${project_dir}/lib/*"/>
+				<pathelement location="c:/tmp2/out/plugins/sample.jar"/>
+			</classpath>
+		</javac>
 				
 
 		<!-- sample.jar -->      	
@@ -53,3 +58,9 @@
 
     </target>
 </project>
+
+
+<!--
+		<javac fork="true" encoding="utf-8" srcdir="${project_dir}/src" 
+				destdir="${project_dir}/bin" includeantruntime="false" classpath="${project_dir}/lib/*"/>
+-->

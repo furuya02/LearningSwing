@@ -23,6 +23,7 @@ import bjd.option.ListOption;
 import bjd.option.OneOption;
 import bjd.option.OptionBasic;
 import bjd.option.OptionIni;
+import bjd.plugin.ListPlugin;
 import bjd.server.ListServer;
 import bjd.server.OneServer;
 import bjd.util.IDispose;
@@ -42,6 +43,7 @@ public final class Kernel implements IDispose {
 	private Menu menu = null;
 
 	//サーバ起動時に最初期化さえる変数
+	private ListPlugin listPlugin = null;
 	private ListOption listOption = null;
 	private ListServer listServer = null;
 	private LogFile logFile = null;
@@ -67,6 +69,10 @@ public final class Kernel implements IDispose {
 
 	public ListServer getListServer() {
 		return listServer;
+	}
+
+	public ListPlugin getListPlugin() {
+		return listPlugin;
 	}
 
 	public boolean isJp() {
@@ -176,10 +182,6 @@ public final class Kernel implements IDispose {
 		//************************************************************
 		// 破棄
 		//************************************************************
-		if (logFile != null) {
-			logFile.dispose();
-			logFile = null;
-		}
 		if (listOption != null) {
 			listOption.dispose();
 			listOption = null;
@@ -195,10 +197,20 @@ public final class Kernel implements IDispose {
 		//		if(mailBox!=null){
 		//			mailBox = null;
 		//		}
+		if (listPlugin != null) {
+			listPlugin.dispose();
+			listPlugin = null;
+		}
+		if (logFile != null) {
+			logFile.dispose();
+			logFile = null;
+		}
 
 		//************************************************************
 		// 初期化
 		//************************************************************
+		listPlugin = new ListPlugin(String.format("%s\\plugins", getProgDir()));
+
 		listOption = new ListOption(this);
 
 		//OptionLog

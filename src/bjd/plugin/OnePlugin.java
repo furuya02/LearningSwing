@@ -1,4 +1,4 @@
-package bjd.plugins;
+package bjd.plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,11 +68,19 @@ public final class OnePlugin implements IDispose {
 	 */
 	public OneOption createOption(Kernel kernel) {
 		try {
+			 //URL url = file.getCanonicalFile().toURI().toURL();
+             //URLClassLoader loader = new URLClassLoader( new URL[] { url });
+           	 //Class cobj = loader.loadClass(classNameOption);
+             
+             //TODO Debug Print
+             //System.out.println(String.format("OnePlugin() cobj = %s",cobj));
+             //return null;
+			
 			Constructor constructor = createConstructor(file, classNameOption, new Class[] { Kernel.class, String.class });
 			return (OneOption) constructor.newInstance(new Object[] { kernel, file.getPath() });
 		} catch (Exception e) {
 			//何の例外が発生しても、プラグインとしては受け付けない
-			Util.runtimeException(e.getMessage());
+			Util.runtimeException(e.getMessage()/*e.getClass().getName()*/);
 			return null;
 		}
 	}

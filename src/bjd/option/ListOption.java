@@ -3,6 +3,7 @@ package bjd.option;
 import bjd.Kernel;
 import bjd.menu.ListMenu;
 import bjd.menu.OneMenu;
+import bjd.plugin.OnePlugin;
 import bjd.util.ListBase;
 import bjd.util.Util;
 
@@ -69,6 +70,15 @@ public final class ListOption extends ListBase<OneOption> {
 		add(new OptionBasic(kernel, executePath)); //「基本」オプション
 		add(new OptionLog(kernel, executePath)); //「ログ」オプション
 
+		for (OnePlugin onePlugin : kernel.getListPlugin()) {
+			//TODO Debug Print
+			System.out.println(String.format("onePlugin.getName() = %s",onePlugin.getName()));
+			OneOption oneOption = onePlugin.createOption(kernel);
+			System.out.println(String.format("■oneOption.getNameTag()=%s", oneOption.getNameTag()));
+			add(oneOption);
+		}
+		
+		
 		/*
 		//DLLを検索し、各オプションを生成する
 		//Ver5.2.4 関係ない*Server.dll以外は、対象外とする

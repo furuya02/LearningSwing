@@ -1,4 +1,4 @@
-package bjd.plugins;
+package bjd.plugin;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import bjd.Kernel;
 import bjd.util.FileSearch;
 import bjd.util.ListBase;
 
@@ -15,7 +14,7 @@ import bjd.util.ListBase;
  * @author SIN
  *
  */
-public final class PluginList extends ListBase<OnePlugin> {
+public final class ListPlugin extends ListBase<OnePlugin> {
 
 	/**
 	 * jarファイルに梱包されているクラスの列挙
@@ -61,7 +60,7 @@ public final class PluginList extends ListBase<OnePlugin> {
 	/**
 	 * @param dir 検索対象となるpluginsフォルダ
 	 */
-	public PluginList(String dir) {
+	public ListPlugin(String dir) {
 		FileSearch fileSearch = new FileSearch(dir);
 
 		//pluginsの中のjarファイルの検索
@@ -69,7 +68,7 @@ public final class PluginList extends ListBase<OnePlugin> {
 
 			//jarファイルに含まれるクラスを列挙する
 			String[] classNameList = getClassNameList(file);
-
+			
 			String classNameOption = null;
 			String classNameServer = null;
 
@@ -84,6 +83,10 @@ public final class PluginList extends ListBase<OnePlugin> {
 				getAr().add(new OnePlugin(file, classNameOption, classNameServer));
 			}
 		}
+
+		//TODO Debug Print
+		System.out.println(String.format("■new ListPlugin(%s) => size()=%d",dir,size()));
+		
 	}
 
 }

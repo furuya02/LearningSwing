@@ -18,11 +18,12 @@ import bjd.net.OneBind;
 import bjd.net.ProtocolKind;
 import bjd.option.Conf;
 import bjd.option.OneOption;
-import bjd.plugins.PluginList;
+import bjd.plugin.ListPlugin;
+import bjd.plugin.OnePlugin;
 import bjd.server.OneServer;
 import bjd.util.TestUtil;
 
-public final class PluginListTest {
+public final class ListPluginTest {
 
 	@Test
 	public void a001() {
@@ -34,10 +35,10 @@ public final class PluginListTest {
 
 		String dir = String.format("%s\\bin\\plugins", currentDir);
 		TestUtil.dispPrompt(this, String.format("対象フォルダ　plugin = new Plugin(%s)", dir));
-		PluginList pluginList = new PluginList(dir);
-		TestUtil.dispPrompt(this, String.format("列挙数 plugin.length()=%d　件", pluginList.size()));
-		assertThat(pluginList.size(), is(2));
-		for (OnePlugin onePlugin : pluginList) {
+		ListPlugin listPlugin = new ListPlugin(dir);
+		TestUtil.dispPrompt(this, String.format("列挙数 plugin.length()=%d　件", listPlugin.size()));
+		assertThat(listPlugin.size(), is(2));
+		for (OnePlugin onePlugin : listPlugin) {
 			//Optionインスタンス生成
 			OneOption oneOption = onePlugin.createOption(kernel);
 			Assert.assertNotNull(oneOption);
